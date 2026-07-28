@@ -18,8 +18,8 @@ export const pacienteRepository = {
         idlocalidad: ""
     }
 
-    let direccionR = await http.post(`/direccion`, dataDireR);
-    let direccionEP = await http.post(`/direccion`, dataDireEP);
+    let direccionR = await http.post(`/direcciones`, dataDireR);
+    let direccionEP = await http.post(`/direcciones`, dataDireEP);
 
     let dataPersR = {
         nombre: data.nombreR,
@@ -40,8 +40,8 @@ export const pacienteRepository = {
 
     console.log(dataPersEP)
     
-    let personaR = await http.post(`/persona`, dataPersR);
-    let personaEP = await http.post(`/persona`, dataPersEP);
+    let personaR = await http.post(`/personas`, dataPersR);
+    let personaEP = await http.post(`/personas`, dataPersEP);
 
     let dataPaciente = {
         activataller: "1",
@@ -61,14 +61,14 @@ export const pacienteRepository = {
 
     console.log(dataPaciente)
     
-    let paciente = await http.post(`/personaEp`, dataPaciente);
+    let paciente = await http.post(`/personas-ep`, dataPaciente);
     
     return paciente
   },
 
 
   async getPacientes() {
-    let response = await http.get(`/personaP`);
+    let response = await http.get(`/personas?espaciente=1`);
 
     return response;
   },

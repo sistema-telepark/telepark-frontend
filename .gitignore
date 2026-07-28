@@ -21,3 +21,10 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# specs
+specs/
+
+# API endpoints
+Telepark API.yaml
+

@@ -2,19 +2,19 @@ import http from "../http-common";
 
 export const userRepository = {
   async getUsers() {
-    let response = await http.get(`/users`);
+    let response = await http.get(`/usuarios`);
 
     return response;
   },
 
-  async updateUser(data) {
-    let response = await http.put(`/update_user`, data);
+  async updateUser(id, data) {
+    let response = await http.put(`/usuarios/${id}`, data);
 
     return response;
   },
 
   async createUser(data) {
-    let response = await http.post(`/create_user`, data);
+    let response = await http.post(`/usuarios`, data);
 
     return response;
   }
