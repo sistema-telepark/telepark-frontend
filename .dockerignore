@@ -1,0 +1,29 @@
+# Dependencies
+node_modules
+
+# Git
+.git
+.gitignore
+
+# Build output
+build
+
+# Environment files
+.env*.local
+
+# Documentation
+README.md
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*

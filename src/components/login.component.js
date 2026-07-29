@@ -12,6 +12,7 @@ class Login extends React.Component {
     // Defino los estados locales
     this.state = {
       campo: {},
+      loading: false,
     };
   }
 
@@ -19,8 +20,7 @@ class Login extends React.Component {
   validarFormulario() {
     let campo = this.state.campo;
     let formularioValido = true;
-    this.props.loginRequest(campo);
-    this.props.history.push("/");
+
     // user
     if (!campo["user"]) {
       formularioValido = false;
@@ -35,19 +35,32 @@ class Login extends React.Component {
   }
 
   // Una vez que los campos del formulario han sido llenado correctamente
-  // Mostramos un mensaje al usuario diciendo: 'Mensaje Enviado Satisfactoriamente !'
-  enviarFormulario(e) {
+  // Se envía la petición de autenticación al API
+  async enviarFormulario(e) {
     e.preventDefault();
 
     // Si la validación de los campos del formulario ha sido realizada
     if (this.validarFormulario()) {
-      // Cambio el estado de 'enviado' a 'true'
-      this.setState({ enviado: true });
+      this.setState({ loading: true });
 
-      // Muestro el mensaje que se encuentra en la función mensajeEnviado()
-      return this.send();
+      try {
+        const response = await authRepository.login({
+          username: this.state.campo.user,
+          password: this.state.campo.pass,
+        });
+
+        if (response) {
+          console.log("===>", response.data.access);
+          TokenService.setUser(response.data);
+          this.send(response.data);
+        }
+      } catch (error) {
+        this.errorSend();
+      } finally {
+        this.setState({ loading: false });
+      }
     } else {
-      return this.errorSend();
+      this.errorSend();
     }
   }
 
@@ -73,14 +86,13 @@ class Login extends React.Component {
 
     if (data.is_superuser === true) {
       setTimeout(() => {
-        window.location.href = "/list-usuarios";
+        this.props.history.push("/list-usuarios");
         }, 1500);
     } else {
       setTimeout(() => {
-        window.location.href = "/add-paciente";
+        this.props.history.push("/add-paciente");
         }, 1500);
     }
-    
   }
 
   errorSend() {
@@ -101,26 +113,12 @@ class Login extends React.Component {
   }
 
   render() {
-    const loginFunction = async () => {
-      let response = await authRepository.login({
-        username: this.state.campo.user,
-        password: this.state.campo.pass,
-      }).catch((error) => {this.errorSend()});
-
-      if (response) {
-      console.log("===>", response.data.access);
-      TokenService.setUser(response.data);
-
-      this.send(response.data);
-      }
-    };
-
     if (TokenService.getLocalAccessToken() && TokenService.getRole() === true) return <Redirect to="/list-usuarios" />;
     if (TokenService.getLocalAccessToken() && TokenService.getRole() !== true) return <Redirect to="/add-paciente" />;
 
     return (
       <div className="col-12 col-md-6 col-lg-4 col-xl-4">
-      <form onSubmit={this.enviarFormulario.bind(this)}>
+      <form onSubmit={(e) => this.enviarFormulario(e)}>
         <main
           className="border-top-sm row justify-content-center form-paciente shadow container-lg mx-auto"
           style={{ marginTop: "3vh", marginBottom: "3vh" }}
@@ -164,12 +162,12 @@ class Login extends React.Component {
                   />
 
                   <button
-                    type="button"
+                    type="submit"
                     className="btn btn-azul"
                     style={{ marginTop: "5vh" }}
-                    onClick={() => loginFunction()}
+                    disabled={this.state.loading}
                   >
-                    Iniciar Sesión
+                    {this.state.loading ? "Ingresando..." : "Iniciar Sesión"}
                   </button>
                 </div>
               </div>

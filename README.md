@@ -39,6 +39,36 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
+## Variables de Entorno
+
+Este proyecto utiliza variables de entorno para configurar el comportamiento en distintos entornos (desarrollo, producción).
+
+| Variable | Descripción | Obligatoria | Ejemplo |
+|----------|-------------|:-----------:|---------|
+| `REACT_APP_API_URL` | URL base del API de Django REST. Se usa como `baseURL` en las peticiones Axios. | Sí | `http://localhost:8080/api/v1` |
+| `PORT` | Puerto del servidor de desarrollo de CRA. Solo aplica en entorno local. | No (default: 3000) | `8081` |
+
+### Configuración típica para desarrollo local
+
+El proyecto incluye los siguientes archivos de entorno versionados:
+
+- `.env.development` — Usado automáticamente al ejecutar `npm start` (desarrollo). Contiene `PORT=8081` y `REACT_APP_API_URL=http://localhost:8080/api/v1`.
+- `.env.production` — Usado automáticamente al ejecutar `npm run build` (producción). Contiene `REACT_APP_API_URL=https://api.telepark.com/api/v1` (placeholder).
+- `.env` — Archivo de respaldo de baja prioridad. Aplica si no existe un archivo específico del entorno.
+
+> **Importante:** Los archivos `.env*.local` están en `.gitignore` y no deben versionarse. Úsalos para configuración local sensible.
+
+### Orden de precedencia (CRA)
+
+Las variables se resuelven en el siguiente orden (de mayor a menor prioridad):
+
+1. `.env.development.local` / `.env.production.local` (no versionados)
+2. `.env.development` / `.env.production` (versionados, específicos del entorno)
+3. `.env` (versionado, respaldo genérico)
+4. Variables de entorno del sistema (sobrescriben todo)
+
+Consulta la [documentación oficial de CRA](https://create-react-app.dev/docs/adding-custom-environment-variables/) para más detalles.
+
 ## Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).

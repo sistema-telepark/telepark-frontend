@@ -8,6 +8,6 @@ export const authRepository = {
   },
 
   logout() {
-    localStorage.removeItem("auth");
+    localStorage.removeItem("user");
   },
 };
