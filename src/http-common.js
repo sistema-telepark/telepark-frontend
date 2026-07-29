@@ -1,17 +1,20 @@
-import axios from "axios";
-import { TokenService } from "./services/tokenService";
+import axios from 'axios';
+import { TokenService } from './services/tokenService';
 
 const instance = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || (console.warn("[TELEPARK] WARN: REACT_APP_API_URL no definida, usando fallback localhost"), "http://localhost:8080/api/v1"),
+  baseURL:
+    process.env.REACT_APP_API_URL ||
+    (console.warn('[TELEPARK] WARN: REACT_APP_API_URL no definida, usando fallback localhost'),
+    'http://localhost:8080/api/v1'),
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 instance.interceptors.request.use(
   (config) => {
     const token = TokenService.getLocalAccessToken();
     if (token) {
-      config.headers["Authorization"] = "Bearer " + token;
+      config.headers['Authorization'] = 'Bearer ' + token;
     }
     return config;
   },
@@ -25,12 +28,12 @@ instance.interceptors.response.use(
   },
   async (err) => {
     const originalConfig = err.config;
-    if (originalConfig.url !== "/auth/login" && err.response) {
+    if (originalConfig.url !== '/auth/login' && err.response) {
       // Access Token was expired
       if (err.response.status === 401 && !originalConfig._retry) {
         originalConfig._retry = true;
         try {
-          const rs = await instance.post("/auth/refresh", {
+          const rs = await instance.post('/auth/refresh', {
             refresh: TokenService.getLocalRefreshToken(),
           });
           const accessToken = rs.data.access;

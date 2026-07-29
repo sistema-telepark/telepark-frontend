@@ -1,30 +1,28 @@
-import http from "../http-common";
+import http from '../http-common';
 
 export const diagnosticoRepository = {
+  //me trae los diagnosticos de una persona con ep
+  async get(personaep_pk) {
+    let response = await http.get(`/personas-ep/${personaep_pk}/diagnosticos`);
 
-    //me trae los diagnosticos de una persona con ep
-    async get(personaep_pk) {
-        let response = await http.get(`/personas-ep/${personaep_pk}/diagnosticos`);
+    return response;
+  },
 
-        return response;
-    },
+  async create(data) {
+    let response = await http.post(`/diagnosticos`, data);
 
-    async create(data) {
-        let response = await http.post(`/diagnosticos`, data);
+    return response;
+  },
 
-        return response;
-    },
+  async update(id, data) {
+    let response = await http.put(`/diagnosticos/${id}`, data);
 
-    async update(id, data) {
-        let response = await http.put(`/diagnosticos/${id}`, data);
+    return response;
+  },
 
-        return response;
-    },
+  async delete(id) {
+    let response = await http.delete(`/diagnosticos/${id}`);
 
-    async delete(id) {
-        let response = await http.delete(`/diagnosticos/${id}`);
-
-        return response;
-    }
-
+    return response;
+  },
 };

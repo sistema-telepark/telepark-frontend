@@ -1,29 +1,27 @@
-import http from "../http-common";
+import http from '../http-common';
 
 export const medicamentoRepository = {
+  async getAll() {
+    let response = await http.get(`/medicamentos`);
 
-    async getAll() {
-        let response = await http.get(`/medicamentos`);
+    return response;
+  },
 
-        return response;
-    },
+  async create(data) {
+    let response = await http.post(`/medicamentos`, data);
 
-    async create(data) {
-        let response = await http.post(`/medicamentos`, data);
+    return response;
+  },
 
-        return response;
-    },
+  async update(id, data) {
+    let response = await http.put(`/medicamentos/${id}`, data);
 
-    async update(id, data) {
-        let response = await http.put(`/medicamentos/${id}`, data);
+    return response;
+  },
 
-        return response;
-    },
+  async delete(id) {
+    let response = await http.delete(`/medicamentos/${id}`);
 
-    async delete(id) {
-        let response = await http.delete(`/medicamentos/${id}`);
-
-        return response;
-    }
-
+    return response;
+  },
 };

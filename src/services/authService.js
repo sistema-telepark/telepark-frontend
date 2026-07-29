@@ -1,4 +1,4 @@
-import http from "../http-common";
+import http from '../http-common';
 
 export const authRepository = {
   async login(data) {
@@ -8,6 +8,6 @@ export const authRepository = {
   },
 
   logout() {
-    localStorage.removeItem("user");
+    localStorage.removeItem('user');
   },
 };

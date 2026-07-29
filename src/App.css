@@ -1,6 +1,6 @@
 .contenedor {
-  min-height:100vh; 
-  display:flex;
+  min-height: 100vh;
+  display: flex;
   flex-direction: column;
 }
 .App {
@@ -19,35 +19,35 @@
 .btn-verde {
   box-shadow: 3px 3px #0d8602;
   background-image: linear-gradient(to right, #44f334, #12c70c, #28c209);
-  color:white
+  color: white;
 }
 
 .btn-rojo {
   box-shadow: 3px 3px #860202;
   background-image: linear-gradient(to right, #f73838, #c70c0c, #c20909);
-  color:white;
+  color: white;
 }
 
 .btn-rojo-simple {
   background-image: linear-gradient(to right, #f73838, #c70c0c, #c20909);
-  color:white
+  color: white;
 }
 
 .btn-azul {
   box-shadow: 3px 3px #0b0286;
   background-image: linear-gradient(to right, #383bf7, #1f0cc7, #2509c2);
-  color:white
+  color: white;
 }
 
 .btn-azul-simple {
   background-image: linear-gradient(to right, #383bf7, #1f0cc7, #2509c2);
-  color:white
+  color: white;
 }
 
 .btn-celeste {
   box-shadow: 3px 3px #024686;
   background-image: linear-gradient(to right, #387bf7, #0c6dc7, #096fc2);
-  color:white
+  color: white;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -83,16 +83,20 @@
 }
 
 .form-paciente {
-  background: #C9D6FF;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #E1E1E3, #ffffff);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #E1E1E3, #ffffff); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #c9d6ff; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #e1e1e3, #ffffff); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #e1e1e3,
+    #ffffff
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   border-radius: 12px;
-  box-shadow:0 .5rem 1rem rgba(0,0,0,.15);
-  justify-content:center;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  justify-content: center;
   margin-top: 1rem;
   margin-bottom: 2rem;
   padding: 2.5rem 2rem;
-} 
+}
 
 .logo {
   width: 150px;
@@ -103,13 +107,17 @@
 footer {
   display: flex;
   margin-top: auto;
-  width:100%;
+  width: 100%;
   font-style: italic;
   align-items: center;
-  justify-content:center;
-  background: #C9D6FF;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to left, #E1E1E3, #ffffff);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to left, #E1E1E3, #ffffff); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  justify-content: center;
+  background: #c9d6ff; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to left, #e1e1e3, #ffffff); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to left,
+    #e1e1e3,
+    #ffffff
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 table {
@@ -118,45 +126,47 @@ table {
   border: rgba(255, 255, 255, 0) !important;
 }
 
-table th, table td {
+table th,
+table td {
   text-align: center;
 }
 
 @media screen and (max-width: 600px) {
   table {
-      width:100%;
+    width: 100%;
   }
   thead {
-      display: none;
+    display: none;
   }
   tr:nth-of-type(2n) {
-      background-color: inherit;
+    background-color: inherit;
   }
   tr td:first-child {
-      background: #f0f0f0;
-      font-weight:bold;
-      font-size:1.3em;
+    background: #f0f0f0;
+    font-weight: bold;
+    font-size: 1.3em;
   }
   tbody td {
-      display: block;
-      text-align:center;
+    display: block;
+    text-align: center;
   }
   tbody td:before {
-      content: attr(data-th);
-      display: block;
-      text-align:center;
+    content: attr(data-th);
+    display: block;
+    text-align: center;
   }
 }
 
-.form-control, .form-select {
+.form-control,
+.form-select {
   border-color: white;
-  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
 
 .field-error {
   font-size: 12px;
-	margin-bottom: 0;
-	color:red;
+  margin-bottom: 0;
+  color: red;
   font-weight: bold;
 }
 

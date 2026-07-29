@@ -1,29 +1,27 @@
-import http from "../http-common";
+import http from '../http-common';
 
 export const enfermedadRepository = {
+  async getAll() {
+    let response = await http.get(`/enfermedades`);
 
-    async getAll() {
-        let response = await http.get(`/enfermedades`);
+    return response;
+  },
 
-        return response;
-    },
+  async create(data) {
+    let response = await http.post(`/enfermedades`, data);
 
-    async create(data) {
-        let response = await http.post(`/enfermedades`, data);
+    return response;
+  },
 
-        return response;
-    },
+  async update(id, data) {
+    let response = await http.put(`/enfermedades/${id}`, data);
 
-    async update(id, data) {
-        let response = await http.put(`/enfermedades/${id}`, data);
+    return response;
+  },
 
-        return response;
-    },
+  async delete(id) {
+    let response = await http.delete(`/enfermedades/${id}`);
 
-    async delete(id) {
-        let response = await http.delete(`/enfermedades/${id}`);
-
-        return response;
-    }
-
+    return response;
+  },
 };

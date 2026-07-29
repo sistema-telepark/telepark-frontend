@@ -1,14 +1,10 @@
-import { createStore, applyMiddleware,compose } from 'redux';
-import thunk from 'redux-thunk';
-import rootReducer from './reducers';
+import { configureStore } from '@reduxjs/toolkit';
+import globalReducer from './reducers/globalSlice';
 
-const store = createStore(
-  rootReducer,
-  compose(applyMiddleware(thunk),
-      typeof window === 'object' &&
-      typeof window?.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ !== 'undefined' ?
-          window?.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__() : f => f
-  )
-);
+const store = configureStore({
+  reducer: {
+    global: globalReducer,
+  },
+});
 
 export default store;

@@ -1,8 +1,10 @@
-import { CAMBIAR } from "../actions/types";
+// DEPRECATED: Reemplazado por globalSlice.js (Redux Toolkit createSlice)
+// Mantenido temporalmente como referencia. Se eliminará en Sprint 4.
+import { CAMBIAR } from '../actions/types';
 
 const initialState = {
-  idEpElegido: "",
-  nombreEpElegido: "",
+  idEpElegido: '',
+  nombreEpElegido: '',
 };
 
 function globalReducer(global = initialState, action) {

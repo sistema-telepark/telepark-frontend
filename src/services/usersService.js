@@ -1,4 +1,4 @@
-import http from "../http-common";
+import http from '../http-common';
 
 export const userRepository = {
   async getUsers() {
@@ -17,6 +17,5 @@ export const userRepository = {
     let response = await http.post(`/usuarios`, data);
 
     return response;
-  }
-
+  },
 };

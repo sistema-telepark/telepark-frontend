@@ -1,13 +1,13 @@
 services:
-  frontend:
+  telepark-frontend:
     build:
       context: .
       args:
-        REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:8080/api/v1}
+        REACT_APP_API_URL: ${REACT_APP_API_URL}
     ports:
-      - "${PORT:-8081}:80"
+      - "${PORT:-8080}:80"
     environment:
-      - REACT_APP_API_URL=${REACT_APP_API_URL:-http://localhost:8080/api/v1}
+      - REACT_APP_API_URL=${REACT_APP_API_URL}
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://127.0.0.1:80"]
       interval: 30s

@@ -1,30 +1,28 @@
-import http from "../http-common";
+import http from '../http-common';
 
 export const evolucionRepository = {
+  //me trae las evoluciones de una persona con ep
+  async get(personaep_pk) {
+    let response = await http.get(`/personas-ep/${personaep_pk}/evoluciones`);
 
-    //me trae las evoluciones de una persona con ep
-    async get(personaep_pk) {
-        let response = await http.get(`/personas-ep/${personaep_pk}/evoluciones`);
+    return response;
+  },
 
-        return response;
-    },
+  async create(data) {
+    let response = await http.post(`/evoluciones`, data);
 
-    async create(data) {
-        let response = await http.post(`/evoluciones`, data);
+    return response;
+  },
 
-        return response;
-    },
+  async update(id, data) {
+    let response = await http.put(`/evoluciones/${id}`, data);
 
-    async update(id, data) {
-        let response = await http.put(`/evoluciones/${id}`, data);
+    return response;
+  },
 
-        return response;
-    },
+  async delete(id) {
+    let response = await http.delete(`/evoluciones/${id}`);
 
-    async delete(id) {
-        let response = await http.delete(`/evoluciones/${id}`);
-
-        return response;
-    }
-
+    return response;
+  },
 };

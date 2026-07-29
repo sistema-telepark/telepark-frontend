@@ -1,4 +1,4 @@
-import http from "../http-common";
+import http from '../http-common';
 
 export const municipioRepository = {
   async getAll() {
@@ -6,5 +6,4 @@ export const municipioRepository = {
 
     return response;
   },
-
 };

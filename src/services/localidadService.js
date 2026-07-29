@@ -1,4 +1,4 @@
-import http from "../http-common";
+import http from '../http-common';
 
 export const localidadRepository = {
   async getAll() {
@@ -6,5 +6,4 @@ export const localidadRepository = {
 
     return response;
   },
-
 };

@@ -1,8 +1,8 @@
-import { CAMBIAR } from "./types";
+import { cambiar } from '../reducers/globalSlice';
 
 export const cambiarID = (id, nombre) => (dispatch) => {
   try {
-    dispatch({ type: CAMBIAR, idPersona: id, nombrePersona: nombre });
+    dispatch(cambiar({ idPersona: id, nombrePersona: nombre }));
   } catch (err) {
     console.log(err);
   }

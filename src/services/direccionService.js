@@ -1,11 +1,9 @@
-import http from "../http-common";
+import http from '../http-common';
 
 export const direccionRepository = {
+  async create(data) {
+    let response = await http.post(`/direcciones`, data);
 
-    async create(data) {
-        let response = await http.post(`/direcciones`, data);
-
-        return response;
-    },
-
+    return response;
+  },
 };

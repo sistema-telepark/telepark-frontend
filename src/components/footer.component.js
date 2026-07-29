@@ -1,5 +1,5 @@
-import React from "react";
-import logoTelepark from "../images/logo2022.png";
+import React from 'react';
+import logoTelepark from '../images/logo2022.png';
 
 class Footer extends React.Component {
   render() {
@@ -8,7 +8,7 @@ class Footer extends React.Component {
         <img
           className="logo"
           src={logoTelepark}
-          style={{ width: "150px" }}
+          style={{ width: '150px' }}
           alt="logo de telepark"
         />
       </footer>
