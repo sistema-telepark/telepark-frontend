@@ -13,6 +13,7 @@ export const TokenService = {
     let user = JSON.parse(localStorage.getItem('user'));
     user.access = token;
     localStorage.setItem('user', JSON.stringify(user));
+    window.dispatchEvent(new CustomEvent('auth-change'));
   },
 
   getUser() {
@@ -22,10 +23,12 @@ export const TokenService = {
   setUser(user) {
     console.log(JSON.stringify(user));
     localStorage.setItem('user', JSON.stringify(user));
+    window.dispatchEvent(new CustomEvent('auth-change'));
   },
 
   removeUser() {
     localStorage.removeItem('user');
+    window.dispatchEvent(new CustomEvent('auth-change'));
   },
 
   getUsername() {
