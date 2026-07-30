@@ -111,7 +111,7 @@ const FichaMedica = () => {
                   diagnosticos
                     .filter((diagnostico) => diagnostico.borrado === 0)
                     .map((diagnostico, index) => (
-                      <tr key={index}>
+                      <tr key={diagnostico.iddiagnostico}>
                         <td>{diagnostico.idenfermedad.nombre}</td>
                         <td>{utils.convertirFormatoFecha(diagnostico.fecha)}</td>
                       </tr>
@@ -154,7 +154,7 @@ const FichaMedica = () => {
                   evoluciones
                     .filter((evolucion) => evolucion.borrado === 0)
                     .map((evolucion, index) => (
-                      <tr key={index}>
+                      <tr key={evolucion.idevolucion}>
                         <td>Estado: {evolucion.escalaevolucion}</td>
                         <td>{utils.describirEstado(evolucion.escalaevolucion)}</td>
                         <td>{utils.convertirFormatoFecha(evolucion.fecha)}</td>
@@ -197,7 +197,7 @@ const FichaMedica = () => {
                   osociales
                     .filter((osocial) => osocial.borrado === 0)
                     .map((osocial, index) => (
-                      <tr key={index}>
+                      <tr key={osocial.idos}>
                         <td>{osocial.idobrasocial.nombre}</td>
                         <td>{utils.convertirTipo(osocial.idobrasocial.esestatal)}</td>
                       </tr>
@@ -242,7 +242,7 @@ const FichaMedica = () => {
                   indicaciones
                     .filter((indicacion) => indicacion.borrado === 0)
                     .map((indicacion, index) => (
-                      <tr key={index}>
+                      <tr key={indicacion.idindicacion}>
                         <td>{indicacion.idmedicamento.nombre}</td>
                         <td>{indicacion.cantidadmiligramos} mg</td>
                         <td>Cada {utils.convertirFormatoHora(indicacion.horadetoma)} hs</td>

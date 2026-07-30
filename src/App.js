@@ -1,25 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { Suspense, lazy, useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 import './App.css';
-import AdminUsuarios from './components/admin-users.component';
-import AddPaciente from './components/add-paciente.component';
-import FichaMedica from './components/fichaMedica.component';
-import ListaDiagnostico from './components/list-diagnostico.component';
-import ListaEvolucion from './components/list-evolucion.component';
-import ListaObraSocial from './components/list-obrasocial.component';
-import ListaIndicacion from './components/list-indicacion.component';
-import Footer from './components/footer.component';
-import Login from './components/login.component';
-import Search from './components/search-criteria.component';
-import Events from './components/gestion-eventos.component';
-import TypeEvents from './components/tipos-de-eventos.component';
-import Nomenclador from './components/nomenclador.component';
-import ListaPaciente from './components/list-pacientesEp.component';
+// Imports estáticos (NO lazy) — se cargan siempre
 import Sidebar from './components/sidebar.component';
-import { TokenService } from './services/tokenService';
+import Footer from './components/footer.component';
+import LoadingSpinner from './components/shared/LoadingSpinner';
 import ErrorFallbackRoute from './components/error-boundary/ErrorFallbackRoute';
 import { logError } from './components/error-boundary/logError';
+import { TokenService } from './services/tokenService';
+
+// Lazy imports con webpackChunkName — se cargan bajo demanda
+const Login = lazy(() => import(/* webpackChunkName: "login" */ './components/login.component'));
+const AdminUsuarios = lazy(() => import(/* webpackChunkName: "admin-usuarios" */ './components/admin-users.component'));
+const AddPaciente = lazy(() => import(/* webpackChunkName: "add-paciente" */ './components/add-paciente.component'));
+const FichaMedica = lazy(() => import(/* webpackChunkName: "ficha-medica" */ './components/fichaMedica.component'));
+const ListaDiagnostico = lazy(() => import(/* webpackChunkName: "lista-diagnostico" */ './components/list-diagnostico.component'));
+const ListaEvolucion = lazy(() => import(/* webpackChunkName: "lista-evolucion" */ './components/list-evolucion.component'));
+const ListaObraSocial = lazy(() => import(/* webpackChunkName: "lista-obrasocial" */ './components/list-obrasocial.component'));
+const ListaIndicacion = lazy(() => import(/* webpackChunkName: "lista-indicacion" */ './components/list-indicacion.component'));
+const Search = lazy(() => import(/* webpackChunkName: "search" */ './components/search-criteria.component'));
+const Events = lazy(() => import(/* webpackChunkName: "events" */ './components/gestion-eventos.component'));
+const TypeEvents = lazy(() => import(/* webpackChunkName: "type-events" */ './components/tipos-de-eventos.component'));
+const Nomenclador = lazy(() => import(/* webpackChunkName: "nomenclador" */ './components/nomenclador.component'));
+const ListaPaciente = lazy(() => import(/* webpackChunkName: "lista-pacientes" */ './components/list-pacientesEp.component'));
 
 function AppContent({ token, userName, userRole, setToken, setUserName, setUserRole }) {
   const navigate = useNavigate();
@@ -70,7 +74,9 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                   onError={logError}
                   resetKeys={[token]}
                 >
-                  <Login />
+                  <Suspense fallback={<LoadingSpinner />}>
+                    <Login />
+                  </Suspense>
                 </ErrorBoundary>
               }
             />
@@ -88,7 +94,9 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                           onError={logError}
                           resetKeys={[token]}
                         >
-                          <AdminUsuarios />
+                          <Suspense fallback={<LoadingSpinner />}>
+                            <AdminUsuarios />
+                          </Suspense>
                         </ErrorBoundary>
                       }
                     />
@@ -102,7 +110,9 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                           onError={logError}
                           resetKeys={[token]}
                         >
-                          <AddPaciente />
+                          <Suspense fallback={<LoadingSpinner />}>
+                            <AddPaciente />
+                          </Suspense>
                         </ErrorBoundary>
                       }
                     />
@@ -119,7 +129,9 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                           onError={logError}
                           resetKeys={[token]}
                         >
-                          <AddPaciente />
+                          <Suspense fallback={<LoadingSpinner />}>
+                            <AddPaciente />
+                          </Suspense>
                         </ErrorBoundary>
                       }
                     />
@@ -136,7 +148,9 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                       onError={logError}
                       resetKeys={[token]}
                     >
-                      <FichaMedica />
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <FichaMedica />
+                      </Suspense>
                     </ErrorBoundary>
                   }
                 />
@@ -150,7 +164,9 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                       onError={logError}
                       resetKeys={[token]}
                     >
-                      <ListaDiagnostico />
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <ListaDiagnostico />
+                      </Suspense>
                     </ErrorBoundary>
                   }
                 />
@@ -164,7 +180,9 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                       onError={logError}
                       resetKeys={[token]}
                     >
-                      <ListaEvolucion />
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <ListaEvolucion />
+                      </Suspense>
                     </ErrorBoundary>
                   }
                 />
@@ -178,7 +196,9 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                       onError={logError}
                       resetKeys={[token]}
                     >
-                      <ListaObraSocial />
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <ListaObraSocial />
+                      </Suspense>
                     </ErrorBoundary>
                   }
                 />
@@ -192,7 +212,9 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                       onError={logError}
                       resetKeys={[token]}
                     >
-                      <ListaIndicacion />
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <ListaIndicacion />
+                      </Suspense>
                     </ErrorBoundary>
                   }
                 />
@@ -206,7 +228,9 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                       onError={logError}
                       resetKeys={[token]}
                     >
-                      <Search />
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <Search />
+                      </Suspense>
                     </ErrorBoundary>
                   }
                 />
@@ -220,7 +244,9 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                       onError={logError}
                       resetKeys={[token]}
                     >
-                      <ListaPaciente />
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <ListaPaciente />
+                      </Suspense>
                     </ErrorBoundary>
                   }
                 />
@@ -234,7 +260,9 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                       onError={logError}
                       resetKeys={[token]}
                     >
-                      <Nomenclador />
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <Nomenclador />
+                      </Suspense>
                     </ErrorBoundary>
                   }
                 />
@@ -248,7 +276,9 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                       onError={logError}
                       resetKeys={[token]}
                     >
-                      <Events />
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <Events />
+                      </Suspense>
                     </ErrorBoundary>
                   }
                 />
@@ -262,7 +292,9 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                       onError={logError}
                       resetKeys={[token]}
                     >
-                      <TypeEvents />
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <TypeEvents />
+                      </Suspense>
                     </ErrorBoundary>
                   }
                 />

@@ -5,6 +5,7 @@ import { userRepository } from '../services/usersService';
 import Swal from 'sweetalert2';
 import { TokenService } from '../services/tokenService';
 import utils from '../utils/utils';
+import { SearchIcon, PlusIcon, PencilIcon } from './icons/IconsShared';
 
 const AdminUsuarios = () => {
   const [showNuevo, setShowNuevo] = useState(false);
@@ -293,16 +294,7 @@ const AdminUsuarios = () => {
           </div>
           <div className="mb-4 col-2 col-md-2 col-lg-6 col-xl-6" style={{ paddingLeft: '0px' }}>
             <button type="button" className="btn btn-verde" onClick={() => buscar()}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                fill="currentColor"
-                className="bi bi-search"
-                viewBox="0 0 16 16"
-              >
-                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a6.5 6.5 0 1 1-11 0 6.5 6.5 0 0 1 11 0z" />
-              </svg>
+              <SearchIcon />
             </button>
           </div>
         </div>
@@ -313,16 +305,7 @@ const AdminUsuarios = () => {
             style={{ textAlign: 'right' }}
           >
             <button type="button" className="btn btn-azul" onClick={() => agregar()}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                className="bi bi-plus-lg"
-                viewBox="0 0 16 16"
-              >
-                <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z" />
-              </svg>
+              <PlusIcon />
               Agregar
             </button>
           </div>
@@ -589,7 +572,7 @@ const AdminUsuarios = () => {
                         usuario.name.toUpperCase().includes(campo.buscador)
                     )
                     .map((usuario, index) => (
-                      <tr key={index}>
+                      <tr key={usuario.id ?? usuario.username}>
                         <td>{usuario.username}</td>
                         <td>{usuario.name}</td>
                         <td>{utils.convertRole(usuario.is_superuser)}</td>
@@ -602,20 +585,7 @@ const AdminUsuarios = () => {
                             style={{ marginRight: 10 }}
                             onClick={() => editUser(usuario)}
                           >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="16"
-                              height="16"
-                              fill="currentColor"
-                              className="bi bi-pencil-square"
-                              viewBox="0 0 16 16"
-                            >
-                              <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                              <path
-                                fillRule="evenodd"
-                                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
-                              />
-                            </svg>
+                            <PencilIcon />
                           </button>
                         </td>
                       </tr>

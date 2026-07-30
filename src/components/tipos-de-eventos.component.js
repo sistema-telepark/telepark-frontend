@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import { Container, Form, FormGroup, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { eventRespository } from '../services/event.service';
 import Swal from 'sweetalert2';
+import { PencilIcon, PlusIcon } from './icons/IconsShared';
 
 const TypeEvents = () => {
   const [typeEvent, setTypeEvent] = useState([]);
@@ -216,7 +217,7 @@ const TypeEvents = () => {
             {typeEvent
               .filter((element) => element.borrado === 0)
               .map((element, index) => (
-                <tbody key={index}>
+                <tbody key={element.idtipoevento}>
                   <tr>
                     <td>{element.idtipoevento}</td>
                     <td>{element.nombre}</td>
@@ -234,20 +235,7 @@ const TypeEvents = () => {
                         className="btn btn-verde me-1"
                         onClick={() => showModalEdit(element)}
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="currentColor"
-                          className="bi bi-pencil-square"
-                          viewBox="0 0 16 16"
-                        >
-                          <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                          <path
-                            fillRule="evenodd"
-                            d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
-                          />
-                        </svg>
+                        <PencilIcon />
                       </button>
                       <button
                         type="button"
@@ -306,16 +294,7 @@ const TypeEvents = () => {
             Cancelar
           </button>
           <button type="button" className="btn btn-azul" onClick={() => guardarNuevo()}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              className="bi bi-plus-lg"
-              viewBox="0 0 16 16"
-            >
-              <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z" />
-            </svg>
+            <PlusIcon />
             Agregar
           </button>
         </ModalFooter>

@@ -25,7 +25,7 @@ const ObraSocialForm = ({
             <option value="">Elegir</option>
             {obrasociales &&
               obrasociales.map((obrasocial, index) => (
-                <option value={obrasocial.idobrasocial} key={index}>
+                <option value={obrasocial.idobrasocial} key={obrasocial.idobrasocial}>
                   {obrasocial.nombre}
                 </option>
               ))}

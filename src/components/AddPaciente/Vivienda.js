@@ -26,7 +26,7 @@ const Vivienda = (register, errors, watch, tipo, arrayProvincias, municipios) =>
             <option value="">Provincia</option>
             {arrayProvincias &&
               arrayProvincias.map((provincia, index) => (
-                <option value={provincia.provincia} key={index}>
+                <option value={provincia.provincia} key={provincia.idprovincia ?? provincia.provincia}>
                   {provincia.provincia}
                 </option>
               ))}
@@ -52,7 +52,7 @@ const Vivienda = (register, errors, watch, tipo, arrayProvincias, municipios) =>
               municipios
                 .filter((municipio) => municipio.provincia === watch('provincia' + tipo))
                 .map((municipio, index) => (
-                  <option value={municipio.idmunicipio} key={index}>
+                  <option value={municipio.idmunicipio} key={municipio.idmunicipio}>
                     {municipio.nombre}
                   </option>
                 ))}
