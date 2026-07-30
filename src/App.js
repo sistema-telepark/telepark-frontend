@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { ErrorBoundary } from 'react-error-boundary';
 import './App.css';
 import AdminUsuarios from './components/admin-users.component';
 import AddPaciente from './components/add-paciente.component';
@@ -17,6 +18,8 @@ import Nomenclador from './components/nomenclador.component';
 import ListaPaciente from './components/list-pacientesEp.component';
 import Sidebar from './components/sidebar.component';
 import { TokenService } from './services/tokenService';
+import ErrorFallbackRoute from './components/error-boundary/ErrorFallbackRoute';
+import { logError } from './components/error-boundary/logError';
 
 function AppContent({ token, userName, userRole, setToken, setUserName, setUserRole }) {
   const navigate = useNavigate();
@@ -57,30 +60,212 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
       <div className="container">
         <div className="row justify-content-center">
           <Routes>
-            <Route path="/" element={<Login />} />
+            <Route
+              path="/"
+              element={
+                <ErrorBoundary
+                  FallbackComponent={(props) => (
+                    <ErrorFallbackRoute {...props} componentName="Login" />
+                  )}
+                  onError={logError}
+                  resetKeys={[token]}
+                >
+                  <Login />
+                </ErrorBoundary>
+              }
+            />
             {token && (
               <>
                 {userRole === true ? (
                   <>
-                    <Route path="/list-usuarios" element={<AdminUsuarios />} />
-                    <Route path="/add-paciente" element={<AddPaciente />} />
+                    <Route
+                      path="/list-usuarios"
+                      element={
+                        <ErrorBoundary
+                          FallbackComponent={(props) => (
+                            <ErrorFallbackRoute {...props} componentName="AdminUsuarios" />
+                          )}
+                          onError={logError}
+                          resetKeys={[token]}
+                        >
+                          <AdminUsuarios />
+                        </ErrorBoundary>
+                      }
+                    />
+                    <Route
+                      path="/add-paciente"
+                      element={
+                        <ErrorBoundary
+                          FallbackComponent={(props) => (
+                            <ErrorFallbackRoute {...props} componentName="AddPaciente" />
+                          )}
+                          onError={logError}
+                          resetKeys={[token]}
+                        >
+                          <AddPaciente />
+                        </ErrorBoundary>
+                      }
+                    />
                   </>
                 ) : (
                   <>
-                    <Route path="/add-paciente" element={<AddPaciente />} />
+                    <Route
+                      path="/add-paciente"
+                      element={
+                        <ErrorBoundary
+                          FallbackComponent={(props) => (
+                            <ErrorFallbackRoute {...props} componentName="AddPaciente" />
+                          )}
+                          onError={logError}
+                          resetKeys={[token]}
+                        >
+                          <AddPaciente />
+                        </ErrorBoundary>
+                      }
+                    />
                   </>
                 )}
 
-                <Route path="/ficha" element={<FichaMedica />} />
-                <Route path="/list-diagnostico" element={<ListaDiagnostico />} />
-                <Route path="/list-evolucion" element={<ListaEvolucion />} />
-                <Route path="/list-obrasocial" element={<ListaObraSocial />} />
-                <Route path="/list-indicacion" element={<ListaIndicacion />} />
-                <Route path="/search" element={<Search />} />
-                <Route path="/list-pacientes" element={<ListaPaciente />} />
-                <Route path="/nomenclador" element={<Nomenclador />} />
-                <Route path="/events" element={<Events />} />
-                <Route path="/type-events" element={<TypeEvents />} />
+                <Route
+                  path="/ficha"
+                  element={
+                    <ErrorBoundary
+                      FallbackComponent={(props) => (
+                        <ErrorFallbackRoute {...props} componentName="FichaMedica" />
+                      )}
+                      onError={logError}
+                      resetKeys={[token]}
+                    >
+                      <FichaMedica />
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/list-diagnostico"
+                  element={
+                    <ErrorBoundary
+                      FallbackComponent={(props) => (
+                        <ErrorFallbackRoute {...props} componentName="ListaDiagnostico" />
+                      )}
+                      onError={logError}
+                      resetKeys={[token]}
+                    >
+                      <ListaDiagnostico />
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/list-evolucion"
+                  element={
+                    <ErrorBoundary
+                      FallbackComponent={(props) => (
+                        <ErrorFallbackRoute {...props} componentName="ListaEvolucion" />
+                      )}
+                      onError={logError}
+                      resetKeys={[token]}
+                    >
+                      <ListaEvolucion />
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/list-obrasocial"
+                  element={
+                    <ErrorBoundary
+                      FallbackComponent={(props) => (
+                        <ErrorFallbackRoute {...props} componentName="ListaObraSocial" />
+                      )}
+                      onError={logError}
+                      resetKeys={[token]}
+                    >
+                      <ListaObraSocial />
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/list-indicacion"
+                  element={
+                    <ErrorBoundary
+                      FallbackComponent={(props) => (
+                        <ErrorFallbackRoute {...props} componentName="ListaIndicacion" />
+                      )}
+                      onError={logError}
+                      resetKeys={[token]}
+                    >
+                      <ListaIndicacion />
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/search"
+                  element={
+                    <ErrorBoundary
+                      FallbackComponent={(props) => (
+                        <ErrorFallbackRoute {...props} componentName="Search" />
+                      )}
+                      onError={logError}
+                      resetKeys={[token]}
+                    >
+                      <Search />
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/list-pacientes"
+                  element={
+                    <ErrorBoundary
+                      FallbackComponent={(props) => (
+                        <ErrorFallbackRoute {...props} componentName="ListaPaciente" />
+                      )}
+                      onError={logError}
+                      resetKeys={[token]}
+                    >
+                      <ListaPaciente />
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/nomenclador"
+                  element={
+                    <ErrorBoundary
+                      FallbackComponent={(props) => (
+                        <ErrorFallbackRoute {...props} componentName="Nomenclador" />
+                      )}
+                      onError={logError}
+                      resetKeys={[token]}
+                    >
+                      <Nomenclador />
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/events"
+                  element={
+                    <ErrorBoundary
+                      FallbackComponent={(props) => (
+                        <ErrorFallbackRoute {...props} componentName="Events" />
+                      )}
+                      onError={logError}
+                      resetKeys={[token]}
+                    >
+                      <Events />
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/type-events"
+                  element={
+                    <ErrorBoundary
+                      FallbackComponent={(props) => (
+                        <ErrorFallbackRoute {...props} componentName="TypeEvents" />
+                      )}
+                      onError={logError}
+                      resetKeys={[token]}
+                    >
+                      <TypeEvents />
+                    </ErrorBoundary>
+                  }
+                />
               </>
             )}
             {!token && <Route path="*" element={<Navigate to="/" replace />} />}
