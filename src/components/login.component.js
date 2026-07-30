@@ -1,25 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Swal from 'sweetalert2';
-import { Navigate } from 'react-router-dom';
-import { withNavigate } from '../utils/withNavigate';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { authRepository } from '../services/authService';
 import { TokenService } from '../services/tokenService';
 import logoTelepark from '../images/logo2022.png';
 
-class Login extends React.Component {
-  constructor(props) {
-    super(props);
+const Login = () => {
+  const navigate = useNavigate();
 
-    // Defino los estados locales
-    this.state = {
-      campo: {},
-      loading: false,
-    };
-  }
+  const [campo, setCampo] = useState({});
+  const [loading, setLoading] = useState(false);
 
   // Valido los campos del formulario
-  validarFormulario() {
-    let campo = this.state.campo;
+  const validarFormulario = () => {
     let formularioValido = true;
 
     // user
@@ -33,50 +26,45 @@ class Login extends React.Component {
     }
 
     return formularioValido;
-  }
+  };
 
   // Una vez que los campos del formulario han sido llenado correctamente
   // Se envía la petición de autenticación al API
-  async enviarFormulario(e) {
+  const enviarFormulario = async (e) => {
     e.preventDefault();
 
     // Si la validación de los campos del formulario ha sido realizada
-    if (this.validarFormulario()) {
-      this.setState({ loading: true });
+    if (validarFormulario()) {
+      setLoading(true);
 
       try {
         const response = await authRepository.login({
-          username: this.state.campo.user,
-          password: this.state.campo.pass,
+          username: campo.user,
+          password: campo.pass,
         });
 
         if (response) {
           console.log('===>', response.data.access);
           TokenService.setUser(response.data);
-          this.send(response.data);
+          send(response.data);
         }
       } catch (error) {
-        this.errorSend();
+        errorSend();
       } finally {
-        this.setState({ loading: false });
+        setLoading(false);
       }
     } else {
-      this.errorSend();
+      errorSend();
     }
-  }
+  };
 
   // Detectamos cuando un campo del formulario es llenado y por ende cambia de estado
-  detectarCambio(field, e) {
-    let campo = this.state.campo;
-    campo[field] = e.target.value;
+  const detectarCambio = (field, e) => {
+    // Cambio de estado de campo — inmutable
+    setCampo({ ...campo, [field]: e.target.value });
+  };
 
-    // Cambio de estado de campo
-    this.setState({
-      campo,
-    });
-  }
-
-  send(data) {
+  const send = (data) => {
     Swal.fire({
       position: 'center',
       icon: 'success',
@@ -87,16 +75,16 @@ class Login extends React.Component {
 
     if (data.is_superuser === true) {
       setTimeout(() => {
-        this.props.navigate('/list-usuarios');
+        navigate('/list-usuarios');
       }, 1500);
     } else {
       setTimeout(() => {
-        this.props.navigate('/add-paciente');
+        navigate('/add-paciente');
       }, 1500);
     }
-  }
+  };
 
-  errorSend() {
+  const errorSend = () => {
     Swal.fire({
       position: 'center',
       icon: 'error',
@@ -105,103 +93,91 @@ class Login extends React.Component {
       confirmButtonText: 'OK',
     });
 
-    this.setState({
-      campo: {
-        user: '',
-        pass: '',
-      },
+    setCampo({
+      user: '',
+      pass: '',
     });
-  }
+  };
 
-  render() {
-    if (TokenService.getLocalAccessToken() && TokenService.getRole() === true)
-      return <Navigate to="/list-usuarios" replace />;
-    if (TokenService.getLocalAccessToken() && TokenService.getRole() !== true)
-      return <Navigate to="/add-paciente" replace />;
+  if (TokenService.getLocalAccessToken() && TokenService.getRole() === true)
+    return <Navigate to="/list-usuarios" replace />;
+  if (TokenService.getLocalAccessToken() && TokenService.getRole() !== true)
+    return <Navigate to="/add-paciente" replace />;
 
-    return (
-      <div className="col-12 col-md-6 col-lg-4 col-xl-4">
-        <form onSubmit={(e) => this.enviarFormulario(e)}>
-          <main
-            className="border-top-sm row justify-content-center form-paciente shadow container-lg mx-auto"
-            style={{ marginTop: '3vh', marginBottom: '3vh' }}
+  return (
+    <div className="col-12 col-md-6 col-lg-4 col-xl-4">
+      <form onSubmit={(e) => enviarFormulario(e)}>
+        <main
+          className="border-top-sm row justify-content-center form-paciente shadow container-lg mx-auto"
+          style={{ marginTop: '3vh', marginBottom: '3vh' }}
+        >
+          <div
+            className="justify-content-center"
+            style={{ paddingTop: '5vh', paddingBottom: '8vh' }}
           >
             <div
-              className="justify-content-center"
-              style={{ paddingTop: '5vh', paddingBottom: '8vh' }}
+              className="col-12 col-md-12 col-lg-12 col-xl-12"
+              style={{ textAlign: 'center', marginBottom: '-5vh' }}
             >
-              <div
-                className="col-12 col-md-12 col-lg-12 col-xl-12"
-                style={{ textAlign: 'center', marginBottom: '-5vh' }}
-              >
-                <img
-                  className="logo"
-                  src={logoTelepark}
-                  style={{ width: '180px' }}
-                  alt="logo de telepark"
-                />
-              </div>
-              <h2 className="mt-4 mt-md-2 text-center">Login</h2>
-              <hr />
-              <div className="container">
-                <div className="row">
-                  <div className="w-100"></div>
-                  <div
-                    className="col-12 col-md-12 col-lg-12 col-xl-12"
-                    style={{ textAlign: 'center', marginTop: '2vh' }}
-                  >
-                    <label className="col-form-label" style={{ float: 'left' }}>
-                      Usuario
-                    </label>
-                    <input
-                      name="user"
-                      type="text"
-                      className="form-control"
-                      placeholder="Ingrese su usuario"
-                      id="user"
-                      aria-describedby="user"
-                      onChange={this.detectarCambio.bind(this, 'user')}
-                      value={this.state.campo['user'] || ''}
-                    />
-                    <label className="col-form-label" style={{ marginTop: '20px', float: 'left' }}>
-                      Contraseña
-                    </label>
-                    <input
-                      name="password"
-                      type="password"
-                      className="form-control"
-                      placeholder="Ingrese su Contraseña"
-                      id="pass"
-                      aria-describedby="pass"
-                      onChange={this.detectarCambio.bind(this, 'pass')}
-                      value={this.state.campo['pass'] || ''}
-                    />
+              <img
+                className="logo"
+                src={logoTelepark}
+                style={{ width: '180px' }}
+                alt="logo de telepark"
+              />
+            </div>
+            <h2 className="mt-4 mt-md-2 text-center">Login</h2>
+            <hr />
+            <div className="container">
+              <div className="row">
+                <div className="w-100"></div>
+                <div
+                  className="col-12 col-md-12 col-lg-12 col-xl-12"
+                  style={{ textAlign: 'center', marginTop: '2vh' }}
+                >
+                  <label className="col-form-label" style={{ float: 'left' }}>
+                    Usuario
+                  </label>
+                  <input
+                    name="user"
+                    type="text"
+                    className="form-control"
+                    placeholder="Ingrese su usuario"
+                    id="user"
+                    aria-describedby="user"
+                    onChange={(e) => detectarCambio('user', e)}
+                    value={campo['user'] || ''}
+                  />
+                  <label className="col-form-label" style={{ marginTop: '20px', float: 'left' }}>
+                    Contraseña
+                  </label>
+                  <input
+                    name="password"
+                    type="password"
+                    className="form-control"
+                    placeholder="Ingrese su Contraseña"
+                    id="pass"
+                    aria-describedby="pass"
+                    onChange={(e) => detectarCambio('pass', e)}
+                    value={campo['pass'] || ''}
+                  />
 
-                    <button
-                      type="submit"
-                      className="btn btn-azul"
-                      style={{ marginTop: '5vh' }}
-                      disabled={this.state.loading}
-                    >
-                      {this.state.loading ? 'Ingresando...' : 'Iniciar Sesión'}
-                    </button>
-                  </div>
+                  <button
+                    type="submit"
+                    className="btn btn-azul"
+                    style={{ marginTop: '5vh' }}
+                    disabled={loading}
+                  >
+                    {loading ? 'Ingresando...' : 'Iniciar Sesión'}
+                  </button>
                 </div>
               </div>
             </div>
-          </main>
-        </form>
-      </div>
-    );
-  }
-}
+          </div>
+        </main>
+      </form>
+    </div>
+  );
+};
 
-// const mapDispatchToProps = (dispatch) => ({
-//   login: (data) => dispatch(setAuthUser(data)),
-// });
-
-// const mapStateToProps = (state, ownProps) => ({
-
-// })
-
-export default withNavigate(Login);
+export default Login;
