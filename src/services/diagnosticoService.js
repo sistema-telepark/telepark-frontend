@@ -1,28 +1,28 @@
 import http from '../http-common';
+import { withServiceHandler } from './errorHandler';
+
+const diagnosticos = {
+  async get(personaep_pk) {
+    const response = await http.get(`/personas-ep/${personaep_pk}/diagnosticos`);
+    return response.data;
+  },
+  async create(data) {
+    const response = await http.post(`/diagnosticos`, data);
+    return response.data;
+  },
+  async update(id, data) {
+    const response = await http.put(`/diagnosticos/${id}`, data);
+    return response.data;
+  },
+  async delete(id) {
+    const response = await http.delete(`/diagnosticos/${id}`);
+    return response.data;
+  },
+};
 
 export const diagnosticoRepository = {
-  //me trae los diagnosticos de una persona con ep
-  async get(personaep_pk) {
-    let response = await http.get(`/personas-ep/${personaep_pk}/diagnosticos`);
-
-    return response;
-  },
-
-  async create(data) {
-    let response = await http.post(`/diagnosticos`, data);
-
-    return response;
-  },
-
-  async update(id, data) {
-    let response = await http.put(`/diagnosticos/${id}`, data);
-
-    return response;
-  },
-
-  async delete(id) {
-    let response = await http.delete(`/diagnosticos/${id}`);
-
-    return response;
-  },
+  get: withServiceHandler(diagnosticos.get, { context: 'obtener diagnosticos' }),
+  create: withServiceHandler(diagnosticos.create, { context: 'crear diagnostico' }),
+  update: withServiceHandler(diagnosticos.update, { context: 'actualizar diagnostico' }),
+  delete: withServiceHandler(diagnosticos.delete, { context: 'eliminar diagnostico' }),
 };

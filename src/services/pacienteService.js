@@ -1,6 +1,7 @@
 import http from '../http-common';
+import { withServiceHandler } from './errorHandler';
 
-export const pacienteRepository = {
+const pacientes = {
   async guardarPaciente(data) {
     let dataDireR = {
       calle: data.calleR,
@@ -37,8 +38,6 @@ export const pacienteRepository = {
       espaciente: 1,
     };
 
-    console.log(dataPersEP);
-
     let personaR = await http.post(`/personas`, dataPersR);
     let personaEP = await http.post(`/personas`, dataPersEP);
 
@@ -58,16 +57,18 @@ export const pacienteRepository = {
       idreferente: personaR.data.idpersona,
     };
 
-    console.log(dataPaciente);
-
     let paciente = await http.post(`/personas-ep`, dataPaciente);
 
-    return paciente;
+    return paciente.data;
   },
 
   async getPacientes() {
-    let response = await http.get(`/personas?espaciente=1`);
-
-    return response;
+    const response = await http.get(`/personas?espaciente=1`);
+    return response.data;
   },
+};
+
+export const pacienteRepository = {
+  guardarPaciente: withServiceHandler(pacientes.guardarPaciente, { context: 'guardar paciente' }),
+  getPacientes: withServiceHandler(pacientes.getPacientes, { context: 'obtener pacientes' }),
 };

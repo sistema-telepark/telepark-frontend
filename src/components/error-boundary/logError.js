@@ -17,3 +17,14 @@ export const logError = (error, info) => {
     }
   );
 };
+
+export const logAsyncError = (error, context = {}) => {
+  console.error(
+    `[AsyncError] ${new Date().toISOString()} | ${window.location.pathname}`,
+    {
+      ...context,
+      error: error.message,
+      stack: error.stack,
+    }
+  );
+};

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 /**
  * ErrorFallbackRoute — Tarjeta de error contextual (NIVEL 2)
@@ -65,6 +66,14 @@ const ErrorFallbackRoute = ({ error, resetErrorBoundary, componentName }) => {
       </div>
     </div>
   );
+};
+
+ErrorFallbackRoute.propTypes = {
+  error: PropTypes.shape({
+    message: PropTypes.string,
+  }),
+  resetErrorBoundary: PropTypes.func.isRequired,
+  componentName: PropTypes.string,
 };
 
 export default ErrorFallbackRoute;

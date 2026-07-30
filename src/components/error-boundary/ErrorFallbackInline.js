@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 /**
  * ErrorFallbackInline — Alerta inline de error (NIVEL 3)
@@ -40,6 +41,14 @@ const ErrorFallbackInline = ({ error, resetErrorBoundary, message }) => {
       )}
     </div>
   );
+};
+
+ErrorFallbackInline.propTypes = {
+  error: PropTypes.shape({
+    message: PropTypes.string,
+  }),
+  resetErrorBoundary: PropTypes.func.isRequired,
+  message: PropTypes.string,
 };
 
 export default ErrorFallbackInline;

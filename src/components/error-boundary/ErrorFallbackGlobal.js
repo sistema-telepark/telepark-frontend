@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import logoTelepark from '../../images/logoTelepark2022.png';
 
 /**
@@ -7,7 +8,7 @@ import logoTelepark from '../../images/logoTelepark2022.png';
  * Se muestra cuando un error no capturado por los boundaries de ruta
  * llega al nivel global. Permite al usuario recargar la aplicación.
  */
-const ErrorFallbackGlobal = ({ error, resetErrorBoundary }) => {
+const ErrorFallbackGlobal = ({ error }) => {
   return (
     <div
       className="d-flex justify-content-center align-items-center min-vh-100"
@@ -41,7 +42,7 @@ const ErrorFallbackGlobal = ({ error, resetErrorBoundary }) => {
 
         <button
           className="btn btn-primary btn-lg"
-          onClick={resetErrorBoundary}
+          onClick={() => window.location.reload()}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -62,6 +63,12 @@ const ErrorFallbackGlobal = ({ error, resetErrorBoundary }) => {
       </div>
     </div>
   );
+};
+
+ErrorFallbackGlobal.propTypes = {
+  error: PropTypes.shape({
+    message: PropTypes.string,
+  }),
 };
 
 export default ErrorFallbackGlobal;

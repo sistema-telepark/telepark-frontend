@@ -1,28 +1,28 @@
 import http from '../http-common';
+import { withServiceHandler } from './errorHandler';
+
+const indicaciones = {
+  async get(personaep_pk) {
+    const response = await http.get(`/personas-ep/${personaep_pk}/indicaciones`);
+    return response.data;
+  },
+  async create(data) {
+    const response = await http.post(`/indicaciones`, data);
+    return response.data;
+  },
+  async update(id, data) {
+    const response = await http.put(`/indicaciones/${id}`, data);
+    return response.data;
+  },
+  async delete(id) {
+    const response = await http.delete(`/indicaciones/${id}`);
+    return response.data;
+  },
+};
 
 export const indicacionRepository = {
-  //me trae la lista de indicaciones de una persona con ep
-  async get(personaep_pk) {
-    let response = await http.get(`/personas-ep/${personaep_pk}/indicaciones`);
-
-    return response;
-  },
-
-  async create(data) {
-    let response = await http.post(`/indicaciones`, data);
-
-    return response;
-  },
-
-  async update(id, data) {
-    let response = await http.put(`/indicaciones/${id}`, data);
-
-    return response;
-  },
-
-  async delete(id) {
-    let response = await http.delete(`/indicaciones/${id}`);
-
-    return response;
-  },
+  get: withServiceHandler(indicaciones.get, { context: 'obtener indicaciones' }),
+  create: withServiceHandler(indicaciones.create, { context: 'crear indicacion' }),
+  update: withServiceHandler(indicaciones.update, { context: 'actualizar indicacion' }),
+  delete: withServiceHandler(indicaciones.delete, { context: 'eliminar indicacion' }),
 };

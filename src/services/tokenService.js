@@ -1,3 +1,13 @@
+/**
+ * TokenService — Gestión de autenticación en localStorage.
+ *
+ * NOTA: Este servicio NO implementa withServiceHandler porque TODOS sus métodos
+ * son síncronos (solo operan sobre localStorage) y no realizan llamadas HTTP.
+ * Además, es importado directamente por http-common.js (interceptor Axios), por lo
+ * que envolverlo con withServiceHandler rompería el interceptor de refresh token.
+ * Si en el futuro se agregan métodos async con HTTP, deben migrarse al patrón
+ * withServiceHandler por separado.
+ */
 export const TokenService = {
   getLocalRefreshToken() {
     const user = JSON.parse(localStorage.getItem('user'));
