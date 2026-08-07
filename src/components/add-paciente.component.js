@@ -52,7 +52,7 @@ const AddPaciente = () => {
         </div>
       </div>
 
-      {DatosPersonales(register, errors, 'EP')}
+      <DatosPersonales register={register} errors={errors} tipo="EP" />
 
       <div className="row mt-3">
         <div className="col-12 col-md-12 col-lg-4 col-xl-3">
@@ -89,7 +89,7 @@ const AddPaciente = () => {
         </div>
       </div>
 
-      {Vivienda(register, errors, watch, 'EP', utils.retornarProvincias(), municipios)}
+      <Vivienda register={register} errors={errors} watch={watch} tipo="EP" arrayProvincias={utils.retornarProvincias()} municipios={municipios} />
 
       <div className="row mt-4">
         <div className="col-12 col-md-12 col-lg-12 col-xl-12">
@@ -192,9 +192,9 @@ const AddPaciente = () => {
         </div>
       </div>
 
-      {DatosPersonales(register, errors, 'R')}
+      <DatosPersonales register={register} errors={errors} tipo="R" />
 
-      {Vivienda(register, errors, watch, 'R', utils.retornarProvincias(), municipios)}
+      <Vivienda register={register} errors={errors} watch={watch} tipo="R" arrayProvincias={utils.retornarProvincias()} municipios={municipios} />
 
       <div className="row">
         <div className={"col-12 col-md-12 col-lg-12 col-xl-12 " + styles.confirmCenter}>

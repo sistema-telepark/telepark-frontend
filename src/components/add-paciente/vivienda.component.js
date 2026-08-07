@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Vivienda = (register, errors, watch, tipo, arrayProvincias, municipios) => {
+const Vivienda = ({ register, errors, watch, tipo, arrayProvincias, municipios }) => {
   return (
     <div>
       <div className="row mt-4">

@@ -1,7 +1,7 @@
 import React from 'react';
 import utils from '../../utils/utils';
 
-const DatosPersonales = (register, errors, tipo) => {
+const DatosPersonales = ({ register, errors, tipo }) => {
   return (
     <div>
       <div className="row">

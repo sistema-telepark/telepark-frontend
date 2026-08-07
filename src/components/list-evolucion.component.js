@@ -44,7 +44,7 @@ const ListaEvolucion = () => {
     let escala = campo.nroEvolucion;
     let fechaEvolucion = campo.fecha;
     let id = idEditado;
-    if ((escala !== '') & (fechaEvolucion !== '')) {
+    if ((escala !== '') && (fechaEvolucion !== '')) {
       let data = {
         escalaevolucion: escala,
         fecha: fechaEvolucion,
@@ -85,7 +85,7 @@ const ListaEvolucion = () => {
   const cargarNuevo = () => {
     let escala = campo.nroEvolucion;
     let fechaEvolucion = campo.fecha;
-    if ((escala !== '') & (fechaEvolucion !== '')) {
+    if ((escala !== '') && (fechaEvolucion !== '')) {
       let data = {
         escalaevolucion: escala,
         fecha: fechaEvolucion,

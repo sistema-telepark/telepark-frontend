@@ -63,10 +63,10 @@ const ListaIndicacion = () => {
     let estadoMedicamento = campo.estado;
     let id = idEditado;
     if (
-      (idMedicamento !== '') &
-      (dosisMedicamento !== '') &
-      (horaMedicamento !== '') &
-      (fechaMedicamento !== '') &
+      (idMedicamento !== '') &&
+      (dosisMedicamento !== '') &&
+      (horaMedicamento !== '') &&
+      (fechaMedicamento !== '') &&
       (estadoMedicamento !== '')
     ) {
       let data = {
@@ -116,10 +116,10 @@ const ListaIndicacion = () => {
     let fechaMedicamento = campo.fecha;
     let estadoMedicamento = campo.estado;
     if (
-      (idMedicamento !== '') &
-      (dosisMedicamento !== '') &
-      (horaMedicamento !== '') &
-      (fechaMedicamento !== '') &
+      (idMedicamento !== '') &&
+      (dosisMedicamento !== '') &&
+      (horaMedicamento !== '') &&
+      (fechaMedicamento !== '') &&
       (estadoMedicamento !== '')
     ) {
       let data = {

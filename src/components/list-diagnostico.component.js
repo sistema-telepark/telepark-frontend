@@ -56,7 +56,7 @@ const ListaDiagnostico = () => {
     let idEnfermedad = campo.enfermedad;
     let fechaEnfermedad = campo.fecha;
     let id = idEditado;
-    if ((idEnfermedad !== '') & (fechaEnfermedad !== '')) {
+    if ((idEnfermedad !== '') && (fechaEnfermedad !== '')) {
       var data = {
         fecha: fechaEnfermedad,
         idpersonaep: idEpElegido,
@@ -99,7 +99,7 @@ const ListaDiagnostico = () => {
   const cargarNuevo = () => {
     let idEnfermedad = campo.enfermedad;
     let fechaEnfermedad = campo.fecha;
-    if ((idEnfermedad !== '') & (fechaEnfermedad !== '')) {
+    if ((idEnfermedad !== '') && (fechaEnfermedad !== '')) {
       let data = {
         fecha: fechaEnfermedad,
         idpersonaep: idEpElegido,
