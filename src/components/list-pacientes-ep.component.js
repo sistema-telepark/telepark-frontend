@@ -6,7 +6,13 @@ import { pacienteRepository } from '../services/paciente.service';
 import '../styles/list-pacientes-ep.css';
 import { Spinner } from 'reactstrap';
 import utils from '../utils/utils';
-import { SearchIcon, EyeIcon, ClipboardCheckIcon, ClipboardDataIcon, JournalPlusIcon, JournalTextIcon } from './icons/icons-shared';
+import {
+  EyeIcon,
+  ClipboardCheckIcon,
+  ClipboardDataIcon,
+  JournalPlusIcon,
+  JournalTextIcon,
+} from './icons/icons-shared';
 import styles from '../styles/list-pacientes-ep.module.css';
 
 const ListaPaciente = (props) => {
@@ -49,7 +55,7 @@ const ListaPaciente = (props) => {
       </div>
 
       <div className="row">
-        <div className="col-10 col-md-10 col-lg-6 col-xl-6">
+        <div className="col-12 col-md-12 col-lg-12 col-xl-12">
           <input
             type="search"
             className="form-control"
@@ -58,11 +64,6 @@ const ListaPaciente = (props) => {
             aria-describedby="buscador"
             onChange={detectarCambio}
           />
-        </div>
-        <div className={"mb-4 col-2 col-md-2 col-lg-6 col-xl-6 " + styles.noPaddingLeft}>
-          <button type="button" className="btn btn-verde">
-            <SearchIcon />
-          </button>
         </div>
       </div>
 

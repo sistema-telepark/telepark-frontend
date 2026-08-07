@@ -1,45 +1,91 @@
-# Getting Started with Create React App
+# TELEPARK Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Sistema de gestión integral para pacientes con **Enfermedad de Parkinson (EP)** de un centro/taller especializado. Permite administrar el registro, seguimiento médico, evolución, medicación, eventos y obras sociales de cada paciente, consumiendo la API de **Django + Django REST Framework** (desarrollada por equipo separado).
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## Requisitos previos
 
-### `yarn start`
+- **Node.js** 16+ (recomendado 18+)
+- **npm** o **yarn**
+- Backend Django disponible en la URL indicada por `REACT_APP_API_URL` (por defecto `http://localhost:8080/api/v1`)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Puesta en marcha
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```bash
+npm install
+npm start
+```
 
-### `yarn test`
+La aplicación se sirve en [http://localhost:3000](http://localhost:3000) (o el puerto definido en `PORT`).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Stack tecnológico
 
-### `yarn build`
+| Tecnología | Versión | Uso |
+|-----------|---------|-----|
+| React | 18.3.x | UI library (API `createRoot`) |
+| Redux Toolkit | 2.2.x | Estado global (slices + `configureStore`) |
+| React Router | 6.26.x | Ruteo SPA (`Routes` + `element`) |
+| Axios | 1.7.x | HTTP client (con interceptores normalizados) |
+| Bootstrap | 5.3.x | CSS framework |
+| Reactstrap | 9.2.x | Componentes Bootstrap |
+| React Hook Form | 7.55.x | Formularios |
+| SweetAlert2 | 11.12.x | Notificaciones y diálogos |
+| react-error-boundary | 6.1.x | Error boundaries (global, ruta, inline) |
+| react-scripts | 5.0.1 | Build tool (Create React App) |
+| ESLint + Prettier | 8.x / 3.x | Calidad de código y formato |
+| Testing Library | 14.x | Tests unitarios e integración |
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+**Backend (equipo separado):** Django + Django REST Framework.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Estructura del proyecto
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+src/
+├── __tests__/        # Tests unitarios, integración y smoke tests
+├── actions/          # Acciones Redux
+├── components/       # Componentes funcionales (kebab-case)
+├── reducers/         # Reducers Redux
+├── services/         # Repositorios de API (con withServiceHandler)
+├── styles/           # CSS modules
+├── utils/            # Utilidades (TokenService, notificationService, errorHandler, logError)
+├── App.js            # Root component: routing + auth reactiva + Error Boundaries
+├── http-common.js    # Instancia de Axios + interceptores (auth, refresh, errores)
+├── store.js          # Configuración del store (Redux Toolkit)
+└── index.js          # Entry point (createRoot + GlobalErrorBoundary)
+```
 
-### `yarn eject`
+Convenciones adoptadas:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- Componentes **funcionales + Hooks** (nunca clase).
+- Archivos en **kebab-case**.
+- **CSS**: Bootstrap 5.3 + CSS modules (mínimo inline).
+- **Errores**: `ErrorBoundary` por sección + notificaciones centralizadas.
+- **API calls**: servicios con `try/catch` + feedback al usuario.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Scripts disponibles
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+En el directorio del proyecto:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+| Script | Descripción |
+|--------|-------------|
+| `npm start` | Servidor de desarrollo con recarga en caliente y lint en consola |
+| `npm test` | Test runner en modo interactivo |
+| `npm run build` | Build de producción en `build/` (minificado, con hashes) |
+| `npm run lint` | Ejecuta ESLint sobre `src/` |
+| `npm run format` | Formatea el código con Prettier |
+| `npm run format:check` | Verifica el formato sin modificar archivos |
+| `npm run eject` | Expone la configuración de CRA (**unidireccional**, no recomendado) |
 
-## Variables de Entorno
+## Docker
+
+El proyecto está contenerizado (`Dockerfile` multi-etapa + `nginx.conf`) y orquestado con `docker-compose.yml`:
+
+```bash
+docker-compose up --build
+```
+
+## Variables de entorno
 
 Este proyecto utiliza variables de entorno para configurar el comportamiento en distintos entornos (desarrollo, producción).
 
@@ -71,30 +117,7 @@ Consulta la [documentación oficial de CRA](https://create-react-app.dev/docs/ad
 
 ## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Proyecto creado con [Create React App](https://create-react-app.dev/). Documentación adicional:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- [Create React App documentation](https://create-react-app.dev/docs/getting-started)
+- [React documentation](https://reactjs.org/)

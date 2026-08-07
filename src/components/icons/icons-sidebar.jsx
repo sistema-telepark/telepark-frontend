@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const MenuIcon = ({ size = 16, color = 'currentColor', className }) => (
+export const MenuIcon = ({ size = 16, color = 'currentColor', className, ...rest }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={size}
@@ -9,6 +9,7 @@ export const MenuIcon = ({ size = 16, color = 'currentColor', className }) => (
     className={className}
     viewBox="0 0 16 16"
     aria-hidden="true"
+    {...rest}
   >
     <path
       fillRule="evenodd"
@@ -17,7 +18,7 @@ export const MenuIcon = ({ size = 16, color = 'currentColor', className }) => (
   </svg>
 );
 
-export const HomeIcon = ({ size = 16, color = 'currentColor', className }) => (
+export const HomeIcon = ({ size = 16, color = 'currentColor', className, ...rest }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={size}
@@ -26,6 +27,7 @@ export const HomeIcon = ({ size = 16, color = 'currentColor', className }) => (
     className={className}
     viewBox="0 0 16 16"
     aria-hidden="true"
+    {...rest}
   >
     <path
       fillRule="evenodd"
@@ -38,7 +40,7 @@ export const HomeIcon = ({ size = 16, color = 'currentColor', className }) => (
   </svg>
 );
 
-export const AdminUsersIcon = ({ size = 16, color = 'currentColor', className }) => (
+export const AdminUsersIcon = ({ size = 16, color = 'currentColor', className, ...rest }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={size}
@@ -47,6 +49,7 @@ export const AdminUsersIcon = ({ size = 16, color = 'currentColor', className })
     className={className}
     viewBox="0 0 880 980"
     aria-hidden="true"
+    {...rest}
   >
     <g transform="translate(0.000000,980.000000) scale(0.1,-0.098)" stroke="none">
       <path d="M3151 9789 c-718 -75 -1367 -524 -1691 -1169 -413 -821 -253 -1820 394 -2465 157 -156 340 -292 519 -385 l87 -45 -2 -149 -3 -148 -190 -48 c-284 -72 -475 -142 -692 -255 -369 -192 -665 -449 -900 -781 -327 -462 -526 -1052 -612 -1814 -36 -318 -45 -514 -46 -965 l0 -440 28 -58 c223 -454 1437 -749 3487 -847 118 -6 411 -13 650 -15 377 -5 430 -3 400 9 -125 49 -227 125 -293 219 -83 117 -550 940 -574 1010 -50 149 -37 319 35 467 48 98 157 209 264 269 l76 43 0 207 0 206 -85 50 c-111 64 -209 167 -256 267 -51 106 -61 150 -61 273 0 164 12 190 314 716 144 250 272 468 285 484 134 179 358 274 572 244 92 -13 174 -42 267 -97 l69 -40 67 44 c37 23 114 68 173 99 l106 56 3 81 3 81 -135 90 c-145 96 -415 233 -573 292 -120 44 -308 98 -442 128 l-100 22 -3 150 -2 150 77 40 c308 161 593 418 794 717 170 253 288 557 335 869 24 157 24 453 0 609 -109 714 -542 1307 -1181 1620 -359 176 -771 250 -1164 209z" />
@@ -55,7 +58,7 @@ export const AdminUsersIcon = ({ size = 16, color = 'currentColor', className })
   </svg>
 );
 
-export const AddPersonIcon = ({ size = 16, color = 'currentColor', className }) => (
+export const AddPersonIcon = ({ size = 16, color = 'currentColor', className, ...rest }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={size}
@@ -64,6 +67,7 @@ export const AddPersonIcon = ({ size = 16, color = 'currentColor', className }) 
     className={className}
     viewBox="0 0 16 16"
     aria-hidden="true"
+    {...rest}
   >
     <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
     <path
@@ -73,7 +77,7 @@ export const AddPersonIcon = ({ size = 16, color = 'currentColor', className }) 
   </svg>
 );
 
-export const SearchSidebarIcon = ({ size = 16, color = 'currentColor', className }) => (
+export const SearchSidebarIcon = ({ size = 16, color = 'currentColor', className, ...rest }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={size}
@@ -82,12 +86,13 @@ export const SearchSidebarIcon = ({ size = 16, color = 'currentColor', className
     className={className}
     viewBox="0 0 16 16"
     aria-hidden="true"
+    {...rest}
   >
     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
   </svg>
 );
 
-export const FamilyIcon = ({ size = 16, color = 'currentColor', className }) => (
+export const FamilyIcon = ({ size = 16, color = 'currentColor', className, ...rest }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={size}
@@ -96,6 +101,7 @@ export const FamilyIcon = ({ size = 16, color = 'currentColor', className }) => 
     className={className}
     viewBox="0 0 16 16"
     aria-hidden="true"
+    {...rest}
   >
     <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
     <path
@@ -106,7 +112,7 @@ export const FamilyIcon = ({ size = 16, color = 'currentColor', className }) => 
   </svg>
 );
 
-export const MedicalRecordIcon = ({ size = 16, color = 'currentColor', className }) => (
+export const MedicalRecordIcon = ({ size = 16, color = 'currentColor', className, ...rest }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={size}
@@ -115,6 +121,7 @@ export const MedicalRecordIcon = ({ size = 16, color = 'currentColor', className
     className={className}
     viewBox="0 0 16 16"
     aria-hidden="true"
+    {...rest}
   >
     <path
       fillRule="evenodd"
@@ -125,7 +132,7 @@ export const MedicalRecordIcon = ({ size = 16, color = 'currentColor', className
   </svg>
 );
 
-export const NomencladorIcon = ({ size = 16, color = 'currentColor', className }) => (
+export const NomencladorIcon = ({ size = 16, color = 'currentColor', className, ...rest }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={size}
@@ -134,6 +141,7 @@ export const NomencladorIcon = ({ size = 16, color = 'currentColor', className }
     className={className}
     viewBox="0 0 16 16"
     aria-hidden="true"
+    {...rest}
   >
     <path
       fillRule="evenodd"
@@ -142,7 +150,7 @@ export const NomencladorIcon = ({ size = 16, color = 'currentColor', className }
   </svg>
 );
 
-export const CalendarIcon = ({ size = 16, color = 'currentColor', className }) => (
+export const CalendarIcon = ({ size = 16, color = 'currentColor', className, ...rest }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={size}
@@ -151,13 +159,14 @@ export const CalendarIcon = ({ size = 16, color = 'currentColor', className }) =
     className={className}
     viewBox="0 0 16 16"
     aria-hidden="true"
+    {...rest}
   >
     <path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z" />
     <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
   </svg>
 );
 
-export const TableIcon = ({ size = 16, color = 'currentColor', className }) => (
+export const TableIcon = ({ size = 16, color = 'currentColor', className, ...rest }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={size}
@@ -166,12 +175,13 @@ export const TableIcon = ({ size = 16, color = 'currentColor', className }) => (
     className={className}
     viewBox="0 0 16 16"
     aria-hidden="true"
+    {...rest}
   >
     <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 2h-4v3h4V4zm0 4h-4v3h4V8zm0 4h-4v3h3a1 1 0 0 0 1-1v-2zm-5 3v-3H6v3h4zm-5 0v-3H1v2a1 1 0 0 0 1 1h3zm-4-4h4V8H1v3zm0-4h4V4H1v3zm5-3v3h4V4H6zm4 4H6v3h4V8z" />
   </svg>
 );
 
-export const LogoutIcon = ({ size = 16, color = 'currentColor', className }) => (
+export const LogoutIcon = ({ size = 16, color = 'currentColor', className, ...rest }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={size}
@@ -180,6 +190,7 @@ export const LogoutIcon = ({ size = 16, color = 'currentColor', className }) => 
     className={className}
     viewBox="0 0 512.00533 512"
     aria-hidden="true"
+    {...rest}
   >
     <path d="m320 277.335938c-11.796875 0-21.332031 9.558593-21.332031 21.332031v85.335937c0 11.753906-9.558594 21.332032-21.335938 21.332032h-64v-320c0-18.21875-11.605469-34.496094-29.054687-40.554688l-6.316406-2.113281h99.371093c11.777344 0 21.335938 9.578125 21.335938 21.335937v64c0 11.773438 9.535156 21.332032 21.332031 21.332032s21.332031-9.558594 21.332031-21.332032v-64c0-35.285156-28.714843-63.99999975-64-63.99999975h-229.332031c-.8125 0-1.492188.36328175-2.28125.46874975-1.027344-.085937-2.007812-.46874975-3.050781-.46874975-23.53125 0-42.667969 19.13281275-42.667969 42.66406275v384c0 18.21875 11.605469 34.496093 29.054688 40.554687l128.386718 42.796875c4.351563 1.34375 8.679688 1.984375 13.226563 1.984375 23.53125 0 42.664062-19.136718 42.664062-42.667968v-21.332032h64c35.285157 0 64-28.714844 64-64v-85.335937c0-11.773438-9.535156-21.332031-21.332031-21.332031zm0 0" />
     <path d="m505.75 198.253906-85.335938-85.332031c-6.097656-6.101563-15.273437-7.9375-23.25-4.632813-7.957031 3.308594-13.164062 11.09375-13.164062 19.714844v64h-85.332031c-11.777344 0-21.335938 9.554688-21.335938 21.332032 0 11.777343 9.558594 21.332031 21.335938 21.332031h85.332031v64c0 8.621093 5.207031 16.40625 13.164062 19.714843 7.976563 3.304688 17.152344 1.46875 23.25-4.628906l85.335938-85.335937c8.339844-8.339844 8.339844-21.824219 0-30.164063zm0 0" />

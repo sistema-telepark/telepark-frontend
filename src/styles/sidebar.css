@@ -44,18 +44,40 @@
   line-height: 60px;
 }
 
-.sidebar.open .logo-details svg {
-  opacity: 0;
-  margin: 20px;
-  display: none;
-  pointer-events: auto;
-  text-align: center;
+.sidebar .logo-details .menu-toggle {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+}
+
+.sidebar .logo-details .menu-toggle:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+  border-radius: 8px;
 }
 
 .sidebar .logo-details {
-  height: 50px;
+  display: flex;
   align-items: center;
+  justify-content: center;
+  height: 50px;
   position: relative;
+}
+
+/* El img del toggle (logo de 150px por App.css) no debe ocupar layout en
+   desktop cerrado: el botón queda de 35px y centrado en el sidebar de 50px. */
+.sidebar .logo-details .menu-toggle img {
+  display: none;
+}
+
+/* RF-04: en desktop abierto el logo vuelve a ser visible junto a la hamburguesa. */
+.sidebar.open .logo-details .menu-toggle img {
+  display: inline-block;
 }
 
 .sidebar .nav-list {
@@ -236,5 +258,12 @@
 
   .sidebar .logo-details svg {
     display: none;
+  }
+
+  /* RF-02: en móvil el toggle es el logo (el svg queda oculto arriba). Sin esta
+     regla, el display:none global del img (mayor especificidad que
+     .links_name) lo dejaría invisible. */
+  .sidebar .logo-details .menu-toggle img {
+    display: inline-block;
   }
 }

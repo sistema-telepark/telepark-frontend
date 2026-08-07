@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 
 import '../styles/sidebar.css';
 
@@ -20,14 +20,8 @@ import {
 
 const Sidebar = (props) => {
   //funciones
-  const open = () => {
-    let estado = document.getElementById('sidebar').classList.contains('open');
-    if (estado !== true) {
-      document.getElementById('sidebar').classList.add('open');
-    } else {
-      document.getElementById('sidebar').classList.remove('open');
-    }
-  };
+  const [open, setOpen] = useState(false);
+  const toggleSidebar = () => setOpen((prevOpen) => !prevOpen);
 
   //arrow function para logout
   const logout = () => {
@@ -39,15 +33,18 @@ const Sidebar = (props) => {
   const current_url = window.location.pathname;
 
   return (
-    <div className="sidebar" id="sidebar">
+    <div className={'sidebar ' + (open ? 'open' : '')} id="sidebar">
       <div className="logo-details" id="logo-details">
-        <MenuIcon onClick={open} className="bi bi-list" />
-        <img
-          className="logo links_name"
-          onClick={open}
-          src={logoTelepark}
-          alt="logo de telepark"
-        />
+        <button
+          type="button"
+          className="menu-toggle"
+          aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
+          aria-expanded={open}
+          onClick={toggleSidebar}
+        >
+          <MenuIcon className="bi bi-list" />
+          <img className="logo links_name" src={logoTelepark} alt="logo de telepark" />
+        </button>
       </div>
       <ul className="nav-list">
         <li>
