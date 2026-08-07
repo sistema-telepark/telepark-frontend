@@ -2,7 +2,6 @@ import React, { Suspense, lazy, useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 import './App.css';
-import styles from './styles/app.module.css';
 // Imports estáticos (NO lazy) — se cargan siempre
 import Sidebar from './components/sidebar.component';
 import Footer from './components/footer.component';
@@ -49,11 +48,11 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
       {token ? (
         <span>
           <nav className="navbar navbar-expand navbar-light bg-light">
-            <div className={"container-fluid " + styles.welcomeBar}>
-              <h4 className={styles.welcomeTitle}>
+            <div className="container-fluid">
+              <span className="navbar-text ms-auto">
                 <b>Bienvenido: </b>
                 {userName}
-              </h4>
+              </span>
             </div>
           </nav>
 
