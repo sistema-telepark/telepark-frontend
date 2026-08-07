@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.css';
 import { connect } from 'react-redux';
-import { obrasocialRepository } from '../services/obrasocialService';
-import { osRepository } from '../services/osService';
+import { obrasocialRepository } from '../services/obrasocial.service';
+import { osRepository } from '../services/os.service';
 import utils from '../utils/utils';
-import ObraSocialForm from './ListObraSocial/ObraSocialForm';
-import { PlusIcon, PencilIcon, TrashIcon } from './icons/IconsShared';
+import ObraSocialForm from './list-obrasocial/obra-social-form.component';
+import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
+import styles from '../styles/list-obrasocial.module.css';
 
 const ListaObraSocial = (props) => {
   const [show, setShow] = useState(false);
@@ -133,7 +133,7 @@ const ListaObraSocial = (props) => {
             <b>Nombre y Apellido:</b> {nombreEpElegido}
           </h5>
         </div>
-        <div className="col-12 col-md-6 col-lg-6 col-xl-6" style={{ textAlign: 'right' }}>
+        <div className={"col-12 col-md-6 col-lg-6 col-xl-6 " + styles.textRight}>
           <button type="button" className="btn btn-azul" onClick={() => agregar()}>
             <PlusIcon />
             Agregar
@@ -177,7 +177,7 @@ const ListaObraSocial = (props) => {
                 <th scope="col">Acción</th>
               </tr>
             </thead>
-            <tbody style={{ verticalAlign: 'middle' }}>
+            <tbody className={styles.tableBodyMiddle}>
               {osociales &&
                 osociales
                   .filter((osocial) => osocial.borrado === 0)
@@ -188,8 +188,7 @@ const ListaObraSocial = (props) => {
                       <td>
                         <button
                           type="button"
-                          className="btn btn-verde"
-                          style={{ marginRight: 10 }}
+                          className={"btn btn-verde " + styles.rowActionButton}
                           onClick={() => editar(osocial.idobrasocial.idobrasocial, osocial.idos)}
                         >
                           <PencilIcon />

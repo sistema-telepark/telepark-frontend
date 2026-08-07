@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { authRepository } from '../services/authService';
-import { TokenService } from '../services/tokenService';
+import { authRepository } from '../services/auth.service';
+import { TokenService } from '../services/token.service';
 import logoTelepark from '../images/logo2022.png';
+import styles from '../styles/login.module.css';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -108,21 +109,17 @@ const Login = () => {
     <div className="col-12 col-md-6 col-lg-4 col-xl-4">
       <form onSubmit={(e) => enviarFormulario(e)}>
         <main
-          className="border-top-sm row justify-content-center form-paciente shadow container-lg mx-auto"
-          style={{ marginTop: '3vh', marginBottom: '3vh' }}
+          className={"border-top-sm row justify-content-center form-paciente shadow container-lg mx-auto " + styles.formContainer}
         >
           <div
-            className="justify-content-center"
-            style={{ paddingTop: '5vh', paddingBottom: '8vh' }}
+            className={"justify-content-center " + styles.formCard}
           >
             <div
-              className="col-12 col-md-12 col-lg-12 col-xl-12"
-              style={{ textAlign: 'center', marginBottom: '-5vh' }}
+              className={"col-12 col-md-12 col-lg-12 col-xl-12 " + styles.logoWrapper}
             >
               <img
-                className="logo"
+                className={"logo " + styles.logo}
                 src={logoTelepark}
-                style={{ width: '180px' }}
                 alt="logo de telepark"
               />
             </div>
@@ -132,10 +129,9 @@ const Login = () => {
               <div className="row">
                 <div className="w-100"></div>
                 <div
-                  className="col-12 col-md-12 col-lg-12 col-xl-12"
-                  style={{ textAlign: 'center', marginTop: '2vh' }}
+                  className={"col-12 col-md-12 col-lg-12 col-xl-12 " + styles.formCenter}
                 >
-                  <label className="col-form-label" style={{ float: 'left' }}>
+                  <label className={"col-form-label " + styles.labelLeft}>
                     Usuario
                   </label>
                   <input
@@ -148,7 +144,7 @@ const Login = () => {
                     onChange={(e) => detectarCambio('user', e)}
                     value={campo['user'] || ''}
                   />
-                  <label className="col-form-label" style={{ marginTop: '20px', float: 'left' }}>
+                  <label className={"col-form-label " + styles.labelPassword}>
                     Contraseña
                   </label>
                   <input
@@ -164,8 +160,7 @@ const Login = () => {
 
                   <button
                     type="submit"
-                    className="btn btn-azul"
-                    style={{ marginTop: '5vh' }}
+                    className={"btn btn-azul " + styles.submitButton}
                     disabled={loading}
                   >
                     {loading ? 'Ingresando...' : 'Iniciar Sesión'}

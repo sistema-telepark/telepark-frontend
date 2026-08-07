@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import 'bootstrap/dist/css/bootstrap.css';
-import '../styles/list-pacientesEp.css';
-import { userRepository } from '../services/usersService';
+import '../styles/list-pacientes-ep.css';
+import { userRepository } from '../services/users.service';
 import Swal from 'sweetalert2';
-import { TokenService } from '../services/tokenService';
+import { TokenService } from '../services/token.service';
 import utils from '../utils/utils';
-import { SearchIcon, PlusIcon, PencilIcon } from './icons/IconsShared';
+import { SearchIcon, PlusIcon, PencilIcon } from './icons/icons-shared';
+import styles from '../styles/admin-users.module.css';
 
 const AdminUsuarios = () => {
   const [showNuevo, setShowNuevo] = useState(false);
@@ -271,16 +271,14 @@ const AdminUsuarios = () => {
   console.log(usuarios);
   return (
     <main
-      className="border-top-sm m-0 row justify-content-center form-paciente m-md-3 rounded shadow container-lg mx-md-auto"
-      style={{ paddingTop: 20 }}
+      className={"border-top-sm m-0 row justify-content-center form-paciente m-md-3 rounded shadow container-lg mx-md-auto " + styles.pageHeader}
     >
       <div className="mb-4 col-12 col-md-9 col-lg-12 col-xl-10">
         <h3 className="mt-4">Administrar Usuarios</h3>
         <hr />
         <div className="row">
           <div
-            className="mb-4 col-10 col-md-10 col-lg-6 col-xl-6"
-            style={{ marginBottom: '10px' }}
+            className={"mb-4 col-10 col-md-10 col-lg-6 col-xl-6 " + styles.searchInputWrapper}
           >
             <input
               type="search"
@@ -292,7 +290,7 @@ const AdminUsuarios = () => {
               value={campo['buscador'] || ''}
             />
           </div>
-          <div className="mb-4 col-2 col-md-2 col-lg-6 col-xl-6" style={{ paddingLeft: '0px' }}>
+          <div className={"mb-4 col-2 col-md-2 col-lg-6 col-xl-6 " + styles.noPaddingLeft}>
             <button type="button" className="btn btn-verde" onClick={() => buscar()}>
               <SearchIcon />
             </button>
@@ -301,8 +299,7 @@ const AdminUsuarios = () => {
 
         <div className="row">
           <div
-            className="mb-4 col-12 col-md-12 col-lg-12 col-xl-12"
-            style={{ textAlign: 'right' }}
+            className={"mb-4 col-12 col-md-12 col-lg-12 col-xl-12 " + styles.textRight}
           >
             <button type="button" className="btn btn-azul" onClick={() => agregar()}>
               <PlusIcon />
@@ -314,11 +311,11 @@ const AdminUsuarios = () => {
         {showNuevo ? (
           <div className="border-top-sm m-0 row justify-content-center form-paciente m-md-3 rounded shadow container-lg mx-md-auto">
             <h4 className="mt-4">
-              Agregar Usuario <h6 style={{ color: 'red' }}>(*) Campos Requeridos</h6>
+              Agregar Usuario <h6 className={styles.required}>(*) Campos Requeridos</h6>
             </h4>
             <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
               <label className="col-form-label">
-                Nombre de Usuario <label style={{ color: 'red' }}>*</label>
+                Nombre de Usuario <label className={styles.required}>*</label>
               </label>
               <input
                 type="text"
@@ -328,11 +325,11 @@ const AdminUsuarios = () => {
                 onChange={(e) => detectarCambio('username', e)}
                 value={campo['username'] || ''}
               />
-              <span style={{ color: 'red' }}>{error['username']}</span>
+              <span className={styles.required}>{error['username']}</span>
             </div>
             <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
               <label className="col-form-label">
-                Nombre <label style={{ color: 'red' }}>*</label>
+                Nombre <label className={styles.required}>*</label>
               </label>
               <input
                 type="text"
@@ -342,11 +339,11 @@ const AdminUsuarios = () => {
                 onChange={(e) => detectarCambio('firstname', e)}
                 value={campo['firstname'] || ''}
               />
-              <span style={{ color: 'red' }}>{error['firstname']}</span>
+              <span className={styles.required}>{error['firstname']}</span>
             </div>
             <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
               <label className="col-form-label">
-                Apellido <label style={{ color: 'red' }}>*</label>
+                Apellido <label className={styles.required}>*</label>
               </label>
               <input
                 type="text"
@@ -356,11 +353,11 @@ const AdminUsuarios = () => {
                 onChange={(e) => detectarCambio('lastname', e)}
                 value={campo['lastname'] || ''}
               />
-              <span style={{ color: 'red' }}>{error['lastname']}</span>
+              <span className={styles.required}>{error['lastname']}</span>
             </div>
             <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
               <label className="col-form-label">
-                Nueva Contraseña <label style={{ color: 'red' }}>*</label>
+                Nueva Contraseña <label className={styles.required}>*</label>
               </label>
               <input
                 type="password"
@@ -370,11 +367,11 @@ const AdminUsuarios = () => {
                 onChange={(e) => detectarCambio('password', e)}
                 value={campo['password'] || ''}
               />
-              <span style={{ color: 'red' }}>{error['password']}</span>
+              <span className={styles.required}>{error['password']}</span>
             </div>
             <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
               <label className="col-form-label">
-                Rol <label style={{ color: 'red' }}>*</label>
+                Rol <label className={styles.required}>*</label>
               </label>
               <select
                 className="form-select"
@@ -387,11 +384,11 @@ const AdminUsuarios = () => {
                 <option value="false">Usuario</option>
                 <option value="true">Administrador</option>
               </select>
-              <span style={{ color: 'red' }}>{error['role']}</span>
+              <span className={styles.required}>{error['role']}</span>
             </div>
             <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
               <label className="col-form-label">
-                Estado <label style={{ color: 'red' }}>*</label>
+                Estado <label className={styles.required}>*</label>
               </label>
               <select
                 className="form-select"
@@ -404,24 +401,21 @@ const AdminUsuarios = () => {
                 <option value="false">Inactivo</option>
                 <option value="true">Activo</option>
               </select>
-              <span style={{ color: 'red' }}>{error['isActive']}</span>
+              <span className={styles.required}>{error['isActive']}</span>
             </div>
             <div
-              className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4"
-              style={{ textAlign: 'center', paddingTop: 38 }}
+              className={"mb-4 col-12 col-md-6 col-lg-4 col-xl-4 " + styles.formActions}
             >
               <button
                 type="submit"
-                className="btn btn-verde"
-                style={{ width: '40%' }}
+                className={"btn btn-verde " + styles.submitButton}
                 onClick={() => guardarNuevo()}
               >
                 Guardar
               </button>
               <button
                 type="submit"
-                className="btn btn-rojo"
-                style={{ width: '40%', marginLeft: 10 }}
+                className={"btn btn-rojo " + styles.cancelButton}
                 onClick={() => clear()}
               >
                 Cancelar
@@ -435,11 +429,11 @@ const AdminUsuarios = () => {
         {show ? (
           <div className="border-top-sm m-0 row justify-content-center form-paciente m-md-3 rounded shadow container-lg mx-md-auto">
             <h4 className="mt-4">
-              Editar Usuario <h6 style={{ color: 'red' }}>(*) Campos Requeridos</h6>
+              Editar Usuario <h6 className={styles.required}>(*) Campos Requeridos</h6>
             </h4>
             <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
               <label className="col-form-label">
-                Nombre de Usuario <label style={{ color: 'red' }}>*</label>
+                Nombre de Usuario <label className={styles.required}>*</label>
               </label>
               <input
                 type="text"
@@ -453,7 +447,7 @@ const AdminUsuarios = () => {
             </div>
             <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
               <label className="col-form-label">
-                Nombre <label style={{ color: 'red' }}>*</label>
+                Nombre <label className={styles.required}>*</label>
               </label>
               <input
                 type="text"
@@ -463,11 +457,11 @@ const AdminUsuarios = () => {
                 onChange={(e) => detectarCambio('firstname', e)}
                 value={campo['firstname'] || ''}
               />
-              <span style={{ color: 'red' }}>{error['firstname']}</span>
+              <span className={styles.required}>{error['firstname']}</span>
             </div>
             <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
               <label className="col-form-label">
-                Apellido <label style={{ color: 'red' }}>*</label>
+                Apellido <label className={styles.required}>*</label>
               </label>
               <input
                 type="text"
@@ -477,7 +471,7 @@ const AdminUsuarios = () => {
                 onChange={(e) => detectarCambio('lastname', e)}
                 value={campo['lastname'] || ''}
               />
-              <span style={{ color: 'red' }}>{error['lastname']}</span>
+              <span className={styles.required}>{error['lastname']}</span>
             </div>
             <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
               <label className="col-form-label">Nueva Contraseña</label>
@@ -492,7 +486,7 @@ const AdminUsuarios = () => {
             </div>
             <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
               <label className="col-form-label">
-                Rol <label style={{ color: 'red' }}>*</label>
+                Rol <label className={styles.required}>*</label>
               </label>
               <select
                 className="form-select"
@@ -507,7 +501,7 @@ const AdminUsuarios = () => {
             </div>
             <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
               <label className="col-form-label">
-                Estado <label style={{ color: 'red' }}>*</label>
+                Estado <label className={styles.required}>*</label>
               </label>
               <select
                 className="form-select"
@@ -521,21 +515,18 @@ const AdminUsuarios = () => {
               </select>
             </div>
             <div
-              className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4"
-              style={{ textAlign: 'center', paddingTop: 38 }}
+              className={"mb-4 col-12 col-md-6 col-lg-4 col-xl-4 " + styles.formActions}
             >
               <button
                 type="submit"
-                className="btn btn-verde"
-                style={{ width: '40%' }}
+                className={"btn btn-verde " + styles.submitButton}
                 onClick={() => guardar()}
               >
                 Guardar
               </button>
               <button
                 type="submit"
-                className="btn btn-rojo"
-                style={{ width: '40%', marginLeft: 10 }}
+                className={"btn btn-rojo " + styles.cancelButton}
                 onClick={() => clear()}
               >
                 Cancelar
@@ -547,10 +538,9 @@ const AdminUsuarios = () => {
         )}
 
         <div className="row">
-          <div className="col-12 col-md-12 col-lg-12 col-xl-12" style={{ position: 'relative' }}>
+          <div className={"col-12 col-md-12 col-lg-12 col-xl-12 " + styles.tableWrapper}>
             <table
-              className="table table-bordered table-hover shadow table-striped"
-              style={{ width: '100%' }}
+              className={"table table-bordered table-hover shadow table-striped " + styles.tableFullWidth}
             >
               <thead>
                 <tr>
@@ -561,7 +551,7 @@ const AdminUsuarios = () => {
                   <th scope="col">Acción</th>
                 </tr>
               </thead>
-              <tbody style={{ verticalAlign: 'middle' }}>
+              <tbody className={styles.tableBodyMiddle}>
                 {usuarios &&
                   usuarios
                     .filter(
@@ -581,8 +571,7 @@ const AdminUsuarios = () => {
                         <td>
                           <button
                             type="button"
-                            className="btn btn-verde"
-                            style={{ marginRight: 10 }}
+                            className={"btn btn-verde " + styles.rowActionButton}
                             onClick={() => editUser(usuario)}
                           >
                             <PencilIcon />

@@ -1,0 +1,22 @@
+.scrollableTable {
+  position: relative;
+  max-height: 350px;
+  overflow: auto;
+  display: block;
+}
+
+.tableFullWidth {
+  width: 100%;
+}
+
+.tableBodyMiddle {
+  vertical-align: middle;
+}
+
+.rowActionButton {
+  margin-right: 10px;
+}
+
+.checkInline {
+  margin-left: 10px;
+}

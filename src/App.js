@@ -2,19 +2,20 @@ import React, { Suspense, lazy, useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 import './App.css';
+import styles from './styles/app.module.css';
 // Imports estáticos (NO lazy) — se cargan siempre
 import Sidebar from './components/sidebar.component';
 import Footer from './components/footer.component';
-import LoadingSpinner from './components/shared/LoadingSpinner';
-import ErrorFallbackRoute from './components/error-boundary/ErrorFallbackRoute';
+import LoadingSpinner from './components/shared/loading-spinner';
+import ErrorFallbackRoute from './components/error-boundary/error-fallback-route.component';
 import { logError } from './components/error-boundary/logError';
-import { TokenService } from './services/tokenService';
+import { TokenService } from './services/token.service';
 
 // Lazy imports con webpackChunkName — se cargan bajo demanda
 const Login = lazy(() => import(/* webpackChunkName: "login" */ './components/login.component'));
 const AdminUsuarios = lazy(() => import(/* webpackChunkName: "admin-usuarios" */ './components/admin-users.component'));
 const AddPaciente = lazy(() => import(/* webpackChunkName: "add-paciente" */ './components/add-paciente.component'));
-const FichaMedica = lazy(() => import(/* webpackChunkName: "ficha-medica" */ './components/fichaMedica.component'));
+const FichaMedica = lazy(() => import(/* webpackChunkName: "ficha-medica" */ './components/ficha-medica.component'));
 const ListaDiagnostico = lazy(() => import(/* webpackChunkName: "lista-diagnostico" */ './components/list-diagnostico.component'));
 const ListaEvolucion = lazy(() => import(/* webpackChunkName: "lista-evolucion" */ './components/list-evolucion.component'));
 const ListaObraSocial = lazy(() => import(/* webpackChunkName: "lista-obrasocial" */ './components/list-obrasocial.component'));
@@ -23,7 +24,7 @@ const Search = lazy(() => import(/* webpackChunkName: "search" */ './components/
 const Events = lazy(() => import(/* webpackChunkName: "events" */ './components/gestion-eventos.component'));
 const TypeEvents = lazy(() => import(/* webpackChunkName: "type-events" */ './components/tipos-de-eventos.component'));
 const Nomenclador = lazy(() => import(/* webpackChunkName: "nomenclador" */ './components/nomenclador.component'));
-const ListaPaciente = lazy(() => import(/* webpackChunkName: "lista-pacientes" */ './components/list-pacientesEp.component'));
+const ListaPaciente = lazy(() => import(/* webpackChunkName: "lista-pacientes" */ './components/list-pacientes-ep.component'));
 
 function AppContent({ token, userName, userRole, setToken, setUserName, setUserRole }) {
   const navigate = useNavigate();
@@ -48,8 +49,8 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
       {token ? (
         <span>
           <nav className="navbar navbar-expand navbar-light bg-light">
-            <div className="container-fluid" style={{ justifyContent: 'right' }}>
-              <h4 style={{ marginBottom: '0px' }}>
+            <div className={"container-fluid " + styles.welcomeBar}>
+              <h4 className={styles.welcomeTitle}>
                 <b>Bienvenido: </b>
                 {userName}
               </h4>

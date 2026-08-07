@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { pacienteRepository } from '../services/pacienteService';
-import { municipioRepository } from '../services/municipioService';
-import Vivienda from './AddPaciente/Vivienda';
-import DatosPersonales from './AddPaciente/DatosPersonales';
+import { pacienteRepository } from '../services/paciente.service';
+import { municipioRepository } from '../services/municipio.service';
+import Vivienda from './add-paciente/vivienda.component';
+import DatosPersonales from './add-paciente/datos-personales.component';
 import utils from '../utils/utils';
+import styles from '../styles/add-paciente.module.css';
 
 const AddPaciente = () => {
   const [municipios, setMunicipios] = useState([]);
@@ -57,10 +58,9 @@ const AddPaciente = () => {
         <div className="col-12 col-md-12 col-lg-4 col-xl-3">
           <label>
             <input
-              className="form-check-input"
+              className={"form-check-input " + styles.checkboxMargin}
               type="checkbox"
               {...register('viveSoloEP')}
-              style={{ marginRight: '10px' }}
             />
             Vive Solo
           </label>
@@ -69,22 +69,20 @@ const AddPaciente = () => {
         <div className="col-12 col-md-12 col-lg-4 col-xl-3">
           <label>
             <input
-              className="form-check-input"
+              className={"form-check-input " + styles.checkboxMargin}
               type="checkbox"
               {...register('tieneCuidadorEP')}
-              style={{ marginRight: '10px' }}
             />
             Tiene Cuidador
           </label>
         </div>
 
         <div className="col-12 col-md-12 col-lg-4 col-xl-3">
-          <label style={{ inlineSize: 'max-content' }}>
+          <label className={styles.checkLabel}>
             <input
-              className="form-check-input"
+              className={"form-check-input " + styles.checkboxMargin}
               type="checkbox"
               {...register('tieneAcompananteEP')}
-              style={{ marginRight: '10px' }}
             />
             Tiene Acompañante Terapeútico
           </label>
@@ -188,7 +186,7 @@ const AddPaciente = () => {
         </div>
       </div>
 
-      <div className="row" style={{ marginTop: '50px' }}>
+      <div className={"row " + styles.referenteSection}>
         <div className="col-12 col-md-12 col-lg-12 col-xl-12">
           <h1 className="text-center">Referente</h1>
         </div>
@@ -199,7 +197,7 @@ const AddPaciente = () => {
       {Vivienda(register, errors, watch, 'R', utils.retornarProvincias(), municipios)}
 
       <div className="row">
-        <div className="col-12 col-md-12 col-lg-12 col-xl-12" style={{ textAlign: 'center' }}>
+        <div className={"col-12 col-md-12 col-lg-12 col-xl-12 " + styles.confirmCenter}>
           <button type="submit" className="mt-3 btn btn-success">
             Confirmar
           </button>

@@ -1,0 +1,49 @@
+.pageHeader {
+  padding-top: 20px;
+}
+
+.searchInputWrapper {
+  margin-bottom: 10px;
+}
+
+.noPaddingLeft {
+  padding-left: 0;
+}
+
+.textRight {
+  text-align: right;
+}
+
+.required {
+  color: red;
+}
+
+.formActions {
+  text-align: center;
+  padding-top: 38px;
+}
+
+.submitButton {
+  width: 40%;
+}
+
+.cancelButton {
+  width: 40%;
+  margin-left: 10px;
+}
+
+.tableWrapper {
+  position: relative;
+}
+
+.tableFullWidth {
+  width: 100%;
+}
+
+.tableBodyMiddle {
+  vertical-align: middle;
+}
+
+.rowActionButton {
+  margin-right: 10px;
+}

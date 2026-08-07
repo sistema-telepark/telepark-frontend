@@ -1,0 +1,21 @@
+.pageBackground {
+  background-color: #f8f9fa;
+}
+
+.logo {
+  width: 200px;
+  margin-bottom: 2rem;
+}
+
+.leadText {
+  max-width: 500px;
+}
+
+.devAlert {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.devPre {
+  font-size: 0.8rem;
+}

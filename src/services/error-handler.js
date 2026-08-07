@@ -1,5 +1,5 @@
 import { logAsyncError } from '../components/error-boundary/logError';
-import { showToast, showModal } from './notificationService';
+import { showToast, showModal } from './notification.service';
 
 export const normalizeError = (error) => {
   if (error.response) {

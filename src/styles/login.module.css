@@ -1,0 +1,36 @@
+.formContainer {
+  margin-top: 3vh;
+  margin-bottom: 3vh;
+}
+
+.formCard {
+  padding-top: 5vh;
+  padding-bottom: 8vh;
+}
+
+.logoWrapper {
+  text-align: center;
+  margin-bottom: -5vh;
+}
+
+.logo {
+  width: 180px;
+}
+
+.formCenter {
+  text-align: center;
+  margin-top: 2vh;
+}
+
+.labelLeft {
+  float: left;
+}
+
+.labelPassword {
+  margin-top: 20px;
+  float: left;
+}
+
+.submitButton {
+  margin-top: 5vh;
+}

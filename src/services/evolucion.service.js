@@ -1,5 +1,5 @@
 import http from '../http-common';
-import { withServiceHandler } from './errorHandler';
+import { withServiceHandler } from './error-handler';
 
 const evoluciones = {
   async get(personaep_pk) {

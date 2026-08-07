@@ -1,6 +1,6 @@
 import { render, screen, act } from '@testing-library/react';
 import App from './App';
-import { TokenService } from './services/tokenService';
+import { TokenService } from './services/token.service';
 
 const mockUser = {
   access: 'test-access-token',
@@ -15,9 +15,10 @@ describe('App integration tests', () => {
     localStorage.clear();
   });
 
-  test('renders Login when no token is present', () => {
+  test('renders Login when no token is present', async () => {
     render(<App />);
-    expect(screen.getByText(/login/i)).toBeInTheDocument();
+    // Login es lazy (Suspense): esperar la resolución del chunk antes de asertar
+    expect(await screen.findByText(/login/i)).toBeInTheDocument();
   });
 
   test('renders sidebar and welcome message when token is present', () => {

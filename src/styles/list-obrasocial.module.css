@@ -1,0 +1,11 @@
+.textRight {
+  text-align: right;
+}
+
+.tableBodyMiddle {
+  vertical-align: middle;
+}
+
+.rowActionButton {
+  margin-right: 10px;
+}

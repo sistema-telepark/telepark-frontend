@@ -5,7 +5,7 @@ import './index.css';
 import { ErrorBoundary } from 'react-error-boundary';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import ErrorFallbackGlobal from './components/error-boundary/ErrorFallbackGlobal';
+import ErrorFallbackGlobal from './components/error-boundary/error-fallback-global.component';
 import { logError } from './components/error-boundary/logError';
 
 import { Provider } from 'react-redux';

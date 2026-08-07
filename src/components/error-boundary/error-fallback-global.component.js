@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import logoTelepark from '../../images/logoTelepark2022.png';
+import styles from '../../styles/error-fallback-global.module.css';
 
 /**
  * ErrorFallbackGlobal — Pantalla completa de error (NIVEL 1)
@@ -11,30 +12,28 @@ import logoTelepark from '../../images/logoTelepark2022.png';
 const ErrorFallbackGlobal = ({ error }) => {
   return (
     <div
-      className="d-flex justify-content-center align-items-center min-vh-100"
-      style={{ backgroundColor: '#f8f9fa' }}
+      className={"d-flex justify-content-center align-items-center min-vh-100 " + styles.pageBackground}
     >
       <div className="text-center p-5">
         <img
           src={logoTelepark}
           alt="Logo Telepark"
-          style={{ width: '200px', marginBottom: '2rem' }}
+          className={styles.logo}
         />
 
         <h1 className="display-4 text-danger mb-3">Algo salió mal</h1>
 
-        <p className="lead text-muted mb-4" style={{ maxWidth: '500px' }}>
+        <p className={"lead text-muted mb-4 " + styles.leadText}>
           Ocurrió un error inesperado en la aplicación. Por favor, recargá la
           página para intentarlo de nuevo.
         </p>
 
         {process.env.NODE_ENV === 'development' && (
           <div
-            className="alert alert-secondary text-start mb-4"
-            style={{ maxWidth: '500px', margin: '0 auto' }}
+            className={"alert alert-secondary text-start mb-4 " + styles.devAlert}
           >
             <strong>Detalles (solo desarrollo):</strong>
-            <pre className="mb-0 mt-2" style={{ fontSize: '0.8rem' }}>
+            <pre className={"mb-0 mt-2 " + styles.devPre}>
               {error.message}
             </pre>
           </div>

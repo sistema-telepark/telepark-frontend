@@ -1,0 +1,20 @@
+.pageHeader {
+  padding-top: 20px;
+}
+
+.sectionRow {
+  vertical-align: middle;
+}
+
+.sectionActions {
+  text-align: right;
+  padding-top: 18px;
+}
+
+.tableFullWidth {
+  width: 100%;
+}
+
+.tableBodyMiddle {
+  vertical-align: middle;
+}

@@ -1,13 +1,13 @@
 import React, { memo } from 'react';
 import logoTelepark from '../images/logo2022.png';
+import styles from '../styles/footer.module.css';
 
 const Footer = () => {
   return (
     <footer>
       <img
-        className="logo"
+        className={"logo " + styles.logo}
         src={logoTelepark}
-        style={{ width: '150px' }}
         alt="logo de telepark"
       />
     </footer>

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.css';
 import { connect } from 'react-redux';
 import { cambiarID } from '../actions/global';
-import { pacienteRepository } from '../services/pacienteService';
-import '../styles/list-pacientesEp.css';
+import { pacienteRepository } from '../services/paciente.service';
+import '../styles/list-pacientes-ep.css';
 import { Spinner } from 'reactstrap';
 import utils from '../utils/utils';
-import { SearchIcon, EyeIcon, ClipboardCheckIcon, ClipboardDataIcon, JournalPlusIcon, JournalTextIcon } from './icons/IconsShared';
+import { SearchIcon, EyeIcon, ClipboardCheckIcon, ClipboardDataIcon, JournalPlusIcon, JournalTextIcon } from './icons/icons-shared';
+import styles from '../styles/list-pacientes-ep.module.css';
 
 const ListaPaciente = (props) => {
   const [loading, setLoading] = useState(true);
@@ -59,7 +59,7 @@ const ListaPaciente = (props) => {
             onChange={detectarCambio}
           />
         </div>
-        <div className="mb-4 col-2 col-md-2 col-lg-6 col-xl-6" style={{ paddingLeft: '0px' }}>
+        <div className={"mb-4 col-2 col-md-2 col-lg-6 col-xl-6 " + styles.noPaddingLeft}>
           <button type="button" className="btn btn-verde">
             <SearchIcon />
           </button>
@@ -69,13 +69,7 @@ const ListaPaciente = (props) => {
       <div className="row">
         <div className="col-12 col-md-12 col-lg-12 col-xl-12 text-center">
           {loading ? (
-            <Spinner
-              color="primary"
-              style={{
-                height: '4rem',
-                width: '4rem',
-              }}
-            >
+            <Spinner className={styles.spinner} color="primary">
               Loading...
             </Spinner>
           ) : (
@@ -86,7 +80,7 @@ const ListaPaciente = (props) => {
                   <th scope="col">Acción</th>
                 </tr>
               </thead>
-              <tbody style={{ verticalAlign: 'middle' }}>
+              <tbody className={styles.tableBodyMiddle}>
                 {pacientes &&
                   pacientes
                     .filter(
@@ -114,14 +108,8 @@ const ListaPaciente = (props) => {
                           >
                             <button
                               type="button"
-                              className="btn"
                               title="Ver Ficha Médica"
-                              style={{
-                                marginRight: 10,
-                                boxShadow: '3px 3px #13E000',
-                                backgroundImage:
-                                  'linear-gradient(to right, #9bff92, #8efe86, #80fd79, #71fc6c, #5ffb5e, #58fb54, #51fb4a, #4afb3e, #51fc35, #57fd2a, #5efe1c, #64ff00)',
-                              }}
+                              className={"btn " + styles.actionButtonVerde}
                             >
                               <EyeIcon />
                             </button>
@@ -139,14 +127,8 @@ const ListaPaciente = (props) => {
                           >
                             <button
                               type="button"
-                              className="btn"
                               title="Ver Diagnósticos"
-                              style={{
-                                marginRight: 10,
-                                boxShadow: '3px 3px #FF9B00',
-                                backgroundImage:
-                                  'linear-gradient(to right, #ffcf46, #ffcb3f, #ffc738, #ffc330, #ffbf28, #ffbc23, #ffb81d, #ffb516, #ffb111, #ffae0b, #ffaa05, #ffa600)',
-                              }}
+                              className={"btn " + styles.actionButtonNaranja}
                             >
                               <ClipboardCheckIcon />
                             </button>
@@ -164,14 +146,8 @@ const ListaPaciente = (props) => {
                           >
                             <button
                               type="button"
-                              className="btn"
                               title="Ver Evolución"
-                              style={{
-                                marginRight: 10,
-                                boxShadow: '3px 3px #D80000',
-                                backgroundImage:
-                                  'linear-gradient(to right, #ff7171, #ff6867, #ff5e5d, #ff5453, #ff4948, #ff4140, #ff3938, #ff302f, #ff2826, #ff1f1d, #ff1311, #ff0000)',
-                              }}
+                              className={"btn " + styles.actionButtonRojo}
                             >
                               <ClipboardDataIcon />
                             </button>
@@ -189,14 +165,8 @@ const ListaPaciente = (props) => {
                           >
                             <button
                               type="button"
-                              className="btn"
                               title="Ver Obra Social"
-                              style={{
-                                marginRight: 10,
-                                boxShadow: '3px 3px #9700CD',
-                                backgroundImage:
-                                  'linear-gradient(to right, #e290ff, #e087ff, #dd7eff, #db74ff, #d86aff, #d561ff, #d258ff, #cf4eff, #cb42ff, #c634ff, #c122ff, #bc00ff)',
-                              }}
+                              className={"btn " + styles.actionButtonVioleta}
                             >
                               <JournalPlusIcon />
                             </button>
@@ -214,14 +184,8 @@ const ListaPaciente = (props) => {
                           >
                             <button
                               type="button"
-                              className="btn"
                               title="Ver Indicaciones Médicas"
-                              style={{
-                                marginRight: 10,
-                                boxShadow: '3px 3px #0059CD',
-                                backgroundImage:
-                                  'linear-gradient(to right, #6ba7f6, #62a2f7, #599df8, #4f98f9, #4593fa, #3c8efb, #338afc, #2a85fd, #2080fe, #157afe, #0a75ff, #006fff)',
-                              }}
+                              className={"btn " + styles.actionButtonAzul}
                             >
                               <JournalTextIcon />
                             </button>

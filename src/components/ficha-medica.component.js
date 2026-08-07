@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { diagnosticoRepository } from '../services/diagnosticoService';
-import { evolucionRepository } from '../services/evolucionService';
-import { osRepository } from '../services/osService';
-import { indicacionRepository } from '../services/indicacionService';
+import { diagnosticoRepository } from '../services/diagnostico.service';
+import { evolucionRepository } from '../services/evolucion.service';
+import { osRepository } from '../services/os.service';
+import { indicacionRepository } from '../services/indicacion.service';
 import utils from '../utils/utils';
+import styles from '../styles/ficha-medica.module.css';
 
 const FichaMedica = () => {
   const idEpElegido = useSelector((state) => state.global.idEpElegido);
@@ -63,8 +63,7 @@ const FichaMedica = () => {
 
   return (
     <main
-      className="border-top-sm m-0 row justify-content-center form-paciente m-md-3 rounded shadow container-lg mx-md-auto"
-      style={{ paddingTop: 20 }}
+      className={"border-top-sm m-0 row justify-content-center form-paciente m-md-3 rounded shadow container-lg mx-md-auto " + styles.pageHeader}
     >
       <div className="mb-4 col-12 col-md-9 col-lg-12 col-xl-10">
         <h3 className="mt-4">
@@ -79,13 +78,12 @@ const FichaMedica = () => {
           </div>
         </div>
 
-        <div className="row" style={{ verticalAlign: 'middle' }}>
+        <div className={"row " + styles.sectionRow}>
           <div className="col-6 col-md-6 col-lg-6 col-xl-6">
             <h4 className="mt-4">Diagnósticos</h4>
           </div>
           <div
-            className="mb-4 col-6 col-md-6 col-lg-6 col-xl-6"
-            style={{ textAlign: 'right', paddingTop: '18px' }}
+            className={"mb-4 col-6 col-md-6 col-lg-6 col-xl-6 " + styles.sectionActions}
           >
             <Link to={'/list-diagnostico'}>
               <button className="btn btn-verde" to={'/list-diagnostico'}>
@@ -97,8 +95,7 @@ const FichaMedica = () => {
         <div className="row">
           <div className="col-12">
             <table
-              className="table table-bordered table-hover shadow table-striped"
-              style={{ width: '100%' }}
+              className={"table table-bordered table-hover shadow table-striped " + styles.tableFullWidth}
             >
               <thead>
                 <tr>
@@ -106,7 +103,7 @@ const FichaMedica = () => {
                   <th scope="col">Fecha de Diagnóstico</th>
                 </tr>
               </thead>
-              <tbody style={{ verticalAlign: 'middle' }}>
+              <tbody className={styles.tableBodyMiddle}>
                 {diagnosticos &&
                   diagnosticos
                     .filter((diagnostico) => diagnostico.borrado === 0)
@@ -121,13 +118,12 @@ const FichaMedica = () => {
           </div>
         </div>
 
-        <div className="row" style={{ verticalAlign: 'middle' }}>
+        <div className={"row " + styles.sectionRow}>
           <div className="col-6 col-md-6 col-lg-6 col-xl-6">
             <h4 className="mt-4">Evolución</h4>
           </div>
           <div
-            className="mb-4 col-6 col-md-6 col-lg-6 col-xl-6"
-            style={{ textAlign: 'right', paddingTop: '18px' }}
+            className={"mb-4 col-6 col-md-6 col-lg-6 col-xl-6 " + styles.sectionActions}
           >
             <Link to={'/list-evolucion'}>
               <button className="btn btn-verde" to={'/list-evolucion'}>
@@ -139,8 +135,7 @@ const FichaMedica = () => {
         <div className="row">
           <div className="col-12">
             <table
-              className="table table-bordered table-hover shadow table-striped"
-              style={{ width: '100%' }}
+              className={"table table-bordered table-hover shadow table-striped " + styles.tableFullWidth}
             >
               <thead>
                 <tr>
@@ -149,7 +144,7 @@ const FichaMedica = () => {
                   <th scope="col">Fecha de Observación</th>
                 </tr>
               </thead>
-              <tbody style={{ verticalAlign: 'middle' }}>
+              <tbody className={styles.tableBodyMiddle}>
                 {evoluciones &&
                   evoluciones
                     .filter((evolucion) => evolucion.borrado === 0)
@@ -165,13 +160,12 @@ const FichaMedica = () => {
           </div>
         </div>
 
-        <div className="row" style={{ verticalAlign: 'middle' }}>
+        <div className={"row " + styles.sectionRow}>
           <div className="col-6 col-md-6 col-lg-6 col-xl-6">
             <h4 className="mt-4">Obra Social</h4>
           </div>
           <div
-            className="mb-4 col-6 col-md-6 col-lg-6 col-xl-6"
-            style={{ textAlign: 'right', paddingTop: '18px' }}
+            className={"mb-4 col-6 col-md-6 col-lg-6 col-xl-6 " + styles.sectionActions}
           >
             <Link to={'/list-obrasocial'}>
               <button className="btn btn-verde" to={'/list-obrasocial'}>
@@ -183,8 +177,7 @@ const FichaMedica = () => {
         <div className="row">
           <div className="col-12">
             <table
-              className="table table-bordered table-hover shadow table-striped"
-              style={{ width: '100%' }}
+              className={"table table-bordered table-hover shadow table-striped " + styles.tableFullWidth}
             >
               <thead>
                 <tr>
@@ -192,7 +185,7 @@ const FichaMedica = () => {
                   <th scope="col">Tipo</th>
                 </tr>
               </thead>
-              <tbody style={{ verticalAlign: 'middle' }}>
+              <tbody className={styles.tableBodyMiddle}>
                 {osociales &&
                   osociales
                     .filter((osocial) => osocial.borrado === 0)
@@ -207,13 +200,12 @@ const FichaMedica = () => {
           </div>
         </div>
 
-        <div className="row" style={{ verticalAlign: 'middle' }}>
+        <div className={"row " + styles.sectionRow}>
           <div className="col-6 col-md-6 col-lg-6 col-xl-6">
             <h4 className="mt-4">Indicación de Medicamentos</h4>
           </div>
           <div
-            className="mb-4 col-6 col-md-6 col-lg-6 col-xl-6"
-            style={{ textAlign: 'right', paddingTop: '18px' }}
+            className={"mb-4 col-6 col-md-6 col-lg-6 col-xl-6 " + styles.sectionActions}
           >
             <Link to={'/list-indicacion'}>
               <button className="btn btn-verde" to={'/list-indicacion'}>
@@ -225,8 +217,7 @@ const FichaMedica = () => {
         <div className="row">
           <div className="col-12">
             <table
-              className="table table-bordered table-hover shadow table-striped"
-              style={{ width: '100%' }}
+              className={"table table-bordered table-hover shadow table-striped " + styles.tableFullWidth}
             >
               <thead>
                 <tr>
@@ -237,7 +228,7 @@ const FichaMedica = () => {
                   <th scope="col">Estado</th>
                 </tr>
               </thead>
-              <tbody style={{ verticalAlign: 'middle' }}>
+              <tbody className={styles.tableBodyMiddle}>
                 {indicaciones &&
                   indicaciones
                     .filter((indicacion) => indicacion.borrado === 0)

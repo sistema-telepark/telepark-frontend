@@ -1,0 +1,15 @@
+.checkboxMargin {
+  margin-right: 10px;
+}
+
+.checkLabel {
+  inline-size: max-content;
+}
+
+.referenteSection {
+  margin-top: 50px;
+}
+
+.confirmCenter {
+  text-align: center;
+}

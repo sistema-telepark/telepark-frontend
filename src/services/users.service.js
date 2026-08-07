@@ -1,5 +1,5 @@
 import http from '../http-common';
-import { withServiceHandler } from './errorHandler';
+import { withServiceHandler } from './error-handler';
 
 const users = {
   async getUsers() {

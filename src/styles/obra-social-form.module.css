@@ -1,0 +1,13 @@
+.formActions {
+  text-align: center;
+  padding-top: 38px;
+}
+
+.submitButton {
+  width: 40%;
+}
+
+.cancelButton {
+  width: 40%;
+  margin-left: 10px;
+}

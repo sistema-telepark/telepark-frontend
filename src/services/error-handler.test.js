@@ -1,12 +1,12 @@
-import { normalizeError, withServiceHandler } from './errorHandler';
+import { normalizeError, withServiceHandler } from './error-handler';
 import { logAsyncError } from '../components/error-boundary/logError';
-import { showToast, showModal } from './notificationService';
+import { showToast, showModal } from './notification.service';
 
 jest.mock('../components/error-boundary/logError', () => ({
   logAsyncError: jest.fn(),
 }));
 
-jest.mock('./notificationService', () => ({
+jest.mock('./notification.service', () => ({
   showToast: jest.fn(),
   showModal: jest.fn(),
 }));

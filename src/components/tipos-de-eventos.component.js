@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import 'bootstrap/dist/css/bootstrap.css';
 import { Container, Form, FormGroup, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { eventRespository } from '../services/event.service';
 import Swal from 'sweetalert2';
-import { PencilIcon, PlusIcon } from './icons/IconsShared';
+import { PencilIcon, PlusIcon } from './icons/icons-shared';
 
 const TypeEvents = () => {
   const [typeEvent, setTypeEvent] = useState([]);

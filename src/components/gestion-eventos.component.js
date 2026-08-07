@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { eventRespository } from '../services/event.service';
 import Swal from 'sweetalert2';
-import 'bootstrap/dist/css/bootstrap.css';
-import { PlusIcon } from './icons/IconsShared';
+import { PlusIcon } from './icons/icons-shared';
+import styles from '../styles/gestion-eventos.module.css';
 
 const Events = () => {
   const [typeEvent, setTypeEvent] = useState([]);
@@ -155,7 +155,7 @@ const Events = () => {
           </div>
           {validate && (
             <div className="row">
-              <span style={{ color: 'red' }}>
+              <span className={styles.errorText}>
                 <strong>La Fecha de finalizacion es menor a la Fecha de inicio</strong>. Coloque
                 una fecha de finalizacion mayor a la fecha de inicio.
               </span>

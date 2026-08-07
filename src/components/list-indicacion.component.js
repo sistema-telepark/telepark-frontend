@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
-import 'bootstrap/dist/css/bootstrap.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { indicacionRepository } from '../services/indicacionService';
-import { medicamentoRepository } from '../services/medicamentoService';
+import { indicacionRepository } from '../services/indicacion.service';
+import { medicamentoRepository } from '../services/medicamento.service';
 import utils from '../utils/utils';
-import { PlusIcon, PencilIcon, TrashIcon } from './icons/IconsShared';
+import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
+import styles from '../styles/list-indicacion.module.css';
 
 const ListaIndicacion = () => {
   const idEpElegido = useSelector((state) => state.global.idEpElegido);
@@ -234,8 +234,7 @@ const ListaIndicacion = () => {
 
   return (
     <main
-      className="border-top-sm m-0 row justify-content-center form-paciente m-md-3 rounded shadow container-lg mx-md-auto"
-      style={{ paddingTop: 20 }}
+      className={"border-top-sm m-0 row justify-content-center form-paciente m-md-3 rounded shadow container-lg mx-md-auto " + styles.pageHeader}
     >
       <div className="mb-4 col-12 col-md-9 col-lg-12 col-xl-10">
         <h3 className="mt-4">Indicación de Medicamentos</h3>
@@ -246,7 +245,7 @@ const ListaIndicacion = () => {
               <b>Nombre y Apellido:</b> {nombreEpElegido}
             </h5>
           </div>
-          <div className="mb-4 col-12 col-md-6 col-lg-6 col-xl-6" style={{ textAlign: 'right' }}>
+          <div className={"mb-4 col-12 col-md-6 col-lg-6 col-xl-6 " + styles.textRight}>
             <button type="button" className="btn btn-azul" onClick={() => agregar()}>
               <PlusIcon />
               Agregar
@@ -318,21 +317,18 @@ const ListaIndicacion = () => {
                 </select>
               </div>
               <div
-                className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4"
-                style={{ textAlign: 'center', paddingTop: 38 }}
+                className={"mb-4 col-12 col-md-6 col-lg-4 col-xl-4 " + styles.formActions}
               >
                 <button
                   type="submit"
-                  className="btn btn-verde"
-                  style={{ width: '40%' }}
+                  className={"btn btn-verde " + styles.submitButton}
                   onClick={() => cargarNuevo()}
                 >
                   Confirmar
                 </button>
                 <button
                   type="submit"
-                  className="btn btn-rojo"
-                  style={{ width: '40%', marginLeft: 10 }}
+                  className={"btn btn-rojo " + styles.cancelButton}
                   onClick={() => cancelar()}
                 >
                   Cancelar
@@ -410,21 +406,18 @@ const ListaIndicacion = () => {
                 </select>
               </div>
               <div
-                className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4"
-                style={{ textAlign: 'center', paddingTop: 38 }}
+                className={"mb-4 col-12 col-md-6 col-lg-4 col-xl-4 " + styles.formActions}
               >
                 <button
                   type="submit"
-                  className="btn btn-verde"
-                  style={{ width: '40%' }}
+                  className={"btn btn-verde " + styles.submitButton}
                   onClick={() => guardar()}
                 >
                   Guardar
                 </button>
                 <button
                   type="submit"
-                  className="btn btn-rojo"
-                  style={{ width: '40%', marginLeft: 10 }}
+                  className={"btn btn-rojo " + styles.cancelButton}
                   onClick={() => cancelar()}
                 >
                   Cancelar
@@ -439,8 +432,7 @@ const ListaIndicacion = () => {
         <div className="row">
           <div className="col-12">
             <table
-              className="table table-bordered table-hover shadow table-striped"
-              style={{ width: '100%' }}
+              className={"table table-bordered table-hover shadow table-striped " + styles.tableFullWidth}
             >
               <thead>
                 <tr>
@@ -452,7 +444,7 @@ const ListaIndicacion = () => {
                   <th scope="col">Acción</th>
                 </tr>
               </thead>
-              <tbody style={{ verticalAlign: 'middle' }}>
+              <tbody className={styles.tableBodyMiddle}>
                 {indicaciones &&
                   indicaciones
                     .filter((indicacion) => indicacion.borrado === 0)
@@ -466,8 +458,7 @@ const ListaIndicacion = () => {
                         <td>
                           <button
                             type="button"
-                            className="btn btn-verde"
-                            style={{ marginRight: 10 }}
+                            className={"btn btn-verde " + styles.rowActionButton}
                             onClick={() =>
                               editar(
                                 indicacion.cantidadmiligramos,

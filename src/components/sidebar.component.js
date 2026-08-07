@@ -1,10 +1,9 @@
 import React, { memo } from 'react';
 
-import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/sidebar.css';
 
 import logoTelepark from '../images/logoTelepark2022.png';
-import { TokenService } from '../services/tokenService';
+import { TokenService } from '../services/token.service';
 import {
   MenuIcon,
   HomeIcon,
@@ -17,7 +16,7 @@ import {
   CalendarIcon,
   TableIcon,
   LogoutIcon,
-} from './icons/IconsSidebar';
+} from './icons/icons-sidebar';
 
 const Sidebar = (props) => {
   //funciones

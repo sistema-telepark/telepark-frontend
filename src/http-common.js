@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { TokenService } from './services/tokenService';
+import { TokenService } from './services/token.service';
 
 const instance = axios.create({
   baseURL:

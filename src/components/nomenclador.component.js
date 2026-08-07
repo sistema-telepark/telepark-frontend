@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.css';
 import utils from '../utils/utils';
-import { enfermedadRepository } from '../services/enfermedadService';
-import { medicamentoRepository } from '../services/medicamentoService';
-import { obrasocialRepository } from '../services/obrasocialService';
-import { CheckIcon, CloseIcon, AddIcon, EditIcon, DeleteIcon } from './icons/IconsNomenclador';
+import { enfermedadRepository } from '../services/enfermedad.service';
+import { medicamentoRepository } from '../services/medicamento.service';
+import { obrasocialRepository } from '../services/obrasocial.service';
+import { CheckIcon, CloseIcon, AddIcon, EditIcon, DeleteIcon } from './icons/icons-nomenclador';
+import styles from '../styles/nomenclador.module.css';
 
 const Nomenclador = () => {
   const [type, setType] = useState('');
@@ -262,17 +262,10 @@ const Nomenclador = () => {
 
           <div className="row">
             <div
-              className="col-12 col-md-12 col-lg-12 col-xl-12"
-              style={{
-                position: 'relative',
-                maxHeight: '350px',
-                overflow: 'auto',
-                display: 'block',
-              }}
+              className={"col-12 col-md-12 col-lg-12 col-xl-12 " + styles.scrollableTable}
             >
               <table
-                className="table table-bordered table-hover shadow table-striped"
-                style={{ width: '100%' }}
+                className={"table table-bordered table-hover shadow table-striped " + styles.tableFullWidth}
               >
                 <thead>
                   <tr>
@@ -280,7 +273,7 @@ const Nomenclador = () => {
                     <th scope="col">Acción</th>
                   </tr>
                 </thead>
-                <tbody style={{ verticalAlign: 'middle' }}>
+                <tbody className={styles.tableBodyMiddle}>
                   {enfermedades &&
                     enfermedades.map((enfermedad, index) => (
                       <tr key={enfermedad.idenfermedad}>
@@ -288,8 +281,7 @@ const Nomenclador = () => {
                         <td>
                           <button
                             type="button"
-                            className="btn btn-verde"
-                            style={{ marginRight: 10 }}
+                            className={"btn btn-verde " + styles.rowActionButton}
                             onClick={() =>
                               editar(
                                 'enfermedad',
@@ -361,17 +353,10 @@ const Nomenclador = () => {
 
           <div className="row">
             <div
-              className="mb-4 col-12 col-md-12 col-lg-12 col-xl-12"
-              style={{
-                position: 'relative',
-                maxHeight: '350px',
-                overflow: 'auto',
-                display: 'block',
-              }}
+              className={"mb-4 col-12 col-md-12 col-lg-12 col-xl-12 " + styles.scrollableTable}
             >
               <table
-                className="table table-bordered table-hover shadow table-striped"
-                style={{ width: '100%' }}
+                className={"table table-bordered table-hover shadow table-striped " + styles.tableFullWidth}
               >
                 <thead>
                   <tr>
@@ -379,7 +364,7 @@ const Nomenclador = () => {
                     <th scope="col">Acción</th>
                   </tr>
                 </thead>
-                <tbody style={{ verticalAlign: 'middle' }}>
+                <tbody className={styles.tableBodyMiddle}>
                   {medicamentos &&
                     medicamentos.map((medicamento, index) => (
                       <tr key={medicamento.idmedicamento}>
@@ -387,8 +372,7 @@ const Nomenclador = () => {
                         <td>
                           <button
                             type="button"
-                            className="btn btn-verde"
-                            style={{ marginRight: 10 }}
+                            className={"btn btn-verde " + styles.rowActionButton}
                             onClick={() =>
                               editar(
                                 'medicamento',
@@ -461,8 +445,7 @@ const Nomenclador = () => {
                 Es Pública
                 <input
                   type="checkbox"
-                  className="form-check-input"
-                  style={{ marginLeft: 10 }}
+                  className={"form-check-input " + styles.checkInline}
                   name="isChecked"
                   onChange={detectarCheck}
                   checked={!campo.isChecked ? false : campo.isChecked}
@@ -473,17 +456,10 @@ const Nomenclador = () => {
 
           <div className="row">
             <div
-              className="mb-2 col-12 col-md-12 col-lg-12 col-xl-12"
-              style={{
-                position: 'relative',
-                maxHeight: '350px',
-                overflow: 'auto',
-                display: 'block',
-              }}
+              className={"mb-2 col-12 col-md-12 col-lg-12 col-xl-12 " + styles.scrollableTable}
             >
               <table
-                className="table table-bordered table-hover shadow table-striped"
-                style={{ width: '100%' }}
+                className={"table table-bordered table-hover shadow table-striped " + styles.tableFullWidth}
               >
                 <thead>
                   <tr>
@@ -491,7 +467,7 @@ const Nomenclador = () => {
                     <th scope="col">Acción</th>
                   </tr>
                 </thead>
-                <tbody style={{ verticalAlign: 'middle' }}>
+                <tbody className={styles.tableBodyMiddle}>
                   {obrasociales &&
                     obrasociales.map((obrasocial, index) => (
                       <tr key={obrasocial.idobrasocial}>
@@ -499,8 +475,7 @@ const Nomenclador = () => {
                         <td>
                           <button
                             type="button"
-                            className="btn btn-verde"
-                            style={{ marginRight: 10 }}
+                            className={"btn btn-verde " + styles.rowActionButton}
                             onClick={() =>
                               editar(
                                 'obrasocial',

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { WarningIcon, ReloadIcon } from '../icons/IconsShared';
+import { WarningIcon, ReloadIcon } from '../icons/icons-shared';
+import styles from '../../styles/error-fallback-route.module.css';
 
 /**
  * ErrorFallbackRoute — Tarjeta de error contextual (NIVEL 2)
@@ -31,7 +32,7 @@ const ErrorFallbackRoute = ({ error, resetErrorBoundary, componentName }) => {
           {process.env.NODE_ENV === 'development' && (
             <div className="alert alert-secondary py-2 px-3 mb-3">
               <strong className="small">Error:</strong>
-              <pre className="mb-0 mt-1" style={{ fontSize: '0.75rem' }}>
+              <pre className={"mb-0 mt-1 " + styles.errorPre}>
                 {error.message}
               </pre>
             </div>

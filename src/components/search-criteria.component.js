@@ -1,6 +1,5 @@
 import React, { memo, useState, useEffect } from 'react';
-import { PencilIcon } from './icons/IconsShared';
-import 'bootstrap/dist/css/bootstrap.css';
+import { PencilIcon } from './icons/icons-shared';
 import { eventRespository } from '../services/event.service';
 import Swal from 'sweetalert2';
 import { Form, FormGroup, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';

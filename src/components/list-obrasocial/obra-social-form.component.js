@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from '../../styles/obra-social-form.module.css';
 
 const ObraSocialForm = ({
   titulo,
@@ -32,21 +33,18 @@ const ObraSocialForm = ({
           </select>
         </div>
         <div
-          className="col-12 col-md-6 col-lg-6 col-xl-6"
-          style={{ textAlign: 'center', paddingTop: 38 }}
+          className={"col-12 col-md-6 col-lg-6 col-xl-6 " + styles.formActions}
         >
           <button
             type="submit"
-            className="btn btn-verde"
-            style={{ width: '40%' }}
+            className={"btn btn-verde " + styles.submitButton}
             onClick={() => funcionConfirmar()}
           >
             Confirmar
           </button>
           <button
             type="submit"
-            className="btn btn-rojo"
-            style={{ width: '40%', marginLeft: 10 }}
+            className={"btn btn-rojo " + styles.cancelButton}
             onClick={() => funcionCancelar()}
           >
             Cancelar
