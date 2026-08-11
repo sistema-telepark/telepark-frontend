@@ -24,6 +24,11 @@ const Events = lazy(() => import(/* webpackChunkName: "events" */ './components/
 const TypeEvents = lazy(() => import(/* webpackChunkName: "type-events" */ './components/tipos-de-eventos.component'));
 const Nomenclador = lazy(() => import(/* webpackChunkName: "nomenclador" */ './components/nomenclador.component'));
 const ListaPaciente = lazy(() => import(/* webpackChunkName: "lista-pacientes" */ './components/list-pacientes-ep.component'));
+const Talleres = lazy(() => import(/* webpackChunkName: "talleres" */ './components/talleres.component'));
+const Encuentro = lazy(() => import(/* webpackChunkName: "encuentro" */ './components/encuentro.component'));
+const Actividad = lazy(() => import(/* webpackChunkName: "actividad" */ './components/actividad.component'));
+const Asistencia = lazy(() => import(/* webpackChunkName: "asistencia-taller" */ './components/asistencia-taller.component'));
+const Consulta = lazy(() => import(/* webpackChunkName: "consulta" */ './components/consulta.component'));
 
 function AppContent({ token, userName, userRole, setToken, setUserName, setUserRole }) {
   const navigate = useNavigate();
@@ -294,6 +299,86 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                     >
                       <Suspense fallback={<LoadingSpinner />}>
                         <TypeEvents />
+                      </Suspense>
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/taller"
+                  element={
+                    <ErrorBoundary
+                      FallbackComponent={(props) => (
+                        <ErrorFallbackRoute {...props} componentName="Talleres" />
+                      )}
+                      onError={logError}
+                      resetKeys={[token]}
+                    >
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <Talleres />
+                      </Suspense>
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/encuentro"
+                  element={
+                    <ErrorBoundary
+                      FallbackComponent={(props) => (
+                        <ErrorFallbackRoute {...props} componentName="Encuentro" />
+                      )}
+                      onError={logError}
+                      resetKeys={[token]}
+                    >
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <Encuentro />
+                      </Suspense>
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/actividad"
+                  element={
+                    <ErrorBoundary
+                      FallbackComponent={(props) => (
+                        <ErrorFallbackRoute {...props} componentName="Actividad" />
+                      )}
+                      onError={logError}
+                      resetKeys={[token]}
+                    >
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <Actividad />
+                      </Suspense>
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/asistencia"
+                  element={
+                    <ErrorBoundary
+                      FallbackComponent={(props) => (
+                        <ErrorFallbackRoute {...props} componentName="Asistencia" />
+                      )}
+                      onError={logError}
+                      resetKeys={[token]}
+                    >
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <Asistencia />
+                      </Suspense>
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/consulta"
+                  element={
+                    <ErrorBoundary
+                      FallbackComponent={(props) => (
+                        <ErrorFallbackRoute {...props} componentName="Consulta" />
+                      )}
+                      onError={logError}
+                      resetKeys={[token]}
+                    >
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <Consulta />
                       </Suspense>
                     </ErrorBoundary>
                   }
