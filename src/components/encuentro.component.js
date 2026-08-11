@@ -171,9 +171,10 @@ const Encuentro = () => {
   };
 
   // Función que obtiene para eliminar un encuentro
-  const deleteE = async (data) => {
+  const eliminarEncuentro = async (data) => {
     const ok = await showConfirm(
-      `¿Seguro que desea eliminar el encuentro con fecha: ${utils.convertirFormatoFecha(data.fecha)}?`
+      `¿Seguro que desea eliminar el encuentro con fecha: ${utils.convertirFormatoFecha(data.fecha)}?`,
+      `Código: ${data.idclasetaller}`
     );
     if (!ok) return;
     const resp = await encuentroRepository.deleteEncuentro(data.idclasetaller);
@@ -263,7 +264,7 @@ const Encuentro = () => {
                       type="button"
                       className={`btn ${styles.deleteButton}`}
                       title="Borrar"
-                      onClick={() => deleteE(element)}
+                      onClick={() => eliminarEncuentro(element)}
                     >
                       <TrashIcon />
                     </button>
