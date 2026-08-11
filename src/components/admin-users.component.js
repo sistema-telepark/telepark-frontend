@@ -160,7 +160,7 @@ const AdminUsuarios = () => {
         password: campo.password,
         is_superuser: campo.role === 'true' ? true : false,
         is_active: campo.isActive === 'true' ? true : false,
-        is_staff: false,
+        is_staff: campo.role === 'true' ? true : false,
       };
 
       setTimeout(() => {
@@ -301,8 +301,8 @@ const AdminUsuarios = () => {
           <div
             className={"mb-4 col-12 col-md-12 col-lg-12 col-xl-12 " + styles.textRight}
           >
-            <button type="button" className="btn btn-azul" onClick={() => agregar()}>
-              <PlusIcon />
+            <button type="button" className="btn btn-primary mb-2 mt-2" onClick={() => agregar()}>
+              <PlusIcon className="signoMas" />
               Agregar
             </button>
           </div>

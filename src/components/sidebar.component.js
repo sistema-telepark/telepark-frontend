@@ -18,6 +18,8 @@ import {
   LogoutIcon,
 } from './icons/icons-sidebar';
 
+import { ClipboardDataIcon, ClipboardCheckIcon, EyeIcon } from './icons/icons-shared';
+
 const Sidebar = (props) => {
   //funciones
   const [open, setOpen] = useState(false);
@@ -118,6 +120,38 @@ const Sidebar = (props) => {
             <span className="links_name">Ingresar/Modificar Tipo de evento</span>
           </a>
           <span className="tooltip">Ingresar/Modificar Tipo de evento</span>
+        </li>
+
+        <li className={current_url === '/taller' ? 'active' : ''}>
+          <a href="./taller" aria-label="Ingresar/Modificar taller">
+            <ClipboardDataIcon />
+            <span className="links_name">Ingresar/Modificar taller</span>
+          </a>
+          <span className="tooltip">Ingresar/Modificar taller</span>
+        </li>
+
+        <li className={current_url === '/encuentro' ? 'active' : ''}>
+          <a href="./encuentro" aria-label="Ingresar/Modificar encuentro">
+            <CalendarIcon />
+            <span className="links_name">Ingresar/Modificar encuentro</span>
+          </a>
+          <span className="tooltip">Ingresar/Modificar encuentro</span>
+        </li>
+
+        <li className={current_url === '/asistencia' ? 'active' : ''}>
+          <a href="./asistencia" aria-label="Registrar asistencia">
+            <ClipboardCheckIcon />
+            <span className="links_name">Registrar asistencia</span>
+          </a>
+          <span className="tooltip">Registrar asistencia</span>
+        </li>
+
+        <li className={current_url === '/consulta' ? 'active' : ''}>
+          <a href="./consulta" aria-label="Consultas">
+            <EyeIcon />
+            <span className="links_name">Consultas</span>
+          </a>
+          <span className="tooltip">Consultas</span>
         </li>
 
         <hr className="hr_sidebar"></hr>

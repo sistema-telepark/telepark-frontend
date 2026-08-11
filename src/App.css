@@ -7,6 +7,12 @@
   text-align: center;
 }
 
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -129,6 +135,15 @@ table {
 table th,
 table td {
   text-align: center;
+}
+
+.signoMas {
+  padding-right: 0.5rem;
+  width: 22px;
+}
+
+.textAreaMotivo {
+  margin-bottom: 1.5rem;
 }
 
 @media screen and (max-width: 600px) {

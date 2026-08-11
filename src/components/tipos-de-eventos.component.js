@@ -201,16 +201,16 @@ const TypeEvents = () => {
       <Container>
         <h1 className="mt-4 mt-md-2 text-center">Tipos de eventos</h1>
         <button className="btn btn-primary mb-2 mt-2" onClick={() => showModalInsert()}>
-          Insertar nuevo tipo de evento
+          <PlusIcon className="signoMas" /> Agregar
         </button>
         <div className="row m-md-3 shadow mx-md-auto border-top-sm m-0">
           <table className="table">
             <thead>
               <tr>
-                <th scope="col">ID</th>
+                <th scope="col">Código</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Desactivar Taller</th>
-                <th scope="col">Accion</th>
+                <th scope="col">Acción</th>
               </tr>
             </thead>
             {typeEvent
