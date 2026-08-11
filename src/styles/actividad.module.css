@@ -1,0 +1,19 @@
+.formColumn {
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.scrollContainer {
+  position: relative;
+  max-height: 350px;
+  overflow: auto;
+  display: block;
+}
+
+.tableBodyMiddle {
+  vertical-align: middle;
+}
+
+.rowActionButton {
+  margin-right: 10px;
+}

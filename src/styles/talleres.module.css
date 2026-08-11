@@ -1,0 +1,66 @@
+.editButton {
+  margin-right: 10px;
+  box-shadow: 3px 3px #13e000;
+  background-image: linear-gradient(
+    to right,
+    #9bff92,
+    #8efe86,
+    #80fd79,
+    #71fc6c,
+    #5ffb5e,
+    #58fb54,
+    #51fb4a,
+    #4afb3e,
+    #51fc35,
+    #57fd2a,
+    #5efe1c,
+    #64ff00
+  );
+}
+
+.deleteButton {
+  margin-right: 10px;
+  box-shadow: 3px 3px #d80000;
+  background-image: linear-gradient(
+    to right,
+    #ff7171,
+    #ff6867,
+    #ff5e5d,
+    #ff5453,
+    #ff4948,
+    #ff4140,
+    #ff3938,
+    #ff302f,
+    #ff2826,
+    #ff1f1d,
+    #ff1311,
+    #ff0000
+  );
+}
+
+.manageButton {
+  margin-right: 10px;
+  box-shadow: 3px 3px #0059cd;
+  background-image: linear-gradient(
+    to right,
+    #6ba7f6,
+    #62a2f7,
+    #599df8,
+    #4f98f9,
+    #4593fa,
+    #3c8efb,
+    #338afc,
+    #2a85fd,
+    #2080fe,
+    #157afe,
+    #0a75ff,
+    #006fff
+  );
+}
+
+.scrollContainer {
+  position: relative;
+  max-height: 350px;
+  overflow: auto;
+  display: block;
+}
