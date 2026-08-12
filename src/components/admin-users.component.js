@@ -81,13 +81,14 @@ const AdminUsuarios = () => {
   };
 
   // Función que obtiene la lista de usuarios
+  // M01 (HITL 2026-08-11): /usuarios devuelve envelope DRF paginado
+  // {count,next,previous,results} → normalizar a .results (patrón RA-13).
   const getUsers = async () => {
     let response = await userRepository.getUsers();
 
-    if (response) {
-      console.log(response.data);
+    if (response && response.data) {
       let admin = TokenService.getUsername();
-      let users = response.data.filter((user) => {
+      let users = (response.data.results ?? response.data).filter((user) => {
         return user.username !== admin;
       });
       setUsuarios(users);

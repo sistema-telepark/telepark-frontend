@@ -37,11 +37,19 @@ const ListaDiagnostico = () => {
   };
 
   // Funcion que obtiene la lista de diagnosticos de un paciente
+  // M02 (HITL 2026-08-11): no llamar al service con idEpElegido vacío
+  // (redux inicial '') — antes armaba `/personas-ep//diagnosticos` → 404.
+  // Normalizar listado paginado DRF a .results (patrón RA-13).
   const getDiagnosticos = async () => {
+    if (!idEpElegido) {
+      setDiagnosticos([]);
+      return;
+    }
+
     let response = await diagnosticoRepository.get(idEpElegido);
 
-    if (response) {
-      setDiagnosticos(response.data);
+    if (response && response.data) {
+      setDiagnosticos(response.data.results ?? response.data);
     }
   };
 

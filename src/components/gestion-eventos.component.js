@@ -23,10 +23,12 @@ const Events = () => {
   }, []);
 
   // Función que obtiene la lista de personas con ep
+  // B01 (HITL 2026-08-11): /personas?espaciente=1 devuelve envelope DRF paginado
+  // {count,next,previous,results} → normalizar a .results (patrón RA-13).
   const getPersonAll = async () => {
     let response = await eventRespository.getPersonAll();
-    if (response) {
-      setNamePersonEP(response.data);
+    if (response && response.data) {
+      setNamePersonEP(response.data.results ?? response.data);
     }
   };
 

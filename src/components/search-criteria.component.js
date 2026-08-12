@@ -152,10 +152,13 @@ const Search = () => {
   };
 
   // Función que obtiene la lista de personas con ep
+  // B01 (HITL 2026-08-11): el backend responde envelope DRF paginado
+  // {count,next,previous,results} → normalizar a .results (patrón RA-13,
+  // consistente con los componentes del módulo Taller).
   const getPersonAll = async () => {
     let response = await eventRespository.getAll();
-    if (response) {
-      setArrayPerson(response.data);
+    if (response && response.data) {
+      setArrayPerson(response.data.results ?? response.data);
     }
   };
 
