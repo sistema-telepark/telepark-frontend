@@ -222,8 +222,10 @@
 
   .open {
     width: 100%;
-    height: 600px;
-    min-height: auto;
+    height: auto;
+    max-height: calc(100vh - 60px);
+    min-height: 0;
+    overflow-y: auto;
   }
 
   .sidebar li a .links_name {
@@ -270,5 +272,14 @@
      .links_name) lo dejaría invisible. */
   .sidebar .logo-details .menu-toggle img {
     display: inline-block;
+  }
+
+  /* T-02.1: Área de toque mínima 48px para logout en móvil (WCAG 2.5.5) */
+  .sidebar li:last-child a {
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
   }
 }
