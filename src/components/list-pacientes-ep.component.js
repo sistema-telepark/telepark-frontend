@@ -8,6 +8,7 @@ import { Spinner } from 'reactstrap';
 import utils from '../utils/utils';
 import {
   EyeIcon,
+  SearchIcon,
   ClipboardCheckIcon,
   ClipboardDataIcon,
   JournalPlusIcon,
@@ -18,6 +19,7 @@ import styles from '../styles/list-pacientes-ep.module.css';
 const ListaPaciente = (props) => {
   const [loading, setLoading] = useState(true);
   const [buscador, setBuscador] = useState('');
+  const [buscar, setBuscar] = useState('');
   const [pacientes, setPacientes] = useState([]);
 
   useEffect(() => {
@@ -38,6 +40,12 @@ const ListaPaciente = (props) => {
   // Funcion que guarda el valor del buscador
   const detectarCambio = (e) => {
     setBuscador(e.target.value);
+    setBuscar(e.target.value);
+  };
+
+  // Funcion que dispara la busqueda por nombre desde la lupa (client-side, RA-11)
+  const buscarPorNombre = () => {
+    setBuscar(buscador);
   };
 
   // Funcion que navega a las diferentes secciones
@@ -57,7 +65,7 @@ const ListaPaciente = (props) => {
       </div>
 
       <div className="row">
-        <div className="col-12 col-md-12 col-lg-12 col-xl-12">
+        <div className="col-10 col-md-10 col-lg-10 col-xl-10">
           <input
             type="search"
             className="form-control"
@@ -66,6 +74,16 @@ const ListaPaciente = (props) => {
             aria-describedby="buscador"
             onChange={detectarCambio}
           />
+        </div>
+        <div className={`col-2 col-md-2 col-lg-2 col-xl-2 ${styles.noPaddingLeft}`}>
+          <button
+            type="button"
+            className="btn btn-verde"
+            onClick={buscarPorNombre}
+            aria-label="Buscar por nombre"
+          >
+            <SearchIcon />
+          </button>
         </div>
       </div>
 
@@ -88,10 +106,10 @@ const ListaPaciente = (props) => {
                   pacientes
                     .filter(
                       (paciente) =>
-                        paciente.idpersona.nombre.toLowerCase().includes(buscador) ||
-                        paciente.idpersona.apellido.toLowerCase().includes(buscador) ||
-                        paciente.idpersona.nombre.toUpperCase().includes(buscador) ||
-                        paciente.idpersona.apellido.toUpperCase().includes(buscador)
+                        paciente.idpersona.nombre.toLowerCase().includes(buscar) ||
+                        paciente.idpersona.apellido.toLowerCase().includes(buscar) ||
+                        paciente.idpersona.nombre.toUpperCase().includes(buscar) ||
+                        paciente.idpersona.apellido.toUpperCase().includes(buscar)
                     )
                     .map((paciente, index) => (
                       <tr key={paciente.idpersona?.idpersona ?? paciente.id}>

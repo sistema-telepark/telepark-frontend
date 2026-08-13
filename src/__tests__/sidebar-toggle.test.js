@@ -149,12 +149,12 @@ describe('Sidebar toggle (Sprint 4.7 — Fix Menú Desktop)', () => {
     expect(src).toContain('useState');
   });
 
-  test('CA-05: list-pacientes-ep.component.js sin botón muerto ni SearchIcon', () => {
+  test('CA-05: list-pacientes-ep.component.js tiene lupa de búsqueda por nombre (SearchIcon + onClick)', () => {
     const src = fs.readFileSync(
       path.join(__dirname, '..', 'components', 'list-pacientes-ep.component.js'),
       'utf8'
     );
-    expect(src).not.toContain('SearchIcon');
-    expect(src).not.toMatch(/<button type="button" className="btn btn-verde">/);
+    expect(src).toContain('SearchIcon');
+    expect(src).toContain('onClick={buscarPorNombre}');
   });
 });

@@ -29,6 +29,7 @@ const Encuentro = lazy(() => import(/* webpackChunkName: "encuentro" */ './compo
 const Actividad = lazy(() => import(/* webpackChunkName: "actividad" */ './components/actividad.component'));
 const Asistencia = lazy(() => import(/* webpackChunkName: "asistencia-taller" */ './components/asistencia-taller.component'));
 const Consulta = lazy(() => import(/* webpackChunkName: "consulta" */ './components/consulta.component'));
+const Familiar = lazy(() => import(/* webpackChunkName: "familiar" */ './components/familiar.component'));
 
 function AppContent({ token, userName, userRole, setToken, setUserName, setUserRole }) {
   const navigate = useNavigate();
@@ -379,6 +380,22 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                     >
                       <Suspense fallback={<LoadingSpinner />}>
                         <Consulta />
+                      </Suspense>
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/familiar"
+                  element={
+                    <ErrorBoundary
+                      FallbackComponent={(props) => (
+                        <ErrorFallbackRoute {...props} componentName="Familiar" />
+                      )}
+                      onError={logError}
+                      resetKeys={[token]}
+                    >
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <Familiar />
                       </Suspense>
                     </ErrorBoundary>
                   }

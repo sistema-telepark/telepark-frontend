@@ -82,8 +82,8 @@ const Sidebar = (props) => {
           <span className="tooltip">Criterio de Búsqueda</span>
         </li>
 
-        <li>
-          <a href="/">
+        <li className={current_url === '/familiar' ? 'active' : ''}>
+          <a href="./familiar" aria-label="Ingresar/Modificar Familiar">
             <FamilyIcon />
             <span className="links_name">Ingresar/Modificar Familiar</span>
           </a>
