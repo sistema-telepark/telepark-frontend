@@ -64,7 +64,7 @@ const ListaPaciente = (props) => {
         </div>
       </div>
 
-      <div className="row">
+      <div className="row mb-4">
         <div className="col-10 col-md-10 col-lg-10 col-xl-10">
           <input
             type="search"

@@ -15,6 +15,7 @@ const AdminUsuarios = () => {
   });
   const [error, setError] = useState({});
   const [usuarios, setUsuarios] = useState();
+  const [idUsuario, setIdUsuario] = useState(null);
 
   useEffect(() => {
     getUsers();
@@ -24,7 +25,6 @@ const AdminUsuarios = () => {
   const detectarCambio = (field, e) => {
     // Cambio de estado de campo — inmutable
     setCampo({ ...campo, [field]: e.target.value });
-    console.log(campo);
   };
 
   // Valido los campos del formulario
@@ -51,6 +51,9 @@ const AdminUsuarios = () => {
       if (!campo['password']) {
         formularioValido = false;
         error['password'] = 'Por favor, ingresa la contraseña.';
+      } else if (campo['password'].length < 8) {
+        formularioValido = false;
+        error['password'] = 'La contraseña debe tener al menos 8 caracteres.';
       }
 
       if (!campo['role']) {
@@ -62,6 +65,14 @@ const AdminUsuarios = () => {
         formularioValido = false;
         error['isActive'] = 'Por favor, ingresa el estado.';
       }
+
+      if (!campo['email']) {
+        formularioValido = false;
+        error['email'] = 'Por favor, ingresa el email.';
+      } else if (!/^\S+@\S+\.\S+$/.test(campo['email'])) {
+        formularioValido = false;
+        error['email'] = 'Por favor, ingresa un email válido.';
+      }
     } else {
       if (!campo['firstname']) {
         formularioValido = false;
@@ -71,6 +82,10 @@ const AdminUsuarios = () => {
       if (!campo['lastname']) {
         formularioValido = false;
         error['lastname'] = 'Por favor, ingresa el apellido.';
+      }
+      if (campo['password'] && campo['password'].length < 8) {
+        formularioValido = false;
+        error['password'] = 'La contraseña debe tener al menos 8 caracteres.';
       }
     }
 
@@ -98,6 +113,7 @@ const AdminUsuarios = () => {
   const editUser = (user) => {
     setShowNuevo(false);
     setShow(true);
+    setIdUsuario(user.id);
     setCampo({
       buscador: '',
       username: user.username,
@@ -110,6 +126,11 @@ const AdminUsuarios = () => {
   };
 
   const guardar = () => {
+    if (!idUsuario) {
+      notificacionError();
+      return;
+    }
+
     let data = {};
     if (validarFormulario()) {
       cargando();
@@ -118,7 +139,6 @@ const AdminUsuarios = () => {
           user: campo.username,
           first_name: campo.firstname,
           last_name: campo.lastname,
-          is_superuser: campo.role === 'true' ? true : false,
           is_active: campo.isActive === 'true' ? true : false,
         };
       } else {
@@ -127,24 +147,19 @@ const AdminUsuarios = () => {
           first_name: campo.firstname,
           last_name: campo.lastname,
           password: campo.password,
-          is_superuser: campo.role === 'true' ? true : false,
           is_active: campo.isActive === 'true' ? true : false,
         };
       }
 
       setTimeout(() => {
         userRepository
-          .updateUser(data)
+          .updateUser(idUsuario, data)
           .then((response) => {
-            if (response) {
-              console.log(response.data);
+            if (response && response.success) {
               notificacionExito();
               clear();
               getUsers();
             }
-          })
-          .catch((error) => {
-            notificacionError();
           });
       }, 1000);
     }
@@ -156,27 +171,21 @@ const AdminUsuarios = () => {
       cargando();
       data = {
         user: campo.username,
+        email: campo.email,
         first_name: campo.firstname,
         last_name: campo.lastname,
         password: campo.password,
-        is_superuser: campo.role === 'true' ? true : false,
-        is_active: campo.isActive === 'true' ? true : false,
-        is_staff: campo.role === 'true' ? true : false,
       };
 
       setTimeout(() => {
         userRepository
           .createUser(data)
           .then((response) => {
-            if (response) {
-              console.log(response);
+            if (response && response.success) {
               notificacionExito();
               clear();
               getUsers();
             }
-          })
-          .catch((error) => {
-            notificacionError();
           });
       }, 1000);
     }
@@ -185,12 +194,14 @@ const AdminUsuarios = () => {
   const clear = () => {
     setShowNuevo(false);
     setShow(false);
+    setIdUsuario(null);
     setCampo({
       buscador: '',
       password: '',
       username: '',
       firstname: '',
       lastname: '',
+      email: '',
       role: '',
       isActive: '',
     });
@@ -206,6 +217,7 @@ const AdminUsuarios = () => {
       username: '',
       firstname: '',
       lastname: '',
+      email: '',
       role: '',
       isActive: '',
     });
@@ -358,6 +370,20 @@ const AdminUsuarios = () => {
             </div>
             <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
               <label className="col-form-label">
+                Email <label className={styles.required}>*</label>
+              </label>
+              <input
+                type="email"
+                className="form-control"
+                placeholder="Email..."
+                id="email"
+                onChange={(e) => detectarCambio('email', e)}
+                value={campo['email'] || ''}
+              />
+              <span className={styles.required}>{error['email']}</span>
+            </div>
+            <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
+              <label className="col-form-label">
                 Nueva Contraseña <label className={styles.required}>*</label>
               </label>
               <input
@@ -404,6 +430,7 @@ const AdminUsuarios = () => {
               </select>
               <span className={styles.required}>{error['isActive']}</span>
             </div>
+            <br />
             <div
               className={"mb-4 col-12 col-md-6 col-lg-4 col-xl-4 " + styles.formActions}
             >

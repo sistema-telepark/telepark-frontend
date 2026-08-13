@@ -34,3 +34,6 @@ AGENTS.md
 # cypress
 cypress*
 
+# tests
+test-*
+__tests__/

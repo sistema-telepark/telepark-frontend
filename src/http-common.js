@@ -52,7 +52,11 @@ instance.interceptors.response.use(
         err.response.data = { message: data.map((e) => e.msg || e).join(', ') };
       }
       if (status === 400 && typeof data === 'object' && !data.message) {
-        err.response.data = { message: data.detail || 'Solicitud inválida' };
+        const fieldErrors = Object.entries(data)
+          .filter(([key]) => !['detail', 'message'].includes(key))
+          .map(([key, value]) => `${key}: ${Array.isArray(value) ? value.join(', ') : value}`)
+          .join('; ');
+        err.response.data = { message: data.detail || fieldErrors || 'Solicitud inválida' };
       }
     }
     return Promise.reject(err);
