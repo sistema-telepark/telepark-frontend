@@ -83,6 +83,15 @@ const AdminUsuarios = () => {
         formularioValido = false;
         error['lastname'] = 'Por favor, ingresa el apellido.';
       }
+
+      if (!campo['email']) {
+        formularioValido = false;
+        error['email'] = 'Por favor, ingresa el email.';
+      } else if (!/^\S+@\S+\.\S+$/.test(campo['email'])) {
+        formularioValido = false;
+        error['email'] = 'Por favor, ingresa un email válido.';
+      }
+
       if (campo['password'] && campo['password'].length < 8) {
         formularioValido = false;
         error['password'] = 'La contraseña debe tener al menos 8 caracteres.';
@@ -119,6 +128,7 @@ const AdminUsuarios = () => {
       username: user.username,
       firstname: user.first_name,
       lastname: user.last_name,
+      email: user.email,
       role: user.is_superuser === true ? 'true' : 'false',
       isActive: user.is_active === true ? 'true' : 'false',
     });
@@ -139,6 +149,7 @@ const AdminUsuarios = () => {
           user: campo.username,
           first_name: campo.firstname,
           last_name: campo.lastname,
+          email: campo.email,
           is_active: campo.isActive === 'true' ? true : false,
         };
       } else {
@@ -146,21 +157,20 @@ const AdminUsuarios = () => {
           user: campo.username,
           first_name: campo.firstname,
           last_name: campo.lastname,
+          email: campo.email,
           password: campo.password,
           is_active: campo.isActive === 'true' ? true : false,
         };
       }
 
       setTimeout(() => {
-        userRepository
-          .updateUser(idUsuario, data)
-          .then((response) => {
-            if (response && response.success) {
-              notificacionExito();
-              clear();
-              getUsers();
-            }
-          });
+        userRepository.updateUser(idUsuario, data).then((response) => {
+          if (response && response.success) {
+            notificacionExito();
+            clear();
+            getUsers();
+          }
+        });
       }, 1000);
     }
   };
@@ -178,15 +188,13 @@ const AdminUsuarios = () => {
       };
 
       setTimeout(() => {
-        userRepository
-          .createUser(data)
-          .then((response) => {
-            if (response && response.success) {
-              notificacionExito();
-              clear();
-              getUsers();
-            }
-          });
+        userRepository.createUser(data).then((response) => {
+          if (response && response.success) {
+            notificacionExito();
+            clear();
+            getUsers();
+          }
+        });
       }, 1000);
     }
   };
@@ -272,7 +280,7 @@ const AdminUsuarios = () => {
         Swal.showLoading();
       },
       willClose: () => {
-        console.log('Cerrando...');
+        // Cerrando loader
       },
     });
   };
@@ -280,19 +288,18 @@ const AdminUsuarios = () => {
   // Función buscar: no implementada en el original (bug preexistente documentado).
   // Se define como stub vacío para mantener el mismo comportamiento en runtime.
   const buscar = () => {};
-
-  console.log(usuarios);
   return (
     <main
-      className={"border-top-sm m-0 row justify-content-center form-paciente m-md-3 rounded shadow container-lg mx-md-auto " + styles.pageHeader}
+      className={
+        'border-top-sm m-0 row justify-content-center form-paciente m-md-3 rounded shadow container-lg mx-md-auto ' +
+        styles.pageHeader
+      }
     >
       <div className="mb-4 col-12 col-md-9 col-lg-12 col-xl-10">
         <h3 className="mt-4">Administrar Usuarios</h3>
         <hr />
         <div className="row">
-          <div
-            className={"mb-4 col-10 col-md-10 col-lg-6 col-xl-6 " + styles.searchInputWrapper}
-          >
+          <div className={'mb-4 col-10 col-md-10 col-lg-6 col-xl-6 ' + styles.searchInputWrapper}>
             <input
               type="search"
               className="form-control"
@@ -303,7 +310,7 @@ const AdminUsuarios = () => {
               value={campo['buscador'] || ''}
             />
           </div>
-          <div className={"mb-4 col-2 col-md-2 col-lg-6 col-xl-6 " + styles.noPaddingLeft}>
+          <div className={'mb-4 col-2 col-md-2 col-lg-6 col-xl-6 ' + styles.noPaddingLeft}>
             <button type="button" className="btn btn-verde" onClick={() => buscar()}>
               <SearchIcon />
             </button>
@@ -311,9 +318,7 @@ const AdminUsuarios = () => {
         </div>
 
         <div className="row">
-          <div
-            className={"mb-4 col-12 col-md-12 col-lg-12 col-xl-12 " + styles.textRight}
-          >
+          <div className={'mb-4 col-12 col-md-12 col-lg-12 col-xl-12 ' + styles.textRight}>
             <button type="button" className="btn btn-primary mb-2 mt-2" onClick={() => agregar()}>
               <PlusIcon className="signoMas" />
               Agregar
@@ -384,7 +389,7 @@ const AdminUsuarios = () => {
             </div>
             <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
               <label className="col-form-label">
-                Nueva Contraseña <label className={styles.required}>*</label>
+                Contraseña <label className={styles.required}>*</label>
               </label>
               <input
                 type="password"
@@ -397,7 +402,7 @@ const AdminUsuarios = () => {
               <span className={styles.required}>{error['password']}</span>
             </div>
             <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-              <label className="col-form-label">
+              <label htmlFor="role" className="col-form-label">
                 Rol <label className={styles.required}>*</label>
               </label>
               <select
@@ -414,7 +419,7 @@ const AdminUsuarios = () => {
               <span className={styles.required}>{error['role']}</span>
             </div>
             <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-              <label className="col-form-label">
+              <label htmlFor="isActive" className="col-form-label">
                 Estado <label className={styles.required}>*</label>
               </label>
               <select
@@ -431,19 +436,17 @@ const AdminUsuarios = () => {
               <span className={styles.required}>{error['isActive']}</span>
             </div>
             <br />
-            <div
-              className={"mb-4 col-12 col-md-6 col-lg-4 col-xl-4 " + styles.formActions}
-            >
+            <div className={'mb-4 col-12 col-md-6 col-lg-4 col-xl-4 ' + styles.formActions}>
               <button
                 type="submit"
-                className={"btn btn-verde " + styles.submitButton}
+                className={'btn btn-verde ' + styles.submitButton}
                 onClick={() => guardarNuevo()}
               >
                 Guardar
               </button>
               <button
                 type="submit"
-                className={"btn btn-rojo " + styles.cancelButton}
+                className={'btn btn-rojo ' + styles.cancelButton}
                 onClick={() => clear()}
               >
                 Cancelar
@@ -502,6 +505,20 @@ const AdminUsuarios = () => {
               <span className={styles.required}>{error['lastname']}</span>
             </div>
             <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
+              <label className="col-form-label">
+                Email <label className={styles.required}>*</label>
+              </label>
+              <input
+                type="email"
+                className="form-control"
+                placeholder="Email..."
+                id="email"
+                onChange={(e) => detectarCambio('email', e)}
+                value={campo['email'] || ''}
+              />
+              <span className={styles.required}>{error['email']}</span>
+            </div>
+            <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
               <label className="col-form-label">Nueva Contraseña</label>
               <input
                 type="password"
@@ -513,7 +530,7 @@ const AdminUsuarios = () => {
               />
             </div>
             <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-              <label className="col-form-label">
+              <label htmlFor="role" className="col-form-label">
                 Rol <label className={styles.required}>*</label>
               </label>
               <select
@@ -528,7 +545,7 @@ const AdminUsuarios = () => {
               </select>
             </div>
             <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-              <label className="col-form-label">
+              <label htmlFor="isActive" className="col-form-label">
                 Estado <label className={styles.required}>*</label>
               </label>
               <select
@@ -542,19 +559,17 @@ const AdminUsuarios = () => {
                 <option value="true">Activo</option>
               </select>
             </div>
-            <div
-              className={"mb-4 col-12 col-md-6 col-lg-4 col-xl-4 " + styles.formActions}
-            >
+            <div className={'mb-4 col-12 col-md-6 col-lg-4 col-xl-4 ' + styles.formActions}>
               <button
                 type="submit"
-                className={"btn btn-verde " + styles.submitButton}
+                className={'btn btn-verde ' + styles.submitButton}
                 onClick={() => guardar()}
               >
                 Guardar
               </button>
               <button
                 type="submit"
-                className={"btn btn-rojo " + styles.cancelButton}
+                className={'btn btn-rojo ' + styles.cancelButton}
                 onClick={() => clear()}
               >
                 Cancelar
@@ -566,9 +581,11 @@ const AdminUsuarios = () => {
         )}
 
         <div className="row">
-          <div className={"col-12 col-md-12 col-lg-12 col-xl-12 " + styles.tableWrapper}>
+          <div className={'col-12 col-md-12 col-lg-12 col-xl-12 ' + styles.tableWrapper}>
             <table
-              className={"table table-bordered table-hover shadow table-striped " + styles.tableFullWidth}
+              className={
+                'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
+              }
             >
               <thead>
                 <tr>
@@ -589,7 +606,7 @@ const AdminUsuarios = () => {
                         usuario.username.toUpperCase().includes(campo.buscador) ||
                         usuario.name.toUpperCase().includes(campo.buscador)
                     )
-                    .map((usuario, index) => (
+                    .map((usuario, _index) => (
                       <tr key={usuario.id ?? usuario.username}>
                         <td>{usuario.username}</td>
                         <td>{usuario.name}</td>
@@ -599,7 +616,7 @@ const AdminUsuarios = () => {
                         <td>
                           <button
                             type="button"
-                            className={"btn btn-verde " + styles.rowActionButton}
+                            className={'btn btn-verde ' + styles.rowActionButton}
                             onClick={() => editUser(usuario)}
                           >
                             <PencilIcon />

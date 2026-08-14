@@ -360,11 +360,7 @@ const TypeEvents = () => {
           >
             Cancelar
           </button>
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={() => edit(form)}
-          >
+          <button type="button" className="btn btn-primary" onClick={() => edit(form)}>
             Guardar
           </button>
         </ModalFooter>

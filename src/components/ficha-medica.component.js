@@ -63,7 +63,10 @@ const FichaMedica = () => {
 
   return (
     <main
-      className={"border-top-sm m-0 row justify-content-center form-paciente m-md-3 rounded shadow container-lg mx-md-auto " + styles.pageHeader}
+      className={
+        'border-top-sm m-0 row justify-content-center form-paciente m-md-3 rounded shadow container-lg mx-md-auto ' +
+        styles.pageHeader
+      }
     >
       <div className="mb-4 col-12 col-md-9 col-lg-12 col-xl-10">
         <h3 className="mt-4">
@@ -78,13 +81,11 @@ const FichaMedica = () => {
           </div>
         </div>
 
-        <div className={"row " + styles.sectionRow}>
+        <div className={'row ' + styles.sectionRow}>
           <div className="col-6 col-md-6 col-lg-6 col-xl-6">
             <h4 className="mt-4">Diagnósticos</h4>
           </div>
-          <div
-            className={"mb-4 col-6 col-md-6 col-lg-6 col-xl-6 " + styles.sectionActions}
-          >
+          <div className={'mb-4 col-6 col-md-6 col-lg-6 col-xl-6 ' + styles.sectionActions}>
             <Link to={'/list-diagnostico'}>
               <button className="btn btn-verde" to={'/list-diagnostico'}>
                 Editar
@@ -95,7 +96,9 @@ const FichaMedica = () => {
         <div className="row">
           <div className="col-12">
             <table
-              className={"table table-bordered table-hover shadow table-striped " + styles.tableFullWidth}
+              className={
+                'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
+              }
             >
               <thead>
                 <tr>
@@ -118,13 +121,11 @@ const FichaMedica = () => {
           </div>
         </div>
 
-        <div className={"row " + styles.sectionRow}>
+        <div className={'row ' + styles.sectionRow}>
           <div className="col-6 col-md-6 col-lg-6 col-xl-6">
             <h4 className="mt-4">Evolución</h4>
           </div>
-          <div
-            className={"mb-4 col-6 col-md-6 col-lg-6 col-xl-6 " + styles.sectionActions}
-          >
+          <div className={'mb-4 col-6 col-md-6 col-lg-6 col-xl-6 ' + styles.sectionActions}>
             <Link to={'/list-evolucion'}>
               <button className="btn btn-verde" to={'/list-evolucion'}>
                 Editar
@@ -135,7 +136,9 @@ const FichaMedica = () => {
         <div className="row">
           <div className="col-12">
             <table
-              className={"table table-bordered table-hover shadow table-striped " + styles.tableFullWidth}
+              className={
+                'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
+              }
             >
               <thead>
                 <tr>
@@ -160,13 +163,11 @@ const FichaMedica = () => {
           </div>
         </div>
 
-        <div className={"row " + styles.sectionRow}>
+        <div className={'row ' + styles.sectionRow}>
           <div className="col-6 col-md-6 col-lg-6 col-xl-6">
             <h4 className="mt-4">Obra Social</h4>
           </div>
-          <div
-            className={"mb-4 col-6 col-md-6 col-lg-6 col-xl-6 " + styles.sectionActions}
-          >
+          <div className={'mb-4 col-6 col-md-6 col-lg-6 col-xl-6 ' + styles.sectionActions}>
             <Link to={'/list-obrasocial'}>
               <button className="btn btn-verde" to={'/list-obrasocial'}>
                 Editar
@@ -177,7 +178,9 @@ const FichaMedica = () => {
         <div className="row">
           <div className="col-12">
             <table
-              className={"table table-bordered table-hover shadow table-striped " + styles.tableFullWidth}
+              className={
+                'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
+              }
             >
               <thead>
                 <tr>
@@ -200,13 +203,11 @@ const FichaMedica = () => {
           </div>
         </div>
 
-        <div className={"row " + styles.sectionRow}>
+        <div className={'row ' + styles.sectionRow}>
           <div className="col-6 col-md-6 col-lg-6 col-xl-6">
             <h4 className="mt-4">Indicación de Medicamentos</h4>
           </div>
-          <div
-            className={"mb-4 col-6 col-md-6 col-lg-6 col-xl-6 " + styles.sectionActions}
-          >
+          <div className={'mb-4 col-6 col-md-6 col-lg-6 col-xl-6 ' + styles.sectionActions}>
             <Link to={'/list-indicacion'}>
               <button className="btn btn-verde" to={'/list-indicacion'}>
                 Editar
@@ -217,7 +218,9 @@ const FichaMedica = () => {
         <div className="row">
           <div className="col-12">
             <table
-              className={"table table-bordered table-hover shadow table-striped " + styles.tableFullWidth}
+              className={
+                'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
+              }
             >
               <thead>
                 <tr>

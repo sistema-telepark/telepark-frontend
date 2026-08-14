@@ -1,5 +1,11 @@
 import Swal from 'sweetalert2';
-import { showToast, showModal, showConfirm, showLoading, closeLoading } from './notification.service';
+import {
+  showToast,
+  showModal,
+  showConfirm,
+  showLoading,
+  closeLoading,
+} from './notification.service';
 
 // sweetalert2 es una función con propiedades (fire, mixin, etc.).
 // El factory del mock se ejecuta ANTES que cualquier let/const del módulo,

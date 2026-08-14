@@ -32,19 +32,17 @@ const ObraSocialForm = ({
               ))}
           </select>
         </div>
-        <div
-          className={"col-12 col-md-6 col-lg-6 col-xl-6 " + styles.formActions}
-        >
+        <div className={'col-12 col-md-6 col-lg-6 col-xl-6 ' + styles.formActions}>
           <button
             type="submit"
-            className={"btn btn-verde " + styles.submitButton}
+            className={'btn btn-verde ' + styles.submitButton}
             onClick={() => funcionConfirmar()}
           >
             Confirmar
           </button>
           <button
             type="submit"
-            className={"btn btn-rojo " + styles.cancelButton}
+            className={'btn btn-rojo ' + styles.cancelButton}
             onClick={() => funcionCancelar()}
           >
             Cancelar

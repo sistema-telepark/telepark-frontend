@@ -157,8 +157,8 @@ const Events = () => {
           {validate && (
             <div className="row">
               <span className={styles.errorText}>
-                <strong>La Fecha de finalizacion es menor a la Fecha de inicio</strong>. Coloque
-                una fecha de finalizacion mayor a la fecha de inicio.
+                <strong>La Fecha de finalizacion es menor a la Fecha de inicio</strong>. Coloque una
+                fecha de finalizacion mayor a la fecha de inicio.
               </span>
             </div>
           )}
@@ -218,11 +218,7 @@ const Events = () => {
                   Seleccione un tipo de evento
                 </option>
                 {typeEvent.map((element) => (
-                  <option
-                    id="idtipoevento"
-                    key={element.idtipoevento}
-                    value={element.idtipoevento}
-                  >
+                  <option id="idtipoevento" key={element.idtipoevento} value={element.idtipoevento}>
                     {element.nombre}
                   </option>
                 ))}

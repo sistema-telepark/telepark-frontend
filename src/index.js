@@ -14,10 +14,7 @@ import store from './store';
 const root = createRoot(document.getElementById('root'));
 root.render(
   <Provider store={store}>
-    <ErrorBoundary
-      FallbackComponent={ErrorFallbackGlobal}
-      onError={logError}
-    >
+    <ErrorBoundary FallbackComponent={ErrorFallbackGlobal} onError={logError}>
       <App />
     </ErrorBoundary>
   </Provider>

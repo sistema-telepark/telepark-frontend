@@ -1,4 +1,4 @@
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -7,10 +7,10 @@ const Toast = Swal.mixin({
   timer: 3000,
   timerProgressBar: true,
   didOpen: (toast) => {
-    toast.addEventListener('mouseenter', Swal.stopTimer)
-    toast.addEventListener('mouseleave', Swal.resumeTimer)
+    toast.addEventListener('mouseenter', Swal.stopTimer);
+    toast.addEventListener('mouseleave', Swal.resumeTimer);
   },
-})
+});
 
 const Modal = Swal.mixin({
   customClass: {
@@ -18,11 +18,11 @@ const Modal = Swal.mixin({
     cancelButton: 'btn btn-danger',
   },
   buttonsStyling: false,
-})
+});
 
 export const showToast = (icon, title, options = {}) => {
-  Toast.fire({ icon, title, ...options })
-}
+  Toast.fire({ icon, title, ...options });
+};
 
 export const showModal = (icon, title, text, options = {}) => {
   Modal.fire({
@@ -31,8 +31,8 @@ export const showModal = (icon, title, text, options = {}) => {
     text,
     showConfirmButton: true,
     ...options,
-  })
-}
+  });
+};
 
 export const showConfirm = async (title, text, options = {}) => {
   const result = await Modal.fire({
@@ -44,9 +44,9 @@ export const showConfirm = async (title, text, options = {}) => {
     cancelButtonText: 'Cancelar',
     reverseButtons: true,
     ...options,
-  })
-  return result.isConfirmed
-}
+  });
+  return result.isConfirmed;
+};
 
 export const showLoading = (title = 'Procesando...', html) => {
   Swal.fire({
@@ -54,7 +54,7 @@ export const showLoading = (title = 'Procesando...', html) => {
     html,
     allowOutsideClick: false,
     didOpen: () => Swal.showLoading(),
-  })
-}
+  });
+};
 
-export const closeLoading = () => Swal.close()
+export const closeLoading = () => Swal.close();

@@ -261,11 +261,11 @@ const Nomenclador = () => {
           </div>
 
           <div className="row">
-            <div
-              className={"col-12 col-md-12 col-lg-12 col-xl-12 " + styles.scrollableTable}
-            >
+            <div className={'col-12 col-md-12 col-lg-12 col-xl-12 ' + styles.scrollableTable}>
               <table
-                className={"table table-bordered table-hover shadow table-striped " + styles.tableFullWidth}
+                className={
+                  'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
+                }
               >
                 <thead>
                   <tr>
@@ -281,7 +281,7 @@ const Nomenclador = () => {
                         <td>
                           <button
                             type="button"
-                            className={"btn btn-verde " + styles.rowActionButton}
+                            className={'btn btn-verde ' + styles.rowActionButton}
                             onClick={() =>
                               editar(
                                 'enfermedad',
@@ -352,11 +352,11 @@ const Nomenclador = () => {
           </div>
 
           <div className="row">
-            <div
-              className={"mb-4 col-12 col-md-12 col-lg-12 col-xl-12 " + styles.scrollableTable}
-            >
+            <div className={'mb-4 col-12 col-md-12 col-lg-12 col-xl-12 ' + styles.scrollableTable}>
               <table
-                className={"table table-bordered table-hover shadow table-striped " + styles.tableFullWidth}
+                className={
+                  'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
+                }
               >
                 <thead>
                   <tr>
@@ -372,7 +372,7 @@ const Nomenclador = () => {
                         <td>
                           <button
                             type="button"
-                            className={"btn btn-verde " + styles.rowActionButton}
+                            className={'btn btn-verde ' + styles.rowActionButton}
                             onClick={() =>
                               editar(
                                 'medicamento',
@@ -445,7 +445,7 @@ const Nomenclador = () => {
                 Es Pública
                 <input
                   type="checkbox"
-                  className={"form-check-input " + styles.checkInline}
+                  className={'form-check-input ' + styles.checkInline}
                   name="isChecked"
                   onChange={detectarCheck}
                   checked={!campo.isChecked ? false : campo.isChecked}
@@ -455,11 +455,11 @@ const Nomenclador = () => {
           </div>
 
           <div className="row">
-            <div
-              className={"mb-2 col-12 col-md-12 col-lg-12 col-xl-12 " + styles.scrollableTable}
-            >
+            <div className={'mb-2 col-12 col-md-12 col-lg-12 col-xl-12 ' + styles.scrollableTable}>
               <table
-                className={"table table-bordered table-hover shadow table-striped " + styles.tableFullWidth}
+                className={
+                  'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
+                }
               >
                 <thead>
                   <tr>
@@ -475,7 +475,7 @@ const Nomenclador = () => {
                         <td>
                           <button
                             type="button"
-                            className={"btn btn-verde " + styles.rowActionButton}
+                            className={'btn btn-verde ' + styles.rowActionButton}
                             onClick={() =>
                               editar(
                                 'obrasocial',

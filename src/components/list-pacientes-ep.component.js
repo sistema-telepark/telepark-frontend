@@ -130,7 +130,7 @@ const ListaPaciente = (props) => {
                             <button
                               type="button"
                               title="Ver Ficha Médica"
-                              className={"btn " + styles.actionButtonVerde}
+                              className={'btn ' + styles.actionButtonVerde}
                             >
                               <EyeIcon />
                             </button>
@@ -149,7 +149,7 @@ const ListaPaciente = (props) => {
                             <button
                               type="button"
                               title="Ver Diagnósticos"
-                              className={"btn " + styles.actionButtonNaranja}
+                              className={'btn ' + styles.actionButtonNaranja}
                             >
                               <ClipboardCheckIcon />
                             </button>
@@ -168,7 +168,7 @@ const ListaPaciente = (props) => {
                             <button
                               type="button"
                               title="Ver Evolución"
-                              className={"btn " + styles.actionButtonRojo}
+                              className={'btn ' + styles.actionButtonRojo}
                             >
                               <ClipboardDataIcon />
                             </button>
@@ -187,7 +187,7 @@ const ListaPaciente = (props) => {
                             <button
                               type="button"
                               title="Ver Obra Social"
-                              className={"btn " + styles.actionButtonVioleta}
+                              className={'btn ' + styles.actionButtonVioleta}
                             >
                               <JournalPlusIcon />
                             </button>
@@ -206,7 +206,7 @@ const ListaPaciente = (props) => {
                             <button
                               type="button"
                               title="Ver Indicaciones Médicas"
-                              className={"btn " + styles.actionButtonAzul}
+                              className={'btn ' + styles.actionButtonAzul}
                             >
                               <JournalTextIcon />
                             </button>

@@ -49,9 +49,13 @@ const events = {
 
 export const eventRespository = {
   getEventAll: withServiceHandler(events.getEventAll, { context: 'obtener tipos de evento' }),
-  updateTypeEvent: withServiceHandler(events.updateTypeEvent, { context: 'actualizar tipo de evento' }),
+  updateTypeEvent: withServiceHandler(events.updateTypeEvent, {
+    context: 'actualizar tipo de evento',
+  }),
   createTypeEvent: withServiceHandler(events.createTypeEvent, { context: 'crear tipo de evento' }),
-  deleteTypeEvent: withServiceHandler(events.deleteTypeEvent, { context: 'eliminar tipo de evento' }),
+  deleteTypeEvent: withServiceHandler(events.deleteTypeEvent, {
+    context: 'eliminar tipo de evento',
+  }),
   createEvent: withServiceHandler(events.createEvent, { context: 'crear evento' }),
   getEventGestionAll: withServiceHandler(events.getEventGestionAll, { context: 'obtener eventos' }),
   getAll: withServiceHandler(events.getAll, { context: 'obtener personas' }),

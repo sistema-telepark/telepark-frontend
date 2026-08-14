@@ -63,11 +63,11 @@ const ListaIndicacion = () => {
     let estadoMedicamento = campo.estado;
     let id = idEditado;
     if (
-      (idMedicamento !== '') &&
-      (dosisMedicamento !== '') &&
-      (horaMedicamento !== '') &&
-      (fechaMedicamento !== '') &&
-      (estadoMedicamento !== '')
+      idMedicamento !== '' &&
+      dosisMedicamento !== '' &&
+      horaMedicamento !== '' &&
+      fechaMedicamento !== '' &&
+      estadoMedicamento !== ''
     ) {
       let data = {
         cantidadmiligramos: dosisMedicamento,
@@ -116,11 +116,11 @@ const ListaIndicacion = () => {
     let fechaMedicamento = campo.fecha;
     let estadoMedicamento = campo.estado;
     if (
-      (idMedicamento !== '') &&
-      (dosisMedicamento !== '') &&
-      (horaMedicamento !== '') &&
-      (fechaMedicamento !== '') &&
-      (estadoMedicamento !== '')
+      idMedicamento !== '' &&
+      dosisMedicamento !== '' &&
+      horaMedicamento !== '' &&
+      fechaMedicamento !== '' &&
+      estadoMedicamento !== ''
     ) {
       let data = {
         cantidadmiligramos: dosisMedicamento,
@@ -145,7 +145,14 @@ const ListaIndicacion = () => {
     }
   };
 
-  const eliminar = (cantidadmiligramos, estavigente, fechaprescripcion, horadetoma, idmedicamento, id) => {
+  const eliminar = (
+    cantidadmiligramos,
+    estavigente,
+    fechaprescripcion,
+    horadetoma,
+    idmedicamento,
+    id
+  ) => {
     var data = {
       cantidadmiligramos: cantidadmiligramos,
       estavigente: estavigente,
@@ -234,7 +241,10 @@ const ListaIndicacion = () => {
 
   return (
     <main
-      className={"border-top-sm m-0 row justify-content-center form-paciente m-md-3 rounded shadow container-lg mx-md-auto " + styles.pageHeader}
+      className={
+        'border-top-sm m-0 row justify-content-center form-paciente m-md-3 rounded shadow container-lg mx-md-auto ' +
+        styles.pageHeader
+      }
     >
       <div className="mb-4 col-12 col-md-9 col-lg-12 col-xl-10">
         <h3 className="mt-4">Indicación de Medicamentos</h3>
@@ -245,7 +255,7 @@ const ListaIndicacion = () => {
               <b>Nombre y Apellido:</b> {nombreEpElegido}
             </h5>
           </div>
-          <div className={"mb-4 col-12 col-md-6 col-lg-6 col-xl-6 " + styles.textRight}>
+          <div className={'mb-4 col-12 col-md-6 col-lg-6 col-xl-6 ' + styles.textRight}>
             <button type="button" className="btn btn-azul" onClick={() => agregar()}>
               <PlusIcon />
               Agregar
@@ -316,19 +326,17 @@ const ListaIndicacion = () => {
                   <option value="0">Caducado</option>
                 </select>
               </div>
-              <div
-                className={"mb-4 col-12 col-md-6 col-lg-4 col-xl-4 " + styles.formActions}
-              >
+              <div className={'mb-4 col-12 col-md-6 col-lg-4 col-xl-4 ' + styles.formActions}>
                 <button
                   type="submit"
-                  className={"btn btn-verde " + styles.submitButton}
+                  className={'btn btn-verde ' + styles.submitButton}
                   onClick={() => cargarNuevo()}
                 >
                   Confirmar
                 </button>
                 <button
                   type="submit"
-                  className={"btn btn-rojo " + styles.cancelButton}
+                  className={'btn btn-rojo ' + styles.cancelButton}
                   onClick={() => cancelar()}
                 >
                   Cancelar
@@ -405,19 +413,17 @@ const ListaIndicacion = () => {
                   <option value="0">Caducado</option>
                 </select>
               </div>
-              <div
-                className={"mb-4 col-12 col-md-6 col-lg-4 col-xl-4 " + styles.formActions}
-              >
+              <div className={'mb-4 col-12 col-md-6 col-lg-4 col-xl-4 ' + styles.formActions}>
                 <button
                   type="submit"
-                  className={"btn btn-verde " + styles.submitButton}
+                  className={'btn btn-verde ' + styles.submitButton}
                   onClick={() => guardar()}
                 >
                   Guardar
                 </button>
                 <button
                   type="submit"
-                  className={"btn btn-rojo " + styles.cancelButton}
+                  className={'btn btn-rojo ' + styles.cancelButton}
                   onClick={() => cancelar()}
                 >
                   Cancelar
@@ -432,7 +438,9 @@ const ListaIndicacion = () => {
         <div className="row">
           <div className="col-12">
             <table
-              className={"table table-bordered table-hover shadow table-striped " + styles.tableFullWidth}
+              className={
+                'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
+              }
             >
               <thead>
                 <tr>
@@ -458,7 +466,7 @@ const ListaIndicacion = () => {
                         <td>
                           <button
                             type="button"
-                            className={"btn btn-verde " + styles.rowActionButton}
+                            className={'btn btn-verde ' + styles.rowActionButton}
                             onClick={() =>
                               editar(
                                 indicacion.cantidadmiligramos,

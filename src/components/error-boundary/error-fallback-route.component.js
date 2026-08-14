@@ -19,22 +19,18 @@ const ErrorFallbackRoute = ({ error, resetErrorBoundary, componentName }) => {
       <div className="card border-warning shadow-sm">
         <div className="card-header bg-warning text-dark d-flex align-items-center gap-2">
           <WarningIcon size={20} />
-          <span className="fw-bold">
-            Error en {componentName || 'esta sección'}
-          </span>
+          <span className="fw-bold">Error en {componentName || 'esta sección'}</span>
         </div>
         <div className="card-body">
           <p className="card-text text-muted">
-            Ocurrió un error al cargar esta sección. Las demás secciones de la
-            aplicación no se vieron afectadas.
+            Ocurrió un error al cargar esta sección. Las demás secciones de la aplicación no se
+            vieron afectadas.
           </p>
 
           {process.env.NODE_ENV === 'development' && (
             <div className="alert alert-secondary py-2 px-3 mb-3">
               <strong className="small">Error:</strong>
-              <pre className={"mb-0 mt-1 " + styles.errorPre}>
-                {error.message}
-              </pre>
+              <pre className={'mb-0 mt-1 ' + styles.errorPre}>{error.message}</pre>
             </div>
           )}
 

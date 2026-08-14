@@ -26,7 +26,10 @@ const Vivienda = ({ register, errors, watch, tipo, arrayProvincias, municipios }
             <option value="">Provincia</option>
             {arrayProvincias &&
               arrayProvincias.map((provincia, index) => (
-                <option value={provincia.provincia} key={provincia.idprovincia ?? provincia.provincia}>
+                <option
+                  value={provincia.provincia}
+                  key={provincia.idprovincia ?? provincia.provincia}
+                >
                   {provincia.provincia}
                 </option>
               ))}

@@ -12,24 +12,62 @@ import { TokenService } from './services/token.service';
 
 // Lazy imports con webpackChunkName — se cargan bajo demanda
 const Login = lazy(() => import(/* webpackChunkName: "login" */ './components/login.component'));
-const AdminUsuarios = lazy(() => import(/* webpackChunkName: "admin-usuarios" */ './components/admin-users.component'));
-const AddPaciente = lazy(() => import(/* webpackChunkName: "add-paciente" */ './components/add-paciente.component'));
-const FichaMedica = lazy(() => import(/* webpackChunkName: "ficha-medica" */ './components/ficha-medica.component'));
-const ListaDiagnostico = lazy(() => import(/* webpackChunkName: "lista-diagnostico" */ './components/list-diagnostico.component'));
-const ListaEvolucion = lazy(() => import(/* webpackChunkName: "lista-evolucion" */ './components/list-evolucion.component'));
-const ListaObraSocial = lazy(() => import(/* webpackChunkName: "lista-obrasocial" */ './components/list-obrasocial.component'));
-const ListaIndicacion = lazy(() => import(/* webpackChunkName: "lista-indicacion" */ './components/list-indicacion.component'));
-const Search = lazy(() => import(/* webpackChunkName: "search" */ './components/search-criteria.component'));
-const Events = lazy(() => import(/* webpackChunkName: "events" */ './components/gestion-eventos.component'));
-const TypeEvents = lazy(() => import(/* webpackChunkName: "type-events" */ './components/tipos-de-eventos.component'));
-const Nomenclador = lazy(() => import(/* webpackChunkName: "nomenclador" */ './components/nomenclador.component'));
-const ListaPaciente = lazy(() => import(/* webpackChunkName: "lista-pacientes" */ './components/list-pacientes-ep.component'));
-const Talleres = lazy(() => import(/* webpackChunkName: "talleres" */ './components/talleres.component'));
-const Encuentro = lazy(() => import(/* webpackChunkName: "encuentro" */ './components/encuentro.component'));
-const Actividad = lazy(() => import(/* webpackChunkName: "actividad" */ './components/actividad.component'));
-const Asistencia = lazy(() => import(/* webpackChunkName: "asistencia-taller" */ './components/asistencia-taller.component'));
-const Consulta = lazy(() => import(/* webpackChunkName: "consulta" */ './components/consulta.component'));
-const Familiar = lazy(() => import(/* webpackChunkName: "familiar" */ './components/familiar.component'));
+const AdminUsuarios = lazy(
+  () => import(/* webpackChunkName: "admin-usuarios" */ './components/admin-users.component')
+);
+const AddPaciente = lazy(
+  () => import(/* webpackChunkName: "add-paciente" */ './components/add-paciente.component')
+);
+const FichaMedica = lazy(
+  () => import(/* webpackChunkName: "ficha-medica" */ './components/ficha-medica.component')
+);
+const ListaDiagnostico = lazy(
+  () =>
+    import(/* webpackChunkName: "lista-diagnostico" */ './components/list-diagnostico.component')
+);
+const ListaEvolucion = lazy(
+  () => import(/* webpackChunkName: "lista-evolucion" */ './components/list-evolucion.component')
+);
+const ListaObraSocial = lazy(
+  () => import(/* webpackChunkName: "lista-obrasocial" */ './components/list-obrasocial.component')
+);
+const ListaIndicacion = lazy(
+  () => import(/* webpackChunkName: "lista-indicacion" */ './components/list-indicacion.component')
+);
+const Search = lazy(
+  () => import(/* webpackChunkName: "search" */ './components/search-criteria.component')
+);
+const Events = lazy(
+  () => import(/* webpackChunkName: "events" */ './components/gestion-eventos.component')
+);
+const TypeEvents = lazy(
+  () => import(/* webpackChunkName: "type-events" */ './components/tipos-de-eventos.component')
+);
+const Nomenclador = lazy(
+  () => import(/* webpackChunkName: "nomenclador" */ './components/nomenclador.component')
+);
+const ListaPaciente = lazy(
+  () => import(/* webpackChunkName: "lista-pacientes" */ './components/list-pacientes-ep.component')
+);
+const Talleres = lazy(
+  () => import(/* webpackChunkName: "talleres" */ './components/talleres.component')
+);
+const Encuentro = lazy(
+  () => import(/* webpackChunkName: "encuentro" */ './components/encuentro.component')
+);
+const Actividad = lazy(
+  () => import(/* webpackChunkName: "actividad" */ './components/actividad.component')
+);
+const Asistencia = lazy(
+  () =>
+    import(/* webpackChunkName: "asistencia-taller" */ './components/asistencia-taller.component')
+);
+const Consulta = lazy(
+  () => import(/* webpackChunkName: "consulta" */ './components/consulta.component')
+);
+const Familiar = lazy(
+  () => import(/* webpackChunkName: "familiar" */ './components/familiar.component')
+);
 
 function AppContent({ token, userName, userRole, setToken, setUserName, setUserRole }) {
   const navigate = useNavigate();

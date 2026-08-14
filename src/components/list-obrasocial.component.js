@@ -133,7 +133,7 @@ const ListaObraSocial = (props) => {
             <b>Nombre y Apellido:</b> {nombreEpElegido}
           </h5>
         </div>
-        <div className={"col-12 col-md-6 col-lg-6 col-xl-6 " + styles.textRight}>
+        <div className={'col-12 col-md-6 col-lg-6 col-xl-6 ' + styles.textRight}>
           <button type="button" className="btn btn-azul" onClick={() => agregar()}>
             <PlusIcon />
             Agregar
@@ -188,7 +188,7 @@ const ListaObraSocial = (props) => {
                       <td>
                         <button
                           type="button"
-                          className={"btn btn-verde " + styles.rowActionButton}
+                          className={'btn btn-verde ' + styles.rowActionButton}
                           onClick={() => editar(osocial.idobrasocial.idobrasocial, osocial.idos)}
                         >
                           <PencilIcon />

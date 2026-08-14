@@ -12,37 +12,28 @@ import styles from '../../styles/error-fallback-global.module.css';
 const ErrorFallbackGlobal = ({ error }) => {
   return (
     <div
-      className={"d-flex justify-content-center align-items-center min-vh-100 " + styles.pageBackground}
+      className={
+        'd-flex justify-content-center align-items-center min-vh-100 ' + styles.pageBackground
+      }
     >
       <div className="text-center p-5">
-        <img
-          src={logoTelepark}
-          alt="Logo Telepark"
-          className={styles.logo}
-        />
+        <img src={logoTelepark} alt="Logo Telepark" className={styles.logo} />
 
         <h1 className="display-4 text-danger mb-3">Algo salió mal</h1>
 
-        <p className={"lead text-muted mb-4 " + styles.leadText}>
-          Ocurrió un error inesperado en la aplicación. Por favor, recargá la
-          página para intentarlo de nuevo.
+        <p className={'lead text-muted mb-4 ' + styles.leadText}>
+          Ocurrió un error inesperado en la aplicación. Por favor, recargá la página para intentarlo
+          de nuevo.
         </p>
 
         {process.env.NODE_ENV === 'development' && (
-          <div
-            className={"alert alert-secondary text-start mb-4 " + styles.devAlert}
-          >
+          <div className={'alert alert-secondary text-start mb-4 ' + styles.devAlert}>
             <strong>Detalles (solo desarrollo):</strong>
-            <pre className={"mb-0 mt-2 " + styles.devPre}>
-              {error.message}
-            </pre>
+            <pre className={'mb-0 mt-2 ' + styles.devPre}>{error.message}</pre>
           </div>
         )}
 
-        <button
-          className="btn btn-primary btn-lg"
-          onClick={() => window.location.reload()}
-        >
+        <button className="btn btn-primary btn-lg" onClick={() => window.location.reload()}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"

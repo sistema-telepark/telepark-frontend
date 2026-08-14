@@ -109,31 +109,22 @@ const Login = () => {
     <div className="col-12 col-md-6 col-lg-4 col-xl-4">
       <form onSubmit={(e) => enviarFormulario(e)}>
         <main
-          className={"border-top-sm row justify-content-center form-paciente shadow container-lg mx-auto " + styles.formContainer}
+          className={
+            'border-top-sm row justify-content-center form-paciente shadow container-lg mx-auto ' +
+            styles.formContainer
+          }
         >
-          <div
-            className={"justify-content-center " + styles.formCard}
-          >
-            <div
-              className={"col-12 col-md-12 col-lg-12 col-xl-12 " + styles.logoWrapper}
-            >
-              <img
-                className={"logo " + styles.logo}
-                src={logoTelepark}
-                alt="logo de telepark"
-              />
+          <div className={'justify-content-center ' + styles.formCard}>
+            <div className={'col-12 col-md-12 col-lg-12 col-xl-12 ' + styles.logoWrapper}>
+              <img className={'logo ' + styles.logo} src={logoTelepark} alt="logo de telepark" />
             </div>
             <h2 className="mt-4 mt-md-2 text-center">Login</h2>
             <hr />
             <div className="container">
               <div className="row">
                 <div className="w-100"></div>
-                <div
-                  className={"col-12 col-md-12 col-lg-12 col-xl-12 " + styles.formCenter}
-                >
-                  <label className={"col-form-label " + styles.labelLeft}>
-                    Usuario
-                  </label>
+                <div className={'col-12 col-md-12 col-lg-12 col-xl-12 ' + styles.formCenter}>
+                  <label className={'col-form-label ' + styles.labelLeft}>Usuario</label>
                   <input
                     name="user"
                     type="text"
@@ -144,9 +135,7 @@ const Login = () => {
                     onChange={(e) => detectarCambio('user', e)}
                     value={campo['user'] || ''}
                   />
-                  <label className={"col-form-label " + styles.labelPassword}>
-                    Contraseña
-                  </label>
+                  <label className={'col-form-label ' + styles.labelPassword}>Contraseña</label>
                   <input
                     name="password"
                     type="password"
@@ -160,7 +149,7 @@ const Login = () => {
 
                   <button
                     type="submit"
-                    className={"btn btn-azul " + styles.submitButton}
+                    className={'btn btn-azul ' + styles.submitButton}
                     disabled={loading}
                   >
                     {loading ? 'Ingresando...' : 'Iniciar Sesión'}

@@ -58,7 +58,7 @@ const AddPaciente = () => {
         <div className="col-12 col-md-12 col-lg-4 col-xl-3">
           <label>
             <input
-              className={"form-check-input " + styles.checkboxMargin}
+              className={'form-check-input ' + styles.checkboxMargin}
               type="checkbox"
               {...register('viveSoloEP')}
             />
@@ -69,7 +69,7 @@ const AddPaciente = () => {
         <div className="col-12 col-md-12 col-lg-4 col-xl-3">
           <label>
             <input
-              className={"form-check-input " + styles.checkboxMargin}
+              className={'form-check-input ' + styles.checkboxMargin}
               type="checkbox"
               {...register('tieneCuidadorEP')}
             />
@@ -80,7 +80,7 @@ const AddPaciente = () => {
         <div className="col-12 col-md-12 col-lg-4 col-xl-3">
           <label className={styles.checkLabel}>
             <input
-              className={"form-check-input " + styles.checkboxMargin}
+              className={'form-check-input ' + styles.checkboxMargin}
               type="checkbox"
               {...register('tieneAcompananteEP')}
             />
@@ -89,7 +89,14 @@ const AddPaciente = () => {
         </div>
       </div>
 
-      <Vivienda register={register} errors={errors} watch={watch} tipo="EP" arrayProvincias={utils.retornarProvincias()} municipios={municipios} />
+      <Vivienda
+        register={register}
+        errors={errors}
+        watch={watch}
+        tipo="EP"
+        arrayProvincias={utils.retornarProvincias()}
+        municipios={municipios}
+      />
 
       <div className="row mt-4">
         <div className="col-12 col-md-12 col-lg-12 col-xl-12">
@@ -186,7 +193,7 @@ const AddPaciente = () => {
         </div>
       </div>
 
-      <div className={"row " + styles.referenteSection}>
+      <div className={'row ' + styles.referenteSection}>
         <div className="col-12 col-md-12 col-lg-12 col-xl-12">
           <h1 className="text-center">Referente</h1>
         </div>
@@ -194,10 +201,17 @@ const AddPaciente = () => {
 
       <DatosPersonales register={register} errors={errors} tipo="R" />
 
-      <Vivienda register={register} errors={errors} watch={watch} tipo="R" arrayProvincias={utils.retornarProvincias()} municipios={municipios} />
+      <Vivienda
+        register={register}
+        errors={errors}
+        watch={watch}
+        tipo="R"
+        arrayProvincias={utils.retornarProvincias()}
+        municipios={municipios}
+      />
 
       <div className="row">
-        <div className={"col-12 col-md-12 col-lg-12 col-xl-12 " + styles.confirmCenter}>
+        <div className={'col-12 col-md-12 col-lg-12 col-xl-12 ' + styles.confirmCenter}>
           <button type="submit" className="mt-3 btn btn-success">
             Confirmar
           </button>

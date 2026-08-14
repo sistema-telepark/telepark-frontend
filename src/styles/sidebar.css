@@ -264,8 +264,8 @@
   }
 
   .sidebar .logo-details {
-  height: 60px;
-}
+    height: 60px;
+  }
 
   /* RF-02: en móvil el toggle es el logo (el svg queda oculto arriba). Sin esta
      regla, el display:none global del img (mayor especificidad que

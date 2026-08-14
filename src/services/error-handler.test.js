@@ -28,7 +28,9 @@ describe('errorHandler', () => {
     });
 
     it('debe concatenar mensajes para error 422 con array', () => {
-      const error = { response: { status: 422, data: [{ msg: 'Campo requerido' }, { msg: 'Valor inválido' }] } };
+      const error = {
+        response: { status: 422, data: [{ msg: 'Campo requerido' }, { msg: 'Valor inválido' }] },
+      };
       const result = normalizeError(error);
       expect(result.message).toBe('Campo requerido, Valor inválido');
       expect(result.severity).toBe('toast');

@@ -245,9 +245,7 @@ const Search = () => {
     });
   };
 
-  let arrayPersonIspaciente = arrayPerson.filter(
-    (e) => e.espaciente === 1 && e.borrado !== 1
-  );
+  let arrayPersonIspaciente = arrayPerson.filter((e) => e.espaciente === 1 && e.borrado !== 1);
 
   return (
     <>
@@ -375,11 +373,7 @@ const Search = () => {
           >
             Cancelar
           </button>
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={() => edit(searchArrayperson)}
-          >
+          <button type="button" className="btn btn-primary" onClick={() => edit(searchArrayperson)}>
             Guardar
           </button>
         </ModalFooter>
