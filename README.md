@@ -34,7 +34,6 @@ La aplicación se sirve en [http://localhost:3000](http://localhost:3000) (o el 
 | react-error-boundary | 6.1.x | Error boundaries (global, ruta, inline) |
 | react-scripts | 5.0.1 | Build tool (Create React App) |
 | ESLint + Prettier | 8.x / 3.x | Calidad de código y formato |
-| Testing Library | 14.x | Tests unitarios e integración |
 
 **Backend (equipo separado):** Django + Django REST Framework.
 
@@ -42,7 +41,6 @@ La aplicación se sirve en [http://localhost:3000](http://localhost:3000) (o el 
 
 ```
 src/
-├── __tests__/        # Tests unitarios, integración y smoke tests
 ├── actions/          # Acciones Redux
 ├── components/       # Componentes funcionales (kebab-case)
 ├── reducers/         # Reducers Redux
@@ -70,7 +68,6 @@ En el directorio del proyecto:
 | Script | Descripción |
 |--------|-------------|
 | `npm start` | Servidor de desarrollo con recarga en caliente y lint en consola |
-| `npm test` | Test runner en modo interactivo |
 | `npm run build` | Build de producción en `build/` (minificado, con hashes) |
 | `npm run lint` | Ejecuta ESLint sobre `src/` |
 | `npm run format` | Formatea el código con Prettier |

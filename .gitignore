@@ -5,9 +5,6 @@
 /.pnp
 .pnp.js
 
-# testing
-/coverage
-
 # production
 /build
 
@@ -30,11 +27,3 @@ Telepark API.yaml
 .agents/
 skills-lock.json
 AGENTS.md
-
-# cypress
-cypress*
-
-# tests
-test-*
-__tests__/
-jest.*
