@@ -37,3 +37,4 @@ cypress*
 # tests
 test-*
 __tests__/
+jest.*

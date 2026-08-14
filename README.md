@@ -92,13 +92,13 @@ Este proyecto utiliza variables de entorno para configurar el comportamiento en 
 | Variable | Descripción | Obligatoria | Ejemplo |
 |----------|-------------|:-----------:|---------|
 | `REACT_APP_API_URL` | URL base del API de Django REST. Se usa como `baseURL` en las peticiones Axios. | Sí | `http://localhost:8080/api/v1` |
-| `PORT` | Puerto del servidor de desarrollo de CRA. Solo aplica en entorno local. | No (default: 3000) | `8081` |
+| `PORT` | Puerto del servidor de desarrollo de CRA. Solo aplica en entorno local. | No (default: 3000) | `8090` |
 
 ### Configuración típica para desarrollo local
 
 El proyecto incluye los siguientes archivos de entorno versionados:
 
-- `.env.development` — Usado automáticamente al ejecutar `npm start` (desarrollo). Contiene `PORT=8081` y `REACT_APP_API_URL=http://localhost:8080/api/v1`.
+- `.env.development` — Usado automáticamente al ejecutar `npm start` (desarrollo). Contiene `PORT=3000` y `REACT_APP_API_URL=http://localhost:8080/api/v1`.
 - `.env.production` — Usado automáticamente al ejecutar `npm run build` (producción). Contiene `REACT_APP_API_URL=https://api.telepark.com/api/v1` (placeholder).
 - `.env` — Archivo de respaldo de baja prioridad. Aplica si no existe un archivo específico del entorno.
 

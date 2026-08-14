@@ -29,7 +29,10 @@
     "eject": "react-scripts eject",
     "lint": "eslint src/ --ext .js,.jsx",
     "format": "prettier --write \"src/**/*.{js,jsx,css,json}\"",
-    "format:check": "prettier --check \"src/**/*.{js,jsx,css,json}\""
+    "format:check": "prettier --check \"src/**/*.{js,jsx,css,json}\"",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "test:e2e": "npm run cypress:run"
   },
   "browserslist": {
     "production": [
@@ -44,10 +47,12 @@
     ]
   },
   "devDependencies": {
+    "cypress": "^13.17.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react": "^7.34.0",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "prettier": "^3.3.0"
+    "prettier": "^3.3.0",
+    "redux-mock-store": "^1.5.5"
   }
 }

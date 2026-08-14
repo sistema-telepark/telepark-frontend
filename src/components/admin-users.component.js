@@ -311,7 +311,7 @@ const AdminUsuarios = () => {
             />
           </div>
           <div className={'mb-4 col-2 col-md-2 col-lg-6 col-xl-6 ' + styles.noPaddingLeft}>
-            <button type="button" className="btn btn-verde" onClick={() => buscar()}>
+            <button type="button" className="btn btn-verde" onClick={() => buscar()} aria-label="Buscar">
               <SearchIcon />
             </button>
           </div>

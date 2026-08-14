@@ -241,10 +241,11 @@ const Nomenclador = () => {
                     type="button"
                     className="btn btn-azul-simple"
                     onClick={() => guardar('enfermedad')}
+                    aria-label="Guardar enfermedad"
                   >
                     <CheckIcon />
                   </button>
-                  <button type="button" className="btn btn-rojo-simple" onClick={() => cancelar()}>
+                  <button type="button" className="btn btn-rojo-simple" onClick={() => cancelar()} aria-label="Cancelar">
                     <CloseIcon />
                   </button>
                 </span>
@@ -253,6 +254,7 @@ const Nomenclador = () => {
                   type="button"
                   className="btn btn-azul-simple"
                   onClick={() => cargarNuevo('enfermedad')}
+                  aria-label="Agregar enfermedad"
                 >
                   <AddIcon />
                 </button>
@@ -289,6 +291,7 @@ const Nomenclador = () => {
                                 enfermedad.idenfermedad
                               )
                             }
+                            aria-label={`Editar enfermedad: ${enfermedad.nombre}`}
                           >
                             <EditIcon />
                           </button>
@@ -302,6 +305,7 @@ const Nomenclador = () => {
                                 eliminar
                               )
                             }
+                            aria-label={`Eliminar enfermedad: ${enfermedad.nombre}`}
                           >
                             <DeleteIcon />
                           </button>
@@ -332,10 +336,11 @@ const Nomenclador = () => {
                     type="button"
                     className="btn btn-azul-simple"
                     onClick={() => guardar('medicamento')}
+                    aria-label="Guardar medicamento"
                   >
                     <CheckIcon />
                   </button>
-                  <button type="button" className="btn btn-rojo-simple" onClick={() => cancelar()}>
+                  <button type="button" className="btn btn-rojo-simple" onClick={() => cancelar()} aria-label="Cancelar">
                     <CloseIcon />
                   </button>
                 </span>
@@ -344,6 +349,7 @@ const Nomenclador = () => {
                   type="button"
                   className="btn btn-azul-simple"
                   onClick={() => cargarNuevo('medicamento')}
+                  aria-label="Agregar medicamento"
                 >
                   <AddIcon />
                 </button>
@@ -380,6 +386,7 @@ const Nomenclador = () => {
                                 medicamento.idmedicamento
                               )
                             }
+                            aria-label={`Editar medicamento: ${medicamento.nombre}`}
                           >
                             <EditIcon />
                           </button>
@@ -393,6 +400,7 @@ const Nomenclador = () => {
                                 eliminar
                               )
                             }
+                            aria-label={`Eliminar medicamento: ${medicamento.nombre}`}
                           >
                             <DeleteIcon />
                           </button>
@@ -423,10 +431,11 @@ const Nomenclador = () => {
                     type="button"
                     className="btn btn-azul-simple"
                     onClick={() => guardar('obrasocial')}
+                    aria-label="Guardar obra social"
                   >
                     <CheckIcon />
                   </button>
-                  <button type="button" className="btn btn-rojo-simple" onClick={() => cancelar()}>
+                  <button type="button" className="btn btn-rojo-simple" onClick={() => cancelar()} aria-label="Cancelar">
                     <CloseIcon />
                   </button>
                 </span>
@@ -435,6 +444,7 @@ const Nomenclador = () => {
                   type="button"
                   className="btn btn-azul-simple"
                   onClick={() => cargarNuevo('obrasocial')}
+                  aria-label="Agregar obra social"
                 >
                   <AddIcon />
                 </button>
@@ -483,6 +493,7 @@ const Nomenclador = () => {
                                 obrasocial.idobrasocial
                               )
                             }
+                            aria-label={`Editar obra social: ${obrasocial.nombre}`}
                           >
                             <EditIcon />
                           </button>
@@ -496,6 +507,7 @@ const Nomenclador = () => {
                                 eliminar
                               )
                             }
+                            aria-label={`Eliminar obra social: ${obrasocial.nombre}`}
                           >
                             <DeleteIcon />
                           </button>
