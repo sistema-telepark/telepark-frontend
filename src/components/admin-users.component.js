@@ -129,7 +129,7 @@ const AdminUsuarios = () => {
       firstname: user.first_name,
       lastname: user.last_name,
       email: user.email,
-      role: user.is_superuser === true ? 'true' : 'false',
+      role: user.is_superuser === true || user.is_superuser === 'true' ? 'true' : 'false',
       isActive: user.is_active === true ? 'true' : 'false',
     });
     setError('');
@@ -151,6 +151,7 @@ const AdminUsuarios = () => {
           last_name: campo.lastname,
           email: campo.email,
           is_active: campo.isActive === 'true' ? true : false,
+          ...(campo.role ? { is_superuser: campo.role === 'true' } : {}),
         };
       } else {
         data = {
@@ -160,6 +161,7 @@ const AdminUsuarios = () => {
           email: campo.email,
           password: campo.password,
           is_active: campo.isActive === 'true' ? true : false,
+          ...(campo.role ? { is_superuser: campo.role === 'true' } : {}),
         };
       }
 
@@ -185,6 +187,8 @@ const AdminUsuarios = () => {
         first_name: campo.firstname,
         last_name: campo.lastname,
         password: campo.password,
+        is_superuser: campo.role === 'true',
+        is_active: campo.isActive === 'true' ? true : false,
       };
 
       setTimeout(() => {
@@ -540,6 +544,7 @@ const AdminUsuarios = () => {
                 onChange={(e) => detectarCambio('role', e)}
                 value={campo['role'] || ''}
               >
+                <option value="">Elegir</option>
                 <option value="false">Usuario</option>
                 <option value="true">Administrador</option>
               </select>

@@ -73,11 +73,10 @@ class Utils {
   }
 
   convertRole(role) {
-    if (role === true) {
+    if (role === true || role === 'true') {
       return 'Administrador';
-    } else {
-      return 'Usuario';
     }
+    return 'Usuario';
   }
 
   convertStateUser(state) {
