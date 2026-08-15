@@ -4,8 +4,9 @@ import { userRepository } from '../services/users.service';
 import Swal from 'sweetalert2';
 import { TokenService } from '../services/token.service';
 import utils from '../utils/utils';
-import { SearchIcon, PlusIcon, PencilIcon } from './icons/icons-shared';
+import { SearchIcon, PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
 import styles from '../styles/admin-users.module.css';
+import { showToast, showConfirm } from '../services/notification.service';
 
 const AdminUsuarios = () => {
   const [showNuevo, setShowNuevo] = useState(false);
@@ -133,6 +134,16 @@ const AdminUsuarios = () => {
       isActive: user.is_active === true ? 'true' : 'false',
     });
     setError('');
+  };
+
+  const eliminarUsuario = async (usuario) => {
+    const ok = await showConfirm(`¿Seguro que desea eliminar al usuario: ${usuario.username}?`);
+    if (!ok) return;
+    const resp = await userRepository.deleteUser(usuario.id);
+    if (resp.success) {
+      showToast('success', 'Eliminado con éxito');
+      setUsuarios(usuarios.filter((u) => u.id !== usuario.id));
+    }
   };
 
   const guardar = () => {
@@ -625,6 +636,14 @@ const AdminUsuarios = () => {
                             onClick={() => editUser(usuario)}
                           >
                             <PencilIcon />
+                          </button>
+                          <button
+                            type="button"
+                            className={'btn btn-rojo ' + styles.rowActionButton}
+                            onClick={() => eliminarUsuario(usuario)}
+                            aria-label={`Eliminar usuario ${usuario.username}`}
+                          >
+                            <TrashIcon />
                           </button>
                         </td>
                       </tr>

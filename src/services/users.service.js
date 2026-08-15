@@ -14,10 +14,15 @@ const users = {
     const response = await http.post(`/usuarios`, data);
     return response.data;
   },
+  async deleteUser(id) {
+    const response = await http.delete(`/usuarios/${id}`);
+    return response.data;
+  },
 };
 
 export const userRepository = {
   getUsers: withServiceHandler(users.getUsers, { context: 'obtener usuarios' }),
   updateUser: withServiceHandler(users.updateUser, { context: 'actualizar usuario' }),
   createUser: withServiceHandler(users.createUser, { context: 'crear usuario' }),
+  deleteUser: withServiceHandler(users.deleteUser, { context: 'eliminar usuario' }),
 };
