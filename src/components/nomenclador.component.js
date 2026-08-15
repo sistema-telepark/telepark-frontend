@@ -245,7 +245,12 @@ const Nomenclador = () => {
                   >
                     <CheckIcon />
                   </button>
-                  <button type="button" className="btn btn-rojo-simple" onClick={() => cancelar()} aria-label="Cancelar">
+                  <button
+                    type="button"
+                    className="btn btn-rojo-simple"
+                    onClick={() => cancelar()}
+                    aria-label="Cancelar"
+                  >
                     <CloseIcon />
                   </button>
                 </span>
@@ -340,7 +345,12 @@ const Nomenclador = () => {
                   >
                     <CheckIcon />
                   </button>
-                  <button type="button" className="btn btn-rojo-simple" onClick={() => cancelar()} aria-label="Cancelar">
+                  <button
+                    type="button"
+                    className="btn btn-rojo-simple"
+                    onClick={() => cancelar()}
+                    aria-label="Cancelar"
+                  >
                     <CloseIcon />
                   </button>
                 </span>
@@ -435,7 +445,12 @@ const Nomenclador = () => {
                   >
                     <CheckIcon />
                   </button>
-                  <button type="button" className="btn btn-rojo-simple" onClick={() => cancelar()} aria-label="Cancelar">
+                  <button
+                    type="button"
+                    className="btn btn-rojo-simple"
+                    onClick={() => cancelar()}
+                    aria-label="Cancelar"
+                  >
                     <CloseIcon />
                   </button>
                 </span>
