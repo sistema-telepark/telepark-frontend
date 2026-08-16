@@ -419,7 +419,7 @@ const AdminUsuarios = () => {
                 onChange={(e) => detectarCambio('password', e)}
                 value={campo['password'] || ''}
               />
-              <span className={styles.required}>{error['password']}</span>
+              <span className={styles.required} role="alert">{error['password']}</span>
             </div>
             <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
               <label htmlFor="role" className="col-form-label">
@@ -548,6 +548,7 @@ const AdminUsuarios = () => {
                 onChange={(e) => detectarCambio('password', e)}
                 value={campo['password'] || ''}
               />
+              <span className={styles.required} role="alert">{error['password']}</span>
             </div>
             <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
               <label htmlFor="role" className="col-form-label">
