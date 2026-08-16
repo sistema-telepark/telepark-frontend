@@ -16,6 +16,7 @@ const AdminUsuarios = () => {
   });
   const [error, setError] = useState({});
   const [usuarios, setUsuarios] = useState();
+  const [usuariosFiltrados, setUsuariosFiltrados] = useState();
   const [idUsuario, setIdUsuario] = useState(null);
 
   useEffect(() => {
@@ -26,6 +27,10 @@ const AdminUsuarios = () => {
   const detectarCambio = (field, e) => {
     // Cambio de estado de campo — inmutable
     setCampo({ ...campo, [field]: e.target.value });
+    // Si el usuario vació el buscador (o apretó la cruz nativa 'X'), restauramos la lista completa
+    if (field === 'buscador' && e.target.value.trim() === '') {
+      setUsuariosFiltrados(undefined);
+    }
   };
 
   // Valido los campos del formulario
@@ -117,6 +122,7 @@ const AdminUsuarios = () => {
         return user.username !== admin;
       });
       setUsuarios(users);
+      setUsuariosFiltrados(undefined);
     }
   };
 
@@ -300,9 +306,28 @@ const AdminUsuarios = () => {
     });
   };
 
-  // Función buscar: no implementada en el original (bug preexistente documentado).
-  // Se define como stub vacío para mantener el mismo comportamiento en runtime.
-  const buscar = () => {};
+  // Función buscar: filtra la lista de usuarios cargada en memoria (client-side, RF-05).
+  // Normaliza el término una sola vez (case-insensitive) y busca sobre username,
+  // first_name y last_name (campos declarados en el contrato del backend).
+  const buscar = () => {
+    const termino = (campo.buscador || '').trim().toLowerCase();
+    if (!usuarios) return;
+    if (termino === '') {
+      setUsuariosFiltrados(undefined);
+      return;
+    }
+    const filtrados = usuarios.filter(
+      (u) =>
+        (u.username || '').toLowerCase().includes(termino) ||
+        (u.first_name || '').toLowerCase().includes(termino) ||
+        (u.last_name || '').toLowerCase().includes(termino)
+    );
+    setUsuariosFiltrados(filtrados);
+  };
+
+  // Lista visible: la filtrada por la lupa (RF-01) o la completa (RF-03).
+  // El render NO filtra en vivo (RF-04).
+  const listaVisible = usuariosFiltrados !== undefined ? usuariosFiltrados : usuarios;
   return (
     <main
       className={
@@ -313,7 +338,13 @@ const AdminUsuarios = () => {
       <div className="mb-4 col-12 col-md-9 col-lg-12 col-xl-10">
         <h3 className="mt-4">Administrar Usuarios</h3>
         <hr />
-        <div className="row">
+        <form
+          className="row"
+          onSubmit={(e) => {
+            e.preventDefault(); // Evita que la página web se recargue por completo
+            buscar();           // Llama a tu función de búsqueda existente
+          }}
+        >
           <div className={'mb-4 col-10 col-md-10 col-lg-6 col-xl-6 ' + styles.searchInputWrapper}>
             <input
               type="search"
@@ -335,7 +366,7 @@ const AdminUsuarios = () => {
               <SearchIcon />
             </button>
           </div>
-        </div>
+        </form>
 
         <div className="row">
           <div className={'mb-4 col-12 col-md-12 col-lg-12 col-xl-12 ' + styles.textRight}>
@@ -619,43 +650,40 @@ const AdminUsuarios = () => {
                 </tr>
               </thead>
               <tbody className={styles.tableBodyMiddle}>
-                {usuarios &&
-                  usuarios
-                    .filter(
-                      (usuario) =>
-                        usuario.username.toLowerCase().includes(campo.buscador) ||
-                        usuario.name.toLowerCase().includes(campo.buscador) ||
-                        usuario.username.toUpperCase().includes(campo.buscador) ||
-                        usuario.name.toUpperCase().includes(campo.buscador)
-                    )
-                    .map((usuario, _index) => (
-                      <tr key={usuario.id ?? usuario.username}>
-                        <td>{usuario.username}</td>
-                        <td>{usuario.name}</td>
-                        <td>{utils.convertRole(usuario.is_superuser)}</td>
-                        <td>{utils.convertStateUser(usuario.is_active)}</td>
+                {listaVisible &&
+                  listaVisible.map((usuario, _index) => (
+                    <tr key={usuario.id ?? usuario.username}>
+                      <td>{usuario.username}</td>
+                      <td>{usuario.first_name} {usuario.last_name}</td>
+                      <td>{utils.convertRole(usuario.is_superuser)}</td>
+                      <td>{utils.convertStateUser(usuario.is_active)}</td>
 
-                        <td>
-                          <button
-                            type="button"
-                            className={'btn btn-verde ' + styles.rowActionButton}
-                            onClick={() => editUser(usuario)}
-                          >
-                            <PencilIcon />
-                          </button>
-                          <button
-                            type="button"
-                            className={'btn btn-rojo ' + styles.rowActionButton}
-                            onClick={() => eliminarUsuario(usuario)}
-                            aria-label={`Eliminar usuario ${usuario.username}`}
-                          >
-                            <TrashIcon />
-                          </button>
-                        </td>
-                      </tr>
+                      <td>
+                        <button
+                          type="button"
+                          className={'btn btn-verde ' + styles.rowActionButton}
+                          onClick={() => editUser(usuario)}
+                        >
+                          <PencilIcon />
+                        </button>
+                        <button
+                          type="button"
+                          className={'btn btn-rojo ' + styles.rowActionButton}
+                          onClick={() => eliminarUsuario(usuario)}
+                          aria-label={`Eliminar usuario ${usuario.username}`}
+                        >
+                          <TrashIcon />
+                        </button>
+                      </td>
+                    </tr>
                     ))}
               </tbody>
             </table>
+            {usuariosFiltrados !== undefined && usuariosFiltrados.length === 0 && (
+              <p className="text-center text-muted">
+                No se encontraron usuarios con el nombre buscado.
+              </p>
+            )}
           </div>
         </div>
       </div>
