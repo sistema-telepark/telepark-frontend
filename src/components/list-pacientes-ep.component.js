@@ -111,7 +111,7 @@ const ListaPaciente = (props) => {
                         paciente.idpersona.nombre.toUpperCase().includes(buscar) ||
                         paciente.idpersona.apellido.toUpperCase().includes(buscar)
                     )
-                    .map((paciente, index) => (
+                    .map((paciente) => (
                       <tr key={paciente.idpersona?.idpersona ?? paciente.id}>
                         <td>
                           {paciente.idpersona.nombre} {paciente.idpersona.apellido}

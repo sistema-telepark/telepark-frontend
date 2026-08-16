@@ -181,7 +181,7 @@ const ListaObraSocial = (props) => {
               {osociales &&
                 osociales
                   .filter((osocial) => osocial.borrado === 0)
-                  .map((osocial, index) => (
+                  .map((osocial) => (
                     <tr key={osocial.idos}>
                       <td>{osocial.idobrasocial.nombre}</td>
                       <td>{utils.convertirTipo(osocial.idobrasocial.esestatal)}</td>

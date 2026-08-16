@@ -1,6 +1,6 @@
 import React, { memo, useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { evolucionRepository } from '../services/evolucion.service';
 import utils from '../utils/utils';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
@@ -9,7 +9,6 @@ import styles from '../styles/list-evolucion.module.css';
 const ListaEvolucion = () => {
   const idEpElegido = useSelector((state) => state.global.idEpElegido);
   const nombreEpElegido = useSelector((state) => state.global.nombreEpElegido);
-  const dispatch = useDispatch();
 
   const [show, setShow] = useState(false);
   const [showNuevo, setShowNuevo] = useState(false);
@@ -94,7 +93,7 @@ const ListaEvolucion = () => {
       };
       evolucionRepository
         .create(data)
-        .then((dataevolucion) => {
+        .then(() => {
           getEvoluciones();
           notificacionGuardar();
         })
@@ -325,7 +324,7 @@ const ListaEvolucion = () => {
                 {evoluciones &&
                   evoluciones
                     .filter((evolucion) => evolucion.borrado === 0)
-                    .map((evolucion, index) => (
+                    .map((evolucion) => (
                       <tr key={evolucion.idevolucion}>
                         <td>Estado: {evolucion.escalaevolucion}</td>
                         <td>{utils.describirEstado(evolucion.escalaevolucion)}</td>

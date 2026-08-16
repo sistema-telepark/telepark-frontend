@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 import './App.css';
 // Imports estáticos (NO lazy) — se cargan siempre
@@ -70,8 +70,6 @@ const Familiar = lazy(
 );
 
 function AppContent({ token, userName, userRole, setToken, setUserName, setUserRole }) {
-  const navigate = useNavigate();
-
   useEffect(() => {
     const handleAuthChange = () => {
       setToken(TokenService.getLocalAccessToken());
@@ -81,11 +79,6 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
     window.addEventListener('auth-change', handleAuthChange);
     return () => window.removeEventListener('auth-change', handleAuthChange);
   }, [setToken, setUserName, setUserRole]);
-
-  const logout = () => {
-    TokenService.removeUser();
-    navigate('/');
-  };
 
   return (
     <>

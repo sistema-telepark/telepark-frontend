@@ -81,7 +81,7 @@ const Search = () => {
           getPersonAll();
         }
       })
-      .catch((error) => {
+      .catch(() => {
         notificacionError();
       });
     setModalEdit(false);
@@ -208,40 +208,12 @@ const Search = () => {
               getPersonAll();
             }
           })
-          .catch((error) => {
+          .catch(() => {
             notificacionError();
           });
         setArrayPerson(arrayPersonas);
         setSearchArrayperson(arrayPerson);
       }
-    });
-  };
-
-  const buscar = () => {
-    let nombre = searchArrayperson.nombre;
-    let arrayPersonas = arrayPerson.filter(function (person) {
-      return person.nombre.includes(nombre);
-    });
-    setSearchArrayperson({
-      idpersona: arrayPersonas.idpersona,
-      nombre: arrayPersonas.nombre,
-      apellido: arrayPersonas.apellido,
-      telefono: arrayPersonas.telefono,
-      espaciente: arrayPersonas.espaciente,
-    });
-    console.log(searchArrayperson);
-  };
-
-  const buscarName = (e) => {
-    setSearchArrayperson({
-      nombre: e.target.value,
-    });
-  };
-
-  const buscarLastName = (e) => {
-    setSearchArrayperson({
-      ...searchArrayperson,
-      [e.target.name]: e.target.value,
     });
   };
 
@@ -270,7 +242,7 @@ const Search = () => {
                 <th scope="col">Accion</th>
               </tr>
             </thead>
-            {arrayPersonIspaciente.map((person, index) => (
+            {arrayPersonIspaciente.map((person) => (
               <tbody key={person.idpersona}>
                 <tr key={person.idpersona}>
                   <th scope="row">{person.idpersona}</th>

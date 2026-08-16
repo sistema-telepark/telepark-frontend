@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { indicacionRepository } from '../services/indicacion.service';
 import { medicamentoRepository } from '../services/medicamento.service';
 import utils from '../utils/utils';
@@ -10,7 +10,6 @@ import styles from '../styles/list-indicacion.module.css';
 const ListaIndicacion = () => {
   const idEpElegido = useSelector((state) => state.global.idEpElegido);
   const nombreEpElegido = useSelector((state) => state.global.nombreEpElegido);
-  const dispatch = useDispatch();
 
   const [show, setShow] = useState(false);
   const [showNuevo, setShowNuevo] = useState(false);
@@ -133,7 +132,7 @@ const ListaIndicacion = () => {
       };
       indicacionRepository
         .create(data)
-        .then((dataindicacion) => {
+        .then(() => {
           getIndicaciones();
           notificacionGuardar();
         })
@@ -278,7 +277,7 @@ const ListaIndicacion = () => {
                 >
                   <option value="">Elegir</option>
                   {medicamentos &&
-                    medicamentos.map((medicamento, index) => (
+                    medicamentos.map((medicamento) => (
                       <option value={medicamento.idmedicamento} key={medicamento.idmedicamento}>
                         {medicamento.nombre}
                       </option>
@@ -362,7 +361,7 @@ const ListaIndicacion = () => {
                 >
                   <option value="">Elegir</option>
                   {medicamentos &&
-                    medicamentos.map((medicamento, index) => (
+                    medicamentos.map((medicamento) => (
                       <option value={medicamento.idmedicamento} key={medicamento.idmedicamento}>
                         {medicamento.nombre}
                       </option>
@@ -456,7 +455,7 @@ const ListaIndicacion = () => {
                 {indicaciones &&
                   indicaciones
                     .filter((indicacion) => indicacion.borrado === 0)
-                    .map((indicacion, index) => (
+                    .map((indicacion) => (
                       <tr key={indicacion.idindicacion}>
                         <td>{indicacion.idmedicamento.nombre}</td>
                         <td>{indicacion.cantidadmiligramos} mg</td>

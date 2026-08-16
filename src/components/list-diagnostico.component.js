@@ -1,6 +1,6 @@
 import React, { memo, useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { diagnosticoRepository } from '../services/diagnostico.service';
 import { enfermedadRepository } from '../services/enfermedad.service';
 import utils from '../utils/utils';
@@ -10,7 +10,6 @@ import styles from '../styles/list-diagnostico.module.css';
 const ListaDiagnostico = () => {
   const idEpElegido = useSelector((state) => state.global.idEpElegido);
   const nombreEpElegido = useSelector((state) => state.global.nombreEpElegido);
-  const dispatch = useDispatch();
 
   const [show, setShow] = useState(false);
   const [showNuevo, setShowNuevo] = useState(false);
@@ -241,7 +240,7 @@ const ListaDiagnostico = () => {
                 >
                   <option value="">Elegir</option>
                   {enfermedades &&
-                    enfermedades.map((enfermedad, index) => (
+                    enfermedades.map((enfermedad) => (
                       <option value={enfermedad.idenfermedad} key={enfermedad.idenfermedad}>
                         {enfermedad.nombre}
                       </option>
@@ -293,7 +292,7 @@ const ListaDiagnostico = () => {
                 >
                   <option value="">Elegir</option>
                   {enfermedades &&
-                    enfermedades.map((enfermedad, index) => (
+                    enfermedades.map((enfermedad) => (
                       <option value={enfermedad.idenfermedad} key={enfermedad.idenfermedad}>
                         {enfermedad.nombre}
                       </option>
@@ -350,7 +349,7 @@ const ListaDiagnostico = () => {
                 {diagnosticos &&
                   diagnosticos
                     .filter((diagnostico) => diagnostico.borrado === 0)
-                    .map((diagnostico, index) => (
+                    .map((diagnostico) => (
                       <tr key={diagnostico.iddiagnostico}>
                         <td>{diagnostico.idenfermedad.nombre}</td>
                         <td>{utils.convertirFormatoFecha(diagnostico.fecha)}</td>

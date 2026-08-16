@@ -111,7 +111,7 @@ const TypeEvents = () => {
           getEventAll();
         }
       })
-      .catch((error) => {
+      .catch(() => {
         notificacionError();
       });
     setTypeEvent(list);
@@ -135,7 +135,7 @@ const TypeEvents = () => {
           getEventAll();
         }
       })
-      .catch((error) => {
+      .catch(() => {
         notificacionError();
       });
   };
@@ -149,10 +149,6 @@ const TypeEvents = () => {
 
   const clear = () => {
     setForm({ idtipoevento: 0, nombre: '', desactivataller: 0 });
-  };
-
-  const addNewEvent = () => {
-    clear();
   };
 
   //notificaciones
@@ -215,7 +211,7 @@ const TypeEvents = () => {
             </thead>
             {typeEvent
               .filter((element) => element.borrado === 0)
-              .map((element, index) => (
+              .map((element) => (
                 <tbody key={element.idtipoevento}>
                   <tr>
                     <td>{element.idtipoevento}</td>
