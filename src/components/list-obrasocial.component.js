@@ -74,7 +74,7 @@ const ListaObraSocial = (props) => {
         idobrasocial: idObrasocial,
         borrado: '0',
       };
-      const response = await osRepository.create(data).catch((e) => console.log(e));
+      const response = await osRepository.create(data).catch(() => undefined);
       if (response) {
         getOs();
         utils.notificacionGuardar();
@@ -94,7 +94,7 @@ const ListaObraSocial = (props) => {
         idobrasocial: idObrasocial,
         borrado: '0',
       };
-      const response = await osRepository.update(id, data).catch((e) => console.log(e));
+      const response = await osRepository.update(id, data).catch(() => undefined);
       if (response) {
         getOs();
         utils.notificacionGuardar();
@@ -111,7 +111,7 @@ const ListaObraSocial = (props) => {
       idobrasocial: info.idobrasocial,
       borrado: '1',
     };
-    const response = await osRepository.update(id, data).catch((e) => console.log(e));
+    const response = await osRepository.update(id, data).catch(() => undefined);
     if (response) {
       getOs();
       setShow(false);

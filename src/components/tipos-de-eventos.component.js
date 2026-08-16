@@ -191,7 +191,6 @@ const TypeEvents = () => {
     });
   };
 
-  console.log(typeEvent);
   return (
     <>
       <Container>

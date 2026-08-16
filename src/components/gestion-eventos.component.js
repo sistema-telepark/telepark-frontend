@@ -117,7 +117,6 @@ const Events = () => {
   };
 
   const validate = validateDate(events.fechaDesde, events.fechaHasta);
-  console.log(events, validate);
 
   return (
     <div className="container">

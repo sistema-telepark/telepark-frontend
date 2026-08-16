@@ -56,9 +56,7 @@ const ListaEvolucion = () => {
           getEvoluciones();
           notificacionGuardar();
         })
-        .catch((e) => {
-          console.log(e);
-        });
+        .catch(() => undefined);
       setCampo({ nroEvolucion: '', fecha: '' });
       setShow(false);
     }
@@ -72,7 +70,6 @@ const ListaEvolucion = () => {
 
   const detectarCambio = (field, e) => {
     setCampo({ ...campo, [field]: e.target.value });
-    console.log(campo);
   };
 
   const agregar = () => {
@@ -97,9 +94,7 @@ const ListaEvolucion = () => {
           getEvoluciones();
           notificacionGuardar();
         })
-        .catch((e) => {
-          console.log(e);
-        });
+        .catch(() => undefined);
       setCampo({ nroEvolucion: '', fecha: '' });
       setShowNuevo(false);
     }
@@ -117,9 +112,7 @@ const ListaEvolucion = () => {
       .then(() => {
         getEvoluciones();
       })
-      .catch((e) => {
-        console.log(e);
-      });
+      .catch(() => undefined);
     setShow(false);
   };
 

@@ -38,11 +38,8 @@ const AddPaciente = () => {
   };
 
   const customSubmit = (data) => {
-    console.log(data);
     enviarFormulario(data);
   };
-
-  console.log(watch('nombreEP'));
 
   return (
     <form onSubmit={handleSubmit(customSubmit)} className="container form-paciente">

@@ -83,9 +83,7 @@ const ListaIndicacion = () => {
           getIndicaciones();
           notificacionGuardar();
         })
-        .catch((e) => {
-          console.log(e);
-        });
+        .catch(() => undefined);
       setCampo({ medicamento: '', dosis: '', hora: '', fecha: '', estado: '' });
       setShow(false);
     }
@@ -99,7 +97,6 @@ const ListaIndicacion = () => {
 
   const detectarCambio = (field, e) => {
     setCampo({ ...campo, [field]: e.target.value });
-    console.log(campo);
   };
 
   const agregar = () => {
@@ -136,9 +133,7 @@ const ListaIndicacion = () => {
           getIndicaciones();
           notificacionGuardar();
         })
-        .catch((e) => {
-          console.log(e);
-        });
+        .catch(() => undefined);
       setCampo({ medicamento: '', dosis: '', hora: '', fecha: '', estado: '' });
       setShowNuevo(false);
     }
@@ -166,9 +161,7 @@ const ListaIndicacion = () => {
       .then(() => {
         getIndicaciones();
       })
-      .catch((e) => {
-        console.log(e);
-      });
+      .catch(() => undefined);
     setShow(false);
   };
 

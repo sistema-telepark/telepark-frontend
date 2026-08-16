@@ -78,9 +78,7 @@ const ListaDiagnostico = () => {
             notificacionGuardar();
           }
         })
-        .catch((e) => {
-          console.log(e);
-        });
+        .catch(() => undefined);
       setCampo({ enfermedad: '', fecha: '' });
       setShow(false);
     }
@@ -94,7 +92,6 @@ const ListaDiagnostico = () => {
 
   const detectarCambio = (field, e) => {
     setCampo({ ...campo, [field]: e.target.value });
-    console.log(campo);
   };
 
   const agregar = () => {
@@ -121,9 +118,7 @@ const ListaDiagnostico = () => {
             notificacionGuardar();
           }
         })
-        .catch((e) => {
-          console.log(e);
-        });
+        .catch(() => undefined);
       setCampo({ enfermedad: '', fecha: '' });
       setShowNuevo(false);
     }
@@ -143,9 +138,7 @@ const ListaDiagnostico = () => {
           getDiagnosticos();
         }
       })
-      .catch((e) => {
-        console.log(e);
-      });
+      .catch(() => undefined);
     setShow(false);
   };
 

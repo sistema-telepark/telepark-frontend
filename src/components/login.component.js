@@ -45,7 +45,6 @@ const Login = () => {
         });
 
         if (response) {
-          console.log('===>', response.data.access);
           TokenService.setUser(response.data);
           send(response.data);
         }

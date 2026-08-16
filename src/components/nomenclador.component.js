@@ -53,14 +53,12 @@ const Nomenclador = () => {
   const detectarCambio = (e) => {
     const { name, value } = e.target;
     setCampo({ ...campo, [name]: value });
-    console.log(campo);
   };
 
   // Funcion que guarda el valor del checkbox
   const detectarCheck = (e) => {
     const { name, checked } = e.target;
     setCampo({ ...campo, [name]: utils.convertirCheck(checked) });
-    console.log(campo);
   };
 
   // Funcion que habilita la edicion de un registro de la tabla seleccionada
@@ -98,7 +96,7 @@ const Nomenclador = () => {
           {
             const response = await enfermedadRepository
               .update(id, { nombre })
-              .catch((e) => console.log(e));
+              .catch(() => undefined);
             if (response) {
               getEnfermedad();
               utils.notificacionGuardar();
@@ -109,7 +107,7 @@ const Nomenclador = () => {
           {
             const response = await medicamentoRepository
               .update(id, { nombre })
-              .catch((e) => console.log(e));
+              .catch(() => undefined);
             if (response) {
               getMedicamento();
               utils.notificacionGuardar();
@@ -120,7 +118,7 @@ const Nomenclador = () => {
           {
             const response = await obrasocialRepository
               .update(id, { nombre, esestatal })
-              .catch((e) => console.log(e));
+              .catch(() => undefined);
             if (response) {
               getObrasocial();
               utils.notificacionGuardar();
@@ -139,7 +137,7 @@ const Nomenclador = () => {
     switch (tipo) {
       case 'enfermedad':
         {
-          const response = await enfermedadRepository.delete(id).catch((e) => console.log(e));
+          const response = await enfermedadRepository.delete(id).catch(() => undefined);
           if (response) {
             getEnfermedad();
           }
@@ -147,7 +145,7 @@ const Nomenclador = () => {
         break;
       case 'medicamento':
         {
-          const response = await medicamentoRepository.delete(id).catch((e) => console.log(e));
+          const response = await medicamentoRepository.delete(id).catch(() => undefined);
           if (response) {
             getMedicamento();
           }
@@ -155,7 +153,7 @@ const Nomenclador = () => {
         break;
       case 'obrasocial':
         {
-          const response = await obrasocialRepository.delete(id).catch((e) => console.log(e));
+          const response = await obrasocialRepository.delete(id).catch(() => undefined);
           if (response) {
             getObrasocial();
           }
@@ -175,9 +173,7 @@ const Nomenclador = () => {
       switch (tipo) {
         case 'enfermedad':
           {
-            const response = await enfermedadRepository
-              .create({ nombre })
-              .catch((e) => console.log(e));
+            const response = await enfermedadRepository.create({ nombre }).catch(() => undefined);
             if (response) {
               getEnfermedad();
               utils.notificacionGuardar();
@@ -186,9 +182,7 @@ const Nomenclador = () => {
           break;
         case 'medicamento':
           {
-            const response = await medicamentoRepository
-              .create({ nombre })
-              .catch((e) => console.log(e));
+            const response = await medicamentoRepository.create({ nombre }).catch(() => undefined);
             if (response) {
               getMedicamento();
               utils.notificacionGuardar();
@@ -199,7 +193,7 @@ const Nomenclador = () => {
           {
             const response = await obrasocialRepository
               .create({ nombre, esestatal })
-              .catch((e) => console.log(e));
+              .catch(() => undefined);
             if (response) {
               getObrasocial();
               utils.notificacionGuardar();
