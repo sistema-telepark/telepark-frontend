@@ -1,10 +1,7 @@
 # ======================================================================
 # Etapa 1: Build — Compilar la aplicación React con Node.js
-# NOTA: Se usa node:16-alpine (no 18) porque react-scripts@4.0.3
-# tiene incompatibilidades con Node 18 (postcss-safe-parser + postcss exports).
-# El proyecto requiere Node 14-16 para funcionar correctamente.
 # ======================================================================
-FROM node:16-alpine AS build
+FROM node:22-alpine AS build
 
 # Directorio de trabajo
 WORKDIR /app
