@@ -24,11 +24,15 @@
 }
 
 .submitButton {
-  width: 40%;
+  width: auto;          
+  min-width: 120px;     
+  padding: 8px 20px;   
 }
 
 .cancelButton {
-  width: 40%;
+  width: auto;          
+  min-width: 120px;     
+  padding: 8px 20px;   
   margin-left: 10px;
 }
 

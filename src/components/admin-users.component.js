@@ -384,20 +384,6 @@ const AdminUsuarios = () => {
             </h4>
             <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
               <label className="col-form-label">
-                Nombre de Usuario <label className={styles.required}>*</label>
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Nombre de usuario..."
-                id="username"
-                onChange={(e) => detectarCambio('username', e)}
-                value={campo['username'] || ''}
-              />
-              <span className={styles.required}>{error['username']}</span>
-            </div>
-            <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-              <label className="col-form-label">
                 Nombre <label className={styles.required}>*</label>
               </label>
               <input
@@ -437,6 +423,20 @@ const AdminUsuarios = () => {
                 value={campo['email'] || ''}
               />
               <span className={styles.required}>{error['email']}</span>
+            </div>
+            <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
+              <label className="col-form-label">
+                Nombre de Usuario <label className={styles.required}>*</label>
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Nombre de usuario..."
+                id="username"
+                onChange={(e) => detectarCambio('username', e)}
+                value={campo['username'] || ''}
+              />
+              <span className={styles.required}>{error['username']}</span>
             </div>
             <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
               <label className="col-form-label">
@@ -487,14 +487,8 @@ const AdminUsuarios = () => {
               <span className={styles.required}>{error['isActive']}</span>
             </div>
             <br />
-            <div className={'mb-4 col-12 col-md-6 col-lg-4 col-xl-4 ' + styles.formActions}>
-              <button
-                type="submit"
-                className={'btn btn-verde ' + styles.submitButton}
-                onClick={() => guardarNuevo()}
-              >
-                Guardar
-              </button>
+            <div className="w-100"></div>
+            <div className={'mb-4 col-12 col-md-8 col-lg-6 col-xl-5 mx-auto d-flex justify-content-center align-items-center ' + styles.formActions}>
               <button
                 type="submit"
                 className={'btn btn-rojo ' + styles.cancelButton}
@@ -502,6 +496,13 @@ const AdminUsuarios = () => {
               >
                 Cancelar
               </button>
+              <button
+                type="submit"
+                className={'btn btn-verde ms-3 ' + styles.submitButton}
+                onClick={() => guardarNuevo()}
+              >
+                Guardar
+              </button>              
             </div>
           </div>
         ) : (
@@ -513,20 +514,6 @@ const AdminUsuarios = () => {
             <h4 className="mt-4">
               Editar Usuario <h6 className={styles.required}>(*) Campos Requeridos</h6>
             </h4>
-            <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-              <label className="col-form-label">
-                Nombre de Usuario <label className={styles.required}>*</label>
-              </label>
-              <input
-                type="text"
-                disabled="true"
-                className="form-control"
-                placeholder="Nombre de usuario..."
-                id="username"
-                onChange={(e) => detectarCambio('username', e)}
-                value={campo['username'] || ''}
-              />
-            </div>
             <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
               <label className="col-form-label">
                 Nombre <label className={styles.required}>*</label>
@@ -568,6 +555,20 @@ const AdminUsuarios = () => {
                 value={campo['email'] || ''}
               />
               <span className={styles.required}>{error['email']}</span>
+            </div>
+            <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
+              <label className="col-form-label">
+                Nombre de Usuario <label className={styles.required}>*</label>
+              </label>
+              <input
+                type="text"
+                disabled="true"
+                className="form-control"
+                placeholder="Nombre de usuario..."
+                id="username"
+                onChange={(e) => detectarCambio('username', e)}
+                value={campo['username'] || ''}
+              />
             </div>
             <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
               <label className="col-form-label">Nueva Contraseña</label>
@@ -612,20 +613,21 @@ const AdminUsuarios = () => {
                 <option value="true">Activo</option>
               </select>
             </div>
-            <div className={'mb-4 col-12 col-md-6 col-lg-4 col-xl-4 ' + styles.formActions}>
-              <button
-                type="submit"
-                className={'btn btn-verde ' + styles.submitButton}
-                onClick={() => guardar()}
-              >
-                Guardar
-              </button>
+            <div className="w-100"></div>
+            <div className={'mb-4 col-12 col-md-8 col-lg-6 col-xl-5 mx-auto d-flex justify-content-center align-items-center ' + styles.formActions}>
               <button
                 type="submit"
                 className={'btn btn-rojo ' + styles.cancelButton}
                 onClick={() => clear()}
               >
                 Cancelar
+              </button>
+              <button
+                type="submit"
+                className={'btn btn-verde ms-3 ' + styles.submitButton}
+                onClick={() => guardar()}
+              >
+                Guardar
               </button>
             </div>
           </div>
