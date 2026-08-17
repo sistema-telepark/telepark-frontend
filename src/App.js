@@ -1,4 +1,5 @@
 import React, { Suspense, lazy, useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 import './App.css';
@@ -442,6 +443,15 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
     </>
   );
 }
+
+AppContent.propTypes = {
+  token: PropTypes.string,
+  userName: PropTypes.string,
+  userRole: PropTypes.bool,
+  setToken: PropTypes.func.isRequired,
+  setUserName: PropTypes.func.isRequired,
+  setUserRole: PropTypes.func.isRequired,
+};
 
 function App() {
   const [token, setToken] = useState(TokenService.getLocalAccessToken());

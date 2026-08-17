@@ -1,5 +1,6 @@
 import React from 'react';
 import utils from '../../utils/utils';
+import PropTypes from 'prop-types';
 
 const DatosPersonales = ({ register, errors, tipo }) => {
   return (
@@ -119,6 +120,16 @@ const DatosPersonales = ({ register, errors, tipo }) => {
       </div>
     </div>
   );
+};
+
+DatosPersonales.propTypes = {
+  register: PropTypes.func.isRequired,
+  errors: PropTypes.objectOf(
+    PropTypes.shape({
+      message: PropTypes.string,
+    })
+  ).isRequired,
+  tipo: PropTypes.string.isRequired,
 };
 
 export default DatosPersonales;

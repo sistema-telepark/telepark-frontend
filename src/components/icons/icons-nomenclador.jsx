@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export const CheckIcon = ({ size = 20, color = 'currentColor', className, ...rest }) => (
   <svg
@@ -15,6 +16,13 @@ export const CheckIcon = ({ size = 20, color = 'currentColor', className, ...res
   </svg>
 );
 
+// Nota RF-03: ...rest propaga props nativas de SVG y no se declara en propTypes.
+CheckIcon.propTypes = {
+  size: PropTypes.number,
+  color: PropTypes.string,
+  className: PropTypes.string,
+};
+
 export const CloseIcon = ({ size = 22, color = 'currentColor', className, ...rest }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -30,6 +38,12 @@ export const CloseIcon = ({ size = 22, color = 'currentColor', className, ...res
   </svg>
 );
 
+CloseIcon.propTypes = {
+  size: PropTypes.number,
+  color: PropTypes.string,
+  className: PropTypes.string,
+};
+
 export const AddIcon = ({ size = 16, color = 'currentColor', className, ...rest }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -44,6 +58,12 @@ export const AddIcon = ({ size = 16, color = 'currentColor', className, ...rest 
     <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z" />
   </svg>
 );
+
+AddIcon.propTypes = {
+  size: PropTypes.number,
+  color: PropTypes.string,
+  className: PropTypes.string,
+};
 
 export const EditIcon = ({ size = 16, color = 'currentColor', className, ...rest }) => (
   <svg
@@ -64,6 +84,12 @@ export const EditIcon = ({ size = 16, color = 'currentColor', className, ...rest
   </svg>
 );
 
+EditIcon.propTypes = {
+  size: PropTypes.number,
+  color: PropTypes.string,
+  className: PropTypes.string,
+};
+
 export const DeleteIcon = ({ size = 16, color = 'currentColor', className, ...rest }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -82,3 +108,9 @@ export const DeleteIcon = ({ size = 16, color = 'currentColor', className, ...re
     />
   </svg>
 );
+
+DeleteIcon.propTypes = {
+  size: PropTypes.number,
+  color: PropTypes.string,
+  className: PropTypes.string,
+};

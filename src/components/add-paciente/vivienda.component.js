@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const Vivienda = ({ register, errors, watch, tipo, arrayProvincias, municipios }) => {
   return (
@@ -25,7 +26,7 @@ const Vivienda = ({ register, errors, watch, tipo, arrayProvincias, municipios }
           >
             <option value="">Provincia</option>
             {arrayProvincias &&
-              arrayProvincias.map((provincia, index) => (
+              arrayProvincias.map((provincia) => (
                 <option
                   value={provincia.provincia}
                   key={provincia.idprovincia ?? provincia.provincia}
@@ -54,7 +55,7 @@ const Vivienda = ({ register, errors, watch, tipo, arrayProvincias, municipios }
             {municipios &&
               municipios
                 .filter((municipio) => municipio.provincia === watch('provincia' + tipo))
-                .map((municipio, index) => (
+                .map((municipio) => (
                   <option value={municipio.idmunicipio} key={municipio.idmunicipio}>
                     {municipio.nombre}
                   </option>
@@ -166,6 +167,30 @@ const Vivienda = ({ register, errors, watch, tipo, arrayProvincias, municipios }
       </div>
     </div>
   );
+};
+
+Vivienda.propTypes = {
+  register: PropTypes.func.isRequired,
+  errors: PropTypes.objectOf(
+    PropTypes.shape({
+      message: PropTypes.string,
+    })
+  ).isRequired,
+  watch: PropTypes.func.isRequired,
+  tipo: PropTypes.string.isRequired,
+  arrayProvincias: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      provincia: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  municipios: PropTypes.arrayOf(
+    PropTypes.shape({
+      idmunicipio: PropTypes.number.isRequired,
+      nombre: PropTypes.string.isRequired,
+      provincia: PropTypes.string.isRequired,
+    })
+  ).isRequired,
 };
 
 export default Vivienda;

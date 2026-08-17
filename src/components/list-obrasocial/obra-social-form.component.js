@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from '../../styles/obra-social-form.module.css';
+import PropTypes from 'prop-types';
 
 const ObraSocialForm = ({
   titulo,
@@ -25,7 +26,7 @@ const ObraSocialForm = ({
           >
             <option value="">Elegir</option>
             {obrasociales &&
-              obrasociales.map((obrasocial, index) => (
+              obrasociales.map((obrasocial) => (
                 <option value={obrasocial.idobrasocial} key={obrasocial.idobrasocial}>
                   {obrasocial.nombre}
                 </option>
@@ -51,6 +52,20 @@ const ObraSocialForm = ({
       </div>
     </div>
   );
+};
+
+ObraSocialForm.propTypes = {
+  titulo: PropTypes.string.isRequired,
+  funcionCambiar: PropTypes.func.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  obrasociales: PropTypes.arrayOf(
+    PropTypes.shape({
+      idobrasocial: PropTypes.number.isRequired,
+      nombre: PropTypes.string.isRequired,
+    })
+  ),
+  funcionConfirmar: PropTypes.func.isRequired,
+  funcionCancelar: PropTypes.func.isRequired,
 };
 
 export default ObraSocialForm;

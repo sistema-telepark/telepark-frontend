@@ -15,6 +15,7 @@ import {
   JournalTextIcon,
 } from './icons/icons-shared';
 import styles from '../styles/list-pacientes-ep.module.css';
+import PropTypes from 'prop-types';
 
 const ListaPaciente = (props) => {
   const [loading, setLoading] = useState(true);
@@ -221,6 +222,12 @@ const ListaPaciente = (props) => {
       </div>
     </main>
   );
+};
+
+ListaPaciente.propTypes = {
+  cambiarID: PropTypes.func.isRequired,
+  idEpElegido: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  nombreEpElegido: PropTypes.string,
 };
 
 const mapStateToProps = (state) => {

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export const MenuIcon = ({ size = 16, color = 'currentColor', className, ...rest }) => (
   <svg
@@ -17,6 +18,13 @@ export const MenuIcon = ({ size = 16, color = 'currentColor', className, ...rest
     />
   </svg>
 );
+
+// Nota RF-03: ...rest propaga props nativas de SVG y no se declara en propTypes.
+MenuIcon.propTypes = {
+  size: PropTypes.number,
+  color: PropTypes.string,
+  className: PropTypes.string,
+};
 
 export const HomeIcon = ({ size = 16, color = 'currentColor', className, ...rest }) => (
   <svg
@@ -40,6 +48,12 @@ export const HomeIcon = ({ size = 16, color = 'currentColor', className, ...rest
   </svg>
 );
 
+HomeIcon.propTypes = {
+  size: PropTypes.number,
+  color: PropTypes.string,
+  className: PropTypes.string,
+};
+
 export const AdminUsersIcon = ({ size = 16, color = 'currentColor', className, ...rest }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -57,6 +71,12 @@ export const AdminUsersIcon = ({ size = 16, color = 'currentColor', className, .
     </g>
   </svg>
 );
+
+AdminUsersIcon.propTypes = {
+  size: PropTypes.number,
+  color: PropTypes.string,
+  className: PropTypes.string,
+};
 
 export const AddPersonIcon = ({ size = 16, color = 'currentColor', className, ...rest }) => (
   <svg
@@ -77,6 +97,12 @@ export const AddPersonIcon = ({ size = 16, color = 'currentColor', className, ..
   </svg>
 );
 
+AddPersonIcon.propTypes = {
+  size: PropTypes.number,
+  color: PropTypes.string,
+  className: PropTypes.string,
+};
+
 export const SearchSidebarIcon = ({ size = 16, color = 'currentColor', className, ...rest }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -91,6 +117,12 @@ export const SearchSidebarIcon = ({ size = 16, color = 'currentColor', className
     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
   </svg>
 );
+
+SearchSidebarIcon.propTypes = {
+  size: PropTypes.number,
+  color: PropTypes.string,
+  className: PropTypes.string,
+};
 
 export const FamilyIcon = ({ size = 16, color = 'currentColor', className, ...rest }) => (
   <svg
@@ -112,6 +144,12 @@ export const FamilyIcon = ({ size = 16, color = 'currentColor', className, ...re
   </svg>
 );
 
+FamilyIcon.propTypes = {
+  size: PropTypes.number,
+  color: PropTypes.string,
+  className: PropTypes.string,
+};
+
 export const MedicalRecordIcon = ({ size = 16, color = 'currentColor', className, ...rest }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -132,6 +170,12 @@ export const MedicalRecordIcon = ({ size = 16, color = 'currentColor', className
   </svg>
 );
 
+MedicalRecordIcon.propTypes = {
+  size: PropTypes.number,
+  color: PropTypes.string,
+  className: PropTypes.string,
+};
+
 export const NomencladorIcon = ({ size = 16, color = 'currentColor', className, ...rest }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -150,6 +194,12 @@ export const NomencladorIcon = ({ size = 16, color = 'currentColor', className, 
   </svg>
 );
 
+NomencladorIcon.propTypes = {
+  size: PropTypes.number,
+  color: PropTypes.string,
+  className: PropTypes.string,
+};
+
 export const CalendarIcon = ({ size = 16, color = 'currentColor', className, ...rest }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -166,6 +216,12 @@ export const CalendarIcon = ({ size = 16, color = 'currentColor', className, ...
   </svg>
 );
 
+CalendarIcon.propTypes = {
+  size: PropTypes.number,
+  color: PropTypes.string,
+  className: PropTypes.string,
+};
+
 export const TableIcon = ({ size = 16, color = 'currentColor', className, ...rest }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -180,6 +236,12 @@ export const TableIcon = ({ size = 16, color = 'currentColor', className, ...res
     <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 2h-4v3h4V4zm0 4h-4v3h4V8zm0 4h-4v3h3a1 1 0 0 0 1-1v-2zm-5 3v-3H6v3h4zm-5 0v-3H1v2a1 1 0 0 0 1 1h3zm-4-4h4V8H1v3zm0-4h4V4H1v3zm5-3v3h4V4H6zm4 4H6v3h4V8z" />
   </svg>
 );
+
+TableIcon.propTypes = {
+  size: PropTypes.number,
+  color: PropTypes.string,
+  className: PropTypes.string,
+};
 
 export const LogoutIcon = ({ size = 16, color = 'currentColor', className, ...rest }) => (
   <svg
@@ -196,3 +258,9 @@ export const LogoutIcon = ({ size = 16, color = 'currentColor', className, ...re
     <path d="m505.75 198.253906-85.335938-85.332031c-6.097656-6.101563-15.273437-7.9375-23.25-4.632813-7.957031 3.308594-13.164062 11.09375-13.164062 19.714844v64h-85.332031c-11.777344 0-21.335938 9.554688-21.335938 21.332032 0 11.777343 9.558594 21.332031 21.335938 21.332031h85.332031v64c0 8.621093 5.207031 16.40625 13.164062 19.714843 7.976563 3.304688 17.152344 1.46875 23.25-4.628906l85.335938-85.335937c8.339844-8.339844 8.339844-21.824219 0-30.164063zm0 0" />
   </svg>
 );
+
+LogoutIcon.propTypes = {
+  size: PropTypes.number,
+  color: PropTypes.string,
+  className: PropTypes.string,
+};
