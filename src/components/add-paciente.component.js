@@ -4,6 +4,7 @@ import { pacienteRepository } from '../services/paciente.service';
 import { municipioRepository } from '../services/municipio.service';
 import Vivienda from './add-paciente/vivienda.component';
 import DatosPersonales from './add-paciente/datos-personales.component';
+import CondicionesVivienda from './add-paciente/condiciones-vivienda.component';
 import utils from '../utils/utils';
 import styles from '../styles/add-paciente.module.css';
 
@@ -51,40 +52,7 @@ const AddPaciente = () => {
 
       <DatosPersonales register={register} errors={errors} tipo="EP" />
 
-      <div className="row mt-3">
-        <div className="col-12 col-md-12 col-lg-4 col-xl-3">
-          <label>
-            <input
-              className={'form-check-input ' + styles.checkboxMargin}
-              type="checkbox"
-              {...register('viveSoloEP')}
-            />
-            Vive Solo
-          </label>
-        </div>
-
-        <div className="col-12 col-md-12 col-lg-4 col-xl-3">
-          <label>
-            <input
-              className={'form-check-input ' + styles.checkboxMargin}
-              type="checkbox"
-              {...register('tieneCuidadorEP')}
-            />
-            Tiene Cuidador
-          </label>
-        </div>
-
-        <div className="col-12 col-md-12 col-lg-4 col-xl-3">
-          <label className={styles.checkLabel}>
-            <input
-              className={'form-check-input ' + styles.checkboxMargin}
-              type="checkbox"
-              {...register('tieneAcompananteEP')}
-            />
-            Tiene Acompañante Terapeútico
-          </label>
-        </div>
-      </div>
+      <CondicionesVivienda register={register} />
 
       <Vivienda
         register={register}

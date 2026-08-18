@@ -5,6 +5,8 @@ import { pacienteRepository } from '../services/paciente.service';
 import { municipioRepository } from '../services/municipio.service';
 import Vivienda from './add-paciente/vivienda.component';
 import DatosPersonales from './add-paciente/datos-personales.component';
+import CondicionesVivienda from './add-paciente/condiciones-vivienda.component';
+import styles from '../styles/add-paciente.module.css';
 import utils from '../utils/utils';
 import { eventRespository } from '../services/event.service';
 import Swal from 'sweetalert2';
@@ -361,6 +363,7 @@ const Search = () => {
         <ModalBody>
           <Form onSubmit={handleSubmit(customSubmit)}>
             <DatosPersonales register={register} errors={errors} tipo="EP" />
+            <CondicionesVivienda register={register} />
             <Vivienda
               register={register}
               errors={errors}
@@ -460,6 +463,11 @@ const Search = () => {
                 {errors['ocupacionAEP'] && (
                   <small className="field-error">{errors['ocupacionAEP'].message}</small>
                 )}
+              </div>
+            </div>
+            <div className={'row ' + styles.referenteSection}>
+              <div className="col-12 col-md-12 col-lg-12 col-xl-12">
+                <h1 className="text-center">Referente</h1>
               </div>
             </div>
             <DatosPersonales register={register} errors={errors} tipo="R" />
