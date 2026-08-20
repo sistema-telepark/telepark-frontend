@@ -26,9 +26,10 @@ const Sidebar = (props) => {
   const toggleSidebar = () => setOpen((prevOpen) => !prevOpen);
 
   //arrow function para logout
-  const logout = () => {
+  const logout = (e) => {
+    e.preventDefault();
     TokenService.removeUser();
-    window.location.href = '/';
+    window.location.replace('/');
   };
 
   const user_role = TokenService.getRole();

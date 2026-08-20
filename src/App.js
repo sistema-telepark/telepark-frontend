@@ -7,6 +7,7 @@ import './App.css';
 import Sidebar from './components/sidebar.component';
 import Footer from './components/footer.component';
 import LoadingSpinner from './components/shared/loading-spinner';
+import ProtectedRoute from './components/shared/protected-route';
 import ErrorFallbackRoute from './components/error-boundary/error-fallback-route.component';
 import { logError } from './components/error-boundary/logError';
 import { TokenService } from './services/token.service';
@@ -77,8 +78,19 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
       setUserName(TokenService.getName());
       setUserRole(TokenService.getRole());
     };
+    const handlePageShow = (event) => {
+      if (event.persisted) handleAuthChange();
+    };
+    const handlePopState = () => handleAuthChange();
+
     window.addEventListener('auth-change', handleAuthChange);
-    return () => window.removeEventListener('auth-change', handleAuthChange);
+    window.addEventListener('pageshow', handlePageShow);
+    window.addEventListener('popstate', handlePopState);
+    return () => {
+      window.removeEventListener('auth-change', handleAuthChange);
+      window.removeEventListener('pageshow', handlePageShow);
+      window.removeEventListener('popstate', handlePopState);
+    };
   }, [setToken, setUserName, setUserRole]);
 
   return (
@@ -119,7 +131,7 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
               }
             />
             {token && (
-              <>
+              <Route element={<ProtectedRoute />}>
                 {userRole === true ? (
                   <>
                     <Route
@@ -432,7 +444,7 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                     </ErrorBoundary>
                   }
                 />
-              </>
+              </Route>
             )}
             {!token && <Route path="*" element={<Navigate to="/" replace />} />}
           </Routes>

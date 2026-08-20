@@ -349,13 +349,13 @@ const TypeEvents = () => {
         <ModalFooter>
           <button
             type="button"
-            className="btn btn-secondary"
+            className="btn btn-rojo"
             data-bs-dismiss="modal"
             onClick={() => handleModalEdit()}
           >
             Cancelar
           </button>
-          <button type="button" className="btn btn-primary" onClick={() => edit(form)}>
+          <button type="button" className="btn btn-verde" onClick={() => edit(form)}>
             Guardar
           </button>
         </ModalFooter>
