@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { pacienteRepository } from '../services/paciente.service';
+import { provinciaRepository } from '../services/provincia.service';
 import Vivienda from './add-paciente/vivienda.component';
 import DatosPersonales from './add-paciente/datos-personales.component';
 import CondicionesVivienda from './add-paciente/condiciones-vivienda.component';
@@ -8,6 +9,7 @@ import utils from '../utils/utils';
 import styles from '../styles/add-paciente.module.css';
 
 const AddPaciente = () => {
+  const [arrayProvincias, setArrayProvincias] = useState([]);
   const {
     register,
     handleSubmit,
@@ -17,10 +19,21 @@ const AddPaciente = () => {
     setValue,
   } = useForm();
 
-  const arrayProvincias = utils.retornarProvincias().map((p) => ({
-    idprovincia: p.id,
-    provincia: p.provincia,
-  }));
+  useEffect(() => {
+    const cargarProvincias = async () => {
+      const response = await provinciaRepository.getAll();
+      if (response && response.data) {
+        setArrayProvincias(
+          response.data.map((provincia) => ({
+            idprovincia: provincia.idprovincia,
+            provincia: provincia.nombre,
+          }))
+        );
+      }
+    };
+
+    cargarProvincias();
+  }, []);
 
   const enviarFormulario = async (data) => {
     const response = await pacienteRepository.guardarPaciente(data).catch(() => utils.errorSend());

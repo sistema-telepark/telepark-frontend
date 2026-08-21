@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { municipioRepository } from '../../services/municipio.service';
+import { localidadRepository } from '../../services/localidad.service';
 
 const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) => {
   const [municipios, setMunicipios] = useState([]);
+  const [localidades, setLocalidades] = useState([]);
   const [cargandoMunicipios, setCargandoMunicipios] = useState(false);
+  const [cargandoLocalidades, setCargandoLocalidades] = useState(false);
   const provinciaSeleccionada = watch('provincia' + tipo);
+  const municipioSeleccionado = watch('municipio' + tipo);
 
   useEffect(() => {
     let activo = true;
@@ -37,6 +41,38 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
       activo = false;
     };
   }, [provinciaSeleccionada, setValue, tipo]);
+
+  useEffect(() => {
+    let activo = true;
+
+    setValue('localidad' + tipo, '');
+
+    if (!municipioSeleccionado) {
+      setLocalidades([]);
+      return undefined;
+    }
+
+    setCargandoLocalidades(true);
+    const cargarLocalidades = async () => {
+      try {
+        const response = await localidadRepository
+          .getByMunicipio(municipioSeleccionado)
+          .catch(() => undefined);
+        if (activo && response && response.data) {
+          setLocalidades(response.data);
+        }
+      } finally {
+        if (activo) {
+          setCargandoLocalidades(false);
+        }
+      }
+    };
+    cargarLocalidades();
+
+    return () => {
+      activo = false;
+    };
+  }, [municipioSeleccionado, setValue, tipo]);
 
   return (
     <div>
@@ -99,21 +135,23 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
         </div>
         <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-3">
           <label className="col-form-label">Localidad</label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Localidad"
+          <select
+            className="form-select"
+            disabled={!municipioSeleccionado || cargandoLocalidades}
             {...register('localidad' + tipo, {
               required: {
                 value: true,
-                message: 'El campo no puede estar vacío',
-              },
-              minLength: {
-                value: 2,
-                message: 'El campo no puede tener menos de 2 caracteres',
+                message: 'Debe seleccionar una opción',
               },
             })}
-          />
+          >
+            <option value="">Localidad</option>
+            {localidades.map((localidad) => (
+              <option value={localidad.idlocalidad} key={localidad.idlocalidad}>
+                {localidad.nombre}
+              </option>
+            ))}
+          </select>
           {errors['localidad' + tipo] && (
             <small className="field-error">{errors['localidad' + tipo].message}</small>
           )}

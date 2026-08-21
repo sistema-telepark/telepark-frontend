@@ -8,10 +8,12 @@ import CondicionesVivienda from './add-paciente/condiciones-vivienda.component';
 import styles from '../styles/add-paciente.module.css';
 import utils from '../utils/utils';
 import { eventRespository } from '../services/event.service';
+import { provinciaRepository } from '../services/provincia.service';
 import Swal from 'sweetalert2';
 import { Form, FormGroup, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 
 const Search = () => {
+  const [arrayProvincias, setArrayProvincias] = useState([]);
   const [arrayPerson, setArrayPerson] = useState([]);
   const [searchArrayperson, setSearchArrayperson] = useState({
     idpersona: 0,
@@ -37,10 +39,21 @@ const Search = () => {
     setValue,
   } = useForm();
 
-  const arrayProvincias = utils.retornarProvincias().map((p) => ({
-    idprovincia: p.id,
-    provincia: p.provincia,
-  }));
+  useEffect(() => {
+    const cargarProvincias = async () => {
+      const response = await provinciaRepository.getAll();
+      if (response && response.data) {
+        setArrayProvincias(
+          response.data.map((provincia) => ({
+            idprovincia: provincia.idprovincia,
+            provincia: provincia.nombre,
+          }))
+        );
+      }
+    };
+
+    cargarProvincias();
+  }, []);
 
   const handleChange = (e) => {
     setSearchArrayperson({
