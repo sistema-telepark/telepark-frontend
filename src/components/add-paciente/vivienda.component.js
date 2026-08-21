@@ -1,7 +1,43 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { municipioRepository } from '../../services/municipio.service';
 
-const Vivienda = ({ register, errors, watch, tipo, arrayProvincias, municipios }) => {
+const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) => {
+  const [municipios, setMunicipios] = useState([]);
+  const [cargandoMunicipios, setCargandoMunicipios] = useState(false);
+  const provinciaSeleccionada = watch('provincia' + tipo);
+
+  useEffect(() => {
+    let activo = true;
+
+    if (!provinciaSeleccionada) {
+      setMunicipios([]);
+      return undefined;
+    }
+
+    setCargandoMunicipios(true);
+    setValue('municipio' + tipo, '');
+    const cargarMunicipios = async () => {
+      try {
+        const response = await municipioRepository
+          .getByProvincia(provinciaSeleccionada)
+          .catch(() => undefined);
+        if (activo && response && response.data) {
+          setMunicipios(response.data);
+        }
+      } finally {
+        if (activo) {
+          setCargandoMunicipios(false);
+        }
+      }
+    };
+    cargarMunicipios();
+
+    return () => {
+      activo = false;
+    };
+  }, [provinciaSeleccionada, setValue, tipo]);
+
   return (
     <div>
       <div className="row mt-4">
@@ -27,10 +63,7 @@ const Vivienda = ({ register, errors, watch, tipo, arrayProvincias, municipios }
             <option value="">Provincia</option>
             {arrayProvincias &&
               arrayProvincias.map((provincia) => (
-                <option
-                  value={provincia.provincia}
-                  key={provincia.idprovincia ?? provincia.provincia}
-                >
+                <option value={provincia.idprovincia} key={provincia.idprovincia}>
                   {provincia.provincia}
                 </option>
               ))}
@@ -44,6 +77,7 @@ const Vivienda = ({ register, errors, watch, tipo, arrayProvincias, municipios }
           <select
             type="text"
             className="form-select"
+            disabled={!provinciaSeleccionada || cargandoMunicipios}
             {...register('municipio' + tipo, {
               required: {
                 value: true,
@@ -53,13 +87,11 @@ const Vivienda = ({ register, errors, watch, tipo, arrayProvincias, municipios }
           >
             <option value="">Municipio</option>
             {municipios &&
-              municipios
-                .filter((municipio) => municipio.provincia === watch('provincia' + tipo))
-                .map((municipio) => (
-                  <option value={municipio.idmunicipio} key={municipio.idmunicipio}>
-                    {municipio.nombre}
-                  </option>
-                ))}
+              municipios.map((municipio) => (
+                <option value={municipio.idmunicipio} key={municipio.idmunicipio}>
+                  {municipio.nombre}
+                </option>
+              ))}
           </select>
           {errors['municipio' + tipo] && (
             <small className="field-error">{errors['municipio' + tipo].message}</small>
@@ -178,16 +210,10 @@ Vivienda.propTypes = {
   ).isRequired,
   watch: PropTypes.func.isRequired,
   tipo: PropTypes.string.isRequired,
+  setValue: PropTypes.func.isRequired,
   arrayProvincias: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number,
-      provincia: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  municipios: PropTypes.arrayOf(
-    PropTypes.shape({
-      idmunicipio: PropTypes.number.isRequired,
-      nombre: PropTypes.string.isRequired,
+      idprovincia: PropTypes.number.isRequired,
       provincia: PropTypes.string.isRequired,
     })
   ).isRequired,

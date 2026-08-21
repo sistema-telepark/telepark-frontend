@@ -331,12 +331,12 @@ const AdminUsuarios = () => {
   return (
     <main
       className={
-        'border-top-sm m-0 row justify-content-center form-paciente m-md-3 rounded shadow container-lg mx-md-auto ' +
+        'border-top-sm m-0 row justify-content-center panel-gris m-md-3 rounded shadow container-lg mx-md-auto ' +
         styles.pageHeader
       }
     >
       <div className="mb-4 col-12 col-md-9 col-lg-12 col-xl-10">
-        <h3 className="mt-4">Administrar Usuarios</h3>
+        <h2 className="mt-4 text-center">Administrar Usuarios</h2>
         <hr />
         <form
           className="row"
@@ -378,7 +378,7 @@ const AdminUsuarios = () => {
         </div>
 
         {showNuevo ? (
-          <div className="border-top-sm m-0 row justify-content-center form-paciente m-md-3 rounded shadow container-lg mx-md-auto">
+          <div className="border-top-sm m-0 row justify-content-center panel-gris m-md-3 rounded shadow container-lg mx-md-auto">
             <h4 className="mt-4">
               Agregar Usuario <h6 className={styles.required}>(*) Campos Requeridos</h6>
             </h4>
@@ -510,7 +510,7 @@ const AdminUsuarios = () => {
         )}
 
         {show ? (
-          <div className="border-top-sm m-0 row justify-content-center form-paciente m-md-3 rounded shadow container-lg mx-md-auto">
+          <div className="border-top-sm m-0 row justify-content-center panel-gris m-md-3 rounded shadow container-lg mx-md-auto">
             <h4 className="mt-4">
               Editar Usuario <h6 className={styles.required}>(*) Campos Requeridos</h6>
             </h4>

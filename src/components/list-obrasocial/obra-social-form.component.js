@@ -12,7 +12,7 @@ const ObraSocialForm = ({
 }) => {
   return (
     <div>
-      <div className="row form-paciente">
+      <div className="row panel-gris">
         <h4>{titulo}</h4>
         <div className="col-12 col-md-6 col-lg-6 col-xl-6">
           <label className="col-form-label">Obra Social</label>

@@ -208,10 +208,10 @@ const Nomenclador = () => {
   };
 
   return (
-    <main className="container form-paciente">
+    <main className="container panel-gris">
       <div className="row">
         <div className="col-12 col-md-12 col-lg-12 col-xl-12">
-          <h3>Ingresar Nomencladores</h3>
+          <h2 className="mt-4 text-center">Ingresar Nomencladores</h2>
           <hr />
         </div>
       </div>
@@ -260,7 +260,7 @@ const Nomenclador = () => {
               )}
             </div>
           </div>
-
+          <br />
           <div className="row">
             <div className={'col-12 col-md-12 col-lg-12 col-xl-12 ' + styles.scrollableTable}>
               <table
@@ -360,7 +360,7 @@ const Nomenclador = () => {
               )}
             </div>
           </div>
-
+          <br />
           <div className="row">
             <div className={'mb-4 col-12 col-md-12 col-lg-12 col-xl-12 ' + styles.scrollableTable}>
               <table
@@ -416,7 +416,7 @@ const Nomenclador = () => {
             </div>
           </div>
         </div>
-
+        
         <div className="mt-4 col-12 col-md-12 col-lg-4 col-xl-4">
           <div className="row">
             <div className="col-12 col-md-12 col-lg-12 col-xl-12 input-group">
@@ -460,7 +460,7 @@ const Nomenclador = () => {
               )}
             </div>
             <div className="col-12 col-md-12 col-lg-12 col-xl-12">
-              <label>
+              <label className="form-label">
                 Es Pública
                 <input
                   type="checkbox"
@@ -472,7 +472,6 @@ const Nomenclador = () => {
               </label>
             </div>
           </div>
-
           <div className="row">
             <div className={'mb-2 col-12 col-md-12 col-lg-12 col-xl-12 ' + styles.scrollableTable}>
               <table

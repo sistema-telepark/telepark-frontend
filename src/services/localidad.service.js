@@ -4,7 +4,7 @@ import { withServiceHandler } from './error-handler';
 const localidades = {
   async getAll() {
     const response = await http.get(`/localidades`);
-    return response.data;
+    return response.data.results ?? response.data;
   },
 };
 

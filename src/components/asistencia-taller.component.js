@@ -137,8 +137,9 @@ const Asistencia = () => {
 
   return (
     <>
-      <Container>
-        <h1 className="mt-4 mt-md-2 text-center">Asistencia</h1>
+      <Container className="container panel-gris">
+        <h2 className="mt-4 text-center">Asistencia</h2>
+        <hr />
         <div className="col-md-3">
           <FormGroup>
             <label htmlFor="fechaEncuentro" className="control-label">
@@ -168,8 +169,6 @@ const Asistencia = () => {
             )}
           </FormGroup>
         </div>
-        <br />
-
         <div className="row m-md-3 shadow mx-md-auto border-top-sm m-0 justify-content-center rounded container-lg ">
           <table className="table">
             <thead>

@@ -119,7 +119,7 @@ const ListaObraSocial = (props) => {
   };
 
   return (
-    <main className="container form-paciente">
+    <main className="container panel-gris">
       <div className="row">
         <div className="mb-2 col-12 col-md-12 col-lg-12 col-xl-12">
           <h3 className="mt-4">Obra Social de Persona con EP</h3>

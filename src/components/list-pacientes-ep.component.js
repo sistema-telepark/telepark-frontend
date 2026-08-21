@@ -57,10 +57,10 @@ const ListaPaciente = (props) => {
   };
 
   return (
-    <main className="container form-paciente">
+    <main className="container panel-gris">
       <div className="row">
         <div className="mb-2 col-12 col-md-12 col-lg-12 col-xl-12">
-          <h3>Personas con Enfermedad de Parkinson</h3>
+          <h2 className="mt-4 text-center">Personas con Enfermedad de Parkinson</h2>
           <hr />
         </div>
       </div>

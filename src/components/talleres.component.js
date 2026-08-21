@@ -172,8 +172,9 @@ const Talleres = () => {
 
   return (
     <>
-      <Container>
-        <h1 className="mt-4 mt-md-2 text-center">Talleres</h1>
+      <Container className="container panel-gris">
+        <h2 className="mt-4 text-center">Talleres</h2>
+        <hr />
         <button
           type="button"
           className="btn btn-primary mb-2 mt-2"
@@ -182,7 +183,6 @@ const Talleres = () => {
           <PlusIcon />
           Agregar
         </button>
-        <br />
         <br />
         <div className="row m-md-3 shadow mx-md-auto border-top-sm m-0">
           <table className="table">

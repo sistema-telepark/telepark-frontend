@@ -64,14 +64,14 @@ const FichaMedica = () => {
   return (
     <main
       className={
-        'border-top-sm m-0 row justify-content-center form-paciente m-md-3 rounded shadow container-lg mx-md-auto ' +
+        'border-top-sm m-0 row justify-content-center panel-gris m-md-3 rounded shadow container-lg mx-md-auto ' +
         styles.pageHeader
       }
     >
       <div className="mb-4 col-12 col-md-9 col-lg-12 col-xl-10">
-        <h3 className="mt-4">
+        <h2 className="mt-4 text-center">
           <b>Ficha Médica</b>
-        </h3>
+        </h2>
         <hr />
         <div className="row">
           <div className="col-12 col-md-12 col-lg-12 col-xl-12">

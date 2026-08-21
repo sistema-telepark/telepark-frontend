@@ -4,7 +4,7 @@ import styles from '../../styles/condiciones-vivienda.module.css';
 
 const CondicionesVivienda = ({ register }) => {
   return (
-    <div className="row mt-3">
+    <div className="row mt-3 justify-content-center">
       <div className="col-12 col-md-12 col-lg-4 col-xl-3">
         <label>
           <input

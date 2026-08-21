@@ -7,14 +7,13 @@ import styles from '../styles/gestion-eventos.module.css';
 const Events = () => {
   const [typeEvent, setTypeEvent] = useState([]);
   const [namePersonEP, setNamePersonEP] = useState([]);
-  const [error, setError] = useState({});
   const [events, setEvents] = useState({
     idEvento: 0,
     fechaDesde: '',
     fechaHasta: '',
     motivo: '',
-    idpersonaep: 0,
-    idtipoevento: 0,
+    idpersonaep: '',
+    idtipoevento: '',
   });
 
   useEffect(() => {
@@ -41,10 +40,10 @@ const Events = () => {
   };
 
   const handleChange = (e) => {
-    setEvents({
-      ...events,
+    setEvents((currentEvents) => ({
+      ...currentEvents,
       [e.target.name]: e.target.value,
-    });
+    }));
   };
 
   const guardarNuevo = () => {
@@ -119,10 +118,17 @@ const Events = () => {
   const validate = validateDate(events.fechaDesde, events.fechaHasta);
 
   return (
-    <div className="container">
-      <form id="myForm">
-        <main className="justify-content-center row container-lg m-md-3 shadow mx-md-auto border-top-sm m-0">
-          <h1 className="mt-4 mt-md-2 text-center">Gestión de eventos</h1>
+    <div>
+      <form
+        id="myForm"
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (!validate) guardarNuevo();
+        }}
+      >
+        <main className="justify-content-center row container-lg m-md-3 shadow mx-md-auto border-top-sm m-0 panel-gris">
+          <h2 className="mt-4 text-center">Gestión de eventos</h2>
+          <hr />
           <div className="row">
             <div className="form-grup mb-4">
               <label htmlFor="fechaDesde" className="control-label">
@@ -183,11 +189,12 @@ const Events = () => {
               </label>
               <select
                 className="form-select"
-                placeholder="Ingrese persona"
                 name="idpersonaep"
                 onChange={handleChange}
+                defaultValue=""
+                required
               >
-                <option disabled={true} selected={true} defaultValue={-1}>
+                <option value="" disabled>
                   Seleccione una persona
                 </option>
                 {namePersonEP.map((element) => (
@@ -209,11 +216,12 @@ const Events = () => {
               </label>
               <select
                 className="form-select"
-                placeholder="Ingrese el tipo de evento"
                 name="idtipoevento"
                 onChange={handleChange}
+                defaultValue=""
+                required
               >
-                <option disabled={true} selected={true} defaultValue={-1}>
+                <option value="" disabled>
                   Seleccione un tipo de evento
                 </option>
                 {typeEvent.map((element) => (
@@ -227,10 +235,9 @@ const Events = () => {
           <div className="row">
             <div className=" justify-content-center  d-flex mb-4">
               <button
-                type="button"
+                type="submit"
                 className="btn btn-primary mb-2 mt-2"
                 disabled={validate}
-                onClick={() => guardarNuevo()}
               >
                 <PlusIcon className="signoMas" />
                 Agregar

@@ -193,8 +193,9 @@ const TypeEvents = () => {
 
   return (
     <>
-      <Container>
-        <h1 className="mt-4 mt-md-2 text-center">Tipos de eventos</h1>
+      <Container className="container panel-gris">
+        <h2 className="mt-4 text-center">Tipos de eventos</h2>
+        <hr />
         <button className="btn btn-primary mb-2 mt-2" onClick={() => showModalInsert()}>
           <PlusIcon className="signoMas" /> Agregar
         </button>
@@ -249,13 +250,13 @@ const TypeEvents = () => {
       <Modal isOpen={modalInsert}>
         <ModalHeader>
           <div>
-            <h2>Ingresar nuevo tipo de evento</h2>
+            <h2>Nuevo tipo de evento</h2>
           </div>
         </ModalHeader>
         <ModalBody>
           <FormGroup>
             <label htmlFor="nombre" className="control-label">
-              Nombre de tipo de evento:
+              Nombre:
             </label>
             <input
               type="text"
@@ -287,9 +288,8 @@ const TypeEvents = () => {
           >
             Cancelar
           </button>
-          <button type="button" className="btn btn-azul" onClick={() => guardarNuevo()}>
-            <PlusIcon />
-            Agregar
+          <button type="button" className="btn btn-verde" onClick={() => guardarNuevo()}>
+            Guardar
           </button>
         </ModalFooter>
       </Modal>

@@ -171,12 +171,12 @@ const ListaEvolucion = () => {
   return (
     <main
       className={
-        'border-top-sm m-0 row justify-content-center form-paciente m-md-3 rounded shadow container-lg mx-md-auto ' +
+        'border-top-sm m-0 row justify-content-center panel-gris m-md-3 rounded shadow container-lg mx-md-auto ' +
         styles.pageHeader
       }
     >
       <div className="mb-4 col-12 col-md-9 col-lg-12 col-xl-10">
-        <h3 className="mt-4">Evolución de Persona con EP</h3>
+        <h2 className="mt-4 text-center">Evolución de Persona con EP</h2>
         <hr />
         <div className="row">
           <div className="col-12 col-md-6 col-lg-6 col-xl-6">
@@ -194,7 +194,7 @@ const ListaEvolucion = () => {
 
         <span>
           {showNuevo ? (
-            <div className="border-top-sm m-0 row form-paciente m-md-3 rounded shadow container-lg mx-md-auto">
+            <div className="border-top-sm m-0 row panel-gris m-md-3 rounded shadow container-lg mx-md-auto">
               <h4 className="mt-4">Nueva Observación</h4>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label className="col-form-label">Estado Evolutivo</label>
@@ -247,7 +247,7 @@ const ListaEvolucion = () => {
 
         <span>
           {show ? (
-            <div className="border-top-sm m-0 row justify-content-center form-paciente m-md-3 rounded shadow container-lg mx-md-auto">
+            <div className="border-top-sm m-0 row justify-content-center panel-gris m-md-3 rounded shadow container-lg mx-md-auto">
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label className="col-form-label">Estado Evolutivo</label>
                 <select

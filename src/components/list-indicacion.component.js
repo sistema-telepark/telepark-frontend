@@ -234,7 +234,7 @@ const ListaIndicacion = () => {
   return (
     <main
       className={
-        'border-top-sm m-0 row justify-content-center form-paciente m-md-3 rounded shadow container-lg mx-md-auto ' +
+        'border-top-sm m-0 row justify-content-center panel-gris m-md-3 rounded shadow container-lg mx-md-auto ' +
         styles.pageHeader
       }
     >
@@ -257,7 +257,7 @@ const ListaIndicacion = () => {
 
         <span>
           {showNuevo ? (
-            <div className="border-top-sm m-0 row form-paciente m-md-3 rounded shadow container-lg mx-md-auto">
+            <div className="border-top-sm m-0 row panel-gris m-md-3 rounded shadow container-lg mx-md-auto">
               <h4 className="mt-4">Nueva Indicación Médica</h4>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label className="col-form-label">Nombre de Medicamento</label>
@@ -342,7 +342,7 @@ const ListaIndicacion = () => {
 
         <span>
           {show ? (
-            <div className="border-top-sm m-0 row justify-content-center form-paciente m-md-3 rounded shadow container-lg mx-md-auto">
+            <div className="border-top-sm m-0 row justify-content-center panel-gris m-md-3 rounded shadow container-lg mx-md-auto">
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label className="col-form-label">Nombre de Medicamento</label>
                 <select

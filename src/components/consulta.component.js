@@ -158,8 +158,9 @@ const Consulta = () => {
 
   return (
     <>
-      <Container>
-        <h1 className="mt-4 mt-md-2 text-center">Consultas</h1>
+      <Container className="container panel-gris">
+        <h2 className="mt-4 text-center">Consultas</h2>
+        <hr />
 
         {/* Primer cuadro con sombra que agrupa la lista de asistencia e inasistencia */}
         <div

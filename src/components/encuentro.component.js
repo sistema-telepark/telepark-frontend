@@ -223,8 +223,9 @@ const Encuentro = () => {
 
   return (
     <>
-      <Container>
-        <h1 className="mt-4 mt-md-2 text-center">Encuentros</h1>
+      <Container className="container panel-gris">
+        <h2 className="mt-4 text-center">Encuentros</h2>
+        <hr />
         <button
           type="button"
           className="btn btn-primary mb-2 mt-2"

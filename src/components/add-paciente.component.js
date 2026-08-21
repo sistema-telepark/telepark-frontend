@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { pacienteRepository } from '../services/paciente.service';
-import { municipioRepository } from '../services/municipio.service';
 import Vivienda from './add-paciente/vivienda.component';
 import DatosPersonales from './add-paciente/datos-personales.component';
 import CondicionesVivienda from './add-paciente/condiciones-vivienda.component';
@@ -9,26 +8,19 @@ import utils from '../utils/utils';
 import styles from '../styles/add-paciente.module.css';
 
 const AddPaciente = () => {
-  const [municipios, setMunicipios] = useState([]);
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
     reset,
+    setValue,
   } = useForm();
 
-  useEffect(() => {
-    getMunicipios();
-  }, []);
-
-  // Función que obtiene la lista de municipios
-  const getMunicipios = async () => {
-    const response = await municipioRepository.getAll().catch(() => undefined);
-    if (response) {
-      setMunicipios(response.data);
-    }
-  };
+  const arrayProvincias = utils.retornarProvincias().map((p) => ({
+    idprovincia: p.id,
+    provincia: p.provincia,
+  }));
 
   const enviarFormulario = async (data) => {
     const response = await pacienteRepository.guardarPaciente(data).catch(() => utils.errorSend());
@@ -43,10 +35,12 @@ const AddPaciente = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(customSubmit)} className="container form-paciente">
+    <form onSubmit={handleSubmit(customSubmit)} className="container panel-gris">
       <div className="row">
         <div className="col-12 col-md-12 col-lg-12 col-xl-12">
-          <h1 className="text-center">Persona con EP</h1>
+          <h2 className="mt-4 text-center">Persona con EP</h2>
+          <hr />
+          <br />
         </div>
       </div>
 
@@ -59,8 +53,8 @@ const AddPaciente = () => {
         errors={errors}
         watch={watch}
         tipo="EP"
-        arrayProvincias={utils.retornarProvincias()}
-        municipios={municipios}
+        setValue={setValue}
+        arrayProvincias={arrayProvincias}
       />
 
       <div className="row mt-4">
@@ -160,7 +154,7 @@ const AddPaciente = () => {
 
       <div className={'row ' + styles.referenteSection}>
         <div className="col-12 col-md-12 col-lg-12 col-xl-12">
-          <h1 className="text-center">Referente</h1>
+          <h2 className="mt-4 text-center">Referente</h2>
         </div>
       </div>
 
@@ -171,14 +165,15 @@ const AddPaciente = () => {
         errors={errors}
         watch={watch}
         tipo="R"
-        arrayProvincias={utils.retornarProvincias()}
-        municipios={municipios}
+        setValue={setValue}
+        arrayProvincias={arrayProvincias}
       />
 
       <div className="row">
         <div className={'col-12 col-md-12 col-lg-12 col-xl-12 ' + styles.confirmCenter}>
-          <button type="submit" className="mt-3 btn btn-success">
-            Confirmar
+          <button type="submit" className="mt-3 btn btn-verde">
+
+            Guardar
           </button>
         </div>
       </div>

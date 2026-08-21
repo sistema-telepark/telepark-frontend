@@ -109,7 +109,7 @@ const Login = () => {
       <form onSubmit={(e) => enviarFormulario(e)}>
         <main
           className={
-            'border-top-sm row justify-content-center form-paciente shadow container-lg mx-auto ' +
+            'border-top-sm row justify-content-center panel-gris shadow container-lg mx-auto ' +
             styles.formContainer
           }
         >
