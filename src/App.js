@@ -20,9 +20,6 @@ const AdminUsuarios = lazy(
 const Home = lazy(
   () => import('./components/home.component')
 );
-const AddPaciente = lazy(
-  () => import(/* webpackChunkName: "add-paciente" */ './components/add-paciente.component')
-);
 const FichaMedica = lazy(
   () => import(/* webpackChunkName: "ficha-medica" */ './components/ficha-medica.component')
 );
@@ -169,13 +166,13 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                       element={
                         <ErrorBoundary
                           FallbackComponent={(props) => (
-                            <ErrorFallbackRoute {...props} componentName="AddPaciente" />
+                            <ErrorFallbackRoute {...props} componentName="Search" />
                           )}
                           onError={logError}
                           resetKeys={[token]}
                         >
                           <Suspense fallback={<LoadingSpinner />}>
-                            <AddPaciente />
+                            <Search />
                           </Suspense>
                         </ErrorBoundary>
                       }
@@ -188,13 +185,13 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                       element={
                         <ErrorBoundary
                           FallbackComponent={(props) => (
-                            <ErrorFallbackRoute {...props} componentName="AddPaciente" />
+                            <ErrorFallbackRoute {...props} componentName="Search" />
                           )}
                           onError={logError}
                           resetKeys={[token]}
                         >
                           <Suspense fallback={<LoadingSpinner />}>
-                            <AddPaciente />
+                            <Search />
                           </Suspense>
                         </ErrorBoundary>
                       }
@@ -278,22 +275,6 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                     >
                       <Suspense fallback={<LoadingSpinner />}>
                         <ListaIndicacion />
-                      </Suspense>
-                    </ErrorBoundary>
-                  }
-                />
-                <Route
-                  path="/search"
-                  element={
-                    <ErrorBoundary
-                      FallbackComponent={(props) => (
-                        <ErrorFallbackRoute {...props} componentName="Search" />
-                      )}
-                      onError={logError}
-                      resetKeys={[token]}
-                    >
-                      <Suspense fallback={<LoadingSpinner />}>
-                        <Search />
                       </Suspense>
                     </ErrorBoundary>
                   }

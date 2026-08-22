@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { obrasocialRepository } from '../services/obrasocial.service';
 import { osRepository } from '../services/os.service';
 import utils from '../utils/utils';
@@ -15,11 +16,17 @@ const ListaObraSocial = (props) => {
   const [obrasociales, setObraSociales] = useState([]);
   const [osociales, setOsociales] = useState([]);
   const { idEpElegido, nombreEpElegido } = props;
+  const navigate = useNavigate();
 
   useEffect(() => {
     getObrasocial();
-    getOs();
-  }, []);
+    if (idEpElegido) {
+      getOs();
+    } else {
+      setOsociales([]);
+      navigate('/list-pacientes', { replace: true });
+    }
+  }, [idEpElegido, navigate]);
 
   // Funcion que obtiene la lista de obras sociales
   const getObrasocial = async () => {
@@ -31,9 +38,11 @@ const ListaObraSocial = (props) => {
 
   // Funcion que obtiene la lista de obras sociales de un paciente
   const getOs = async () => {
+    if (!idEpElegido) return;
+
     const response = await osRepository.get(idEpElegido).catch(() => undefined);
-    if (response) {
-      setOsociales(response.data);
+    if (response?.success) {
+      setOsociales(response.data.results ?? response.data);
     }
   };
 
@@ -70,12 +79,12 @@ const ListaObraSocial = (props) => {
     const idObrasocial = campo.obrasocial;
     if (idObrasocial !== '') {
       const data = {
-        idpersonaep: idEpElegido,
-        idobrasocial: idObrasocial,
-        borrado: '0',
+        idpersonaep: Number(idEpElegido),
+        idobrasocial: Number(idObrasocial),
+        borrado: 0,
       };
       const response = await osRepository.create(data).catch(() => undefined);
-      if (response) {
+      if (response?.success) {
         getOs();
         utils.notificacionGuardar();
         setShow(false);
@@ -90,12 +99,12 @@ const ListaObraSocial = (props) => {
     const id = idEditado;
     if (idObrasocial !== '') {
       const data = {
-        idpersonaep: idEpElegido,
-        idobrasocial: idObrasocial,
-        borrado: '0',
+        idpersonaep: Number(idEpElegido),
+        idobrasocial: Number(idObrasocial),
+        borrado: 0,
       };
       const response = await osRepository.update(id, data).catch(() => undefined);
-      if (response) {
+      if (response?.success) {
         getOs();
         utils.notificacionGuardar();
         setShow(false);
@@ -107,12 +116,12 @@ const ListaObraSocial = (props) => {
   // Funcion que elimina una obra social
   const eliminar = async (info, id) => {
     const data = {
-      idpersonaep: idEpElegido,
-      idobrasocial: info.idobrasocial,
-      borrado: '1',
+      idpersonaep: Number(idEpElegido),
+      idobrasocial: Number(info.idobrasocial),
+      borrado: 1,
     };
     const response = await osRepository.update(id, data).catch(() => undefined);
-    if (response) {
+    if (response?.success) {
       getOs();
       setShow(false);
     }

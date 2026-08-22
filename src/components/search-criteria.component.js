@@ -15,6 +15,7 @@ import { Form, FormGroup, Modal, ModalBody, ModalFooter, ModalHeader } from 'rea
 const Search = () => {
   const [arrayProvincias, setArrayProvincias] = useState([]);
   const [arrayPerson, setArrayPerson] = useState([]);
+  const [buscar, setBuscar] = useState('');
   const [searchArrayperson, setSearchArrayperson] = useState({
     idpersona: 0,
     nombre: '',
@@ -60,6 +61,10 @@ const Search = () => {
       ...searchArrayperson,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const detectarCambioBusqueda = (e) => {
+    setBuscar(e.target.value);
   };
 
   const edit = (data) => {
@@ -163,8 +168,8 @@ const Search = () => {
   // {count,next,previous,results} → normalizar a .results (patrón RA-13,
   // consistente con los componentes del módulo Taller).
   const getPersonAll = async () => {
-    let response = await eventRespository.getAll();
-    if (response && response.data) {
+    let response = await eventRespository.getPersonEp();
+    if (response?.success) {
       setArrayPerson(response.data.results ?? response.data);
     }
   };
@@ -224,23 +229,49 @@ const Search = () => {
     });
   };
 
-  let arrayPersonIspaciente = arrayPerson.filter((e) => e.espaciente === 1 && e.borrado !== 1);
+  const terminoBusqueda = buscar.trim().toLowerCase();
+  const arrayPersonIspaciente = arrayPerson.filter((person) => {
+    if (person.borrado === 1) return false;
+    if (!terminoBusqueda) return true;
+
+    return [person.idpersona, person.nombre, person.apellido, person.telefono]
+      .filter((value) => value !== null && value !== undefined)
+      .some((value) => String(value).toLowerCase().includes(terminoBusqueda));
+  });
 
   return (
     <>
       <main className="border-top-sm m-0 justify-content-center m-md-3 rounded shadow container-lg mx-md-auto panel-gris">
         <h2 className="mt-4 text-center">Personas con EP</h2>
         <hr />
-        <button
-          type="button"
-          className="btn btn-primary mb-2 mt-2"
-          onClick={() => showModalInsert()}
+        <form
+          className="row align-items-center"
+          onSubmit={(e) => {
+            e.preventDefault();
+          }}
         >
-          <PlusIcon className="signoMas" />
-          Agregar
-        </button>
-        <br />
-        <br />
+          <div className={'mb-4 col-12 col-md-9 col-lg-9 col-xl-9 ' + styles.searchInputWrapper}>
+            <input
+              type="search"
+              className="form-control"
+              placeholder="Buscar"
+              id="buscador-personas-ep"
+              aria-label="Buscar personas con EP"
+              onChange={detectarCambioBusqueda}
+              value={buscar}
+            />
+          </div>
+          <div className={'mb-4 col-12 col-md-3 col-lg-3 col-xl-3 ' + styles.searchActions}>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() => showModalInsert()}
+            >
+              <PlusIcon className="signoMas" />
+              Agregar Nuevo
+            </button>
+          </div>
+        </form>
         <div className="row">
           <table className="table">
             <thead>

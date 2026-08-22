@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { useSelector } from 'react-redux';
 import { indicacionRepository } from '../services/indicacion.service';
@@ -10,6 +11,7 @@ import styles from '../styles/list-indicacion.module.css';
 const ListaIndicacion = () => {
   const idEpElegido = useSelector((state) => state.global.idEpElegido);
   const nombreEpElegido = useSelector((state) => state.global.nombreEpElegido);
+  const navigate = useNavigate();
 
   const [show, setShow] = useState(false);
   const [showNuevo, setShowNuevo] = useState(false);
@@ -21,20 +23,27 @@ const ListaIndicacion = () => {
     estado: '',
   });
   const [idEditado, setIdEditado] = useState('');
-  const [indicaciones, setIndicaciones] = useState();
+  const [indicaciones, setIndicaciones] = useState([]);
   const [medicamentos, setMedicamentos] = useState();
 
   useEffect(() => {
-    getIndicaciones();
+    if (idEpElegido) {
+      getIndicaciones();
+    } else {
+      setIndicaciones([]);
+      navigate('/list-pacientes', { replace: true });
+    }
     getMedicamento();
-  }, []);
+  }, [idEpElegido, navigate]);
 
   // Funcion que obtiene la lista de indicaciones de un paciente
   const getIndicaciones = async () => {
+    if (!idEpElegido) return;
+
     let response = await indicacionRepository.get(idEpElegido);
 
-    if (response) {
-      setIndicaciones(response.data);
+    if (response?.success) {
+      setIndicaciones(response.data.results ?? response.data);
     }
   };
 
@@ -69,19 +78,21 @@ const ListaIndicacion = () => {
       estadoMedicamento !== ''
     ) {
       let data = {
-        cantidadmiligramos: dosisMedicamento,
-        estavigente: estadoMedicamento,
+        cantidadmiligramos: Number(dosisMedicamento),
+        estavigente: Number(estadoMedicamento),
         fechaprescripcion: fechaMedicamento,
         horadetoma: horaMedicamento,
-        idpersonaep: idEpElegido,
-        idmedicamento: idMedicamento,
-        borrado: '0',
+        idpersonaep: Number(idEpElegido),
+        idmedicamento: Number(idMedicamento),
+        borrado: 0,
       };
       indicacionRepository
         .update(id, data)
-        .then(() => {
-          getIndicaciones();
-          notificacionGuardar();
+        .then((response) => {
+          if (response?.success) {
+            getIndicaciones();
+            notificacionGuardar();
+          }
         })
         .catch(() => undefined);
       setCampo({ medicamento: '', dosis: '', hora: '', fecha: '', estado: '' });
@@ -119,19 +130,21 @@ const ListaIndicacion = () => {
       estadoMedicamento !== ''
     ) {
       let data = {
-        cantidadmiligramos: dosisMedicamento,
-        estavigente: estadoMedicamento,
+        cantidadmiligramos: Number(dosisMedicamento),
+        estavigente: Number(estadoMedicamento),
         fechaprescripcion: fechaMedicamento,
         horadetoma: horaMedicamento,
-        idpersonaep: idEpElegido,
-        idmedicamento: idMedicamento,
-        borrado: '0',
+        idpersonaep: Number(idEpElegido),
+        idmedicamento: Number(idMedicamento),
+        borrado: 0,
       };
       indicacionRepository
         .create(data)
-        .then(() => {
-          getIndicaciones();
-          notificacionGuardar();
+        .then((response) => {
+          if (response?.success) {
+            getIndicaciones();
+            notificacionGuardar();
+          }
         })
         .catch(() => undefined);
       setCampo({ medicamento: '', dosis: '', hora: '', fecha: '', estado: '' });
@@ -148,18 +161,20 @@ const ListaIndicacion = () => {
     id
   ) => {
     var data = {
-      cantidadmiligramos: cantidadmiligramos,
-      estavigente: estavigente,
+      cantidadmiligramos: Number(cantidadmiligramos),
+      estavigente: Number(estavigente),
       fechaprescripcion: fechaprescripcion,
       horadetoma: horadetoma,
-      idpersonaep: idEpElegido,
-      idmedicamento: idmedicamento,
-      borrado: '1',
+      idpersonaep: Number(idEpElegido),
+      idmedicamento: Number(idmedicamento),
+      borrado: 1,
     };
     indicacionRepository
       .update(id, data)
-      .then(() => {
-        getIndicaciones();
+      .then((response) => {
+        if (response?.success) {
+          getIndicaciones();
+        }
       })
       .catch(() => undefined);
     setShow(false);

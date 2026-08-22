@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { diagnosticoRepository } from '../services/diagnostico.service';
 import { evolucionRepository } from '../services/evolucion.service';
 import { osRepository } from '../services/os.service';
@@ -11,26 +12,34 @@ import styles from '../styles/ficha-medica.module.css';
 const FichaMedica = () => {
   const idEpElegido = useSelector((state) => state.global.idEpElegido);
   const nombreEpElegido = useSelector((state) => state.global.nombreEpElegido);
-  const dispatch = useDispatch();
-
-  const [diagnosticos, setDiagnosticos] = useState();
-  const [evoluciones, setEvoluciones] = useState();
-  const [osociales, setOsociales] = useState();
-  const [indicaciones, setIndicaciones] = useState();
+  const navigate = useNavigate();
+  const [diagnosticos, setDiagnosticos] = useState([]);
+  const [evoluciones, setEvoluciones] = useState([]);
+  const [osociales, setOsociales] = useState([]);
+  const [indicaciones, setIndicaciones] = useState([]);
 
   useEffect(() => {
+    if (!idEpElegido) {
+      setDiagnosticos([]);
+      setEvoluciones([]);
+      setOsociales([]);
+      setIndicaciones([]);
+      navigate('/list-pacientes', { replace: true });
+      return;
+    }
+
     getDiagnosticos();
     getEvoluciones();
     getOs();
     getIndicaciones();
-  }, []);
+  }, [idEpElegido, navigate]);
 
   // Funcion que obtiene la lista de diagnosticos de un paciente
   const getDiagnosticos = async () => {
     let response = await diagnosticoRepository.get(idEpElegido);
 
-    if (response) {
-      setDiagnosticos(response.data);
+    if (response?.success) {
+      setDiagnosticos(response.data.results ?? response.data);
     }
   };
 
@@ -38,8 +47,8 @@ const FichaMedica = () => {
   const getEvoluciones = async () => {
     let response = await evolucionRepository.get(idEpElegido);
 
-    if (response) {
-      setEvoluciones(response.data);
+    if (response?.success) {
+      setEvoluciones(response.data.results ?? response.data);
     }
   };
 
@@ -47,8 +56,8 @@ const FichaMedica = () => {
   const getOs = async () => {
     let response = await osRepository.get(idEpElegido);
 
-    if (response) {
-      setOsociales(response.data);
+    if (response?.success) {
+      setOsociales(response.data.results ?? response.data);
     }
   };
 
@@ -56,8 +65,8 @@ const FichaMedica = () => {
   const getIndicaciones = async () => {
     let response = await indicacionRepository.get(idEpElegido);
 
-    if (response) {
-      setIndicaciones(response.data);
+    if (response?.success) {
+      setIndicaciones(response.data.results ?? response.data);
     }
   };
 

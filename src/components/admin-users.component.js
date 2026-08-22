@@ -331,23 +331,18 @@ const AdminUsuarios = () => {
   // Lista visible: la filtrada por el buscador o la completa.
   const listaVisible = usuariosFiltrados !== undefined ? usuariosFiltrados : usuarios;
   return (
-    <main
-      className={
-        'border-top-sm m-0 row justify-content-center panel-gris m-md-3 rounded shadow container-lg mx-md-auto ' +
-        styles.pageHeader
-      }
-    >
+    <main className="border-top-sm m-0 justify-content-center m-md-3 rounded shadow container-lg mx-md-auto panel-gris">
       <div className="mb-4 col-12 col-md-9 col-lg-12 col-xl-10">
         <h2 className="mt-4 text-center">Administrar Usuarios</h2>
         <hr />
         <form
-          className="row"
+          className="row align-items-center"
           onSubmit={(e) => {
             e.preventDefault(); // Evita que la página web se recargue por completo
             buscar();           // Llama a tu función de búsqueda existente
           }}
         >
-          <div className={'mb-4 col-12 col-md-12 col-lg-12 col-xl-12 ' + styles.searchInputWrapper}>
+          <div className={'mb-4 col-12 col-md-9 col-lg-9 col-xl-9 ' + styles.searchInputWrapper}>
             <input
               type="search"
               className="form-control"
@@ -358,16 +353,18 @@ const AdminUsuarios = () => {
               value={campo['buscador'] || ''}
             />
           </div>
-        </form>
-
-        <div className="row">
-          <div className={'mb-4 col-12 col-md-12 col-lg-12 col-xl-12 ' + styles.textRight}>
-            <button type="button" className="btn btn-primary mb-2 mt-2" onClick={() => agregar()}>
+          <div
+            className={
+              'mb-4 col-12 col-md-3 col-lg-3 col-xl-3 ' +
+              styles.searchActions
+            }
+          >
+            <button type="button" className="btn btn-primary" onClick={() => agregar()}>
               <PlusIcon className="signoMas" />
-              Agregar
+              Agregar Nuevo
             </button>
           </div>
-        </div>
+        </form>
 
         {showNuevo ? (
           <div className="border-top-sm m-0 row justify-content-center panel-gris m-md-3 rounded shadow container-lg mx-md-auto">
@@ -673,11 +670,6 @@ const AdminUsuarios = () => {
                     ))}
               </tbody>
             </table>
-            {usuariosFiltrados !== undefined && usuariosFiltrados.length === 0 && (
-              <p className="text-center text-muted">
-                No se encontraron usuarios con el nombre buscado.
-              </p>
-            )}
           </div>
         </div>
       </div>

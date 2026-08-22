@@ -1,11 +1,27 @@
 import { logAsyncError } from '../components/error-boundary/logError';
 import { showToast, showModal } from './notification.service';
 
+const formatValidationErrors = (data) => {
+  if (!data) return '';
+  if (typeof data === 'string') return data;
+  if (Array.isArray(data)) {
+    return data.map((item) => formatValidationErrors(item)).filter(Boolean).join(', ');
+  }
+
+  return Object.entries(data)
+    .map(([field, value]) => {
+      const message = formatValidationErrors(value);
+      return message ? `${field}: ${message}` : '';
+    })
+    .filter(Boolean)
+    .join('; ');
+};
+
 export const normalizeError = (error) => {
   if (error.response) {
     const { status, data } = error.response;
-    let message = data?.message || data?.detail || `Error ${status}`;
-    if (Array.isArray(data)) message = data.map((e) => e.msg || e).join(', ');
+    const message =
+      data?.message || data?.detail || formatValidationErrors(data) || `Error ${status}`;
     return {
       message,
       status,
@@ -35,7 +51,12 @@ export const withServiceHandler = (fn, options = {}) => {
       return { success: true, data: result };
     } catch (error) {
       const normalized = normalizeError(error);
-      logAsyncError(error, { service: context, method: fn.name, args });
+      logAsyncError(error, {
+        service: context,
+        method: fn.name,
+        args,
+        response: error.response?.data,
+      });
       if (showNotification) {
         const severity = forceSeverity || normalized.severity;
         if (severity === 'modal') {

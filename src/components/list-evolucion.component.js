@@ -1,4 +1,5 @@
 import React, { memo, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { useSelector } from 'react-redux';
 import { evolucionRepository } from '../services/evolucion.service';
@@ -9,6 +10,7 @@ import styles from '../styles/list-evolucion.module.css';
 const ListaEvolucion = () => {
   const idEpElegido = useSelector((state) => state.global.idEpElegido);
   const nombreEpElegido = useSelector((state) => state.global.nombreEpElegido);
+  const navigate = useNavigate();
 
   const [show, setShow] = useState(false);
   const [showNuevo, setShowNuevo] = useState(false);
@@ -17,18 +19,23 @@ const ListaEvolucion = () => {
     fecha: '',
   });
   const [idEditado, setIdEditado] = useState('');
-  const [evoluciones, setEvoluciones] = useState();
+  const [evoluciones, setEvoluciones] = useState([]);
 
   useEffect(() => {
+    if (!idEpElegido) {
+      setEvoluciones([]);
+      navigate('/list-pacientes', { replace: true });
+      return;
+    }
     getEvoluciones();
-  }, []);
+  }, [idEpElegido, navigate]);
 
   // Funcion que obtiene la lista de evolucion de un paciente
   const getEvoluciones = async () => {
     let response = await evolucionRepository.get(idEpElegido);
 
-    if (response) {
-      setEvoluciones(response.data);
+    if (response?.success) {
+      setEvoluciones(response.data.results ?? response.data);
     }
   };
 
@@ -45,16 +52,18 @@ const ListaEvolucion = () => {
     let id = idEditado;
     if (escala !== '' && fechaEvolucion !== '') {
       let data = {
-        escalaevolucion: escala,
+        escalaevolucion: Number(escala),
         fecha: fechaEvolucion,
-        idpersonaep: idEpElegido,
-        borrado: '0',
+        idpersonaep: Number(idEpElegido),
+        borrado: 0,
       };
       evolucionRepository
         .update(id, data)
-        .then(() => {
-          getEvoluciones();
-          notificacionGuardar();
+        .then((response) => {
+          if (response?.success) {
+            getEvoluciones();
+            notificacionGuardar();
+          }
         })
         .catch(() => undefined);
       setCampo({ nroEvolucion: '', fecha: '' });
@@ -83,16 +92,18 @@ const ListaEvolucion = () => {
     let fechaEvolucion = campo.fecha;
     if (escala !== '' && fechaEvolucion !== '') {
       let data = {
-        escalaevolucion: escala,
+        escalaevolucion: Number(escala),
         fecha: fechaEvolucion,
-        idpersonaep: idEpElegido,
-        borrado: '0',
+        idpersonaep: Number(idEpElegido),
+        borrado: 0,
       };
       evolucionRepository
         .create(data)
-        .then(() => {
-          getEvoluciones();
-          notificacionGuardar();
+        .then((response) => {
+          if (response?.success) {
+            getEvoluciones();
+            notificacionGuardar();
+          }
         })
         .catch(() => undefined);
       setCampo({ nroEvolucion: '', fecha: '' });
@@ -102,15 +113,17 @@ const ListaEvolucion = () => {
 
   const eliminar = (escalaevolucion, fecha, id) => {
     var data = {
-      escalaevolucion: escalaevolucion,
+      escalaevolucion: Number(escalaevolucion),
       fecha: fecha,
-      idpersonaep: idEpElegido,
-      borrado: '1',
+      idpersonaep: Number(idEpElegido),
+      borrado: 1,
     };
     evolucionRepository
       .update(id, data)
-      .then(() => {
-        getEvoluciones();
+      .then((response) => {
+        if (response?.success) {
+          getEvoluciones();
+        }
       })
       .catch(() => undefined);
     setShow(false);

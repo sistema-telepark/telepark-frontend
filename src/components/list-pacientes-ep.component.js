@@ -25,12 +25,12 @@ const ListaPaciente = (props) => {
     getPacientes();
   }, []);
 
-  // Funcion que obtiene la lista de pacientes
-  // B01 (HITL 2026-08-11): /personas?espaciente=1 devuelve envelope DRF paginado
-  // {count,next,previous,results} → normalizar a .results (patrón RA-13).
+  // Obtiene únicamente las personas que tienen ficha de EP.
   const getPacientes = async () => {
-    const response = await pacienteRepository.getPacientes().catch(() => utils.notificacionError());
-    if (response && response.data) {
+    const response = await pacienteRepository
+      .getPacientesEp()
+      .catch(() => utils.notificacionError());
+    if (response?.success) {
       setPacientes(response.data.results ?? response.data);
       setLoading(false);
     }

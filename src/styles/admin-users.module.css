@@ -6,6 +6,12 @@
   margin-bottom: 10px;
 }
 
+.searchActions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
 .noPaddingLeft {
   padding-left: 0;
 }

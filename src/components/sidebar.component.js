@@ -9,7 +9,6 @@ import {
   HomeIcon,
   AdminUsersIcon,
   AddPersonIcon,
-  SearchSidebarIcon,
   FamilyIcon,
   MedicalRecordIcon,
   NomencladorIcon,
@@ -20,7 +19,7 @@ import {
 
 import { ClipboardDataIcon, ClipboardCheckIcon, EyeIcon } from './icons/icons-shared';
 
-const Sidebar = (props) => {
+const Sidebar = () => {
   //funciones
   const [open, setOpen] = useState(false);
   const toggleSidebar = () => setOpen((prevOpen) => !prevOpen);
@@ -74,13 +73,6 @@ const Sidebar = (props) => {
             <span className="links_name">Ingresar Persona con EP</span>
           </a>
           <span className="tooltip">Ingresar Persona con EP</span>
-        </li>
-        <li className={current_url === '/search' ? 'active' : ''}>
-          <a href="./search">
-            <SearchSidebarIcon />
-            <span className="links_name">Criterio de Búsqueda</span>
-          </a>
-          <span className="tooltip">Criterio de Búsqueda</span>
         </li>
 
         <li className={current_url === '/familiar' ? 'active' : ''}>

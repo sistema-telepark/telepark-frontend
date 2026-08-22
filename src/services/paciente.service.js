@@ -73,9 +73,17 @@ const pacientes = {
     const response = await http.get(`/personas?espaciente=1`);
     return response.data;
   },
+
+  async getPacientesEp() {
+    const response = await http.get(`/personas-ep`);
+    return response.data;
+  },
 };
 
 export const pacienteRepository = {
   guardarPaciente: withServiceHandler(pacientes.guardarPaciente, { context: 'guardar paciente' }),
   getPacientes: withServiceHandler(pacientes.getPacientes, { context: 'obtener pacientes' }),
+  getPacientesEp: withServiceHandler(pacientes.getPacientesEp, {
+    context: 'obtener personas con EP',
+  }),
 };

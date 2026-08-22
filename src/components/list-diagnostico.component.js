@@ -1,4 +1,5 @@
 import React, { memo, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { useSelector } from 'react-redux';
 import { diagnosticoRepository } from '../services/diagnostico.service';
@@ -10,6 +11,7 @@ import styles from '../styles/list-diagnostico.module.css';
 const ListaDiagnostico = () => {
   const idEpElegido = useSelector((state) => state.global.idEpElegido);
   const nombreEpElegido = useSelector((state) => state.global.nombreEpElegido);
+  const navigate = useNavigate();
 
   const [show, setShow] = useState(false);
   const [showNuevo, setShowNuevo] = useState(false);
@@ -23,8 +25,13 @@ const ListaDiagnostico = () => {
 
   useEffect(() => {
     getEnfermedad();
-    getDiagnosticos();
-  }, []);
+    if (idEpElegido) {
+      getDiagnosticos();
+    } else {
+      setDiagnosticos([]);
+      navigate('/list-pacientes', { replace: true });
+    }
+  }, [idEpElegido, navigate]);
 
   // Funcion que obtiene la lista de enfermedades
   const getEnfermedad = async () => {
@@ -66,14 +73,14 @@ const ListaDiagnostico = () => {
     if (idEnfermedad !== '' && fechaEnfermedad !== '') {
       var data = {
         fecha: fechaEnfermedad,
-        idpersonaep: idEpElegido,
-        idenfermedad: idEnfermedad,
-        borrado: '0',
+        idpersonaep: Number(idEpElegido),
+        idenfermedad: Number(idEnfermedad),
+        borrado: 0,
       };
       diagnosticoRepository
         .update(id, data)
         .then((response) => {
-          if (response) {
+          if (response?.success) {
             getDiagnosticos();
             notificacionGuardar();
           }
@@ -106,14 +113,14 @@ const ListaDiagnostico = () => {
     if (idEnfermedad !== '' && fechaEnfermedad !== '') {
       let data = {
         fecha: fechaEnfermedad,
-        idpersonaep: idEpElegido,
-        idenfermedad: idEnfermedad,
-        borrado: '0',
+        idpersonaep: Number(idEpElegido),
+        idenfermedad: Number(idEnfermedad),
+        borrado: 0,
       };
       diagnosticoRepository
         .create(data)
         .then((reponse) => {
-          if (reponse) {
+          if (reponse?.success) {
             getDiagnosticos();
             notificacionGuardar();
           }
@@ -127,9 +134,9 @@ const ListaDiagnostico = () => {
   const eliminar = (idenfermedad, fecha, id) => {
     var data = {
       fecha: fecha,
-      idpersonaep: idEpElegido,
-      idenfermedad: idenfermedad,
-      borrado: '1',
+      idpersonaep: Number(idEpElegido),
+      idenfermedad: Number(idenfermedad),
+      borrado: 1,
     };
     diagnosticoRepository
       .update(id, data)

@@ -2,6 +2,16 @@
   margin-right: 10px;
 }
 
+.searchInputWrapper {
+  margin-bottom: 10px;
+}
+
+.searchActions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
 .checkLabel {
   inline-size: max-content;
 }

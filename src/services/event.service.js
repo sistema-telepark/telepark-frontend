@@ -37,6 +37,10 @@ const events = {
     const response = await http.get(`/personas?espaciente=1`);
     return response.data;
   },
+  async getPersonEp() {
+    const response = await http.get(`/personas-ep`);
+    return response.data;
+  },
   async updatePerson(id, data) {
     const response = await http.put(`/personas/${id}`, data);
     return response.data;
@@ -60,6 +64,7 @@ export const eventRespository = {
   getEventGestionAll: withServiceHandler(events.getEventGestionAll, { context: 'obtener eventos' }),
   getAll: withServiceHandler(events.getAll, { context: 'obtener personas' }),
   getPersonAll: withServiceHandler(events.getPersonAll, { context: 'obtener pacientes' }),
+  getPersonEp: withServiceHandler(events.getPersonEp, { context: 'obtener personas con EP' }),
   updatePerson: withServiceHandler(events.updatePerson, { context: 'actualizar persona' }),
   deletePerson: withServiceHandler(events.deletePerson, { context: 'eliminar persona' }),
 };
