@@ -485,7 +485,12 @@ function App() {
   const [userRole, setUserRole] = useState(TokenService.getRole());
 
   return (
-    <Router>
+    <Router
+      future={{
+        v7_startTransition: true,
+        v7_relativeSplatPath: true,
+      }}
+    >
       <AppContent
         token={token}
         userName={userName}

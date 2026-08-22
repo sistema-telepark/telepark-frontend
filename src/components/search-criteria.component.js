@@ -284,7 +284,7 @@ const Search = () => {
 
       {/* EDITAR */}
       <Modal isOpen={modalEdit}>
-        <ModalHeader>
+        <ModalHeader tag="div">
           <div>
             <h2>Editar la persona con ep</h2>
           </div>
@@ -363,7 +363,7 @@ const Search = () => {
 
       {/* AGREGAR PERSONA CON EP */}
       <Modal isOpen={modalInsert}>
-        <ModalHeader className="justify-content-center">
+        <ModalHeader tag="div" className="justify-content-center">
           <h2 className="mb-0">Agregar persona con EP</h2>
         </ModalHeader>
         <ModalBody>

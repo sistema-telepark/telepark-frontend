@@ -4,7 +4,7 @@ import { userRepository } from '../services/users.service';
 import Swal from 'sweetalert2';
 import { TokenService } from '../services/token.service';
 import utils from '../utils/utils';
-import { SearchIcon, PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
+import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
 import styles from '../styles/admin-users.module.css';
 import { showToast, showConfirm } from '../services/notification.service';
 
@@ -27,6 +27,9 @@ const AdminUsuarios = () => {
   const detectarCambio = (field, e) => {
     // Cambio de estado de campo — inmutable
     setCampo({ ...campo, [field]: e.target.value });
+    if (field === 'buscador') {
+      buscar(e.target.value);
+    }
     // Si el usuario vació el buscador (o apretó la cruz nativa 'X'), restauramos la lista completa
     if (field === 'buscador' && e.target.value.trim() === '') {
       setUsuariosFiltrados(undefined);
@@ -309,8 +312,8 @@ const AdminUsuarios = () => {
   // Función buscar: filtra la lista de usuarios cargada en memoria (client-side, RF-05).
   // Normaliza el término una sola vez (case-insensitive) y busca sobre username,
   // first_name y last_name (campos declarados en el contrato del backend).
-  const buscar = () => {
-    const termino = (campo.buscador || '').trim().toLowerCase();
+  const buscar = (valor = campo.buscador) => {
+    const termino = (valor || '').trim().toLowerCase();
     if (!usuarios) return;
     if (termino === '') {
       setUsuariosFiltrados(undefined);
@@ -325,8 +328,7 @@ const AdminUsuarios = () => {
     setUsuariosFiltrados(filtrados);
   };
 
-  // Lista visible: la filtrada por la lupa (RF-01) o la completa (RF-03).
-  // El render NO filtra en vivo (RF-04).
+  // Lista visible: la filtrada por el buscador o la completa.
   const listaVisible = usuariosFiltrados !== undefined ? usuariosFiltrados : usuarios;
   return (
     <main
@@ -345,7 +347,7 @@ const AdminUsuarios = () => {
             buscar();           // Llama a tu función de búsqueda existente
           }}
         >
-          <div className={'mb-4 col-10 col-md-10 col-lg-6 col-xl-6 ' + styles.searchInputWrapper}>
+          <div className={'mb-4 col-12 col-md-12 col-lg-12 col-xl-12 ' + styles.searchInputWrapper}>
             <input
               type="search"
               className="form-control"
@@ -355,16 +357,6 @@ const AdminUsuarios = () => {
               onChange={(e) => detectarCambio('buscador', e)}
               value={campo['buscador'] || ''}
             />
-          </div>
-          <div className={'mb-4 col-2 col-md-2 col-lg-6 col-xl-6 ' + styles.noPaddingLeft}>
-            <button
-              type="button"
-              className="btn btn-verde"
-              onClick={() => buscar()}
-              aria-label="Buscar"
-            >
-              <SearchIcon />
-            </button>
           </div>
         </form>
 
@@ -380,7 +372,7 @@ const AdminUsuarios = () => {
         {showNuevo ? (
           <div className="border-top-sm m-0 row justify-content-center panel-gris m-md-3 rounded shadow container-lg mx-md-auto">
             <h4 className="mt-4">
-              Agregar Usuario <h6 className={styles.required}>(*) Campos Requeridos</h6>
+              Agregar Usuario <span className={styles.required}>(*) Campos Requeridos</span>
             </h4>
             <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
               <label className="col-form-label">
@@ -512,7 +504,7 @@ const AdminUsuarios = () => {
         {show ? (
           <div className="border-top-sm m-0 row justify-content-center panel-gris m-md-3 rounded shadow container-lg mx-md-auto">
             <h4 className="mt-4">
-              Editar Usuario <h6 className={styles.required}>(*) Campos Requeridos</h6>
+              Editar Usuario <span className={styles.required}>(*) Campos Requeridos</span>
             </h4>
             <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
               <label className="col-form-label">
