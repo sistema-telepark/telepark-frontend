@@ -36,10 +36,13 @@ const AddPaciente = () => {
   }, []);
 
   const enviarFormulario = async (data) => {
-    const response = await pacienteRepository.guardarPaciente(data).catch(() => utils.errorSend());
-    if (response) {
+    const response = await pacienteRepository.guardarPaciente(data).catch(() => null);
+
+    if (response?.success) {
       utils.send();
       reset();
+    } else {
+      utils.errorSend();
     }
   };
 

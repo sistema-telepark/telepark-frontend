@@ -46,7 +46,7 @@ const Login = () => {
 
         if (response) {
           TokenService.setUser(response.data);
-          send(response.data);
+          send();
         }
       } catch (error) {
         errorSend();
@@ -64,7 +64,7 @@ const Login = () => {
     setCampo({ ...campo, [field]: e.target.value });
   };
 
-  const send = (data) => {
+  const send = () => {
     Swal.fire({
       position: 'center',
       icon: 'success',
@@ -73,15 +73,9 @@ const Login = () => {
       timer: 1500,
     });
 
-    if (data.is_superuser === true) {
-      setTimeout(() => {
-        navigate('/list-usuarios');
-      }, 1500);
-    } else {
-      setTimeout(() => {
-        navigate('/add-paciente');
-      }, 1500);
-    }
+    setTimeout(() => {
+      navigate('/home');
+    }, 1500);
   };
 
   const errorSend = () => {
@@ -99,10 +93,7 @@ const Login = () => {
     });
   };
 
-  if (TokenService.getLocalAccessToken() && TokenService.getRole() === true)
-    return <Navigate to="/list-usuarios" replace />;
-  if (TokenService.getLocalAccessToken() && TokenService.getRole() !== true)
-    return <Navigate to="/add-paciente" replace />;
+  if (TokenService.getLocalAccessToken()) return <Navigate to="/home" replace />;
 
   return (
     <div className="col-12 col-md-6 col-lg-4 col-xl-4">

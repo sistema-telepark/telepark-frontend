@@ -50,8 +50,8 @@ const Sidebar = (props) => {
         </button>
       </div>
       <ul className="nav-list">
-        <li>
-          <a href="/">
+        <li className={current_url === '/home' ? 'active' : ''}>
+          <a href="/home">
             <HomeIcon />
             <span className="links_name">Home</span>
           </a>

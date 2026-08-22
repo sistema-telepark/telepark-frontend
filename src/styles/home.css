@@ -1,0 +1,11 @@
+.home-container {
+  min-height: calc(100vh - 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-container img {
+  width: 180px;
+  height: auto;
+}

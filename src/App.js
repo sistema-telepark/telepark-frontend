@@ -1,6 +1,6 @@
 import React, { Suspense, lazy, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 import './App.css';
 // Imports estáticos (NO lazy) — se cargan siempre
@@ -16,6 +16,9 @@ import { TokenService } from './services/token.service';
 const Login = lazy(() => import(/* webpackChunkName: "login" */ './components/login.component'));
 const AdminUsuarios = lazy(
   () => import(/* webpackChunkName: "admin-usuarios" */ './components/admin-users.component')
+);
+const Home = lazy(
+  () => import('./components/home.component')
 );
 const AddPaciente = lazy(
   () => import(/* webpackChunkName: "add-paciente" */ './components/add-paciente.component')
@@ -72,6 +75,9 @@ const Familiar = lazy(
 );
 
 function AppContent({ token, userName, userRole, setToken, setUserName, setUserRole }) {
+  const location = useLocation();
+  const mostrarFooter = token && location.pathname !== '/home';
+
   useEffect(() => {
     const handleAuthChange = () => {
       setToken(TokenService.getLocalAccessToken());
@@ -132,6 +138,14 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
             />
             {token && (
               <Route element={<ProtectedRoute />}>
+                <Route
+                  path="/home"
+                  element={
+                    <Suspense fallback={<LoadingSpinner />}>
+                      <Home />
+                    </Suspense>
+                  }
+                />
                 {userRole === true ? (
                   <>
                     <Route
@@ -451,7 +465,7 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
         </div>
       </div>
 
-      {token ? <Footer /> : ''}
+      {mostrarFooter ? <Footer /> : ''}
     </>
   );
 }

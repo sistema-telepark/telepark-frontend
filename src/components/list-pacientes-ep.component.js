@@ -107,24 +107,24 @@ const ListaPaciente = (props) => {
                   pacientes
                     .filter(
                       (paciente) =>
-                        paciente.idpersona.nombre.toLowerCase().includes(buscar) ||
-                        paciente.idpersona.apellido.toLowerCase().includes(buscar) ||
-                        paciente.idpersona.nombre.toUpperCase().includes(buscar) ||
-                        paciente.idpersona.apellido.toUpperCase().includes(buscar)
+                        paciente.nombre.toLowerCase().includes(buscar) ||
+                        paciente.apellido.toLowerCase().includes(buscar) ||
+                        paciente.nombre.toUpperCase().includes(buscar) ||
+                        paciente.apellido.toUpperCase().includes(buscar)
                     )
                     .map((paciente) => (
-                      <tr key={paciente.idpersona?.idpersona ?? paciente.id}>
+                      <tr key={paciente.idpersona ?? paciente.id}>
                         <td>
-                          {paciente.idpersona.nombre} {paciente.idpersona.apellido}
+                          {paciente.nombre} {paciente.apellido}
                         </td>
                         <td>
                           <Link
                             to="/ficha"
                             onClick={() =>
                               verSeccion(
-                                paciente.idpersona.idpersona,
-                                paciente.idpersona.nombre,
-                                paciente.idpersona.apellido
+                                paciente.idpersona,
+                                paciente.nombre,
+                                paciente.apellido
                               )
                             }
                           >
@@ -141,9 +141,9 @@ const ListaPaciente = (props) => {
                             to="/list-diagnostico"
                             onClick={() =>
                               verSeccion(
-                                paciente.idpersona.idpersona,
-                                paciente.idpersona.nombre,
-                                paciente.idpersona.apellido
+                                paciente.idpersona,
+                                paciente.nombre,
+                                paciente.apellido
                               )
                             }
                           >
@@ -160,9 +160,9 @@ const ListaPaciente = (props) => {
                             to="/list-evolucion"
                             onClick={() =>
                               verSeccion(
-                                paciente.idpersona.idpersona,
-                                paciente.idpersona.nombre,
-                                paciente.idpersona.apellido
+                                paciente.idpersona,
+                                paciente.nombre,
+                                paciente.apellido
                               )
                             }
                           >
@@ -179,9 +179,9 @@ const ListaPaciente = (props) => {
                             to="/list-obrasocial"
                             onClick={() =>
                               verSeccion(
-                                paciente.idpersona.idpersona,
-                                paciente.idpersona.nombre,
-                                paciente.idpersona.apellido
+                                paciente.idpersona,
+                                paciente.nombre,
+                                paciente.apellido
                               )
                             }
                           >
@@ -198,9 +198,9 @@ const ListaPaciente = (props) => {
                             to="/list-indicacion"
                             onClick={() =>
                               verSeccion(
-                                paciente.idpersona.idpersona,
-                                paciente.idpersona.nombre,
-                                paciente.idpersona.apellido
+                                paciente.idpersona,
+                                paciente.nombre,
+                                paciente.apellido
                               )
                             }
                           >

@@ -1,5 +1,5 @@
 import React, { memo, useState, useEffect } from 'react';
-import { PencilIcon, PlusIcon } from './icons/icons-shared';
+import { PencilIcon, PlusIcon, TrashIcon } from './icons/icons-shared';
 import { useForm } from 'react-hook-form';
 import { pacienteRepository } from '../services/paciente.service';
 import Vivienda from './add-paciente/vivienda.component';
@@ -269,10 +269,10 @@ const Search = () => {
                     </button>
                     <button
                       type="button"
-                      className="btn btn-danger"
+                      className="btn btn-rojo me-1"
                       onClick={() => eliminar(person)}
                     >
-                      Eliminar
+                      <TrashIcon />
                     </button>
                   </td>
                 </tr>

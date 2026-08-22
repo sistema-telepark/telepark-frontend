@@ -42,8 +42,14 @@ const pacientes = {
     let personaEP = await http.post(`/personas`, dataPersEP);
 
     let dataPaciente = {
-      activataller: '1',
-      escolaridadcompleta: '0',
+      nombre: data.nombreEP,
+      apellido: data.apellidoEP,
+      telefono: data.telefonoEP,
+      borrado: 0,
+      espaciente: 1,
+
+      activataller: 1,
+      escolaridadcompleta: 0,
       fechainicio: new Date(),
       fechanacimiento: data.nacimientoEP,
       maximaescolaridadalcanzada: data.escolaridadEP,
@@ -53,6 +59,7 @@ const pacientes = {
       vivesolo: data.viveSoloEP ? 1 : 0,
       ocupacionprevia: data.ocupacionPEP,
       ocupacionactual: data.ocupacionAEP,
+
       idpersona: personaEP.data.idpersona,
       idreferente: personaR.data.idpersona,
     };
