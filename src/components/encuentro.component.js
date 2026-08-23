@@ -239,7 +239,7 @@ const Encuentro = () => {
           <table className="table table-striped">
             <thead>
               <tr>
-                <th scope="col">Código</th>
+                <th scope="col">ID</th>
                 <th scope="col">Fecha</th>
                 <th scope="col">Virtual</th>
                 <th scope="col">Acción</th>

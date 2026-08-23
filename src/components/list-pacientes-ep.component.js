@@ -80,7 +80,7 @@ const ListaPaciente = (props) => {
             <table className="table table-bordered table-hover shadow table-striped">
               <thead>
                 <tr>
-                  <th scope="col">Paciente</th>
+                  <th scope="col">Persona con EP</th>
                   <th scope="col">Acción</th>
                 </tr>
               </thead>

@@ -203,7 +203,7 @@ const TypeEvents = () => {
           <table className="table table-striped">
             <thead>
               <tr>
-                <th scope="col">Código</th>
+                <th scope="col">ID</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Desactivar Taller</th>
                 <th scope="col">Acción</th>
