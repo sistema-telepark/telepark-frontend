@@ -236,7 +236,7 @@ const Encuentro = () => {
         </button>
         <br />
         <div className="row m-md-3 shadow mx-md-auto border-top-sm m-0">
-          <table className="table">
+          <table className="table table-striped">
             <thead>
               <tr>
                 <th scope="col">Código</th>
@@ -489,7 +489,7 @@ const Encuentro = () => {
         <ModalBody>
           <div className="row">
             <div className={`col-12 col-md-12 col-lg-12 col-xl-12 ${styles.scrollContainer}`}>
-              <table className="table table-bordered table-hover shadow">
+              <table className="table table-bordered table-hover shadow table-striped">
                 <tbody>
                   {nombresTalleres.map((tallerNombre) => (
                     <React.Fragment key={tallerNombre}>

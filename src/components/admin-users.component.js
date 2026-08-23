@@ -332,9 +332,16 @@ const AdminUsuarios = () => {
   const listaVisible = usuariosFiltrados !== undefined ? usuariosFiltrados : usuarios;
   return (
     <main className="border-top-sm m-0 justify-content-center m-md-3 rounded shadow container-lg mx-md-auto panel-gris">
-      <div className="mb-4 col-12 col-md-9 col-lg-12 col-xl-10">
         <h2 className="mt-4 text-center">Administrar Usuarios</h2>
         <hr />
+        <div className="row">
+          <div className="col-12">
+            <button type="button" className="btn btn-primary mb-2 mt-2" onClick={() => agregar()}>
+              <PlusIcon className="signoMas" />
+              Agregar
+            </button>
+          </div>
+        </div>
         <form
           className="row align-items-center"
           onSubmit={(e) => {
@@ -342,7 +349,7 @@ const AdminUsuarios = () => {
             buscar();           // Llama a tu función de búsqueda existente
           }}
         >
-          <div className={'mb-4 col-12 col-md-9 col-lg-9 col-xl-9 ' + styles.searchInputWrapper}>
+          <div className={'mb-4 col-12 ' + styles.searchInputWrapper}>
             <input
               type="search"
               className="form-control"
@@ -352,17 +359,6 @@ const AdminUsuarios = () => {
               onChange={(e) => detectarCambio('buscador', e)}
               value={campo['buscador'] || ''}
             />
-          </div>
-          <div
-            className={
-              'mb-4 col-12 col-md-3 col-lg-3 col-xl-3 ' +
-              styles.searchActions
-            }
-          >
-            <button type="button" className="btn btn-primary" onClick={() => agregar()}>
-              <PlusIcon className="signoMas" />
-              Agregar Nuevo
-            </button>
           </div>
         </form>
 
@@ -672,7 +668,6 @@ const AdminUsuarios = () => {
             </table>
           </div>
         </div>
-      </div>
     </main>
   );
 };

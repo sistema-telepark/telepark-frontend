@@ -1,4 +1,5 @@
 import React, { memo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import '../styles/sidebar.css';
 
@@ -32,7 +33,7 @@ const Sidebar = () => {
   };
 
   const user_role = TokenService.getRole();
-  const current_url = window.location.pathname;
+  const current_url = useLocation().pathname;
 
   return (
     <div className={'sidebar ' + (open ? 'open' : '')} id="sidebar">

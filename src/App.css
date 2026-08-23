@@ -153,9 +153,6 @@ table td {
   thead {
     display: none;
   }
-  tr:nth-of-type(2n) {
-    background-color: inherit;
-  }
   tr td:first-child {
     background: #f0f0f0;
     font-weight: bold;

@@ -200,7 +200,7 @@ const TypeEvents = () => {
           <PlusIcon className="signoMas" /> Agregar
         </button>
         <div className="row m-md-3 shadow mx-md-auto border-top-sm m-0">
-          <table className="table">
+          <table className="table table-striped">
             <thead>
               <tr>
                 <th scope="col">Código</th>
@@ -209,11 +209,11 @@ const TypeEvents = () => {
                 <th scope="col">Acción</th>
               </tr>
             </thead>
-            {typeEvent
-              .filter((element) => element.borrado === 0)
-              .map((element) => (
-                <tbody key={element.idtipoevento}>
-                  <tr>
+            <tbody>
+              {typeEvent
+                .filter((element) => element.borrado === 0)
+                .map((element) => (
+                  <tr key={element.idtipoevento}>
                     <td>{element.idtipoevento}</td>
                     <td>{element.nombre}</td>
                     <td>
@@ -241,8 +241,8 @@ const TypeEvents = () => {
                       </button>
                     </td>
                   </tr>
-                </tbody>
-              ))}
+                ))}
+            </tbody>
           </table>
         </div>
       </Container>

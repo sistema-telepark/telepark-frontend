@@ -203,9 +203,9 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
             className="form-control"
             placeholder="Departamento"
             {...register('departamento' + tipo, {
-              required: {
-                value: true,
-                message: 'El campo no puede estar vacío',
+              pattern: {
+                value: /^[a-zA-Z0-9]+$/g,
+                message: 'El campo debe contener solo letras y números',
               },
             })}
           />
@@ -220,10 +220,6 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
             className="form-control"
             placeholder="Piso"
             {...register('piso' + tipo, {
-              required: {
-                value: true,
-                message: 'El campo no puede estar vacío',
-              },
               pattern: {
                 value: /^-?[0-9]\d*\.?\d*$/g,
                 message: 'El campo debe contener solo números',

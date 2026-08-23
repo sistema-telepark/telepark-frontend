@@ -1,31 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { eventRespository } from '../services/event.service';
 import Swal from 'sweetalert2';
 import { PlusIcon } from './icons/icons-shared';
 import styles from '../styles/gestion-eventos.module.css';
 
+const initialEvents = {
+  fechaDesde: '',
+  fechaHasta: '',
+  motivo: '',
+  idpersonaep: '',
+  idtipoevento: '',
+};
+
 const Events = () => {
   const [typeEvent, setTypeEvent] = useState([]);
   const [namePersonEP, setNamePersonEP] = useState([]);
-  const [events, setEvents] = useState({
-    idEvento: 0,
-    fechaDesde: '',
-    fechaHasta: '',
-    motivo: '',
-    idpersonaep: '',
-    idtipoevento: '',
-  });
+  const [events, setEvents] = useState(initialEvents);
+  const formRef = useRef(null);
 
   useEffect(() => {
-    getPersonAll();
+    getPersonEpAll();
     getTipeEvent();
   }, []);
 
   // Función que obtiene la lista de personas con ep
-  // B01 (HITL 2026-08-11): /personas?espaciente=1 devuelve envelope DRF paginado
+  // B01 (HITL 2026-08-11): /personas-ep devuelve envelope DRF paginado
   // {count,next,previous,results} → normalizar a .results (patrón RA-13).
-  const getPersonAll = async () => {
-    let response = await eventRespository.getPersonAll();
+  const getPersonEpAll = async () => {
+    let response = await eventRespository.getPersonEp();
     if (response && response.data) {
       setNamePersonEP(response.data.results ?? response.data);
     }
@@ -49,8 +51,8 @@ const Events = () => {
   const guardarNuevo = () => {
     let data = {};
     data = {
-      fechadesde: events.fechaDesde,
-      fechahasta: events.fechaHasta,
+      fechadesde: events.fechaDesde || null,
+      fechahasta: events.fechaHasta || null,
       motivo: events.motivo,
       idpersonaep: events.idpersonaep,
       idtipoevento: events.idtipoevento,
@@ -61,10 +63,12 @@ const Events = () => {
       .createEvent(data)
       .then((response) => {
         if (response) {
+          setEvents(initialEvents);
+          formRef.current.reset();
           notificacionExito();
         }
       })
-      .catch((error) => {
+      .catch(() => {
         notificacionError();
       });
   };
@@ -120,6 +124,7 @@ const Events = () => {
   return (
     <div>
       <form
+        ref={formRef}
         id="myForm"
         onSubmit={(e) => {
           e.preventDefault();
@@ -197,15 +202,17 @@ const Events = () => {
                 <option value="" disabled>
                   Seleccione una persona
                 </option>
-                {namePersonEP.map((element) => (
-                  <option
-                    id="idpersonaep"
-                    key={element.idpersona.idpersona}
-                    value={element.idpersona.idpersona}
-                  >
-                    {element.idpersona.nombre} {element.idpersona.apellido}
-                  </option>
-                ))}
+                {namePersonEP.map((element) => {
+                  return (
+                    <option
+                      id={`persona-${element.idpersona}`}
+                      key={`persona-${element.idpersona}`}
+                      value={element.idpersona}
+                    >
+                      {element.nombre} {element.apellido}
+                    </option>
+                  );
+                })}
               </select>
             </div>
           </div>

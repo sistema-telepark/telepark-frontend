@@ -3,19 +3,21 @@ import { withServiceHandler } from './error-handler';
 
 const pacientes = {
   async guardarPaciente(data) {
+    const valorNumerico = (valor) => (valor === '' || valor === undefined ? null : Number(valor));
+
     let dataDireR = {
       calle: data.calleR,
-      departamento: 'A',
-      numero: data.numeroR,
-      piso: data.pisoR,
-      idlocalidad: '',
+      departamento: data.departamentoR || null,
+      numero: valorNumerico(data.numeroR),
+      piso: valorNumerico(data.pisoR),
+      idlocalidad: valorNumerico(data.localidadR),
     };
     let dataDireEP = {
       calle: data.calleEP,
-      departamento: 'A',
-      numero: data.numeroEP,
-      piso: data.pisoEP,
-      idlocalidad: '',
+      departamento: data.departamentoEP || null,
+      numero: valorNumerico(data.numeroEP),
+      piso: valorNumerico(data.pisoEP),
+      idlocalidad: valorNumerico(data.localidadEP),
     };
 
     let direccionR = await http.post(`/direcciones`, dataDireR);

@@ -185,7 +185,7 @@ const Talleres = () => {
         </button>
         <br />
         <div className="row m-md-3 shadow mx-md-auto border-top-sm m-0">
-          <table className="table">
+          <table className="table table-striped">
             <thead>
               <tr>
                 <th scope="col">Código</th>

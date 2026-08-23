@@ -60,9 +60,9 @@ const Consulta = () => {
   };
 
   const getPacientes = async () => {
-    const resp = await pacienteRepository.getPacientes();
+    const resp = await pacienteRepository.getPacientesEp();
     if (resp.success) {
-      setPacientes(resp.data.results);
+      setPacientes(resp.data.results ?? resp.data);
     }
   };
 
@@ -102,7 +102,7 @@ const Consulta = () => {
   // Consultar pacientes con faltas consecutivas en los últimos dos encuentros
   const consultarFaltasC = async () => {
     const respAsistencias = await asistenciaRepository.getAsistenciaAll();
-    const respPacientes = await pacienteRepository.getPacientes();
+    const respPacientes = await pacienteRepository.getPacientesEp();
     const respEncuentros = await encuentroRepository.getEncuentroAll();
 
     if (!respAsistencias.success || !respPacientes.success || !respEncuentros.success) {
@@ -144,7 +144,7 @@ const Consulta = () => {
       .map(([idpersonaep]) => idpersonaep);
 
     const pacientesFiltrados = pacientes.filter((paciente) =>
-      pacientesConFaltasConsecutivas.includes(String(paciente.idpersona.idpersona))
+      pacientesConFaltasConsecutivas.includes(String(paciente.idpersona))
     );
 
     setFaltaC(pacientesFiltrados);
@@ -152,8 +152,8 @@ const Consulta = () => {
   };
 
   const obtenerNombre = (idpersonaep) => {
-    const paciente = pacientes.find((p) => Number(p.idpersona.idpersona) === Number(idpersonaep));
-    return paciente ? `${paciente.idpersona.nombre} ${paciente.idpersona.apellido}` : 'Desconocido';
+    const paciente = pacientes.find((p) => Number(p.idpersona) === Number(idpersonaep));
+    return paciente ? `${paciente.nombre} ${paciente.apellido}` : 'Desconocido';
   };
 
   return (
@@ -251,9 +251,9 @@ const Consulta = () => {
                   </thead>
                   <tbody>
                     {faltaC.map((paciente) => (
-                      <tr key={paciente.idpersona.idpersona}>
+                      <tr key={paciente.idpersona}>
                         <td>
-                          {paciente.idpersona.nombre} {paciente.idpersona.apellido}
+                          {paciente.nombre} {paciente.apellido}
                         </td>
                       </tr>
                     ))}

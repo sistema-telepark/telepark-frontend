@@ -16,7 +16,6 @@ const ESTADO_AUSENTE = 'Ausente';
 const Asistencia = () => {
   const [encuentro, setEncuentro] = useState([]);
   const [pacientes, setPacientes] = useState([]);
-  const [asistencia, setAsistencia] = useState([]);
   const [evento, setEvento] = useState([]);
 
   const formAsistencia = useForm();
@@ -24,7 +23,6 @@ const Asistencia = () => {
   useEffect(() => {
     getEncuentroAll();
     getPacientes();
-    getAsistencia();
     getEventoAll();
   }, []);
 
@@ -36,16 +34,9 @@ const Asistencia = () => {
   };
 
   const getPacientes = async () => {
-    const resp = await pacienteRepository.getPacientes();
+    const resp = await pacienteRepository.getPacientesEp();
     if (resp.success) {
-      setPacientes(resp.data.results);
-    }
-  };
-
-  const getAsistencia = async () => {
-    const resp = await asistenciaRepository.getAsistenciaAll();
-    if (resp.success) {
-      setAsistencia(resp.data.results);
+      setPacientes(resp.data.results ?? resp.data);
     }
   };
 
@@ -71,7 +62,7 @@ const Asistencia = () => {
   // Guardar la asistencia del día (lote bulk — RA-14)
   const guardarAsistencia = async (data) => {
     const asistenciaData = pacientes.map((paciente) => ({
-      idpersonaep: paciente.idpersona.idpersona,
+      idpersonaep: paciente.idpersona,
       idclasetaller: Number(data.fechaEncuentro),
       estado: paciente.checked ? ESTADO_PRESENTE : ESTADO_AUSENTE,
     }));
@@ -102,7 +93,7 @@ const Asistencia = () => {
 
       const updatedPacientes = pacientes.map((persona) => {
         const eventosPersona = evento.filter(
-          (ev) => Number(ev.idpersonaep) === Number(persona.idpersona.idpersona)
+          (ev) => Number(ev.idpersonaep) === Number(persona.idpersona)
         );
 
         const isDateInRange = eventosPersona.some((eventoItem) => {
@@ -124,7 +115,7 @@ const Asistencia = () => {
   const handleAsistenciaCheck = (idpersona) => {
     setPacientes(
       pacientes.map((persona) =>
-        persona.idpersona.idpersona === idpersona
+        persona.idpersona === idpersona
           ? { ...persona, checked: !persona.checked }
           : persona
       )
@@ -170,37 +161,37 @@ const Asistencia = () => {
           </FormGroup>
         </div>
         <div className="row m-md-3 shadow mx-md-auto border-top-sm m-0 justify-content-center rounded container-lg ">
-          <table className="table">
+          <table className="table table-striped">
             <thead>
               <tr>
-                <th scope="col">IdPaciente</th>
-                <th scope="col">Paciente</th>
+                <th scope="col">ID</th>
+                <th scope="col">Persona con EP</th>
                 <th scope="col">Asistencia</th>
                 <th scope="col">Justificado</th>
               </tr>
             </thead>
             <tbody>
               {pacientes.map((element) => (
-                <tr key={element.idpersona.idpersona}>
-                  <td>{element.idpersona.idpersona}</td>
-                  <td>{element.idpersona.apellido}</td>
+                <tr key={element.idpersona}>
+                  <td>{element.idpersona}</td>
+                  <td>{`${element.nombre} ${element.apellido}`}</td>
                   <td>
                     <input
                       type="checkbox"
                       className="form-check-input"
                       name="asistencia"
-                      id={`asistencia-${element.idpersona.idpersona}`}
-                      value={element.idpersona.idpersona}
+                      id={`asistencia-${element.idpersona}`}
+                      value={element.idpersona}
                       checked={element.checked || false}
-                      onChange={() => handleAsistenciaCheck(element.idpersona.idpersona)}
+                      onChange={() => handleAsistenciaCheck(element.idpersona)}
                     />
                   </td>
                   <td>
                     <input
                       type="checkbox"
                       className="form-check-input"
-                      id={`justificado-${element.idpersona.idpersona}`}
-                      value={element.idpersona.idpersona}
+                      id={`justificado-${element.idpersona}`}
+                      value={element.idpersona}
                       checked={element.justificado || false}
                       readOnly
                     />

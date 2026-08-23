@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect } from 'react';
+import React, { memo, useState, useEffect, useRef } from 'react';
 import { PencilIcon, PlusIcon, TrashIcon } from './icons/icons-shared';
 import { useForm } from 'react-hook-form';
 import { pacienteRepository } from '../services/paciente.service';
@@ -26,6 +26,7 @@ const Search = () => {
   });
   const [modalEdit, setModalEdit] = useState(false);
   const [modalInsert, setModalInsert] = useState(false);
+  const mostrarNotificacionAlCerrar = useRef(false);
 
   useEffect(() => {
     getPersonAll();
@@ -178,6 +179,14 @@ const Search = () => {
     setModalInsert(false);
   };
 
+  const handleModalInsertClosed = () => {
+    if (mostrarNotificacionAlCerrar.current) {
+      mostrarNotificacionAlCerrar.current = false;
+      document.activeElement?.blur();
+      setTimeout(() => utils.send(), 0);
+    }
+  };
+
   const showModalInsert = () => {
     setModalInsert(true);
   };
@@ -185,8 +194,8 @@ const Search = () => {
   const enviarFormulario = async (data) => {
     const response = await pacienteRepository.guardarPaciente(data).catch(() => utils.errorSend());
     if (response) {
-      utils.send();
       reset();
+      mostrarNotificacionAlCerrar.current = true;
       handleModalInsert();
       getPersonAll();
     }
@@ -244,13 +253,25 @@ const Search = () => {
       <main className="border-top-sm m-0 justify-content-center m-md-3 rounded shadow container-lg mx-md-auto panel-gris">
         <h2 className="mt-4 text-center">Personas con EP</h2>
         <hr />
+        <div className="row">
+          <div className="col-12">
+            <button
+              type="button"
+              className="btn btn-primary mb-2 mt-2"
+              onClick={() => showModalInsert()}
+            >
+              <PlusIcon />
+              Agregar
+            </button>
+          </div>
+        </div>
         <form
           className="row align-items-center"
           onSubmit={(e) => {
             e.preventDefault();
           }}
         >
-          <div className={'mb-4 col-12 col-md-9 col-lg-9 col-xl-9 ' + styles.searchInputWrapper}>
+          <div className={'mb-4 col-12 ' + styles.searchInputWrapper}>
             <input
               type="search"
               className="form-control"
@@ -261,19 +282,12 @@ const Search = () => {
               value={buscar}
             />
           </div>
-          <div className={'mb-4 col-12 col-md-3 col-lg-3 col-xl-3 ' + styles.searchActions}>
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={() => showModalInsert()}
-            >
-              <PlusIcon className="signoMas" />
-              Agregar Nuevo
-            </button>
-          </div>
         </form>
         <div className="row">
-          <table className="table">
+          <div className={'col-12 col-md-12 col-lg-12 col-xl-12 ' + styles.tableWrapper}>
+          <table className={
+                'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
+              }>
             <thead>
               <tr>
                 <th scope="col">Código</th>
@@ -283,8 +297,8 @@ const Search = () => {
                 <th scope="col">Accion</th>
               </tr>
             </thead>
-            {arrayPersonIspaciente.map((person) => (
-              <tbody key={person.idpersona}>
+            <tbody>
+              {arrayPersonIspaciente.map((person) => (
                 <tr key={person.idpersona}>
                   <th scope="row">{person.idpersona}</th>
                   <td>{person.nombre}</td>
@@ -307,9 +321,10 @@ const Search = () => {
                     </button>
                   </td>
                 </tr>
-              </tbody>
-            ))}
+              ))}
+            </tbody>
           </table>
+          </div>
         </div>
       </main>
 
@@ -380,20 +395,24 @@ const Search = () => {
         <ModalFooter>
           <button
             type="button"
-            className="btn btn-secondary"
+            className="btn btn-rojo"
             data-bs-dismiss="modal"
             onClick={() => handleModalEdit()}
           >
             Cancelar
           </button>
-          <button type="button" className="btn btn-primary" onClick={() => edit(searchArrayperson)}>
+          <button type="button" className="btn btn-verde" onClick={() => edit(searchArrayperson)}>
             Guardar
           </button>
         </ModalFooter>
       </Modal>
 
       {/* AGREGAR PERSONA CON EP */}
-      <Modal isOpen={modalInsert}>
+      <Modal
+        isOpen={modalInsert}
+        onClosed={handleModalInsertClosed}
+        returnFocusAfterClose={false}
+      >
         <ModalHeader tag="div" className="justify-content-center">
           <h2 className="mb-0">Agregar persona con EP</h2>
         </ModalHeader>
