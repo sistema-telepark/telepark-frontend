@@ -334,16 +334,12 @@ const AdminUsuarios = () => {
     <main className="border-top-sm m-0 justify-content-center m-md-3 rounded shadow container-lg mx-md-auto panel-gris">
         <h2 className="mt-4 text-center">Administrar Usuarios</h2>
         <hr />
-        <div className="row">
-          <div className="col-12">
-            <button type="button" className="btn btn-primary mb-2 mt-2" onClick={() => agregar()}>
-              <PlusIcon className="signoMas" />
-              Agregar
-            </button>
-          </div>
-        </div>
+        <button type="button" className="btn btn-primary mb-2 mt-2" onClick={() => agregar()}>
+          <PlusIcon className="signoMas" />
+          Agregar
+        </button>
         <form
-          className="row align-items-center"
+          className="row align-items-center mt-2"
           onSubmit={(e) => {
             e.preventDefault(); // Evita que la página web se recargue por completo
             buscar();           // Llama a tu función de búsqueda existente

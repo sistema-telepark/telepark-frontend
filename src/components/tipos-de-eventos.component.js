@@ -196,7 +196,7 @@ const TypeEvents = () => {
       <Container className="container panel-gris">
         <h2 className="mt-4 text-center">Tipos de eventos</h2>
         <hr />
-        <button className="btn btn-primary mb-2 mt-2" onClick={() => showModalInsert()}>
+        <button className="btn btn-primary mb-2 mt-3" onClick={() => showModalInsert()}>
           <PlusIcon className="signoMas" /> Agregar
         </button>
         <div className="row m-md-3 shadow mx-md-auto border-top-sm m-0">

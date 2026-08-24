@@ -127,7 +127,6 @@ const Asistencia = () => {
   });
 
   return (
-    <>
       <Container className="container panel-gris">
         <h2 className="mt-4 text-center">Asistencia</h2>
         <hr />
@@ -218,7 +217,6 @@ const Asistencia = () => {
           </div>
         </div>
       </Container>
-    </>
   );
 };
 

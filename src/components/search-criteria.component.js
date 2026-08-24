@@ -253,20 +253,16 @@ const Search = () => {
       <main className="border-top-sm m-0 justify-content-center m-md-3 rounded shadow container-lg mx-md-auto panel-gris">
         <h2 className="mt-4 text-center">Personas con EP</h2>
         <hr />
-        <div className="row">
-          <div className="col-12">
-            <button
-              type="button"
-              className="btn btn-primary mb-2 mt-2"
-              onClick={() => showModalInsert()}
-            >
-              <PlusIcon />
-              Agregar
-            </button>
-          </div>
-        </div>
+        <button
+          type="button"
+          className="btn btn-primary mb-2 mt-2"
+          onClick={() => showModalInsert()}
+        >
+          <PlusIcon />
+          Agregar
+        </button>
         <form
-          className="row align-items-center"
+          className="row align-items-center mt-2"
           onSubmit={(e) => {
             e.preventDefault();
           }}

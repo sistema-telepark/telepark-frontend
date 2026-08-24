@@ -228,13 +228,12 @@ const Encuentro = () => {
         <hr />
         <button
           type="button"
-          className="btn btn-primary mb-2 mt-2"
+          className="btn btn-primary mb-2 mt-3"
           onClick={() => showModalInsert()}
         >
           <PlusIcon />
           Agregar
         </button>
-        <br />
         <div className="row m-md-3 shadow mx-md-auto border-top-sm m-0">
           <table className="table table-striped">
             <thead>
