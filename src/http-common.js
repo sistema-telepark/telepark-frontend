@@ -3,7 +3,7 @@ import { TokenService } from './services/token.service';
 
 const instance = axios.create({
   baseURL:
-    process.env.REACT_APP_API_URL ||
+    import.meta.env.REACT_APP_API_URL ||
     (console.warn('[TELEPARK] WARN: REACT_APP_API_URL no definida, usando fallback localhost'),
     'http://localhost:8080/api/v1'),
   headers: {

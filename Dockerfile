@@ -9,11 +9,9 @@ WORKDIR /app
 # Copiar solo los archivos de dependencias primero (caching de capas)
 COPY package*.json ./
 
-# NOTA: Se usa npm install en lugar de npm ci porque el package-lock.json existente
-# tiene un conflicto de versiones (typescript@7.0.2 en lock vs 4.9.5 esperado).
-# Esto es un problema pre-existente del proyecto. Una vez sincronizado el lock,
-# cambiar a: RUN npm ci
-RUN npm install
+# D-DOCKER (Sprint 5.16): el lock quedó sano tras remover react-scripts
+# (conflicto typescript@7.0.2 vs 4.9.5 resuelto) → se usa npm ci.
+RUN npm ci
 
 # Copiar el resto del código fuente
 COPY . .
@@ -30,8 +28,8 @@ RUN npm run build
 # ======================================================================
 FROM nginx:alpine
 
-# Copiar el build desde la etapa anterior
-COPY --from=build /app/build /usr/share/nginx/html
+# Copiar el build desde la etapa anterior (Vite emite a /app/dist)
+COPY --from=build /app/dist /usr/share/nginx/html
 
 # Copiar configuración personalizada de Nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf

@@ -31,7 +31,7 @@ const ErrorFallbackInline = ({ error, resetErrorBoundary, message }) => {
         Reintentar
       </button>
 
-      {process.env.NODE_ENV === 'development' && (
+      {import.meta.env.DEV && (
         <div className="w-100 small text-muted mt-1">
           <code>{error.message}</code>
         </div>

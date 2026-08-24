@@ -6,7 +6,7 @@ node_modules
 .gitignore
 
 # Build output
-build
+dist
 
 # Environment files
 .env*.local

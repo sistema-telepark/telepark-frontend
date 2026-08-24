@@ -26,7 +26,7 @@ const ErrorFallbackGlobal = ({ error }) => {
           de nuevo.
         </p>
 
-        {process.env.NODE_ENV === 'development' && (
+        {import.meta.env.DEV && (
           <div className={'alert alert-secondary text-start mb-4 ' + styles.devAlert}>
             <strong>Detalles (solo desarrollo):</strong>
             <pre className={'mb-0 mt-2 ' + styles.devPre}>{error.message}</pre>

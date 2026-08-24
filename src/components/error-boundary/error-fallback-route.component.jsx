@@ -27,7 +27,7 @@ const ErrorFallbackRoute = ({ error, resetErrorBoundary, componentName }) => {
             vieron afectadas.
           </p>
 
-          {process.env.NODE_ENV === 'development' && (
+          {import.meta.env.DEV && (
             <div className="alert alert-secondary py-2 px-3 mb-3">
               <strong className="small">Error:</strong>
               <pre className={'mb-0 mt-1 ' + styles.errorPre}>{error.message}</pre>
