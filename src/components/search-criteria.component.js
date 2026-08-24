@@ -281,45 +281,47 @@ const Search = () => {
         </form>
         <div className="row">
           <div className={'col-12 col-md-12 col-lg-12 col-xl-12 ' + styles.tableWrapper}>
-          <table className={
+            <table
+              className={
                 'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
-              }>
-            <thead>
-              <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Apellido</th>
-                <th scope="col">Telefono</th>
-                <th scope="col">Accion</th>
-              </tr>
-            </thead>
-            <tbody>
-              {arrayPersonIspaciente.map((person) => (
-                <tr key={person.idpersona}>
-                  <th scope="row">{person.idpersona}</th>
-                  <td>{person.nombre}</td>
-                  <td>{person.apellido}</td>
-                  <td>{person.telefono}</td>
-                  <td>
-                    <button
-                      type="button"
-                      className="btn btn-verde me-1"
-                      onClick={() => showModalEdit(person)}
-                    >
-                      <PencilIcon />
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-rojo me-1"
-                      onClick={() => eliminar(person)}
-                    >
-                      <TrashIcon />
-                    </button>
-                  </td>
+              }
+            >
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Nombre</th>
+                  <th scope="col">Apellido</th>
+                  <th scope="col">Telefono</th>
+                  <th scope="col">Accion</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {arrayPersonIspaciente.map((person) => (
+                  <tr key={person.idpersona}>
+                    <th scope="row">{person.idpersona}</th>
+                    <td>{person.nombre}</td>
+                    <td>{person.apellido}</td>
+                    <td>{person.telefono}</td>
+                    <td>
+                      <button
+                        type="button"
+                        className="btn btn-verde me-1"
+                        onClick={() => showModalEdit(person)}
+                      >
+                        <PencilIcon />
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-rojo me-1"
+                        onClick={() => eliminar(person)}
+                      >
+                        <TrashIcon />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </main>
@@ -404,11 +406,7 @@ const Search = () => {
       </Modal>
 
       {/* AGREGAR PERSONA CON EP */}
-      <Modal
-        isOpen={modalInsert}
-        onClosed={handleModalInsertClosed}
-        returnFocusAfterClose={false}
-      >
+      <Modal isOpen={modalInsert} onClosed={handleModalInsertClosed} returnFocusAfterClose={false}>
         <ModalHeader tag="div" className="justify-content-center">
           <h2 className="mb-0">Agregar persona con EP</h2>
         </ModalHeader>

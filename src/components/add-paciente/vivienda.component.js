@@ -16,6 +16,7 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
 
     if (!provinciaSeleccionada) {
       setMunicipios([]);
+      setCargandoMunicipios(false);
       return undefined;
     }
 
@@ -26,8 +27,12 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
         const response = await municipioRepository
           .getByProvincia(provinciaSeleccionada)
           .catch(() => undefined);
-        if (activo && response && response.data) {
-          setMunicipios(response.data);
+        if (activo) {
+          if (response && response.data) {
+            setMunicipios(response.data);
+          } else {
+            setMunicipios([]);
+          }
         }
       } finally {
         if (activo) {
@@ -49,6 +54,7 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
 
     if (!municipioSeleccionado) {
       setLocalidades([]);
+      setCargandoLocalidades(false);
       return undefined;
     }
 
@@ -58,8 +64,12 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
         const response = await localidadRepository
           .getByMunicipio(municipioSeleccionado)
           .catch(() => undefined);
-        if (activo && response && response.data) {
-          setLocalidades(response.data);
+        if (activo) {
+          if (response && response.data) {
+            setLocalidades(response.data);
+          } else {
+            setLocalidades([]);
+          }
         }
       } finally {
         if (activo) {
