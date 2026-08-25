@@ -23,17 +23,17 @@ La aplicación se sirve en [http://localhost:3000](http://localhost:3000) (o el 
 
 | Tecnología | Versión | Uso |
 |-----------|---------|-----|
-| React | 18.3.x | UI library (API `createRoot`) |
+| React | 19.2.x | UI library (API `createRoot`) |
 | Redux Toolkit | 2.12.x | Estado global (slices + `configureStore`) |
-| React Router | 6.30.x | Ruteo SPA (`Routes` + `element`) |
+| React Router | 7.18.x (paquete `react-router`) | Ruteo SPA (modo librería, `Routes` + `element`) |
 | Axios | 1.19.x | HTTP client (con interceptores normalizados) |
 | Bootstrap | 5.3.x | CSS framework |
-| Reactstrap | 9.2.x | Componentes Bootstrap |
+| React Bootstrap | 2.10.x | Componentes Bootstrap (reemplaza reactstrap) |
 | React Hook Form | 7.86.x | Formularios |
 | SweetAlert2 | 11.26.x | Notificaciones y diálogos |
 | react-error-boundary | 6.1.x | Error boundaries (global, ruta, inline) |
 | Vite | 8.x | Build tool (dev server + build de producción) |
-| ESLint + Prettier | 8.x / 3.x | Calidad de código y formato |
+| ESLint + Prettier | 9.x / 3.x | Calidad de código y formato (flat config) |
 
 **Backend (equipo separado):** Django + Django REST Framework.
 
