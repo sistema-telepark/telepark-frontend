@@ -10,7 +10,7 @@ import utils from '../utils/utils';
 import { eventRespository } from '../services/event.service';
 import { provinciaRepository } from '../services/provincia.service';
 import Swal from 'sweetalert2';
-import { Form, FormGroup, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
+import { Form, Modal } from 'react-bootstrap';
 
 const Search = () => {
   const [arrayProvincias, setArrayProvincias] = useState([]);
@@ -327,15 +327,15 @@ const Search = () => {
       </main>
 
       {/* EDITAR */}
-      <Modal isOpen={modalEdit}>
-        <ModalHeader tag="div">
+      <Modal show={modalEdit}>
+        <Modal.Header>
           <div>
             <h2>Editar la persona con ep</h2>
           </div>
-        </ModalHeader>
-        <ModalBody>
+        </Modal.Header>
+        <Modal.Body>
           <Form>
-            <FormGroup>
+            <Form.Group className="mb-0">
               <label htmlFor="idpersona" className="control-label">
                 ID de la persona
               </label>
@@ -348,8 +348,8 @@ const Search = () => {
                 onChange={handleChange}
                 value={searchArrayperson.idpersona}
               />
-            </FormGroup>
-            <FormGroup>
+            </Form.Group>
+            <Form.Group className="mb-0">
               <label htmlFor="nombre" className="control-label">
                 Nombre
               </label>
@@ -361,8 +361,8 @@ const Search = () => {
                 onChange={handleChange}
                 value={searchArrayperson.nombre}
               />
-            </FormGroup>
-            <FormGroup>
+            </Form.Group>
+            <Form.Group className="mb-0">
               <label htmlFor="apellido" className="control-label">
                 Apellido
               </label>
@@ -374,8 +374,8 @@ const Search = () => {
                 onChange={handleChange}
                 value={searchArrayperson.apellido}
               />
-            </FormGroup>
-            <FormGroup>
+            </Form.Group>
+            <Form.Group className="mb-0">
               <label htmlFor="telefono" className="control-label">
                 Telefono
               </label>
@@ -387,10 +387,10 @@ const Search = () => {
                 onChange={handleChange}
                 value={searchArrayperson.telefono}
               />
-            </FormGroup>
+            </Form.Group>
           </Form>
-        </ModalBody>
-        <ModalFooter>
+        </Modal.Body>
+        <Modal.Footer>
           <button
             type="button"
             className="btn btn-rojo"
@@ -402,15 +402,15 @@ const Search = () => {
           <button type="button" className="btn btn-verde" onClick={() => edit(searchArrayperson)}>
             Guardar
           </button>
-        </ModalFooter>
+        </Modal.Footer>
       </Modal>
 
       {/* AGREGAR PERSONA CON EP */}
-      <Modal isOpen={modalInsert} onClosed={handleModalInsertClosed} returnFocusAfterClose={false}>
-        <ModalHeader tag="div" className="justify-content-center">
+      <Modal show={modalInsert} onExit={handleModalInsertClosed} restoreFocus={false}>
+        <Modal.Header className="justify-content-center">
           <h2 className="mb-0">Agregar persona con EP</h2>
-        </ModalHeader>
-        <ModalBody>
+        </Modal.Header>
+        <Modal.Body>
           <Form onSubmit={handleSubmit(customSubmit)}>
             <DatosPersonales register={register} errors={errors} tipo="EP" />
             <br />
@@ -534,16 +534,16 @@ const Search = () => {
               arrayProvincias={arrayProvincias}
             />
           </Form>
-        </ModalBody>
+        </Modal.Body>
         <br />
-        <ModalFooter className="justify-content-center">
+        <Modal.Footer className="justify-content-center">
           <button type="button" className="btn btn-rojo" onClick={() => handleModalInsert()}>
             Cancelar
           </button>
           <button type="button" className="btn btn-verde" onClick={handleSubmit(customSubmit)}>
             Guardar
           </button>
-        </ModalFooter>
+        </Modal.Footer>
       </Modal>
     </>
   );

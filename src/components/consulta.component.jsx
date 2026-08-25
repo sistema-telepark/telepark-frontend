@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, FormGroup } from 'reactstrap';
+import { Container, Form } from 'react-bootstrap';
 import { tallerRepository } from '../services/taller.service';
 import { actividadRepository } from '../services/actividad.service';
 import { encuentroRepository } from '../services/encuentro.service';
@@ -167,7 +167,7 @@ const Consulta = () => {
           className={`row m-md-3 mx-auto justify-content-center rounded container-lg ${styles.whiteCard}`}
         >
           <div className="col-md-6">
-            <FormGroup>
+            <Form.Group className="mb-0">
               <select
                 className="form-select"
                 name="fechaEncuentro"
@@ -182,7 +182,7 @@ const Consulta = () => {
                 ))}
               </select>
               {errores.fecha && <small className="text-danger">{errores.fecha}</small>}
-            </FormGroup>
+            </Form.Group>
           </div>
 
           {/* Componente de asistencia */}

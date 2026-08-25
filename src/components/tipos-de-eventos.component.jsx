@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Form, FormGroup, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
+import { Container, Form, Modal } from 'react-bootstrap';
 import { eventRespository } from '../services/event.service';
 import Swal from 'sweetalert2';
 import { PencilIcon, PlusIcon } from './icons/icons-shared';
@@ -247,14 +247,14 @@ const TypeEvents = () => {
         </div>
       </Container>
 
-      <Modal isOpen={modalInsert}>
-        <ModalHeader>
+      <Modal show={modalInsert}>
+        <Modal.Header>
           <div>
             <h2>Nuevo tipo de evento</h2>
           </div>
-        </ModalHeader>
-        <ModalBody>
-          <FormGroup>
+        </Modal.Header>
+        <Modal.Body>
+          <Form.Group className="mb-0">
             <label htmlFor="nombre" className="control-label">
               Nombre:
             </label>
@@ -265,8 +265,8 @@ const TypeEvents = () => {
               className="form-control"
               onChange={handleChange}
             />
-          </FormGroup>
-          <FormGroup>
+          </Form.Group>
+          <Form.Group className="mb-0">
             <label htmlFor="desactivataller" className="control-label">
               Desactivar taller:
             </label>
@@ -277,9 +277,9 @@ const TypeEvents = () => {
               className="form-check-input"
               onChange={handleChange}
             />
-          </FormGroup>
-        </ModalBody>
-        <ModalFooter>
+          </Form.Group>
+        </Modal.Body>
+        <Modal.Footer>
           <button
             type="button"
             className="btn btn-rojo"
@@ -291,20 +291,20 @@ const TypeEvents = () => {
           <button type="button" className="btn btn-verde" onClick={() => guardarNuevo()}>
             Guardar
           </button>
-        </ModalFooter>
+        </Modal.Footer>
       </Modal>
 
       {/* EDITAR */}
 
-      <Modal isOpen={modalEdit}>
-        <ModalHeader>
+      <Modal show={modalEdit}>
+        <Modal.Header>
           <div>
             <h2>Editar tipo de evento</h2>
           </div>
-        </ModalHeader>
-        <ModalBody>
+        </Modal.Header>
+        <Modal.Body>
           <Form>
-            <FormGroup>
+            <Form.Group className="mb-0">
               <label htmlFor="idtipoevento" className="control-label">
                 ID:
               </label>
@@ -317,8 +317,8 @@ const TypeEvents = () => {
                 onChange={handleChange}
                 value={form.idtipoevento}
               />
-            </FormGroup>
-            <FormGroup>
+            </Form.Group>
+            <Form.Group className="mb-0">
               <label htmlFor="nombre" className="control-label">
                 Nombre de tipo de evento:
               </label>
@@ -330,8 +330,8 @@ const TypeEvents = () => {
                 onChange={handleChange}
                 value={form.nombre}
               />
-            </FormGroup>
-            <FormGroup>
+            </Form.Group>
+            <Form.Group className="mb-0">
               <label htmlFor="desactivataller" className="control-label">
                 Desactivar taller:
               </label>
@@ -343,10 +343,10 @@ const TypeEvents = () => {
                 onChange={handleChange}
                 defaultChecked={form.desactivataller === 1 ? true : false}
               />
-            </FormGroup>
+            </Form.Group>
           </Form>
-        </ModalBody>
-        <ModalFooter>
+        </Modal.Body>
+        <Modal.Footer>
           <button
             type="button"
             className="btn btn-rojo"
@@ -358,7 +358,7 @@ const TypeEvents = () => {
           <button type="button" className="btn btn-verde" onClick={() => edit(form)}>
             Guardar
           </button>
-        </ModalFooter>
+        </Modal.Footer>
       </Modal>
     </>
   );

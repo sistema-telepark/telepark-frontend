@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router';
 import { authRepository } from '../services/auth.service';
 import { TokenService } from '../services/token.service';
 import logoTelepark from '../images/logo2022.png';

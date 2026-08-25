@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { cambiarID } from '../actions/global';
 import { pacienteRepository } from '../services/paciente.service';
 import '../styles/list-pacientes-ep.css';
-import { Spinner } from 'reactstrap';
+import { Spinner } from 'react-bootstrap';
 import utils from '../utils/utils';
 import {
   EyeIcon,
@@ -73,7 +73,7 @@ const ListaPaciente = (props) => {
       <div className="row">
         <div className="col-12 col-md-12 col-lg-12 col-xl-12 text-center">
           {loading ? (
-            <Spinner className={styles.spinner} color="primary">
+            <Spinner className={styles.spinner} animation="border" variant="primary">
               Loading...
             </Spinner>
           ) : (

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Container, FormGroup, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
+import { Container, Form, Modal } from 'react-bootstrap';
 import { tallerRepository } from '../services/taller.service';
 import { actividadRepository } from '../services/actividad.service';
 import { showToast, showConfirm } from '../services/notification.service';
@@ -233,16 +233,16 @@ const Talleres = () => {
       </Container>
 
       {/* nuevo taller */}
-      <Modal isOpen={modalInsert}>
-        <ModalHeader>
+      <Modal show={modalInsert}>
+        <Modal.Header>
           <div>
             <h2>Ingresar nuevo taller</h2>
           </div>
-        </ModalHeader>
-        <ModalBody>
+        </Modal.Header>
+        <Modal.Body>
           <div className="row">
             <div className="col-md-12">
-              <FormGroup>
+              <Form.Group className="mb-0">
                 <div className="form-group mb-2">
                   <label htmlFor="tipotaller" className="control-label">
                     Tipo de taller
@@ -267,11 +267,11 @@ const Talleres = () => {
                     </small>
                   )}
                 </div>
-              </FormGroup>
+              </Form.Group>
             </div>
           </div>
-        </ModalBody>
-        <ModalFooter>
+        </Modal.Body>
+        <Modal.Footer>
           <button type="button" className="btn btn-rojo" onClick={() => handleModalInsert()}>
             Cancelar
           </button>
@@ -282,19 +282,19 @@ const Talleres = () => {
           >
             Guardar
           </button>
-        </ModalFooter>
+        </Modal.Footer>
       </Modal>
 
       {/* editar taller */}
-      <Modal isOpen={modalEdit}>
-        <ModalHeader>
+      <Modal show={modalEdit}>
+        <Modal.Header>
           <div>
             <h2>Editar taller</h2>
           </div>
-        </ModalHeader>
-        <ModalBody>
+        </Modal.Header>
+        <Modal.Body>
           <div className="row">
-            <FormGroup>
+            <Form.Group className="mb-0">
               <label htmlFor="idtaller" className="control-label">
                 Código:
               </label>
@@ -306,10 +306,10 @@ const Talleres = () => {
                 readOnly
                 value={tallerEditando ? tallerEditando.idtaller : ''}
               />
-            </FormGroup>
+            </Form.Group>
 
             <div className="col-md-12">
-              <FormGroup>
+              <Form.Group className="mb-0">
                 <div className="form-group mb-2">
                   <label htmlFor="tipotaller" className="control-label">
                     Tipo de taller
@@ -334,11 +334,11 @@ const Talleres = () => {
                     </small>
                   )}
                 </div>
-              </FormGroup>
+              </Form.Group>
             </div>
           </div>
-        </ModalBody>
-        <ModalFooter>
+        </Modal.Body>
+        <Modal.Footer>
           <button type="button" className="btn btn-rojo" onClick={() => handleModalEdit()}>
             Cancelar
           </button>
@@ -349,12 +349,12 @@ const Talleres = () => {
           >
             Guardar
           </button>
-        </ModalFooter>
+        </Modal.Footer>
       </Modal>
 
       {/* guardar actividades */}
-      <Modal isOpen={modalInsertAct}>
-        <ModalHeader>
+      <Modal show={modalInsertAct}>
+        <Modal.Header>
           <div>
             <h3>Actividades del taller:</h3>
             <label className="control-label">
@@ -362,10 +362,10 @@ const Talleres = () => {
               <h6>Código: {tallerSeleccionado ? tallerSeleccionado.idtaller : ''} </h6>
             </label>
           </div>
-        </ModalHeader>
-        <ModalBody>
+        </Modal.Header>
+        <Modal.Body>
           <div className="row">
-            <FormGroup>
+            <Form.Group className="mb-0">
               <label className="control-label">Ingrese nueva actividad:</label>
               <div className="mb-2 col-12 col-md-12 col-lg-12 col-xl-12 input-group">
                 <div className="input-group">
@@ -389,7 +389,7 @@ const Talleres = () => {
                   <small className="text-danger">{formAct.formState.errors.nombre.message}</small>
                 )}
               </div>
-            </FormGroup>
+            </Form.Group>
 
             <div className={`col-12 col-md-12 col-lg-12 col-xl-12 ${styles.scrollContainer}`}>
               <table className="table table-bordered table-hover shadow table-striped">
@@ -433,15 +433,15 @@ const Talleres = () => {
               </table>
             </div>
           </div>
-        </ModalBody>
-        <ModalFooter>
+        </Modal.Body>
+        <Modal.Footer>
           <button type="button" className="btn btn-rojo" onClick={() => handleModalInsertAct()}>
             Cancelar
           </button>
           <button type="button" className="btn btn-verde" onClick={() => guardarAct()}>
             Guardar
           </button>
-        </ModalFooter>
+        </Modal.Footer>
       </Modal>
     </>
   );

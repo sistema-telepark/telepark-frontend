@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Container, FormGroup } from 'reactstrap';
+import { Container, Form } from 'react-bootstrap';
 import { encuentroRepository } from '../services/encuentro.service';
 import { pacienteRepository } from '../services/paciente.service';
 import { asistenciaRepository } from '../services/asistencia.service';
@@ -131,7 +131,7 @@ const Asistencia = () => {
         <h2 className="mt-4 text-center">Asistencia</h2>
         <hr />
         <div className="col-md-3">
-          <FormGroup>
+          <Form.Group className="mb-0">
             <label htmlFor="fechaEncuentro" className="control-label">
               Encuentro:
             </label>
@@ -157,7 +157,7 @@ const Asistencia = () => {
                 {formAsistencia.formState.errors.fechaEncuentro.message}
               </small>
             )}
-          </FormGroup>
+          </Form.Group>
         </div>
         <div className="row m-md-3 shadow mx-md-auto border-top-sm m-0 justify-content-center rounded container-lg ">
           <table className="table table-striped">

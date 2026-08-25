@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Container, FormGroup, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
+import { Container, Form, Modal } from 'react-bootstrap';
 import { encuentroRepository } from '../services/encuentro.service';
 import { tallerRepository } from '../services/taller.service';
 import { actividadRepository } from '../services/actividad.service';
@@ -286,16 +286,16 @@ const Encuentro = () => {
       </Container>
 
       {/* nuevo encuentro */}
-      <Modal isOpen={modalInsert}>
-        <ModalHeader>
+      <Modal show={modalInsert}>
+        <Modal.Header>
           <div>
             <h2>Nuevo Encuentro</h2>
           </div>
-        </ModalHeader>
-        <ModalBody>
+        </Modal.Header>
+        <Modal.Body>
           <div className="row">
             <div className="col-md-6">
-              <FormGroup>
+              <Form.Group className="mb-0">
                 <div className="form-group mb-2">
                   <label className="control-label">Fecha del encuentro</label>
                   <input
@@ -310,11 +310,11 @@ const Encuentro = () => {
                 {formInsert.formState.errors.fecha && (
                   <small className="text-danger">{formInsert.formState.errors.fecha.message}</small>
                 )}
-              </FormGroup>
+              </Form.Group>
             </div>
 
             <div className="col-md-6">
-              <FormGroup>
+              <Form.Group className="mb-0">
                 <div className="form-check">
                   <label htmlFor="virtual" className="form-check-label">
                     Virtual
@@ -326,13 +326,13 @@ const Encuentro = () => {
                     {...formInsert.register('virtual')}
                   />
                 </div>
-              </FormGroup>
+              </Form.Group>
             </div>
           </div>
 
           <div className="row">
             <div className="col-md-12">
-              <FormGroup>
+              <Form.Group className="mb-0">
                 <div className="form-group mb-2">
                   <label className="control-label">Taller</label>
                   <select
@@ -354,11 +354,11 @@ const Encuentro = () => {
                     </small>
                   )}
                 </div>
-              </FormGroup>
+              </Form.Group>
             </div>
           </div>
-        </ModalBody>
-        <ModalFooter>
+        </Modal.Body>
+        <Modal.Footer>
           <button type="button" className="btn btn-rojo" onClick={() => handleModalInsert()}>
             Cancelar
           </button>
@@ -369,20 +369,20 @@ const Encuentro = () => {
           >
             Guardar
           </button>
-        </ModalFooter>
+        </Modal.Footer>
       </Modal>
 
       {/* editar encuentro */}
-      <Modal isOpen={modalEdit}>
-        <ModalHeader>
+      <Modal show={modalEdit}>
+        <Modal.Header>
           <div>
             <h2>Editar encuentro</h2>
           </div>
-        </ModalHeader>
-        <ModalBody>
+        </Modal.Header>
+        <Modal.Body>
           <div className="row">
             <div className="col-md-12">
-              <FormGroup>
+              <Form.Group className="mb-0">
                 <label htmlFor="idclasetaller" className="control-label">
                   Código:
                 </label>
@@ -394,11 +394,11 @@ const Encuentro = () => {
                   readOnly
                   value={encuentroEditando ? encuentroEditando.idclasetaller : ''}
                 />
-              </FormGroup>
+              </Form.Group>
             </div>
 
             <div className="col-md-6">
-              <FormGroup>
+              <Form.Group className="mb-0">
                 <label className="control-label">Fecha de encuentro</label>
                 <input
                   type="date"
@@ -408,11 +408,11 @@ const Encuentro = () => {
                 {formEdit.formState.errors.fecha && (
                   <small className="text-danger">{formEdit.formState.errors.fecha.message}</small>
                 )}
-              </FormGroup>
+              </Form.Group>
             </div>
 
             <div className="col-md-6">
-              <FormGroup>
+              <Form.Group className="mb-0">
                 <div className="form-check">
                   <label htmlFor="virtual" className="form-check-label">
                     Virtual
@@ -424,13 +424,13 @@ const Encuentro = () => {
                     {...formEdit.register('virtual')}
                   />
                 </div>
-              </FormGroup>
+              </Form.Group>
             </div>
           </div>
 
           <div className="row">
             <div className="col-md-12">
-              <FormGroup>
+              <Form.Group className="mb-0">
                 <div className="form-group mb-2">
                   <label className="control-label">Taller</label>
                   <select
@@ -452,11 +452,11 @@ const Encuentro = () => {
                     </small>
                   )}
                 </div>
-              </FormGroup>
+              </Form.Group>
             </div>
           </div>
-        </ModalBody>
-        <ModalFooter>
+        </Modal.Body>
+        <Modal.Footer>
           <button type="button" className="btn btn-rojo" onClick={() => handleModalEdit()}>
             Cancelar
           </button>
@@ -467,12 +467,12 @@ const Encuentro = () => {
           >
             Guardar
           </button>
-        </ModalFooter>
+        </Modal.Footer>
       </Modal>
 
       {/* elegir actividades */}
-      <Modal isOpen={modalInsertAct}>
-        <ModalHeader>
+      <Modal show={modalInsertAct}>
+        <Modal.Header>
           <div>
             <h3>Actividades del encuentro:</h3>
             <label className="control-label">
@@ -484,8 +484,8 @@ const Encuentro = () => {
               <h6>Código: {encuentroSeleccionado ? encuentroSeleccionado.idclasetaller : ''}</h6>
             </label>
           </div>
-        </ModalHeader>
-        <ModalBody>
+        </Modal.Header>
+        <Modal.Body>
           <div className="row">
             <div className={`col-12 col-md-12 col-lg-12 col-xl-12 ${styles.scrollContainer}`}>
               <table className="table table-bordered table-hover shadow table-striped">
@@ -519,8 +519,8 @@ const Encuentro = () => {
               </table>
             </div>
           </div>
-        </ModalBody>
-        <ModalFooter>
+        </Modal.Body>
+        <Modal.Footer>
           <button type="button" className="btn btn-rojo" onClick={() => handleModalInsertAct()}>
             Cancelar
           </button>
@@ -531,7 +531,7 @@ const Encuentro = () => {
           >
             Guardar
           </button>
-        </ModalFooter>
+        </Modal.Footer>
       </Modal>
     </>
   );

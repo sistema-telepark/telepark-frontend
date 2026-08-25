@@ -1,5 +1,5 @@
 import React, { memo, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import Swal from 'sweetalert2';
 import { useSelector } from 'react-redux';
 import { evolucionRepository } from '../services/evolucion.service';
