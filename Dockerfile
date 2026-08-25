@@ -9,6 +9,11 @@ WORKDIR /app
 # Copiar solo los archivos de dependencias primero (caching de capas)
 COPY package*.json ./
 
+# D-NPM12 (Sprint 5.18, Opción A modificada — decisión HITL 2026-08-25):
+# el tag node:22-alpine trae npm 10.9.8 (desactualizado vs 12.x).
+# Se instala npm 12.x SIEMPRE (incondicional, sin verificación previa del tag).
+RUN npm install -g npm@12
+
 # D-DOCKER (Sprint 5.16): el lock quedó sano tras remover react-scripts
 # (conflicto typescript@7.0.2 vs 4.9.5 resuelto) → se usa npm ci.
 RUN npm ci
