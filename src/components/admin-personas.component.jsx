@@ -251,7 +251,7 @@ const AdminPersonas = () => {
   return (
     <>
       <main className="border-top-sm m-0 justify-content-center m-md-3 rounded shadow container-lg mx-md-auto panel-gris">
-        <h2 className="mt-4 text-center">Personas con EP</h2>
+        <h2 className="mt-4 text-center">Personas</h2>
         <hr />
         <button
           type="button"

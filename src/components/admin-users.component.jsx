@@ -7,6 +7,7 @@ import utils from '../utils/utils';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
 import styles from '../styles/admin-users.module.css';
 import { showToast, showConfirm } from '../services/notification.service';
+import { Form, Modal } from 'react-bootstrap';
 
 const AdminUsuarios = () => {
   const [showNuevo, setShowNuevo] = useState(false);
@@ -358,263 +359,268 @@ const AdminUsuarios = () => {
           </div>
         </form>
 
-        {showNuevo ? (
-          <div className="border-top-sm m-0 row justify-content-center panel-gris m-md-3 rounded shadow container-lg mx-md-auto">
-            <h4 className="mt-4">
+        <Modal show={showNuevo}>
+          <Modal.Header>
+            <h4>
               Agregar Usuario <span className={styles.required}>(*) Campos Requeridos</span>
             </h4>
-            <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-              <label className="col-form-label">
-                Nombre <label className={styles.required}>*</label>
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Nombre..."
-                id="firstname"
-                onChange={(e) => detectarCambio('firstname', e)}
-                value={campo['firstname'] || ''}
-              />
-              <span className={styles.required}>{error['firstname']}</span>
-            </div>
-            <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-              <label className="col-form-label">
-                Apellido <label className={styles.required}>*</label>
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Apellido..."
-                id="lastname"
-                onChange={(e) => detectarCambio('lastname', e)}
-                value={campo['lastname'] || ''}
-              />
-              <span className={styles.required}>{error['lastname']}</span>
-            </div>
-            <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-              <label className="col-form-label">
-                Email <label className={styles.required}>*</label>
-              </label>
-              <input
-                type="email"
-                className="form-control"
-                placeholder="Email..."
-                id="email"
-                onChange={(e) => detectarCambio('email', e)}
-                value={campo['email'] || ''}
-              />
-              <span className={styles.required}>{error['email']}</span>
-            </div>
-            <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-              <label className="col-form-label">
-                Nombre de Usuario <label className={styles.required}>*</label>
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Nombre de usuario..."
-                id="username"
-                onChange={(e) => detectarCambio('username', e)}
-                value={campo['username'] || ''}
-              />
-              <span className={styles.required}>{error['username']}</span>
-            </div>
-            <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-              <label className="col-form-label">
-                Contraseña <label className={styles.required}>*</label>
-              </label>
-              <input
-                type="password"
-                className="form-control"
-                placeholder="Contraseña..."
-                id="password"
-                onChange={(e) => detectarCambio('password', e)}
-                value={campo['password'] || ''}
-              />
-              <span className={styles.required} role="alert">{error['password']}</span>
-            </div>
-            <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-              <label htmlFor="role" className="col-form-label">
-                Rol <label className={styles.required}>*</label>
-              </label>
-              <select
-                className="form-select"
-                placeholder="Ingrese rol..."
-                id="role"
-                onChange={(e) => detectarCambio('role', e)}
-                value={campo['role'] || ''}
-              >
-                <option value="">Elegir</option>
-                <option value="false">Usuario</option>
-                <option value="true">Administrador</option>
-              </select>
-              <span className={styles.required}>{error['role']}</span>
-            </div>
-            <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-              <label htmlFor="isActive" className="col-form-label">
-                Estado <label className={styles.required}>*</label>
-              </label>
-              <select
-                className="form-select"
-                placeholder="Ingrese estado..."
-                id="isActive"
-                onChange={(e) => detectarCambio('isActive', e)}
-                value={campo['isActive'] || ''}
-              >
-                <option value="">Elegir</option>
-                <option value="false">Inactivo</option>
-                <option value="true">Activo</option>
-              </select>
-              <span className={styles.required}>{error['isActive']}</span>
-            </div>
-            <br />
-            <div className="w-100"></div>
-            <div className={'mb-4 col-12 col-md-8 col-lg-6 col-xl-5 mx-auto d-flex justify-content-center align-items-center ' + styles.formActions}>
-              <button
-                type="submit"
-                className={'btn btn-rojo ' + styles.cancelButton}
-                onClick={() => clear()}
-              >
-                Cancelar
-              </button>
-              <button
-                type="submit"
-                className={'btn btn-verde ms-3 ' + styles.submitButton}
-                onClick={() => guardarNuevo()}
-              >
-                Guardar
-              </button>              
-            </div>
-          </div>
-        ) : (
-          ''
-        )}
+          </Modal.Header>
+          <Modal.Body>
+            <Form onSubmit={(e) => e.preventDefault()}>
+              <div className="row justify-content-center">
+                <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
+                  <label className="col-form-label">
+                    Nombre <label className={styles.required}>*</label>
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Nombre..."
+                    id="firstname"
+                    onChange={(e) => detectarCambio('firstname', e)}
+                    value={campo['firstname'] || ''}
+                  />
+                  <span className={styles.required}>{error['firstname']}</span>
+                </div>
+                <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
+                  <label className="col-form-label">
+                    Apellido <label className={styles.required}>*</label>
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Apellido..."
+                    id="lastname"
+                    onChange={(e) => detectarCambio('lastname', e)}
+                    value={campo['lastname'] || ''}
+                  />
+                  <span className={styles.required}>{error['lastname']}</span>
+                </div>
+                <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
+                  <label className="col-form-label">
+                    Email <label className={styles.required}>*</label>
+                  </label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    placeholder="Email..."
+                    id="email"
+                    onChange={(e) => detectarCambio('email', e)}
+                    value={campo['email'] || ''}
+                  />
+                  <span className={styles.required}>{error['email']}</span>
+                </div>
+                <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
+                  <label className="col-form-label">
+                    Nombre de Usuario <label className={styles.required}>*</label>
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Nombre de usuario..."
+                    id="username"
+                    onChange={(e) => detectarCambio('username', e)}
+                    value={campo['username'] || ''}
+                  />
+                  <span className={styles.required}>{error['username']}</span>
+                </div>
+                <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
+                  <label className="col-form-label">
+                    Contraseña <label className={styles.required}>*</label>
+                  </label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    placeholder="Contraseña..."
+                    id="password"
+                    onChange={(e) => detectarCambio('password', e)}
+                    value={campo['password'] || ''}
+                  />
+                  <span className={styles.required} role="alert">{error['password']}</span>
+                </div>
+                <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
+                  <label htmlFor="role" className="col-form-label">
+                    Rol <label className={styles.required}>*</label>
+                  </label>
+                  <select
+                    className="form-select"
+                    placeholder="Ingrese rol..."
+                    id="role"
+                    onChange={(e) => detectarCambio('role', e)}
+                    value={campo['role'] || ''}
+                  >
+                    <option value="">Elegir</option>
+                    <option value="false">Usuario</option>
+                    <option value="true">Administrador</option>
+                  </select>
+                  <span className={styles.required}>{error['role']}</span>
+                </div>
+                <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
+                  <label htmlFor="isActive" className="col-form-label">
+                    Estado <label className={styles.required}>*</label>
+                  </label>
+                  <select
+                    className="form-select"
+                    placeholder="Ingrese estado..."
+                    id="isActive"
+                    onChange={(e) => detectarCambio('isActive', e)}
+                    value={campo['isActive'] || ''}
+                  >
+                    <option value="">Elegir</option>
+                    <option value="false">Inactivo</option>
+                    <option value="true">Activo</option>
+                  </select>
+                  <span className={styles.required}>{error['isActive']}</span>
+                </div>
+              </div>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <button
+              type="submit"
+              className={'btn btn-rojo ' + styles.cancelButton}
+              onClick={() => clear()}
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              className={'btn btn-verde ms-3 ' + styles.submitButton}
+              onClick={() => guardarNuevo()}
+            >
+              Guardar
+            </button>
+          </Modal.Footer>
+        </Modal>
 
-        {show ? (
-          <div className="border-top-sm m-0 row justify-content-center panel-gris m-md-3 rounded shadow container-lg mx-md-auto">
-            <h4 className="mt-4">
+        <Modal show={show}>
+          <Modal.Header>
+            <h4>
               Editar Usuario <span className={styles.required}>(*) Campos Requeridos</span>
             </h4>
-            <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-              <label className="col-form-label">
-                Nombre <label className={styles.required}>*</label>
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Nombre..."
-                id="firstname"
-                onChange={(e) => detectarCambio('firstname', e)}
-                value={campo['firstname'] || ''}
-              />
-              <span className={styles.required}>{error['firstname']}</span>
-            </div>
-            <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-              <label className="col-form-label">
-                Apellido <label className={styles.required}>*</label>
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Apellido..."
-                id="lastname"
-                onChange={(e) => detectarCambio('lastname', e)}
-                value={campo['lastname'] || ''}
-              />
-              <span className={styles.required}>{error['lastname']}</span>
-            </div>
-            <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-              <label className="col-form-label">
-                Email <label className={styles.required}>*</label>
-              </label>
-              <input
-                type="email"
-                className="form-control"
-                placeholder="Email..."
-                id="email"
-                onChange={(e) => detectarCambio('email', e)}
-                value={campo['email'] || ''}
-              />
-              <span className={styles.required}>{error['email']}</span>
-            </div>
-            <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-              <label className="col-form-label">
-                Nombre de Usuario <label className={styles.required}>*</label>
-              </label>
-              <input
-                type="text"
-                disabled="true"
-                className="form-control"
-                placeholder="Nombre de usuario..."
-                id="username"
-                onChange={(e) => detectarCambio('username', e)}
-                value={campo['username'] || ''}
-              />
-            </div>
-            <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-              <label className="col-form-label">Nueva Contraseña</label>
-              <input
-                type="password"
-                className="form-control"
-                placeholder="Contraseña..."
-                id="password"
-                onChange={(e) => detectarCambio('password', e)}
-                value={campo['password'] || ''}
-              />
-              <span className={styles.required} role="alert">{error['password']}</span>
-            </div>
-            <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-              <label htmlFor="role" className="col-form-label">
-                Rol <label className={styles.required}>*</label>
-              </label>
-              <select
-                className="form-select"
-                placeholder="Ingrese rol..."
-                id="role"
-                onChange={(e) => detectarCambio('role', e)}
-                value={campo['role'] || ''}
-              >
-                <option value="">Elegir</option>
-                <option value="false">Usuario</option>
-                <option value="true">Administrador</option>
-              </select>
-            </div>
-            <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-              <label htmlFor="isActive" className="col-form-label">
-                Estado <label className={styles.required}>*</label>
-              </label>
-              <select
-                className="form-select"
-                placeholder="Ingrese estado..."
-                id="isActive"
-                onChange={(e) => detectarCambio('isActive', e)}
-                value={campo['isActive'] || ''}
-              >
-                <option value="false">Inactivo</option>
-                <option value="true">Activo</option>
-              </select>
-            </div>
-            <div className="w-100"></div>
-            <div className={'mb-4 col-12 col-md-8 col-lg-6 col-xl-5 mx-auto d-flex justify-content-center align-items-center ' + styles.formActions}>
-              <button
-                type="submit"
-                className={'btn btn-rojo ' + styles.cancelButton}
-                onClick={() => clear()}
-              >
-                Cancelar
-              </button>
-              <button
-                type="submit"
-                className={'btn btn-verde ms-3 ' + styles.submitButton}
-                onClick={() => guardar()}
-              >
-                Guardar
-              </button>
-            </div>
-          </div>
-        ) : (
-          ''
-        )}
+          </Modal.Header>
+          <Modal.Body>
+            <Form onSubmit={(e) => e.preventDefault()}>
+              <div className="row justify-content-center">
+                <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
+                  <label className="col-form-label">
+                    Nombre <label className={styles.required}>*</label>
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Nombre..."
+                    id="firstname"
+                    onChange={(e) => detectarCambio('firstname', e)}
+                    value={campo['firstname'] || ''}
+                  />
+                  <span className={styles.required}>{error['firstname']}</span>
+                </div>
+                <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
+                  <label className="col-form-label">
+                    Apellido <label className={styles.required}>*</label>
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Apellido..."
+                    id="lastname"
+                    onChange={(e) => detectarCambio('lastname', e)}
+                    value={campo['lastname'] || ''}
+                  />
+                  <span className={styles.required}>{error['lastname']}</span>
+                </div>
+                <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
+                  <label className="col-form-label">
+                    Email <label className={styles.required}>*</label>
+                  </label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    placeholder="Email..."
+                    id="email"
+                    onChange={(e) => detectarCambio('email', e)}
+                    value={campo['email'] || ''}
+                  />
+                  <span className={styles.required}>{error['email']}</span>
+                </div>
+                <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
+                  <label className="col-form-label">
+                    Nombre de Usuario <label className={styles.required}>*</label>
+                  </label>
+                  <input
+                    type="text"
+                    disabled="true"
+                    className="form-control"
+                    placeholder="Nombre de usuario..."
+                    id="username"
+                    onChange={(e) => detectarCambio('username', e)}
+                    value={campo['username'] || ''}
+                  />
+                </div>
+                <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
+                  <label className="col-form-label">Nueva Contraseña</label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    placeholder="Contraseña..."
+                    id="password"
+                    onChange={(e) => detectarCambio('password', e)}
+                    value={campo['password'] || ''}
+                  />
+                  <span className={styles.required} role="alert">{error['password']}</span>
+                </div>
+                <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
+                  <label htmlFor="role" className="col-form-label">
+                    Rol <label className={styles.required}>*</label>
+                  </label>
+                  <select
+                    className="form-select"
+                    placeholder="Ingrese rol..."
+                    id="role"
+                    onChange={(e) => detectarCambio('role', e)}
+                    value={campo['role'] || ''}
+                  >
+                    <option value="">Elegir</option>
+                    <option value="false">Usuario</option>
+                    <option value="true">Administrador</option>
+                  </select>
+                </div>
+                <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
+                  <label htmlFor="isActive" className="col-form-label">
+                    Estado <label className={styles.required}>*</label>
+                  </label>
+                  <select
+                    className="form-select"
+                    placeholder="Ingrese estado..."
+                    id="isActive"
+                    onChange={(e) => detectarCambio('isActive', e)}
+                    value={campo['isActive'] || ''}
+                  >
+                    <option value="false">Inactivo</option>
+                    <option value="true">Activo</option>
+                  </select>
+                </div>
+              </div>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <button
+              type="submit"
+              className={'btn btn-rojo ' + styles.cancelButton}
+              onClick={() => clear()}
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              className={'btn btn-verde ms-3 ' + styles.submitButton}
+              onClick={() => guardar()}
+            >
+              Guardar
+            </button>
+          </Modal.Footer>
+        </Modal>
 
         <div className="row">
           <div className={'col-12 col-md-12 col-lg-12 col-xl-12 ' + styles.tableWrapper}>
