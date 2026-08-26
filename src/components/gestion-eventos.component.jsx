@@ -243,7 +243,7 @@ const Events = () => {
             <div className=" justify-content-center  d-flex mb-4">
               <button
                 type="submit"
-                className="btn btn-primary mb-2 mt-2"
+                className="btn btn-azul mb-2 mt-2"
                 disabled={validate}
               >
                 <PlusIcon className="signoMas" />

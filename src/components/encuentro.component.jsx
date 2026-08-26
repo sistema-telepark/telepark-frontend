@@ -228,7 +228,7 @@ const Encuentro = () => {
         <hr />
         <button
           type="button"
-          className="btn btn-primary mb-2 mt-3"
+          className="btn btn-azul mb-2 mt-3"
           onClick={() => showModalInsert()}
         >
           <PlusIcon />

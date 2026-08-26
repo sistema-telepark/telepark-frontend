@@ -334,7 +334,7 @@ const AdminUsuarios = () => {
     <main className="border-top-sm m-0 justify-content-center m-md-3 rounded shadow container-lg mx-md-auto panel-gris">
         <h2 className="mt-4 text-center">Administrar Usuarios</h2>
         <hr />
-        <button type="button" className="btn btn-primary mb-2 mt-2" onClick={() => agregar()}>
+        <button type="button" className="btn btn-azul mb-2 mt-2" onClick={() => agregar()}>
           <PlusIcon className="signoMas" />
           Agregar
         </button>

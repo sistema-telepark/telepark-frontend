@@ -242,7 +242,7 @@ const ListaEvolucion = () => {
                   className={'btn btn-verde ' + styles.submitButton}
                   onClick={() => cargarNuevo()}
                 >
-                  Confirmar
+                  Guardar
                 </button>
                 <button
                   type="submit"

@@ -255,7 +255,7 @@ const Search = () => {
         <hr />
         <button
           type="button"
-          className="btn btn-primary mb-2 mt-2"
+          className="btn btn-azul mb-2 mt-2"
           onClick={() => showModalInsert()}
         >
           <PlusIcon />

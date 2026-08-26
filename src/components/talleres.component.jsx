@@ -177,7 +177,7 @@ const Talleres = () => {
         <hr />
         <button
           type="button"
-          className="btn btn-primary mb-2 mt-3"
+          className="btn btn-azul mb-2 mt-3"
           onClick={() => showModalInsert()}
         >
           <PlusIcon />
@@ -379,7 +379,7 @@ const Talleres = () => {
                   />
                   <button
                     type="button"
-                    className="btn btn-primary"
+                    className="btn btn-azul"
                     onClick={() => formAct.handleSubmit(cargarNuevo)()}
                   >
                     <PlusIcon />

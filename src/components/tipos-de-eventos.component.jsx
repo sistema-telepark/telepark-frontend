@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Form, Modal } from 'react-bootstrap';
 import { eventRespository } from '../services/event.service';
 import Swal from 'sweetalert2';
-import { PencilIcon, PlusIcon } from './icons/icons-shared';
+import { PencilIcon, PlusIcon, TrashIcon } from './icons/icons-shared';
 
 const TypeEvents = () => {
   const [typeEvent, setTypeEvent] = useState([]);
@@ -196,7 +196,7 @@ const TypeEvents = () => {
       <Container className="container panel-gris">
         <h2 className="mt-4 text-center">Tipos de eventos</h2>
         <hr />
-        <button className="btn btn-primary mb-2 mt-3" onClick={() => showModalInsert()}>
+        <button className="btn btn-azul mb-2 mt-3" onClick={() => showModalInsert()}>
           <PlusIcon className="signoMas" /> Agregar
         </button>
         <div className="row m-md-3 shadow mx-md-auto border-top-sm m-0">
@@ -237,7 +237,7 @@ const TypeEvents = () => {
                         className="btn btn-rojo"
                         onClick={() => handleDelete(element)}
                       >
-                        Eliminar
+                        <TrashIcon />
                       </button>
                     </td>
                   </tr>

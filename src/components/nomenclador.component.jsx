@@ -251,7 +251,7 @@ const Nomenclador = () => {
               ) : (
                 <button
                   type="button"
-                  className="btn btn-azul-simple"
+                  className="btn btn-azul"
                   onClick={() => cargarNuevo('enfermedad')}
                   aria-label="Agregar enfermedad"
                 >
@@ -351,7 +351,7 @@ const Nomenclador = () => {
               ) : (
                 <button
                   type="button"
-                  className="btn btn-azul-simple"
+                  className="btn btn-azul"
                   onClick={() => cargarNuevo('medicamento')}
                   aria-label="Agregar medicamento"
                 >
@@ -451,7 +451,7 @@ const Nomenclador = () => {
               ) : (
                 <button
                   type="button"
-                  className="btn btn-azul-simple"
+                  className="btn btn-azul"
                   onClick={() => cargarNuevo('obrasocial')}
                   aria-label="Agregar obra social"
                 >

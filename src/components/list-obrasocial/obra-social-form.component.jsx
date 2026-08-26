@@ -39,7 +39,7 @@ const ObraSocialForm = ({
             className={'btn btn-verde ' + styles.submitButton}
             onClick={() => funcionConfirmar()}
           >
-            Confirmar
+            Guardar
           </button>
           <button
             type="submit"
