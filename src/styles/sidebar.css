@@ -67,6 +67,7 @@
   justify-content: center;
   height: 50px;
   position: relative;
+  padding-top: 1.5rem;
 }
 
 /* El img del toggle (logo de 150px por App.css) no debe ocupar layout en
@@ -83,7 +84,7 @@
 .sidebar .nav-list {
   padding-inline-start: 0px;
   padding-top: 2rem;
-  height: calc(100% - 62px);
+  height: calc(100% - 82px);
   margin-left: 5px;
   margin-right: 5px;
 }
@@ -216,10 +217,13 @@
     border-radius: 0px;
     padding-bottom: 2vh;
     z-index: 99;
-    height: 60px;
+    height: 70px;
     transition: all 0.5s ease;
   }
 
+  .sidebar .logo-details {
+    padding-top: 0.5rem;
+  }
   .open {
     width: 100%;
     height: auto;
@@ -264,7 +268,7 @@
   }
 
   .sidebar .logo-details {
-    height: 60px;
+    height: 70px;
   }
 
   /* RF-02: en móvil el toggle es el logo (el svg queda oculto arriba). Sin esta
