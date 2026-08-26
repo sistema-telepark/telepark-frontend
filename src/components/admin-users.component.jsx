@@ -626,7 +626,7 @@ const AdminUsuarios = () => {
               <thead>
                 <tr>
                   <th scope="col">Usuario</th>
-                  <th scope="col">Nombre Completo</th>
+                  <th scope="col">Nombre completo</th>
                   <th scope="col">Rol</th>
                   <th scope="col">Estado</th>
                   <th scope="col">Acción</th>

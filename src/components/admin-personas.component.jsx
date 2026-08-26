@@ -12,7 +12,7 @@ import { provinciaRepository } from '../services/provincia.service';
 import Swal from 'sweetalert2';
 import { Form, Modal } from 'react-bootstrap';
 
-const Search = () => {
+const AdminPersonas = () => {
   const [arrayProvincias, setArrayProvincias] = useState([]);
   const [arrayPerson, setArrayPerson] = useState([]);
   const [buscar, setBuscar] = useState('');
@@ -164,12 +164,12 @@ const Search = () => {
     });
   };
 
-  // Función que obtiene la lista de personas con ep
+  // Función que obtiene la lista de TODAS las personas
   // B01 (HITL 2026-08-11): el backend responde envelope DRF paginado
   // {count,next,previous,results} → normalizar a .results (patrón RA-13,
   // consistente con los componentes del módulo Taller).
   const getPersonAll = async () => {
-    let response = await eventRespository.getPersonEp();
+    let response = await eventRespository.getAll();
     if (response?.success) {
       setArrayPerson(response.data.results ?? response.data);
     }
@@ -548,4 +548,4 @@ const Search = () => {
     </>
   );
 };
-export default memo(Search);
+export default memo(AdminPersonas);

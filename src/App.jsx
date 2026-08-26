@@ -36,8 +36,8 @@ const ListaObraSocial = lazy(
 const ListaIndicacion = lazy(
   () => import(/* webpackChunkName: "lista-indicacion" */ './components/list-indicacion.component')
 );
-const Search = lazy(
-  () => import(/* webpackChunkName: "search" */ './components/search-criteria.component')
+const AdminPersonas = lazy(
+  () => import(/* webpackChunkName: "admin-personas" */ './components/admin-personas.component')
 );
 const Events = lazy(
   () => import(/* webpackChunkName: "events" */ './components/gestion-eventos.component')
@@ -166,13 +166,13 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                       element={
                         <ErrorBoundary
                           FallbackComponent={(props) => (
-                            <ErrorFallbackRoute {...props} componentName="Search" />
+                            <ErrorFallbackRoute {...props} componentName="AdminPersonas" />
                           )}
                           onError={logError}
                           resetKeys={[token]}
                         >
                           <Suspense fallback={<LoadingSpinner />}>
-                            <Search />
+                            <AdminPersonas />
                           </Suspense>
                         </ErrorBoundary>
                       }
@@ -185,13 +185,13 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                       element={
                         <ErrorBoundary
                           FallbackComponent={(props) => (
-                            <ErrorFallbackRoute {...props} componentName="Search" />
+                            <ErrorFallbackRoute {...props} componentName="AdminPersonas" />
                           )}
                           onError={logError}
                           resetKeys={[token]}
                         >
                           <Suspense fallback={<LoadingSpinner />}>
-                            <Search />
+                            <AdminPersonas />
                           </Suspense>
                         </ErrorBoundary>
                       }
