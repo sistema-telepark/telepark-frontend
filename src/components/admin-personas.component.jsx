@@ -14,7 +14,6 @@ const AdminPersonas = () => {
     apellido: '',
     telefono: 0,
     borrado: 0,
-    espaciente: 0,
   });
   const [modalEdit, setModalEdit] = useState(false);
 
@@ -44,7 +43,6 @@ const AdminPersonas = () => {
           apellido: data.apellido,
           telefono: data.telefono,
           borrado: listdata.borrado,
-          espaciente: listdata.espaciente,
         };
         return modifidedPerson;
       }
@@ -85,7 +83,6 @@ const AdminPersonas = () => {
       nombre: '',
       apellido: '',
       telefono: 0,
-      espaciente: 0,
       borrado: 0,
     });
   };
