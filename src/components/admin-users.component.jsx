@@ -475,7 +475,7 @@ const AdminUsuarios = () => {
               </div>
             </Form>
           </Modal.Body>
-          <Modal.Footer>
+          <Modal.Footer className="justify-content-center">
             <button
               type="submit"
               className={'btn btn-rojo ' + styles.cancelButton}

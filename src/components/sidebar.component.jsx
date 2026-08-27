@@ -10,6 +10,7 @@ import {
   HomeIcon,
   AdminUsersIcon,
   AddPersonIcon,
+  SearchSidebarIcon,
   FamilyIcon,
   MedicalRecordIcon,
   NomencladorIcon,
@@ -70,10 +71,10 @@ const Sidebar = () => {
         )}
         <li className={current_url === '/add-paciente' ? 'active' : ''}>
           <a href="./add-paciente">
-            <AddPersonIcon />
-            <span className="links_name">Ingresar Persona con EP</span>
+            <SearchSidebarIcon />
+            <span className="links_name">Buscar Personas</span>
           </a>
-          <span className="tooltip">Ingresar Persona con EP</span>
+          <span className="tooltip">Buscar Personas</span>
         </li>
 
         <li className={current_url === '/familiar' ? 'active' : ''}>
@@ -87,9 +88,9 @@ const Sidebar = () => {
         <li className={current_url === '/list-pacientes' ? 'active' : ''}>
           <a href="./list-pacientes">
             <MedicalRecordIcon />
-            <span className="links_name">Ingresar Ficha Medica</span>
+            <span className="links_name">Ficha Medica</span>
           </a>
-          <span className="tooltip">Ingresar Ficha Medica Persona con EP</span>
+          <span className="tooltip">Administrar Ficha Medica de Personas con EP</span>
         </li>
 
         <li className={current_url === '/nomenclador' ? 'active' : ''}>
