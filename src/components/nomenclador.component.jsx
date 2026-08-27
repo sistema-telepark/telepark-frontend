@@ -217,7 +217,7 @@ const Nomenclador = () => {
       </div>
 
       <div className="row">
-        <div className="mt-4 mb-4 col-12 col-md-12 col-lg-4 col-xl-4">
+        <div className="mt-3 mb-4 col-12 col-md-12 col-lg-4 col-xl-4">
           <div className="row">
             <div className="mb-2 col-12 col-md-12 col-lg-12 col-xl-12 input-group">
               <input
@@ -317,7 +317,7 @@ const Nomenclador = () => {
           </div>
         </div>
 
-        <div className="mt-4 col-12 col-md-12 col-lg-4 col-xl-4">
+        <div className="mt-3 col-12 col-md-12 col-lg-4 col-xl-4">
           <div className="row">
             <div className="mb-2 col-12 col-md-12 col-lg-12 col-xl-12 input-group">
               <input
@@ -417,7 +417,7 @@ const Nomenclador = () => {
           </div>
         </div>
         
-        <div className="mt-4 col-12 col-md-12 col-lg-4 col-xl-4">
+        <div className="mt-3 col-12 col-md-12 col-lg-4 col-xl-4">
           <div className="row">
             <div className="col-12 col-md-12 col-lg-12 col-xl-12 input-group">
               <input

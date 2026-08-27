@@ -189,7 +189,7 @@ const AdminPersonas = () => {
         <h2 className="mt-4 text-center">Personas</h2>
         <hr />
         <form
-          className="row align-items-center mt-2"
+          className="row align-items-center mt-4"
           onSubmit={(e) => {
             e.preventDefault();
           }}
