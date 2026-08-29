@@ -58,7 +58,6 @@ const TypeEvents = () => {
     setModalEdit(false);
   };
 
-  // Función que obtiene para eliminar un tipos de evento
   const deleteTypeEvent = async (data) => {
     try {
       let modifidedEvent = {
@@ -130,7 +129,6 @@ const TypeEvents = () => {
       }
     });
   };
-  // Función que obtiene la lista de tipos de eventos
   const getEventAll = async (isActivo = () => true) => {
     try {
       let response = await eventRespository.getEventAll();
@@ -147,7 +145,6 @@ const TypeEvents = () => {
     setForm({ idtipoevento: 0, nombre: '', desactivataller: 0 });
   };
 
-  //notificaciones
   const notificacionExito = () => {
     const Toast = Swal.mixin({
       toast: true,
@@ -269,8 +266,6 @@ const TypeEvents = () => {
           </button>
         </Modal.Footer>
       </Modal>
-
-      {/* EDITAR */}
 
       <Modal show={modalEdit}>
         <Modal.Header>

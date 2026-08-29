@@ -2,7 +2,6 @@ import http from '../http-common';
 import { withServiceHandler } from './error-handler';
 
 const events = {
-  // service tipo de evento
   async getEventAll() {
     const response = await http.get(`/tipos-evento`);
     return response.data;
@@ -19,7 +18,6 @@ const events = {
     const response = await http.delete(`/tipos-evento/${id}`);
     return response.data;
   },
-  // service de evento
   async createEvent(data) {
     const response = await http.post(`/eventos`, data);
     return response.data;
@@ -28,7 +26,6 @@ const events = {
     const response = await http.get(`/eventos`);
     return response.data;
   },
-  // service de persona
   async getAll() {
     const response = await http.get(`/personas`);
     return response.data;

@@ -36,7 +36,6 @@ const ListaObraSocial = (props) => {
     }
   }, [idEpElegido, navigate]);
 
-  // Funcion que obtiene la lista de obras sociales
   const getObrasocial = async () => {
     const response = await obrasocialRepository.getAll();
     if (response?.success) {
@@ -44,7 +43,6 @@ const ListaObraSocial = (props) => {
     }
   };
 
-  // Funcion que obtiene la lista de obras sociales de un paciente
   const getOs = async () => {
     if (!idEpElegido) return;
 
@@ -54,20 +52,17 @@ const ListaObraSocial = (props) => {
     }
   };
 
-  // Funcion que guarda el valor de los campos
   const detectarCambio = (e) => {
     const { name, value } = e.target;
     setCampo({ ...campo, [name]: value });
   };
 
-  // Funcion que habilita el formulario de agregar
   const agregar = () => {
     setShow(false);
     setShowNuevo(true);
     setCampo({ ...campo, obrasocial: '' });
   };
 
-  // Funcion que habilita el formulario de editar
   const editar = (obrasocial, idos) => {
     setShow(true);
     setShowNuevo(false);
@@ -75,14 +70,12 @@ const ListaObraSocial = (props) => {
     setCampo({ obrasocial: obrasocial });
   };
 
-  // Funcion que cancela las operaciones y oculta los formularios
   const cancelar = () => {
     setShow(false);
     setShowNuevo(false);
     setCampo({ ...campo, obrasocial: '' });
   };
 
-  // Funcion que crea una nueva obra social y la guarda en la base de datos
   const cargarNuevo = async () => {
     const idObrasocial = campo.obrasocial;
     if (idObrasocial !== '') {
@@ -101,7 +94,6 @@ const ListaObraSocial = (props) => {
     }
   };
 
-  // Funcion que actualiza una obra social y la guarda en la base de datos
   const guardar = async () => {
     const idObrasocial = campo.obrasocial;
     const id = idEditado;
@@ -121,7 +113,6 @@ const ListaObraSocial = (props) => {
     }
   };
 
-  // Funcion que elimina una obra social
   const eliminar = async (info, id) => {
     const data = {
       idpersonaep: Number(idEpElegido),

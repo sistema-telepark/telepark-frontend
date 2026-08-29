@@ -36,7 +36,6 @@ const Encuentro = () => {
     };
   }, []);
 
-  // Función que obtiene la lista de encuentros
   const getEncuentroAll = async (isActivo = () => true) => {
     try {
       const resp = await encuentroRepository.getEncuentroAll();
@@ -49,7 +48,6 @@ const Encuentro = () => {
     }
   };
 
-  // Función que obtiene la lista de talleres
   const getTallerAll = async (isActivo = () => true) => {
     try {
       const resp = await tallerRepository.getTallerAll();
@@ -62,7 +60,6 @@ const Encuentro = () => {
     }
   };
 
-  // Función que obtiene la lista de actividades
   const getActividadAll = async (isActivo = () => true) => {
     try {
       const resp = await actividadRepository.getAll();
@@ -75,7 +72,7 @@ const Encuentro = () => {
     }
   };
 
-  // Función que obtiene las actividades realizadas de una clase (array plano — RA-13)
+  // Las actividades realizadas de una clase llegan como array plano
   const getActividadesRealizadas = async (idclasetaller) => {
     try {
       const resp =
@@ -88,7 +85,6 @@ const Encuentro = () => {
     }
   };
 
-  /** manejador de estados de los checkboxes de actividades */
   const handleActividadCheck = (idactividad) => {
     setActividad((prevActividades) =>
       prevActividades.map((act) =>
@@ -160,7 +156,6 @@ const Encuentro = () => {
     }
   };
 
-  // Edita un encuentro
   const guardarEdicion = async (data) => {
     try {
       const resp = await encuentroRepository.updateEncuentro(encuentroEditando.idclasetaller, {
@@ -190,7 +185,6 @@ const Encuentro = () => {
     setModalInsert(false);
   };
 
-  // Al editar un encuentro muestra sus valores
   const showModalEdit = (data) => {
     setEncuentroEditando(data);
     formEdit.reset({
@@ -207,7 +201,6 @@ const Encuentro = () => {
     setModalEdit(false);
   };
 
-  // Función que obtiene para eliminar un encuentro
   const eliminarEncuentro = async (data) => {
     try {
       const ok = await showConfirm(
@@ -326,7 +319,6 @@ const Encuentro = () => {
         </div>
       </Container>
 
-      {/* nuevo encuentro */}
       <Modal show={modalInsert}>
         <Modal.Header>
           <div>
@@ -413,7 +405,6 @@ const Encuentro = () => {
         </Modal.Footer>
       </Modal>
 
-      {/* editar encuentro */}
       <Modal show={modalEdit}>
         <Modal.Header>
           <div>
@@ -511,7 +502,6 @@ const Encuentro = () => {
         </Modal.Footer>
       </Modal>
 
-      {/* elegir actividades */}
       <Modal show={modalInsertAct}>
         <Modal.Header>
           <div>

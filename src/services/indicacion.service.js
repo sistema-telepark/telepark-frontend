@@ -7,8 +7,8 @@ const indicaciones = {
       const response = await http.get(`/personas-ep/${personaep_pk}/indicaciones`);
       return response.data.results ?? response.data;
     } catch (error) {
-      // Sprint 5.24 (DR-1 Opción A): 404 {code:"not_found"} de sub-recurso de PersonaEp
-      // se traduce a lista vacía silenciosa (sin propagar error al componente).
+      // 404 de sub-recurso de PersonaEp se traduce a lista vacía silenciosa
+      // (sin propagar error al componente).
       if (error.response?.status === 404) {
         return [];
       }

@@ -21,16 +21,13 @@ const Login = () => {
     };
   }, []);
 
-  // Valido los campos del formulario
   const validarFormulario = () => {
     let formularioValido = true;
 
-    // user
     if (!campo['user']) {
       formularioValido = false;
     }
 
-    // Pass
     if (!campo['pass']) {
       formularioValido = false;
     }
@@ -38,12 +35,9 @@ const Login = () => {
     return formularioValido;
   };
 
-  // Una vez que los campos del formulario han sido llenado correctamente
-  // Se envía la petición de autenticación al API
   const enviarFormulario = async (e) => {
     e.preventDefault();
 
-    // Si la validación de los campos del formulario ha sido realizada
     if (validarFormulario()) {
       setLoading(true);
 
@@ -67,9 +61,7 @@ const Login = () => {
     }
   };
 
-  // Detectamos cuando un campo del formulario es llenado y por ende cambia de estado
   const detectarCambio = (field, e) => {
-    // Cambio de estado de campo — inmutable
     setCampo({ ...campo, [field]: e.target.value });
   };
 

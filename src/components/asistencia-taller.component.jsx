@@ -10,7 +10,6 @@ import { logAsyncError } from './error-boundary/logError';
 import utils from '../utils/utils';
 import styles from '../styles/asistencia-taller.module.css';
 
-// Valores canónicos del estado de AsistenciaTaller (D-1/S10)
 const ESTADO_PRESENTE = 'Presente';
 const ESTADO_AUSENTE = 'Ausente';
 
@@ -67,7 +66,6 @@ const Asistencia = () => {
     }
   };
 
-  // Limpia el select y desmarca todos los checkboxes (sin tocar backend)
   const clear = () => {
     formAsistencia.reset();
     setPacientes(
@@ -79,7 +77,7 @@ const Asistencia = () => {
     );
   };
 
-  // Guardar la asistencia del día (lote bulk — RA-14)
+  // Guarda la asistencia del día (lote bulk)
   const guardarAsistencia = async (data) => {
     try {
       const asistenciaData = pacientes.map((paciente) => ({

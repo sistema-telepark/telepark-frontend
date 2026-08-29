@@ -24,7 +24,6 @@ const Actividad = () => {
     };
   }, []);
 
-  // Función que obtiene la lista de actividades
   const getActividades = async (isActivo = () => true) => {
     try {
       const resp = await actividadRepository.getAll();
@@ -37,7 +36,6 @@ const Actividad = () => {
     }
   };
 
-  // Función que obtiene la lista de talleres reales (fix D-5)
   const getTalleres = async (isActivo = () => true) => {
     try {
       const resp = await tallerRepository.getTallerAll();
@@ -50,19 +48,16 @@ const Actividad = () => {
     }
   };
 
-  // Función que habilita la edición de un registro de la tabla
   const editar = (actividad) => {
     setEditId(actividad.idactividad);
     formActividad.reset({ nombre: actividad.nombre, idtaller: actividad.idtaller });
   };
 
-  // Función que cancela la edición
   const cancelar = () => {
     setEditId(null);
     formActividad.reset({ nombre: '', idtaller: '' });
   };
 
-  // Guarda la edición o agrega una nueva actividad
   const onSubmit = async (data) => {
     try {
       if (editId) {
@@ -93,7 +88,6 @@ const Actividad = () => {
     }
   };
 
-  // Función que elimina una actividad con confirmación y DELETE real
   const eliminar = async (actividad) => {
     try {
       const ok = await showConfirm(`¿Seguro que desea eliminar la actividad: ${actividad.nombre}?`);

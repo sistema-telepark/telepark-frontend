@@ -32,7 +32,6 @@ const ListaEvolucion = () => {
     getEvoluciones();
   }, [idEpElegido, navigate]);
 
-  // Funcion que obtiene la lista de evolucion de un paciente
   const getEvoluciones = async () => {
     setLoading(true);
     try {
@@ -127,7 +126,6 @@ const ListaEvolucion = () => {
     setShow(false);
   };
 
-  //notificaciones
   const notificacionGuardar = () => {
     const Toast = Swal.mixin({
       toast: true,
@@ -171,7 +169,6 @@ const ListaEvolucion = () => {
           eliminar(escalaevolucion, fecha, idEvolucion);
           swalWithBootstrapButtons.fire('Eliminado!', 'Se ha eliminado el registro', 'success');
         } else if (
-          /* Read more about handling dismissals below */
           result.dismiss === Swal.DismissReason.cancel
         ) {
           swalWithBootstrapButtons.fire('Cancelado', 'No se eliminaron registros', 'error');

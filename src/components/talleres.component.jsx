@@ -42,7 +42,6 @@ const Talleres = () => {
     };
   }, []);
 
-  // Función que obtiene la lista de talleres
   const getTallerAll = async (isActivo = () => true) => {
     try {
       const resp = await tallerRepository.getTallerAll();
@@ -55,7 +54,6 @@ const Talleres = () => {
     }
   };
 
-  // Función que obtiene la lista de actividades
   const getActividades = async (isActivo = () => true) => {
     try {
       const resp = await actividadRepository.getAll();
@@ -103,7 +101,6 @@ const Talleres = () => {
     setModalInsertAct(false);
   };
 
-  // Guardar datos de un nuevo taller
   const guardarNuevo = async (data) => {
     try {
       const resp = await tallerRepository.createTaller({ tipotaller: data.tipotaller });
@@ -118,7 +115,6 @@ const Talleres = () => {
     }
   };
 
-  // Editar un taller existente
   const editar = async (data) => {
     try {
       const resp = await tallerRepository.updateTaller(tallerEditando.idtaller, {
@@ -136,7 +132,6 @@ const Talleres = () => {
     }
   };
 
-  // Borrar un taller con confirmación y DELETE real
   const deleteT = async (data) => {
     try {
       const ok = await showConfirm(`¿Seguro que desea eliminar el taller: ${data.tipotaller}?`);
@@ -151,7 +146,6 @@ const Talleres = () => {
     }
   };
 
-  // Agregar una actividad pendiente al lote local del taller
   const cargarNuevo = (data) => {
     const nuevaActividad = { nombre: data.nombre, idLocal: generarIdLocal() };
     setActividades([...actividades, nuevaActividad]);
@@ -163,7 +157,6 @@ const Talleres = () => {
     setActividades(actividades.filter((actividad) => actividad.idLocal !== idLocal));
   };
 
-  // Borrar una actividad persistida con confirmación y DELETE real
   const deleteA = async (data) => {
     try {
       const ok = await showConfirm(`¿Seguro que desea eliminar la actividad: ${data.nombre}?`);
@@ -178,7 +171,6 @@ const Talleres = () => {
     }
   };
 
-  // Guardar el lote de actividades pendientes del taller
   const guardarAct = async () => {
     try {
       const results = await Promise.all(
@@ -263,7 +255,6 @@ const Talleres = () => {
         </div>
       </Container>
 
-      {/* nuevo taller */}
       <Modal show={modalInsert}>
         <Modal.Header>
           <div>
@@ -316,7 +307,6 @@ const Talleres = () => {
         </Modal.Footer>
       </Modal>
 
-      {/* editar taller */}
       <Modal show={modalEdit}>
         <Modal.Header>
           <div>
@@ -383,7 +373,6 @@ const Talleres = () => {
         </Modal.Footer>
       </Modal>
 
-      {/* guardar actividades */}
       <Modal show={modalInsertAct}>
         <Modal.Header>
           <div>

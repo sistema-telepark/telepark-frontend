@@ -16,7 +16,7 @@ export const CheckIcon = ({ size = 20, color = 'currentColor', className, ...res
   </svg>
 );
 
-// Nota RF-03: ...rest propaga props nativas de SVG y no se declara en propTypes.
+// ...rest propaga props nativas de SVG y no se declara en propTypes.
 CheckIcon.propTypes = {
   size: PropTypes.number,
   color: PropTypes.string,

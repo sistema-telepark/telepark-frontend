@@ -29,9 +29,7 @@ const AdminUsuarios = () => {
     };
   }, []);
 
-  // Función que obtiene los datos de los campos del formulario
   const detectarCambio = (field, e) => {
-    // Cambio de estado de campo — inmutable
     setCampo({ ...campo, [field]: e.target.value });
     if (field === 'buscador') {
       buscar(e.target.value);
@@ -42,7 +40,6 @@ const AdminUsuarios = () => {
     }
   };
 
-  // Valido los campos del formulario
   const validarFormulario = () => {
     let error = {};
     let formularioValido = true;
@@ -113,15 +110,13 @@ const AdminUsuarios = () => {
       }
     }
 
-    // Seteo el estado de error
     setError(error);
 
     return formularioValido;
   };
 
-  // Función que obtiene la lista de usuarios
-  // M01 (HITL 2026-08-11): /usuarios devuelve envelope DRF paginado
-  // {count,next,previous,results} → normalizar a .results (patrón RA-13).
+  // El backend devuelve envelope DRF paginado {count,next,previous,results}
+  // → normalizar a .results.
   const getUsers = async (isActivo = () => true) => {
     let response = await userRepository.getUsers();
 
@@ -264,7 +259,6 @@ const AdminUsuarios = () => {
     });
   };
 
-  //notificaciones
   const notificacionExito = () => {
     const Toast = Swal.mixin({
       toast: true,
@@ -284,7 +278,6 @@ const AdminUsuarios = () => {
     });
   };
 
-  //notificaciones
   const notificacionError = () => {
     const Toast = Swal.mixin({
       toast: true,
@@ -304,7 +297,6 @@ const AdminUsuarios = () => {
     });
   };
 
-  // Loader
   const cargando = () => {
     Swal.fire({
       title: 'Espere...',
@@ -312,15 +304,12 @@ const AdminUsuarios = () => {
       didOpen: () => {
         Swal.showLoading();
       },
-      willClose: () => {
-        // Cerrando loader
-      },
+      willClose: () => {},
     });
   };
 
-  // Función buscar: filtra la lista de usuarios cargada en memoria (client-side, RF-05).
-  // Normaliza el término una sola vez (case-insensitive) y busca sobre username,
-  // first_name y last_name (campos declarados en el contrato del backend).
+  // Filtra la lista de usuarios cargada en memoria; normaliza el término una
+  // sola vez (case-insensitive) y busca sobre username, first_name y last_name.
   const buscar = (valor = campo.buscador) => {
     const termino = (valor || '').trim().toLowerCase();
     if (!usuarios) return;
@@ -337,7 +326,6 @@ const AdminUsuarios = () => {
     setUsuariosFiltrados(filtrados);
   };
 
-  // Lista visible: la filtrada por el buscador o la completa.
   const listaVisible = usuariosFiltrados !== undefined ? usuariosFiltrados : usuarios;
   return (
     <main className="border-top-sm m-0 justify-content-center m-md-3 rounded shadow container-lg mx-md-auto panel-gris">
@@ -350,8 +338,8 @@ const AdminUsuarios = () => {
       <form
         className="row align-items-center mt-2"
         onSubmit={(e) => {
-          e.preventDefault(); // Evita que la página web se recargue por completo
-          buscar(); // Llama a tu función de búsqueda existente
+          e.preventDefault();
+          buscar();
         }}
       >
         <div className={'mb-4 col-12 ' + styles.searchInputWrapper}>

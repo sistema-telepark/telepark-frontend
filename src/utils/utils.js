@@ -59,7 +59,6 @@ class Utils {
     }
   }
 
-  // Funcion que retorna la descripcion segun el estado de evolucion
   describirEstado(estado) {
     switch (estado) {
       case 0:
@@ -90,7 +89,6 @@ class Utils {
     return anio + '-' + mes + '-' + dia;
   }
 
-  // Notificaciones
   notificacionGuardar() {
     const Toast = Swal.mixin({
       toast: true,
@@ -133,7 +131,6 @@ class Utils {
         if (result.isConfirmed) {
           funcion(info, id);
         } else if (
-          /* Read more about handling dismissals below */
           result.dismiss === Swal.DismissReason.cancel
         ) {
           swalWithBootstrapButtons.fire('Cancelado', 'No se eliminaron registros', 'error');

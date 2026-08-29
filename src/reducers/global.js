@@ -1,5 +1,5 @@
-// DEPRECATED: Reemplazado por globalSlice.js (Redux Toolkit createSlice)
-// Mantenido temporalmente como referencia. Se eliminará en Sprint 4.
+// DEPRECATED: Reemplazado por globalSlice.js (Redux Toolkit createSlice).
+// Mantenido temporalmente como referencia.
 import { CAMBIAR } from '../actions/types';
 
 const initialState = {

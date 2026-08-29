@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { TokenService } from './services/token.service';
 
-// T-4 (Sprint 5.25): política de retry de red — Opción A del PO (2026-08-29).
-// Presupuesto: 1 request original + 2 reintentos = 3 intentos totales.
+// Política de retry de red: 1 request original + 2 reintentos = 3 intentos totales.
 const RETRY_CONFIG = {
   maxRetries: 2,
   baseDelayMs: 500,
@@ -78,7 +77,7 @@ instance.interceptors.response.use(
         }
       }
     }
-    // Retry de red (T-4): ERR_NETWORK/timeout para todos los métodos; 502/503/504 solo idempotentes
+    // Retry de red: ERR_NETWORK/timeout para todos los métodos; 502/503/504 solo idempotentes
     if (originalConfig && (isNetworkError(err) || isRetryableServerError(err))) {
       const retryCount = originalConfig._retryCount || 0;
       if (retryCount < RETRY_CONFIG.maxRetries) {

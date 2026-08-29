@@ -19,7 +19,7 @@ export const MenuIcon = ({ size = 16, color = 'currentColor', className, ...rest
   </svg>
 );
 
-// Nota RF-03: ...rest propaga props nativas de SVG y no se declara en propTypes.
+// ...rest propaga props nativas de SVG y no se declara en propTypes.
 MenuIcon.propTypes = {
   size: PropTypes.number,
   color: PropTypes.string,

@@ -22,11 +22,9 @@ import {
 import { ClipboardDataIcon, ClipboardCheckIcon, EyeIcon } from './icons/icons-shared';
 
 const Sidebar = () => {
-  //funciones
   const [open, setOpen] = useState(false);
   const toggleSidebar = () => setOpen((prevOpen) => !prevOpen);
 
-  //arrow function para logout
   const logout = (e) => {
     e.preventDefault();
     TokenService.removeUser();

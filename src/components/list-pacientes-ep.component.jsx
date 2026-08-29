@@ -111,12 +111,10 @@ const ListaPaciente = (props) => {
     enviarFormulario(data);
   };
 
-  // Funcion que guarda el valor del buscador
   const detectarCambio = (e) => {
     setBuscar(e.target.value);
   };
 
-  // Funcion que navega a las diferentes secciones
   const verSeccion = (id, nombre, apellido) => {
     const idpersona = id;
     const nombrepersona = nombre + ' ' + apellido;
@@ -275,7 +273,6 @@ const ListaPaciente = (props) => {
         </div>
       </main>
 
-      {/* AGREGAR PERSONA CON EP */}
       <Modal show={modalInsert} onExit={handleModalInsertClosed} restoreFocus={false}>
         <Modal.Header className="justify-content-center">
           <h2 className="mb-0">Agregar persona con EP</h2>

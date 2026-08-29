@@ -44,7 +44,6 @@ const ListaIndicacion = () => {
     }
   }, [idEpElegido, navigate]);
 
-  // Funcion que obtiene la lista de indicaciones de un paciente
   const getIndicaciones = async () => {
     if (!idEpElegido) return;
 
@@ -55,7 +54,6 @@ const ListaIndicacion = () => {
     }
   };
 
-  // Funcion que obtiene la lista de medicamentos
   const getMedicamento = async () => {
     let response = await medicamentoRepository.getAll();
 
@@ -179,7 +177,6 @@ const ListaIndicacion = () => {
     setShow(false);
   };
 
-  //notificaciones
   const notificacionGuardar = () => {
     const Toast = Swal.mixin({
       toast: true,
@@ -237,7 +234,6 @@ const ListaIndicacion = () => {
           );
           swalWithBootstrapButtons.fire('Eliminado!', 'Se ha eliminado el registro', 'success');
         } else if (
-          /* Read more about handling dismissals below */
           result.dismiss === Swal.DismissReason.cancel
         ) {
           swalWithBootstrapButtons.fire('Cancelado', 'No se eliminaron registros', 'error');

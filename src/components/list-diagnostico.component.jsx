@@ -41,7 +41,6 @@ const ListaDiagnostico = () => {
     }
   }, [idEpElegido, navigate]);
 
-  // Funcion que obtiene la lista de enfermedades
   const getEnfermedad = async () => {
     let response = await enfermedadRepository.getAll();
 
@@ -50,10 +49,8 @@ const ListaDiagnostico = () => {
     }
   };
 
-  // Funcion que obtiene la lista de diagnosticos de un paciente
-  // M02 (HITL 2026-08-11): no llamar al service con idEpElegido vacío
-  // (redux inicial '') — antes armaba `/personas-ep//diagnosticos` → 404.
-  // Normalizar listado paginado DRF a .results (patrón RA-13).
+  // No llamar al service con idEpElegido vacío (estado inicial '') — antes
+  // armaba `/personas-ep//diagnosticos` → 404. Normalizar listado paginado a .results.
   const getDiagnosticos = async () => {
     if (!idEpElegido) {
       setDiagnosticos([]);
@@ -148,7 +145,6 @@ const ListaDiagnostico = () => {
     setShow(false);
   };
 
-  //notificaciones
   const notificacionGuardar = () => {
     const Toast = Swal.mixin({
       toast: true,
@@ -192,7 +188,6 @@ const ListaDiagnostico = () => {
           eliminar(idenfermedad, fecha, idDiagnostico);
           swalWithBootstrapButtons.fire('Eliminado!', 'Se ha eliminado el registro', 'success');
         } else if (
-          /* Read more about handling dismissals below */
           result.dismiss === Swal.DismissReason.cancel
         ) {
           swalWithBootstrapButtons.fire('Cancelado', 'No se eliminaron registros', 'error');

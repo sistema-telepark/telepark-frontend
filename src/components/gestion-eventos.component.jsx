@@ -27,9 +27,8 @@ const Events = () => {
     };
   }, []);
 
-  // Función que obtiene la lista de personas con ep
-  // B01 (HITL 2026-08-11): /personas-ep devuelve envelope DRF paginado
-  // {count,next,previous,results} → normalizar a .results (patrón RA-13).
+  // El backend devuelve envelope DRF paginado {count,next,previous,results}
+  // → normalizar a .results.
   const getPersonEpAll = async (isActivo = () => true) => {
     let response = await eventRespository.getPersonEp();
     if (!isActivo()) return;
@@ -38,7 +37,6 @@ const Events = () => {
     }
   };
 
-  // Función que obtiene la lista de tipos de eventos
   const getTipeEvent = async (isActivo = () => true) => {
     let response = await eventRespository.getEventAll();
     if (!isActivo()) return;
@@ -74,7 +72,6 @@ const Events = () => {
     });
   };
 
-  //notificaciones
   const notificacionExito = () => {
     const Toast = Swal.mixin({
       toast: true,

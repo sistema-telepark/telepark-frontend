@@ -25,7 +25,6 @@ const Nomenclador = () => {
     getObrasocial();
   }, []);
 
-  // Funcion que obtiene la lista de enfermedades
   const getEnfermedad = async () => {
     const response = await enfermedadRepository.getAll();
     if (response?.success) {
@@ -33,7 +32,6 @@ const Nomenclador = () => {
     }
   };
 
-  // Funcion que obtiene la lista de medicamentos
   const getMedicamento = async () => {
     let response = await medicamentoRepository.getAll();
     if (response?.success) {
@@ -41,7 +39,6 @@ const Nomenclador = () => {
     }
   };
 
-  // Funcion que obtiene la lista de obras sociales
   const getObrasocial = async () => {
     let response = await obrasocialRepository.getAll();
     if (response?.success) {
@@ -49,19 +46,16 @@ const Nomenclador = () => {
     }
   };
 
-  // Funcion que guarda el valor de los campos
   const detectarCambio = (e) => {
     const { name, value } = e.target;
     setCampo({ ...campo, [name]: value });
   };
 
-  // Funcion que guarda el valor del checkbox
   const detectarCheck = (e) => {
     const { name, checked } = e.target;
     setCampo({ ...campo, [name]: utils.convertirCheck(checked) });
   };
 
-  // Funcion que habilita la edicion de un registro de la tabla seleccionada
   const editar = (tipo, info, id) => {
     setType(tipo);
     switch (tipo) {
@@ -79,13 +73,11 @@ const Nomenclador = () => {
     }
   };
 
-  // Funcion que cancela la edicion de la tabla seleccionada
   const cancelar = () => {
     setType('');
     setCampo({ enfermedad: '', medicamento: '', obrasocial: '', isChecked: 0, idEditado: '' });
   };
 
-  // Funcion que guarda la edicion de la tabla seleccionada
   const guardar = async (tipo) => {
     let nombre = campo[tipo];
     let esestatal = tipo === 'obrasocial' ? campo.isChecked : undefined;
@@ -126,7 +118,6 @@ const Nomenclador = () => {
     }
   };
 
-  // Funcion que elimina un registro de la tabla elegida
   const eliminar = async (tipo, id) => {
     switch (tipo) {
       case 'enfermedad':
@@ -159,7 +150,6 @@ const Nomenclador = () => {
     cancelar();
   };
 
-  // Funcion que agrega un registro a la tabla elegida
   const cargarNuevo = async (tipo) => {
     let nombre = campo[tipo];
     let esestatal = tipo === 'obrasocial' ? campo.isChecked : false;

@@ -2,9 +2,9 @@ import http from '../http-common';
 import { withServiceHandler } from './error-handler';
 
 const actividadesRealizadas = {
-  // RA-13: el YAML NO expone /actividadrealizada/{id}/actividades; se recorre la
-  // paginación de /actividades-realizadas (envelope DRF {count,next,results},
-  // Telepark API.yaml:4853) y se filtra client-side por idclasetaller.
+  // El backend no expone /actividadrealizada/{id}/actividades; se recorre la
+  // paginación de /actividades-realizadas (envelope DRF {count,next,results})
+  // y se filtra client-side por idclasetaller.
   async getActividadesRealizadasByClase(idClaseTaller) {
     const resultados = [];
     let nextUrl = `/actividades-realizadas`;
@@ -25,8 +25,8 @@ const actividadesRealizadas = {
     const response = await http.post(`/actividades-realizadas`, data);
     return response.data;
   },
-  // FIX H3 (RF-23, Telepark API.yaml:146): el path param del YAML se llama
-  // idactividad pero identifica el registro de actividad realizada (M2M).
+  // El path param se llama idactividad pero identifica el registro de
+  // actividad realizada (M2M).
   async updateActividadRealizada(id, data) {
     const response = await http.put(`/actividades-realizadas/${id}`, data);
     return response.data;

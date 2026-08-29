@@ -35,7 +35,6 @@ const FichaMedica = () => {
     getIndicaciones();
   }, [idEpElegido, navigate]);
 
-  // Funcion que obtiene la lista de diagnosticos de un paciente
   const getDiagnosticos = async () => {
     try {
       let response = await diagnosticoRepository.get(idEpElegido);
@@ -48,7 +47,6 @@ const FichaMedica = () => {
     }
   };
 
-  // Funcion que obtiene la lista de evolucion de un paciente
   const getEvoluciones = async () => {
     try {
       let response = await evolucionRepository.get(idEpElegido);
@@ -61,7 +59,6 @@ const FichaMedica = () => {
     }
   };
 
-  // Funcion que obtiene la lista de obras sociales de un paciente
   const getOs = async () => {
     try {
       let response = await osRepository.get(idEpElegido);
@@ -74,7 +71,6 @@ const FichaMedica = () => {
     }
   };
 
-  // Funcion que obtiene la lista de indicaciones de un paciente
   const getIndicaciones = async () => {
     try {
       let response = await indicacionRepository.get(idEpElegido);

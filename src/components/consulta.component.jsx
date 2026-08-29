@@ -10,7 +10,6 @@ import { logAsyncError } from './error-boundary/logError';
 import utils from '../utils/utils';
 import styles from '../styles/consulta.module.css';
 
-// Constante canónica reutilizada de asistencia-taller.component.js (D-1/S10)
 const ESTADO_AUSENTE = 'Ausente';
 
 const Consulta = () => {
@@ -101,7 +100,6 @@ const Consulta = () => {
     });
   };
 
-  // Consultar el listado de asistencia de un encuentro
   const consultarAsistencia = async () => {
     try {
       if (!form.fechaEncuentro) {
@@ -124,7 +122,6 @@ const Consulta = () => {
     }
   };
 
-  // Consultar pacientes con faltas consecutivas en los últimos dos encuentros
   const consultarFaltasC = async () => {
     try {
       const respAsistencias = await asistenciaRepository.getAsistenciaAll();
@@ -191,7 +188,6 @@ const Consulta = () => {
         <h2 className="mt-4 text-center">Consultas</h2>
         <hr />
 
-        {/* Primer cuadro con sombra que agrupa la lista de asistencia e inasistencia */}
         <div
           className={`row m-md-3 mx-auto justify-content-center rounded container-lg ${styles.whiteCard}`}
         >
@@ -214,7 +210,6 @@ const Consulta = () => {
             </Form.Group>
           </div>
 
-          {/* Componente de asistencia */}
           <div className={`mb-4 col-12 col-md-8 p-4 rounded shadow-sm ${styles.sectionCard}`}>
             <div className="d-flex justify-content-between align-items-center mb-3">
               <span>Listado de asistencia</span>
@@ -254,7 +249,6 @@ const Consulta = () => {
           </div>
         </div>
 
-        {/* Segundo cuadro con sombra para el listado de faltas consecutivas */}
         <div
           className={`row m-md-3 mx-auto justify-content-center rounded container-lg ${styles.whiteCard}`}
         >

@@ -83,7 +83,6 @@ const AdminPersonas = () => {
     });
   };
 
-  //notificaciones
   const notificacionExito = () => {
     const Toast = Swal.mixin({
       toast: true,
@@ -103,10 +102,8 @@ const AdminPersonas = () => {
     });
   };
 
-  // Función que obtiene la lista de TODAS las personas
-  // B01 (HITL 2026-08-11): el backend responde envelope DRF paginado
-  // {count,next,previous,results} → normalizar a .results (patrón RA-13,
-  // consistente con los componentes del módulo Taller).
+  // El backend responde envelope DRF paginado {count,next,previous,results}
+  // → normalizar a .results.
   const getPersonAll = async (isActivo = () => true) => {
     let response = await eventRespository.getAll();
     if (!isActivo()) return;
@@ -119,7 +116,6 @@ const AdminPersonas = () => {
     let arrayPersonas = arrayPerson.filter(function (e) {
       return e.idpersona !== persona.idpersona;
     });
-    // modifico el borrado logico de la persona
     persona.borrado = 1;
     Swal.fire({
       title: `¿Seguro que desea eliminar a  ${persona.nombre}?`,
@@ -223,7 +219,6 @@ const AdminPersonas = () => {
         </div>
       </main>
 
-      {/* EDITAR */}
       <Modal show={modalEdit}>
         <Modal.Header>
           <div>
