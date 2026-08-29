@@ -5,7 +5,10 @@ const formatValidationErrors = (data) => {
   if (!data) return '';
   if (typeof data === 'string') return data;
   if (Array.isArray(data)) {
-    return data.map((item) => formatValidationErrors(item)).filter(Boolean).join(', ');
+    return data
+      .map((item) => formatValidationErrors(item))
+      .filter(Boolean)
+      .join(', ');
   }
 
   return Object.entries(data)
@@ -20,8 +23,13 @@ const formatValidationErrors = (data) => {
 export const normalizeError = (error) => {
   if (error.response) {
     const { status, data } = error.response;
+    const rawMessage = data?.message || data?.detail;
+    // Sprint 5.24 (C2 US-4): si detail/message es objeto {campo:[msgs]} (400 por campo),
+    // aplanarlo con formatValidationErrors — evita renderizar "[object Object]".
     const message =
-      data?.message || data?.detail || formatValidationErrors(data) || `Error ${status}`;
+      rawMessage && typeof rawMessage === 'object'
+        ? formatValidationErrors(rawMessage)
+        : rawMessage || formatValidationErrors(data) || `Error ${status}`;
     return {
       message,
       status,
