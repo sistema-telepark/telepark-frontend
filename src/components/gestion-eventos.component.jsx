@@ -19,24 +19,30 @@ const Events = () => {
   const formRef = useRef(null);
 
   useEffect(() => {
-    getPersonEpAll();
-    getTipeEvent();
+    let activo = true;
+    getPersonEpAll(() => activo);
+    getTipeEvent(() => activo);
+    return () => {
+      activo = false;
+    };
   }, []);
 
   // Función que obtiene la lista de personas con ep
   // B01 (HITL 2026-08-11): /personas-ep devuelve envelope DRF paginado
   // {count,next,previous,results} → normalizar a .results (patrón RA-13).
-  const getPersonEpAll = async () => {
+  const getPersonEpAll = async (isActivo = () => true) => {
     let response = await eventRespository.getPersonEp();
-    if (response && response.data) {
+    if (!isActivo()) return;
+    if (response?.success && response?.data) {
       setNamePersonEP(response.data.results ?? response.data);
     }
   };
 
   // Función que obtiene la lista de tipos de eventos
-  const getTipeEvent = async () => {
+  const getTipeEvent = async (isActivo = () => true) => {
     let response = await eventRespository.getEventAll();
-    if (response) {
+    if (!isActivo()) return;
+    if (response?.success && response?.data) {
       setTypeEvent(response.data);
     }
   };
@@ -59,18 +65,13 @@ const Events = () => {
       borrado: 0,
     };
 
-    eventRespository
-      .createEvent(data)
-      .then((response) => {
-        if (response) {
-          setEvents(initialEvents);
-          formRef.current.reset();
-          notificacionExito();
-        }
-      })
-      .catch(() => {
-        notificacionError();
-      });
+    eventRespository.createEvent(data).then((response) => {
+      if (response?.success) {
+        setEvents(initialEvents);
+        formRef.current.reset();
+        notificacionExito();
+      }
+    });
   };
 
   //notificaciones
@@ -92,26 +93,6 @@ const Events = () => {
       title: 'Se ha guardado con éxito',
     });
   };
-  //notificaciones
-  const notificacionError = () => {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer);
-        toast.addEventListener('mouseleave', Swal.resumeTimer);
-      },
-    });
-
-    Toast.fire({
-      icon: 'error',
-      title: 'Error: Hubo un problema en la carga.',
-    });
-  };
-
   const validateDate = (fechaDesde, fechaHasta) => {
     if (fechaDesde !== '' && fechaHasta !== '') {
       return fechaDesde > fechaHasta;
@@ -241,11 +222,7 @@ const Events = () => {
           </div>
           <div className="row">
             <div className=" justify-content-center  d-flex mb-4">
-              <button
-                type="submit"
-                className="btn btn-azul mb-2 mt-2"
-                disabled={validate}
-              >
+              <button type="submit" className="btn btn-azul mb-2 mt-2" disabled={validate}>
                 <PlusIcon className="signoMas" />
                 Agregar
               </button>

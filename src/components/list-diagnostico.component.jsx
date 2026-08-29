@@ -7,6 +7,7 @@ import { enfermedadRepository } from '../services/enfermedad.service';
 import utils from '../utils/utils';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
 import styles from '../styles/list-diagnostico.module.css';
+import { Spinner } from 'react-bootstrap';
 
 const ListaDiagnostico = () => {
   const idEpElegido = useSelector((state) => state.global.idEpElegido);
@@ -22,12 +23,19 @@ const ListaDiagnostico = () => {
   const [idEditado, setIdEditado] = useState('');
   const [enfermedades, setEnfermedades] = useState();
   const [diagnosticos, setDiagnosticos] = useState();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getEnfermedad();
-    if (idEpElegido) {
-      getDiagnosticos();
-    } else {
+    setLoading(true);
+    const cargarInicial = async () => {
+      try {
+        await Promise.all([getEnfermedad(), getDiagnosticos()]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    cargarInicial();
+    if (!idEpElegido) {
       setDiagnosticos([]);
       navigate('/list-pacientes', { replace: true });
     }
@@ -37,7 +45,7 @@ const ListaDiagnostico = () => {
   const getEnfermedad = async () => {
     let response = await enfermedadRepository.getAll();
 
-    if (response) {
+    if (response?.success && response?.data) {
       setEnfermedades(response.data);
     }
   };
@@ -54,7 +62,7 @@ const ListaDiagnostico = () => {
 
     let response = await diagnosticoRepository.get(idEpElegido);
 
-    if (response && response.data) {
+    if (response?.success && response?.data) {
       setDiagnosticos(response.data.results ?? response.data);
     }
   };
@@ -77,15 +85,12 @@ const ListaDiagnostico = () => {
         idenfermedad: Number(idEnfermedad),
         borrado: 0,
       };
-      diagnosticoRepository
-        .update(id, data)
-        .then((response) => {
-          if (response?.success) {
-            getDiagnosticos();
-            notificacionGuardar();
-          }
-        })
-        .catch(() => undefined);
+      diagnosticoRepository.update(id, data).then((response) => {
+        if (response?.success) {
+          getDiagnosticos();
+          notificacionGuardar();
+        }
+      });
       setCampo({ enfermedad: '', fecha: '' });
       setShow(false);
     }
@@ -117,15 +122,12 @@ const ListaDiagnostico = () => {
         idenfermedad: Number(idEnfermedad),
         borrado: 0,
       };
-      diagnosticoRepository
-        .create(data)
-        .then((reponse) => {
-          if (reponse?.success) {
-            getDiagnosticos();
-            notificacionGuardar();
-          }
-        })
-        .catch(() => undefined);
+      diagnosticoRepository.create(data).then((reponse) => {
+        if (reponse?.success) {
+          getDiagnosticos();
+          notificacionGuardar();
+        }
+      });
       setCampo({ enfermedad: '', fecha: '' });
       setShowNuevo(false);
     }
@@ -138,14 +140,11 @@ const ListaDiagnostico = () => {
       idenfermedad: Number(idenfermedad),
       borrado: 1,
     };
-    diagnosticoRepository
-      .update(id, data)
-      .then((response) => {
-        if (response) {
-          getDiagnosticos();
-        }
-      })
-      .catch(() => undefined);
+    diagnosticoRepository.update(id, data).then((response) => {
+      if (response?.success) {
+        getDiagnosticos();
+      }
+    });
     setShow(false);
   };
 
@@ -333,58 +332,70 @@ const ListaDiagnostico = () => {
 
         <div className="row">
           <div className="col-12">
-            <table
-              className={
-                'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
-              }
-            >
-              <thead>
-                <tr>
-                  <th scope="col">Nombre de Enfermedad</th>
-                  <th scope="col">Fecha de Diagnóstico</th>
-                  <th scope="col">Acción</th>
-                </tr>
-              </thead>
-              <tbody className={styles.tableBodyMiddle}>
-                {diagnosticos &&
-                  diagnosticos
-                    .filter((diagnostico) => diagnostico.borrado === 0)
-                    .map((diagnostico) => (
-                      <tr key={diagnostico.iddiagnostico}>
-                        <td>{diagnostico.idenfermedad.nombre}</td>
-                        <td>{utils.convertirFormatoFecha(diagnostico.fecha)}</td>
-                        <td>
-                          <button
-                            type="button"
-                            className={'btn btn-verde ' + styles.rowActionButton}
-                            onClick={() =>
-                              editar(
-                                diagnostico.idenfermedad.idenfermedad,
-                                diagnostico.fecha,
-                                diagnostico.iddiagnostico
-                              )
-                            }
-                          >
-                            <PencilIcon />
-                          </button>
-                          <button
-                            type="button"
-                            className="btn btn-rojo"
-                            onClick={() =>
-                              notificacionEliminar(
-                                diagnostico.idenfermedad.idenfermedad,
-                                diagnostico.fecha,
-                                diagnostico.iddiagnostico
-                              )
-                            }
-                          >
-                            <TrashIcon />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-              </tbody>
-            </table>
+            {loading ? (
+              <div className="text-center py-4">
+                <Spinner
+                  style={{ height: '4rem', width: '4rem' }}
+                  animation="border"
+                  variant="primary"
+                >
+                  Loading...
+                </Spinner>
+              </div>
+            ) : (
+              <table
+                className={
+                  'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
+                }
+              >
+                <thead>
+                  <tr>
+                    <th scope="col">Nombre de Enfermedad</th>
+                    <th scope="col">Fecha de Diagnóstico</th>
+                    <th scope="col">Acción</th>
+                  </tr>
+                </thead>
+                <tbody className={styles.tableBodyMiddle}>
+                  {diagnosticos &&
+                    diagnosticos
+                      .filter((diagnostico) => diagnostico.borrado === 0)
+                      .map((diagnostico) => (
+                        <tr key={diagnostico.iddiagnostico}>
+                          <td>{diagnostico.idenfermedad.nombre}</td>
+                          <td>{utils.convertirFormatoFecha(diagnostico.fecha)}</td>
+                          <td>
+                            <button
+                              type="button"
+                              className={'btn btn-verde ' + styles.rowActionButton}
+                              onClick={() =>
+                                editar(
+                                  diagnostico.idenfermedad.idenfermedad,
+                                  diagnostico.fecha,
+                                  diagnostico.iddiagnostico
+                                )
+                              }
+                            >
+                              <PencilIcon />
+                            </button>
+                            <button
+                              type="button"
+                              className="btn btn-rojo"
+                              onClick={() =>
+                                notificacionEliminar(
+                                  diagnostico.idenfermedad.idenfermedad,
+                                  diagnostico.fecha,
+                                  diagnostico.iddiagnostico
+                                )
+                              }
+                            >
+                              <TrashIcon />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
       </div>

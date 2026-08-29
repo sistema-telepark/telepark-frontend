@@ -6,6 +6,7 @@ import { encuentroRepository } from '../services/encuentro.service';
 import { pacienteRepository } from '../services/paciente.service';
 import { asistenciaRepository } from '../services/asistencia.service';
 import { eventRespository } from '../services/event.service';
+import { logAsyncError } from './error-boundary/logError';
 import utils from '../utils/utils';
 import styles from '../styles/consulta.module.css';
 
@@ -39,37 +40,57 @@ const Consulta = () => {
   }, []);
 
   const getTallerAll = async () => {
-    const resp = await tallerRepository.getTallerAll();
-    if (resp.success) {
-      setTaller(resp.data.results);
+    try {
+      const resp = await tallerRepository.getTallerAll();
+      if (resp.success) {
+        setTaller(resp.data.results);
+      }
+    } catch (error) {
+      logAsyncError(error, { context: 'obtener talleres' });
     }
   };
 
   const getActividades = async () => {
-    const resp = await actividadRepository.getAll();
-    if (resp.success) {
-      setAct(resp.data.results);
+    try {
+      const resp = await actividadRepository.getAll();
+      if (resp.success) {
+        setAct(resp.data.results);
+      }
+    } catch (error) {
+      logAsyncError(error, { context: 'obtener actividades' });
     }
   };
 
   const getEncuentroAll = async () => {
-    const resp = await encuentroRepository.getEncuentroAll();
-    if (resp.success) {
-      setEncuentro(resp.data.results);
+    try {
+      const resp = await encuentroRepository.getEncuentroAll();
+      if (resp.success) {
+        setEncuentro(resp.data.results);
+      }
+    } catch (error) {
+      logAsyncError(error, { context: 'obtener encuentros' });
     }
   };
 
   const getPacientes = async () => {
-    const resp = await pacienteRepository.getPacientesEp();
-    if (resp.success) {
-      setPacientes(resp.data.results ?? resp.data);
+    try {
+      const resp = await pacienteRepository.getPacientesEp();
+      if (resp.success) {
+        setPacientes(resp.data.results ?? resp.data);
+      }
+    } catch (error) {
+      logAsyncError(error, { context: 'obtener pacientes' });
     }
   };
 
   const getEventoAll = async () => {
-    const resp = await eventRespository.getEventGestionAll();
-    if (resp.success) {
-      setEvento(resp.data.results);
+    try {
+      const resp = await eventRespository.getEventGestionAll();
+      if (resp.success) {
+        setEvento(resp.data.results);
+      }
+    } catch (error) {
+      logAsyncError(error, { context: 'obtener eventos' });
     }
   };
 
@@ -82,73 +103,81 @@ const Consulta = () => {
 
   // Consultar el listado de asistencia de un encuentro
   const consultarAsistencia = async () => {
-    if (!form.fechaEncuentro) {
-      setErrores({ fecha: 'Debe elegir un encuentro.' });
-      setAsistencia([]);
-      return;
-    }
-    setErrores({});
+    try {
+      if (!form.fechaEncuentro) {
+        setErrores({ fecha: 'Debe elegir un encuentro.' });
+        setAsistencia([]);
+        return;
+      }
+      setErrores({});
 
-    const resp = await asistenciaRepository.getAsistenciaByEncuentro(form.fechaEncuentro);
-    if (resp.success) {
-      setAsistencia(resp.data);
-      setMensajeSinDatos(resp.data.length === 0);
-    } else {
-      setAsistencia([]);
-      setMensajeSinDatos(true);
+      const resp = await asistenciaRepository.getAsistenciaByEncuentro(form.fechaEncuentro);
+      if (resp.success) {
+        setAsistencia(resp.data);
+        setMensajeSinDatos(resp.data.length === 0);
+      } else {
+        setAsistencia([]);
+        setMensajeSinDatos(true);
+      }
+    } catch (error) {
+      logAsyncError(error, { context: 'consultar asistencia' });
     }
   };
 
   // Consultar pacientes con faltas consecutivas en los últimos dos encuentros
   const consultarFaltasC = async () => {
-    const respAsistencias = await asistenciaRepository.getAsistenciaAll();
-    const respPacientes = await pacienteRepository.getPacientesEp();
-    const respEncuentros = await encuentroRepository.getEncuentroAll();
+    try {
+      const respAsistencias = await asistenciaRepository.getAsistenciaAll();
+      const respPacientes = await pacienteRepository.getPacientesEp();
+      const respEncuentros = await encuentroRepository.getEncuentroAll();
 
-    if (!respAsistencias.success || !respPacientes.success || !respEncuentros.success) {
-      setFaltaC([]);
-      setMensajeSinDatosFC(true);
-      return;
-    }
-
-    const asistencias = respAsistencias.data.results;
-    const pacientes = respPacientes.data.results;
-    const encuentros = respEncuentros.data.results;
-
-    // Ordenar encuentros por fecha (del más reciente al más antiguo)
-    const encuentrosOrdenados = [...encuentros].sort(
-      (a, b) => new Date(b.fecha) - new Date(a.fecha)
-    );
-    const ultimosDosEncuentros = encuentrosOrdenados.slice(0, 2).map((enc) => enc.idclasetaller);
-
-    // Filtrar asistencias de los últimos dos encuentros con estado Ausente
-    const asistenciasFiltradas = asistencias.filter(
-      (asistenciaItem) =>
-        ultimosDosEncuentros.includes(asistenciaItem.idclasetaller) &&
-        asistenciaItem.estado === ESTADO_AUSENTE
-    );
-
-    // Agrupar asistencias por paciente
-    const faltasPorPaciente = asistenciasFiltradas.reduce((acc, asistenciaItem) => {
-      const { idpersonaep } = asistenciaItem;
-      if (!acc[idpersonaep]) {
-        acc[idpersonaep] = 0;
+      if (!respAsistencias.success || !respPacientes.success || !respEncuentros.success) {
+        setFaltaC([]);
+        setMensajeSinDatosFC(true);
+        return;
       }
-      acc[idpersonaep]++;
-      return acc;
-    }, {});
 
-    // Filtrar pacientes con faltas en ambos encuentros
-    const pacientesConFaltasConsecutivas = Object.entries(faltasPorPaciente)
-      .filter(([, count]) => count === 2)
-      .map(([idpersonaep]) => idpersonaep);
+      const asistencias = respAsistencias.data.results;
+      const pacientes = respPacientes.data.results;
+      const encuentros = respEncuentros.data.results;
 
-    const pacientesFiltrados = pacientes.filter((paciente) =>
-      pacientesConFaltasConsecutivas.includes(String(paciente.idpersona))
-    );
+      // Ordenar encuentros por fecha (del más reciente al más antiguo)
+      const encuentrosOrdenados = [...encuentros].sort(
+        (a, b) => new Date(b.fecha) - new Date(a.fecha)
+      );
+      const ultimosDosEncuentros = encuentrosOrdenados.slice(0, 2).map((enc) => enc.idclasetaller);
 
-    setFaltaC(pacientesFiltrados);
-    setMensajeSinDatosFC(pacientesFiltrados.length === 0);
+      // Filtrar asistencias de los últimos dos encuentros con estado Ausente
+      const asistenciasFiltradas = asistencias.filter(
+        (asistenciaItem) =>
+          ultimosDosEncuentros.includes(asistenciaItem.idclasetaller) &&
+          asistenciaItem.estado === ESTADO_AUSENTE
+      );
+
+      // Agrupar asistencias por paciente
+      const faltasPorPaciente = asistenciasFiltradas.reduce((acc, asistenciaItem) => {
+        const { idpersonaep } = asistenciaItem;
+        if (!acc[idpersonaep]) {
+          acc[idpersonaep] = 0;
+        }
+        acc[idpersonaep]++;
+        return acc;
+      }, {});
+
+      // Filtrar pacientes con faltas en ambos encuentros
+      const pacientesConFaltasConsecutivas = Object.entries(faltasPorPaciente)
+        .filter(([, count]) => count === 2)
+        .map(([idpersonaep]) => idpersonaep);
+
+      const pacientesFiltrados = pacientes.filter((paciente) =>
+        pacientesConFaltasConsecutivas.includes(String(paciente.idpersona))
+      );
+
+      setFaltaC(pacientesFiltrados);
+      setMensajeSinDatosFC(pacientesFiltrados.length === 0);
+    } catch (error) {
+      logAsyncError(error, { context: 'consultar faltas consecutivas' });
+    }
   };
 
   const obtenerNombre = (idpersonaep) => {

@@ -24,9 +24,7 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
     setValue('municipio' + tipo, '');
     const cargarMunicipios = async () => {
       try {
-        const response = await municipioRepository
-          .getByProvincia(provinciaSeleccionada)
-          .catch(() => undefined);
+        const response = await municipioRepository.getByProvincia(provinciaSeleccionada);
         if (activo) {
           if (response && response.data) {
             setMunicipios(response.data);
@@ -61,9 +59,7 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
     setCargandoLocalidades(true);
     const cargarLocalidades = async () => {
       try {
-        const response = await localidadRepository
-          .getByMunicipio(municipioSeleccionado)
-          .catch(() => undefined);
+        const response = await localidadRepository.getByMunicipio(municipioSeleccionado);
         if (activo) {
           if (response && response.data) {
             setLocalidades(response.data);

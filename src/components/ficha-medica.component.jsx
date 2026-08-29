@@ -6,6 +6,7 @@ import { diagnosticoRepository } from '../services/diagnostico.service';
 import { evolucionRepository } from '../services/evolucion.service';
 import { osRepository } from '../services/os.service';
 import { indicacionRepository } from '../services/indicacion.service';
+import { logAsyncError } from './error-boundary/logError';
 import utils from '../utils/utils';
 import styles from '../styles/ficha-medica.module.css';
 
@@ -36,37 +37,53 @@ const FichaMedica = () => {
 
   // Funcion que obtiene la lista de diagnosticos de un paciente
   const getDiagnosticos = async () => {
-    let response = await diagnosticoRepository.get(idEpElegido);
+    try {
+      let response = await diagnosticoRepository.get(idEpElegido);
 
-    if (response?.success) {
-      setDiagnosticos(response.data.results ?? response.data);
+      if (response?.success) {
+        setDiagnosticos(response.data.results ?? response.data);
+      }
+    } catch (error) {
+      logAsyncError(error, { context: 'obtener diagnosticos' });
     }
   };
 
   // Funcion que obtiene la lista de evolucion de un paciente
   const getEvoluciones = async () => {
-    let response = await evolucionRepository.get(idEpElegido);
+    try {
+      let response = await evolucionRepository.get(idEpElegido);
 
-    if (response?.success) {
-      setEvoluciones(response.data.results ?? response.data);
+      if (response?.success) {
+        setEvoluciones(response.data.results ?? response.data);
+      }
+    } catch (error) {
+      logAsyncError(error, { context: 'obtener evoluciones' });
     }
   };
 
   // Funcion que obtiene la lista de obras sociales de un paciente
   const getOs = async () => {
-    let response = await osRepository.get(idEpElegido);
+    try {
+      let response = await osRepository.get(idEpElegido);
 
-    if (response?.success) {
-      setOsociales(response.data.results ?? response.data);
+      if (response?.success) {
+        setOsociales(response.data.results ?? response.data);
+      }
+    } catch (error) {
+      logAsyncError(error, { context: 'obtener coberturas' });
     }
   };
 
   // Funcion que obtiene la lista de indicaciones de un paciente
   const getIndicaciones = async () => {
-    let response = await indicacionRepository.get(idEpElegido);
+    try {
+      let response = await indicacionRepository.get(idEpElegido);
 
-    if (response?.success) {
-      setIndicaciones(response.data.results ?? response.data);
+      if (response?.success) {
+        setIndicaciones(response.data.results ?? response.data);
+      }
+    } catch (error) {
+      logAsyncError(error, { context: 'obtener indicaciones' });
     }
   };
 

@@ -5,6 +5,7 @@ import { tallerRepository } from '../services/taller.service';
 import { actividadRepository } from '../services/actividad.service';
 import { showToast, showConfirm } from '../services/notification.service';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
+import { logAsyncError } from './error-boundary/logError';
 import styles from '../styles/talleres.module.css';
 
 const TIPOS_TALLER = ['Educación física', 'Literario', 'Danza'];
@@ -33,23 +34,37 @@ const Talleres = () => {
   const formAct = useForm();
 
   useEffect(() => {
-    getTallerAll();
-    getActividades();
+    let activo = true;
+    getTallerAll(() => activo);
+    getActividades(() => activo);
+    return () => {
+      activo = false;
+    };
   }, []);
 
   // Función que obtiene la lista de talleres
-  const getTallerAll = async () => {
-    const resp = await tallerRepository.getTallerAll();
-    if (resp.success) {
-      setTaller(resp.data.results);
+  const getTallerAll = async (isActivo = () => true) => {
+    try {
+      const resp = await tallerRepository.getTallerAll();
+      if (!isActivo()) return;
+      if (resp.success) {
+        setTaller(resp.data.results);
+      }
+    } catch (error) {
+      logAsyncError(error, { context: 'obtener talleres' });
     }
   };
 
   // Función que obtiene la lista de actividades
-  const getActividades = async () => {
-    const resp = await actividadRepository.getAll();
-    if (resp.success) {
-      setAct(resp.data.results);
+  const getActividades = async (isActivo = () => true) => {
+    try {
+      const resp = await actividadRepository.getAll();
+      if (!isActivo()) return;
+      if (resp.success) {
+        setAct(resp.data.results);
+      }
+    } catch (error) {
+      logAsyncError(error, { context: 'obtener actividades' });
     }
   };
 
@@ -90,37 +105,49 @@ const Talleres = () => {
 
   // Guardar datos de un nuevo taller
   const guardarNuevo = async (data) => {
-    const resp = await tallerRepository.createTaller({ tipotaller: data.tipotaller });
-    if (resp.success) {
-      showToast('success', 'Se ha guardado con éxito');
-      setModalInsert(false);
-      formInsert.reset();
-      getTallerAll();
+    try {
+      const resp = await tallerRepository.createTaller({ tipotaller: data.tipotaller });
+      if (resp.success) {
+        showToast('success', 'Se ha guardado con éxito');
+        setModalInsert(false);
+        formInsert.reset();
+        getTallerAll();
+      }
+    } catch (error) {
+      logAsyncError(error, { context: 'crear taller' });
     }
   };
 
   // Editar un taller existente
   const editar = async (data) => {
-    const resp = await tallerRepository.updateTaller(tallerEditando.idtaller, {
-      tipotaller: data.tipotaller,
-    });
-    if (resp.success) {
-      showToast('success', 'Se ha guardado con éxito');
-      setModalEdit(false);
-      formEdit.reset();
-      setTallerEditando(null);
-      getTallerAll();
+    try {
+      const resp = await tallerRepository.updateTaller(tallerEditando.idtaller, {
+        tipotaller: data.tipotaller,
+      });
+      if (resp.success) {
+        showToast('success', 'Se ha guardado con éxito');
+        setModalEdit(false);
+        formEdit.reset();
+        setTallerEditando(null);
+        getTallerAll();
+      }
+    } catch (error) {
+      logAsyncError(error, { context: 'actualizar taller' });
     }
   };
 
   // Borrar un taller con confirmación y DELETE real
   const deleteT = async (data) => {
-    const ok = await showConfirm(`¿Seguro que desea eliminar el taller: ${data.tipotaller}?`);
-    if (!ok) return;
-    const resp = await tallerRepository.deleteTaller(data.idtaller);
-    if (resp.success) {
-      showToast('success', 'Eliminado con éxito');
-      setTaller(taller.filter((item) => item.idtaller !== data.idtaller));
+    try {
+      const ok = await showConfirm(`¿Seguro que desea eliminar el taller: ${data.tipotaller}?`);
+      if (!ok) return;
+      const resp = await tallerRepository.deleteTaller(data.idtaller);
+      if (resp.success) {
+        showToast('success', 'Eliminado con éxito');
+        setTaller(taller.filter((item) => item.idtaller !== data.idtaller));
+      }
+    } catch (error) {
+      logAsyncError(error, { context: 'eliminar taller' });
     }
   };
 
@@ -138,31 +165,39 @@ const Talleres = () => {
 
   // Borrar una actividad persistida con confirmación y DELETE real
   const deleteA = async (data) => {
-    const ok = await showConfirm(`¿Seguro que desea eliminar la actividad: ${data.nombre}?`);
-    if (!ok) return;
-    const resp = await actividadRepository.delete(data.idactividad);
-    if (resp.success) {
-      showToast('success', 'Eliminado con éxito');
-      getActividades();
+    try {
+      const ok = await showConfirm(`¿Seguro que desea eliminar la actividad: ${data.nombre}?`);
+      if (!ok) return;
+      const resp = await actividadRepository.delete(data.idactividad);
+      if (resp.success) {
+        showToast('success', 'Eliminado con éxito');
+        getActividades();
+      }
+    } catch (error) {
+      logAsyncError(error, { context: 'eliminar actividad' });
     }
   };
 
   // Guardar el lote de actividades pendientes del taller
   const guardarAct = async () => {
-    const results = await Promise.all(
-      actividades.map((actividad) =>
-        actividadRepository.create({
-          nombre: actividad.nombre,
-          idtaller: tallerSeleccionado.idtaller,
-        })
-      )
-    );
-    if (results.every((resp) => resp.success)) {
-      showToast('success', 'Se ha guardado con éxito');
-      setModalInsertAct(false);
-      formAct.reset();
-      setActividades([]);
-      getActividades();
+    try {
+      const results = await Promise.all(
+        actividades.map((actividad) =>
+          actividadRepository.create({
+            nombre: actividad.nombre,
+            idtaller: tallerSeleccionado.idtaller,
+          })
+        )
+      );
+      if (results.every((resp) => resp.success)) {
+        showToast('success', 'Se ha guardado con éxito');
+        setModalInsertAct(false);
+        formAct.reset();
+        setActividades([]);
+        getActividades();
+      }
+    } catch (error) {
+      logAsyncError(error, { context: 'crear actividades' });
     }
   };
 
@@ -175,11 +210,7 @@ const Talleres = () => {
       <Container className="container panel-gris">
         <h2 className="mt-4 text-center">Talleres</h2>
         <hr />
-        <button
-          type="button"
-          className="btn btn-azul mb-2 mt-2"
-          onClick={() => showModalInsert()}
-        >
+        <button type="button" className="btn btn-azul mb-2 mt-2" onClick={() => showModalInsert()}>
           <PlusIcon />
           Agregar
         </button>

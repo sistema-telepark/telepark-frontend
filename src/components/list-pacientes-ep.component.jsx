@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { cambiarID } from '../actions/global';
 import { pacienteRepository } from '../services/paciente.service';
 import '../styles/list-pacientes-ep.css';
-import { Spinner, Form, Modal } from 'react-bootstrap';
+import { Alert, Spinner, Form, Modal } from 'react-bootstrap';
 import utils from '../utils/utils';
 import {
   EyeIcon,
@@ -25,6 +25,7 @@ import PropTypes from 'prop-types';
 
 const ListaPaciente = (props) => {
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [buscar, setBuscar] = useState('');
   const [pacientes, setPacientes] = useState([]);
   const [modalInsert, setModalInsert] = useState(false);
@@ -37,11 +38,20 @@ const ListaPaciente = (props) => {
 
   // Obtiene únicamente las personas que tienen ficha de EP.
   const getPacientes = async () => {
-    const response = await pacienteRepository
-      .getPacientesEp()
-      .catch(() => utils.notificacionError());
-    if (response?.success) {
-      setPacientes(response.data.results ?? response.data);
+    setLoading(true);
+    setError(false);
+    try {
+      const response = await pacienteRepository.getPacientesEp();
+      if (response?.success && response?.data) {
+        setPacientes(response.data.results ?? response.data);
+      } else {
+        setError(true);
+        utils.notificacionError();
+      }
+    } catch {
+      setError(true);
+      utils.notificacionError();
+    } finally {
       setLoading(false);
     }
   };
@@ -58,7 +68,7 @@ const ListaPaciente = (props) => {
   useEffect(() => {
     const cargarProvincias = async () => {
       const response = await provinciaRepository.getAll();
-      if (response && response.data) {
+      if (response?.success && response?.data) {
         setArrayProvincias(
           response.data.map((provincia) => ({
             idprovincia: provincia.idprovincia,
@@ -79,7 +89,7 @@ const ListaPaciente = (props) => {
     if (mostrarNotificacionAlCerrar.current) {
       mostrarNotificacionAlCerrar.current = false;
       document.activeElement?.blur();
-      setTimeout(() => utils.send(), 0);
+      utils.send();
     }
   };
 
@@ -89,7 +99,7 @@ const ListaPaciente = (props) => {
 
   const enviarFormulario = async (data) => {
     const response = await pacienteRepository.guardarPaciente(data).catch(() => utils.errorSend());
-    if (response) {
+    if (response?.success) {
       reset();
       mostrarNotificacionAlCerrar.current = true;
       handleModalInsert();
@@ -125,11 +135,7 @@ const ListaPaciente = (props) => {
 
         <div className="row mb-4">
           <div className="col-12 col-md-12 col-lg-12 col-xl-12">
-            <button
-              type="button"
-              className="btn btn-azul mb-3"
-              onClick={() => showModalInsert()}
-            >
+            <button type="button" className="btn btn-azul mb-3" onClick={() => showModalInsert()}>
               <PlusIcon />
               Agregar
             </button>
@@ -146,7 +152,18 @@ const ListaPaciente = (props) => {
 
         <div className="row">
           <div className="col-12 col-md-12 col-lg-12 col-xl-12 text-center">
-            {loading ? (
+            {error ? (
+              <Alert variant="danger" role="alert">
+                No se pudieron cargar los pacientes. Intente nuevamente.
+                <button
+                  type="button"
+                  className="btn btn-outline-danger btn-lg ms-2"
+                  onClick={getPacientes}
+                >
+                  Reintentar
+                </button>
+              </Alert>
+            ) : loading ? (
               <Spinner className={styles.spinner} animation="border" variant="primary">
                 Loading...
               </Spinner>

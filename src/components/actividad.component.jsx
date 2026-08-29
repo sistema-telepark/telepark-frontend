@@ -5,6 +5,7 @@ import { tallerRepository } from '../services/taller.service';
 import { showToast, showConfirm } from '../services/notification.service';
 import { PlusIcon, TrashIcon } from './icons/icons-shared';
 import { CheckIcon, CloseIcon } from './icons/icons-nomenclador';
+import { logAsyncError } from './error-boundary/logError';
 import styles from '../styles/actividad.module.css';
 
 const Actividad = () => {
@@ -15,23 +16,37 @@ const Actividad = () => {
   const formActividad = useForm();
 
   useEffect(() => {
-    getActividades();
-    getTalleres();
+    let activo = true;
+    getActividades(() => activo);
+    getTalleres(() => activo);
+    return () => {
+      activo = false;
+    };
   }, []);
 
   // Función que obtiene la lista de actividades
-  const getActividades = async () => {
-    const resp = await actividadRepository.getAll();
-    if (resp.success) {
-      setActividades(resp.data.results);
+  const getActividades = async (isActivo = () => true) => {
+    try {
+      const resp = await actividadRepository.getAll();
+      if (!isActivo()) return;
+      if (resp.success) {
+        setActividades(resp.data.results);
+      }
+    } catch (error) {
+      logAsyncError(error, { context: 'obtener actividades' });
     }
   };
 
   // Función que obtiene la lista de talleres reales (fix D-5)
-  const getTalleres = async () => {
-    const resp = await tallerRepository.getTallerAll();
-    if (resp.success) {
-      setTalleres(resp.data.results);
+  const getTalleres = async (isActivo = () => true) => {
+    try {
+      const resp = await tallerRepository.getTallerAll();
+      if (!isActivo()) return;
+      if (resp.success) {
+        setTalleres(resp.data.results);
+      }
+    } catch (error) {
+      logAsyncError(error, { context: 'obtener talleres' });
     }
   };
 
@@ -49,39 +64,47 @@ const Actividad = () => {
 
   // Guarda la edición o agrega una nueva actividad
   const onSubmit = async (data) => {
-    if (editId) {
-      const resp = await actividadRepository.update(editId, {
+    try {
+      if (editId) {
+        const resp = await actividadRepository.update(editId, {
+          nombre: data.nombre,
+          idtaller: data.idtaller,
+        });
+        if (resp.success) {
+          showToast('success', 'Se ha guardado con éxito');
+          getActividades();
+          setEditId(null);
+          formActividad.reset();
+        }
+        return;
+      }
+
+      const resp = await actividadRepository.create({
         nombre: data.nombre,
         idtaller: data.idtaller,
       });
       if (resp.success) {
         showToast('success', 'Se ha guardado con éxito');
         getActividades();
-        setEditId(null);
         formActividad.reset();
       }
-      return;
-    }
-
-    const resp = await actividadRepository.create({
-      nombre: data.nombre,
-      idtaller: data.idtaller,
-    });
-    if (resp.success) {
-      showToast('success', 'Se ha guardado con éxito');
-      getActividades();
-      formActividad.reset();
+    } catch (error) {
+      logAsyncError(error, { context: 'guardar actividad' });
     }
   };
 
   // Función que elimina una actividad con confirmación y DELETE real
   const eliminar = async (actividad) => {
-    const ok = await showConfirm(`¿Seguro que desea eliminar la actividad: ${actividad.nombre}?`);
-    if (!ok) return;
-    const resp = await actividadRepository.delete(actividad.idactividad);
-    if (resp.success) {
-      showToast('success', 'Eliminado con éxito');
-      getActividades();
+    try {
+      const ok = await showConfirm(`¿Seguro que desea eliminar la actividad: ${actividad.nombre}?`);
+      if (!ok) return;
+      const resp = await actividadRepository.delete(actividad.idactividad);
+      if (resp.success) {
+        showToast('success', 'Eliminado con éxito');
+        getActividades();
+      }
+    } catch (error) {
+      logAsyncError(error, { context: 'eliminar actividad' });
     }
   };
 

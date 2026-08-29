@@ -7,6 +7,7 @@ import utils from '../utils/utils';
 import ObraSocialForm from './list-obrasocial/obra-social-form.component';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
 import styles from '../styles/list-obrasocial.module.css';
+import { Spinner } from 'react-bootstrap';
 
 const ListaObraSocial = (props) => {
   const [show, setShow] = useState(false);
@@ -15,14 +16,21 @@ const ListaObraSocial = (props) => {
   const [idEditado, setIdEditado] = useState('');
   const [obrasociales, setObraSociales] = useState([]);
   const [osociales, setOsociales] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { idEpElegido, nombreEpElegido } = props;
   const navigate = useNavigate();
 
   useEffect(() => {
-    getObrasocial();
-    if (idEpElegido) {
-      getOs();
-    } else {
+    setLoading(true);
+    const cargarInicial = async () => {
+      try {
+        await Promise.all([getObrasocial(), getOs()]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    cargarInicial();
+    if (!idEpElegido) {
       setOsociales([]);
       navigate('/list-pacientes', { replace: true });
     }
@@ -30,8 +38,8 @@ const ListaObraSocial = (props) => {
 
   // Funcion que obtiene la lista de obras sociales
   const getObrasocial = async () => {
-    const response = await obrasocialRepository.getAll().catch(() => undefined);
-    if (response) {
+    const response = await obrasocialRepository.getAll();
+    if (response?.success) {
       setObraSociales(response.data);
     }
   };
@@ -40,7 +48,7 @@ const ListaObraSocial = (props) => {
   const getOs = async () => {
     if (!idEpElegido) return;
 
-    const response = await osRepository.get(idEpElegido).catch(() => undefined);
+    const response = await osRepository.get(idEpElegido);
     if (response?.success) {
       setOsociales(response.data.results ?? response.data);
     }
@@ -83,7 +91,7 @@ const ListaObraSocial = (props) => {
         idobrasocial: Number(idObrasocial),
         borrado: 0,
       };
-      const response = await osRepository.create(data).catch(() => undefined);
+      const response = await osRepository.create(data);
       if (response?.success) {
         getOs();
         utils.notificacionGuardar();
@@ -103,7 +111,7 @@ const ListaObraSocial = (props) => {
         idobrasocial: Number(idObrasocial),
         borrado: 0,
       };
-      const response = await osRepository.update(id, data).catch(() => undefined);
+      const response = await osRepository.update(id, data);
       if (response?.success) {
         getOs();
         utils.notificacionGuardar();
@@ -120,7 +128,7 @@ const ListaObraSocial = (props) => {
       idobrasocial: Number(info.idobrasocial),
       borrado: 1,
     };
-    const response = await osRepository.update(id, data).catch(() => undefined);
+    const response = await osRepository.update(id, data);
     if (response?.success) {
       getOs();
       setShow(false);
@@ -178,49 +186,61 @@ const ListaObraSocial = (props) => {
 
       <div className="row">
         <div className="col-12 col-md-12 col-lg-12 col-xl-12">
-          <table className="table table-bordered table-hover shadow table-striped">
-            <thead>
-              <tr>
-                <th scope="col">Obra Social</th>
-                <th scope="col">Tipo</th>
-                <th scope="col">Acción</th>
-              </tr>
-            </thead>
-            <tbody className={styles.tableBodyMiddle}>
-              {osociales &&
-                osociales
-                  .filter((osocial) => osocial.borrado === 0)
-                  .map((osocial) => (
-                    <tr key={osocial.idos}>
-                      <td>{osocial.idobrasocial.nombre}</td>
-                      <td>{utils.convertirTipo(osocial.idobrasocial.esestatal)}</td>
-                      <td>
-                        <button
-                          type="button"
-                          className={'btn btn-verde ' + styles.rowActionButton}
-                          onClick={() => editar(osocial.idobrasocial.idobrasocial, osocial.idos)}
-                        >
-                          <PencilIcon />
-                        </button>
+          {loading ? (
+            <div className="text-center py-4">
+              <Spinner
+                style={{ height: '4rem', width: '4rem' }}
+                animation="border"
+                variant="primary"
+              >
+                Loading...
+              </Spinner>
+            </div>
+          ) : (
+            <table className="table table-bordered table-hover shadow table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">Obra Social</th>
+                  <th scope="col">Tipo</th>
+                  <th scope="col">Acción</th>
+                </tr>
+              </thead>
+              <tbody className={styles.tableBodyMiddle}>
+                {osociales &&
+                  osociales
+                    .filter((osocial) => osocial.borrado === 0)
+                    .map((osocial) => (
+                      <tr key={osocial.idos}>
+                        <td>{osocial.idobrasocial.nombre}</td>
+                        <td>{utils.convertirTipo(osocial.idobrasocial.esestatal)}</td>
+                        <td>
+                          <button
+                            type="button"
+                            className={'btn btn-verde ' + styles.rowActionButton}
+                            onClick={() => editar(osocial.idobrasocial.idobrasocial, osocial.idos)}
+                          >
+                            <PencilIcon />
+                          </button>
 
-                        <button
-                          type="button"
-                          className="btn btn-rojo"
-                          onClick={() =>
-                            utils.notificacionEliminar(
-                              { idobrasocial: osocial.idobrasocial.idobrasocial },
-                              osocial.idos,
-                              eliminar
-                            )
-                          }
-                        >
-                          <TrashIcon />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-            </tbody>
-          </table>
+                          <button
+                            type="button"
+                            className="btn btn-rojo"
+                            onClick={() =>
+                              utils.notificacionEliminar(
+                                { idobrasocial: osocial.idobrasocial.idobrasocial },
+                                osocial.idos,
+                                eliminar
+                              )
+                            }
+                          >
+                            <TrashIcon />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </main>

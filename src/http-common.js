@@ -1,6 +1,39 @@
 import axios from 'axios';
 import { TokenService } from './services/token.service';
 
+// T-4 (Sprint 5.25): política de retry de red — Opción A del PO (2026-08-29).
+// Presupuesto: 1 request original + 2 reintentos = 3 intentos totales.
+const RETRY_CONFIG = {
+  maxRetries: 2,
+  baseDelayMs: 500,
+  backoffFactor: 2,
+  jitterPercent: 0.25,
+};
+
+// Solo estas requests se reintentan ante 502/503/504 (idempotentes).
+const IDEMPOTENT_METHODS = ['GET', 'HEAD', 'OPTIONS'];
+
+const RETRYABLE_STATUS_CODES = [502, 503, 504];
+
+// Error de red o timeout: reintentable para TODOS los métodos (no matchea ERR_CANCELED).
+const isNetworkError = (error) => error.code === 'ERR_NETWORK' || error.code === 'ECONNABORTED';
+
+// 5xx transitorio: reintentable solo si la request es idempotente.
+const isRetryableServerError = (error) => {
+  if (!error.response) return false;
+  const method = (error.config?.method || '').toUpperCase();
+  return (
+    RETRYABLE_STATUS_CODES.includes(error.response.status) && IDEMPOTENT_METHODS.includes(method)
+  );
+};
+
+// Backoff exponencial base 500 ms ×2 con jitter ±25%.
+const getRetryDelayMs = (attempt) => {
+  const base = RETRY_CONFIG.baseDelayMs * Math.pow(RETRY_CONFIG.backoffFactor, attempt - 1);
+  const jitter = 1 + (Math.random() * 2 - 1) * RETRY_CONFIG.jitterPercent;
+  return Math.round(base * jitter);
+};
+
 const instance = axios.create({
   baseURL:
     import.meta.env.REACT_APP_API_URL ||
@@ -43,6 +76,16 @@ instance.interceptors.response.use(
         } catch (_error) {
           return Promise.reject(_error);
         }
+      }
+    }
+    // Retry de red (T-4): ERR_NETWORK/timeout para todos los métodos; 502/503/504 solo idempotentes
+    if (originalConfig && (isNetworkError(err) || isRetryableServerError(err))) {
+      const retryCount = originalConfig._retryCount || 0;
+      if (retryCount < RETRY_CONFIG.maxRetries) {
+        originalConfig._retryCount = retryCount + 1;
+        const delayMs = getRetryDelayMs(retryCount + 1);
+        await new Promise((resolve) => setTimeout(resolve, delayMs));
+        return instance(originalConfig);
       }
     }
     // Normalizar estructura del error para el downstream

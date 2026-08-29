@@ -18,7 +18,11 @@ const AdminPersonas = () => {
   const [modalEdit, setModalEdit] = useState(false);
 
   useEffect(() => {
-    getPersonAll();
+    let activo = true;
+    getPersonAll(() => activo);
+    return () => {
+      activo = false;
+    };
   }, []);
 
   const handleChange = (e) => {
@@ -33,33 +37,25 @@ const AdminPersonas = () => {
   };
 
   const edit = (data) => {
-    let list = arrayPerson;
-    let modifidedPerson;
-    list.map((listdata) => {
-      if (data.idpersona === listdata.idpersona) {
-        modifidedPerson = {
-          id: data.idpersona,
-          nombre: data.nombre,
-          apellido: data.apellido,
-          telefono: data.telefono,
-          borrado: listdata.borrado,
-        };
-        return modifidedPerson;
+    let list = [...arrayPerson];
+    let modifidedPerson = list.find((listdata) => data.idpersona === listdata.idpersona);
+    if (!modifidedPerson) {
+      return;
+    }
+    modifidedPerson = {
+      id: data.idpersona,
+      nombre: data.nombre,
+      apellido: data.apellido,
+      telefono: data.telefono,
+      borrado: modifidedPerson.borrado,
+    };
+    eventRespository.updatePerson(data.idpersona, modifidedPerson).then((response) => {
+      if (response?.success) {
+        notificacionExito();
+        clear();
+        getPersonAll();
       }
-      return list;
     });
-    eventRespository
-      .updatePerson(data.idpersona, modifidedPerson)
-      .then((response) => {
-        if (response) {
-          notificacionExito();
-          clear();
-          getPersonAll();
-        }
-      })
-      .catch(() => {
-        notificacionError();
-      });
     setModalEdit(false);
   };
 
@@ -107,32 +103,14 @@ const AdminPersonas = () => {
     });
   };
 
-  const notificacionError = () => {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer);
-        toast.addEventListener('mouseleave', Swal.resumeTimer);
-      },
-    });
-
-    Toast.fire({
-      icon: 'error',
-      title: 'Error: Hubo un problema en la carga.',
-    });
-  };
-
   // Función que obtiene la lista de TODAS las personas
   // B01 (HITL 2026-08-11): el backend responde envelope DRF paginado
   // {count,next,previous,results} → normalizar a .results (patrón RA-13,
   // consistente con los componentes del módulo Taller).
-  const getPersonAll = async () => {
+  const getPersonAll = async (isActivo = () => true) => {
     let response = await eventRespository.getAll();
-    if (response?.success) {
+    if (!isActivo()) return;
+    if (response?.success && response?.data) {
       setArrayPerson(response.data.results ?? response.data);
     }
   };
@@ -153,17 +131,12 @@ const AdminPersonas = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire('Eliminado con exito!', `Se elimino a${persona.nombre}`, 'success');
-        eventRespository
-          .updatePerson(persona.idpersona, persona)
-          .then((response) => {
-            if (response) {
-              notificacionExito();
-              getPersonAll();
-            }
-          })
-          .catch(() => {
-            notificacionError();
-          });
+        eventRespository.updatePerson(persona.idpersona, persona).then((response) => {
+          if (response?.success) {
+            notificacionExito();
+            getPersonAll();
+          }
+        });
         setArrayPerson(arrayPersonas);
         setSearchArrayperson(arrayPerson);
       }

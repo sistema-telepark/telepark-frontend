@@ -27,25 +27,25 @@ const Nomenclador = () => {
 
   // Funcion que obtiene la lista de enfermedades
   const getEnfermedad = async () => {
-    const response = await enfermedadRepository.getAll().catch(() => undefined);
-    if (response) {
-      setEnfermedades(response.data);
+    const response = await enfermedadRepository.getAll();
+    if (response?.success) {
+      setEnfermedades(response?.data ?? []);
     }
   };
 
   // Funcion que obtiene la lista de medicamentos
   const getMedicamento = async () => {
-    let response = await medicamentoRepository.getAll().catch(() => undefined);
-    if (response) {
-      setMedicamentos(response.data);
+    let response = await medicamentoRepository.getAll();
+    if (response?.success) {
+      setMedicamentos(response?.data ?? []);
     }
   };
 
   // Funcion que obtiene la lista de obras sociales
   const getObrasocial = async () => {
-    let response = await obrasocialRepository.getAll().catch(() => undefined);
-    if (response) {
-      setObrasociales(response.data);
+    let response = await obrasocialRepository.getAll();
+    if (response?.success) {
+      setObrasociales(response?.data ?? []);
     }
   };
 
@@ -94,10 +94,8 @@ const Nomenclador = () => {
       switch (tipo) {
         case 'enfermedad':
           {
-            const response = await enfermedadRepository
-              .update(id, { nombre })
-              .catch(() => undefined);
-            if (response) {
+            const response = await enfermedadRepository.update(id, { nombre });
+            if (response?.success) {
               getEnfermedad();
               utils.notificacionGuardar();
             }
@@ -105,10 +103,8 @@ const Nomenclador = () => {
           break;
         case 'medicamento':
           {
-            const response = await medicamentoRepository
-              .update(id, { nombre })
-              .catch(() => undefined);
-            if (response) {
+            const response = await medicamentoRepository.update(id, { nombre });
+            if (response?.success) {
               getMedicamento();
               utils.notificacionGuardar();
             }
@@ -116,10 +112,8 @@ const Nomenclador = () => {
           break;
         case 'obrasocial':
           {
-            const response = await obrasocialRepository
-              .update(id, { nombre, esestatal })
-              .catch(() => undefined);
-            if (response) {
+            const response = await obrasocialRepository.update(id, { nombre, esestatal });
+            if (response?.success) {
               getObrasocial();
               utils.notificacionGuardar();
             }
@@ -137,24 +131,24 @@ const Nomenclador = () => {
     switch (tipo) {
       case 'enfermedad':
         {
-          const response = await enfermedadRepository.delete(id).catch(() => undefined);
-          if (response) {
+          const response = await enfermedadRepository.delete(id);
+          if (response?.success) {
             getEnfermedad();
           }
         }
         break;
       case 'medicamento':
         {
-          const response = await medicamentoRepository.delete(id).catch(() => undefined);
-          if (response) {
+          const response = await medicamentoRepository.delete(id);
+          if (response?.success) {
             getMedicamento();
           }
         }
         break;
       case 'obrasocial':
         {
-          const response = await obrasocialRepository.delete(id).catch(() => undefined);
-          if (response) {
+          const response = await obrasocialRepository.delete(id);
+          if (response?.success) {
             getObrasocial();
           }
         }
@@ -173,8 +167,8 @@ const Nomenclador = () => {
       switch (tipo) {
         case 'enfermedad':
           {
-            const response = await enfermedadRepository.create({ nombre }).catch(() => undefined);
-            if (response) {
+            const response = await enfermedadRepository.create({ nombre });
+            if (response?.success) {
               getEnfermedad();
               utils.notificacionGuardar();
             }
@@ -182,8 +176,8 @@ const Nomenclador = () => {
           break;
         case 'medicamento':
           {
-            const response = await medicamentoRepository.create({ nombre }).catch(() => undefined);
-            if (response) {
+            const response = await medicamentoRepository.create({ nombre });
+            if (response?.success) {
               getMedicamento();
               utils.notificacionGuardar();
             }
@@ -191,10 +185,8 @@ const Nomenclador = () => {
           break;
         case 'obrasocial':
           {
-            const response = await obrasocialRepository
-              .create({ nombre, esestatal })
-              .catch(() => undefined);
-            if (response) {
+            const response = await obrasocialRepository.create({ nombre, esestatal });
+            if (response?.success) {
               getObrasocial();
               utils.notificacionGuardar();
             }
@@ -416,7 +408,7 @@ const Nomenclador = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="mt-3 col-12 col-md-12 col-lg-4 col-xl-4">
           <div className="row">
             <div className="col-12 col-md-12 col-lg-12 col-xl-12 input-group">

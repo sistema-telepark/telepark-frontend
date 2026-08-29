@@ -6,6 +6,7 @@ import { pacienteRepository } from '../services/paciente.service';
 import { asistenciaRepository } from '../services/asistencia.service';
 import { eventRespository } from '../services/event.service';
 import { showToast } from '../services/notification.service';
+import { logAsyncError } from './error-boundary/logError';
 import utils from '../utils/utils';
 import styles from '../styles/asistencia-taller.module.css';
 
@@ -21,29 +22,48 @@ const Asistencia = () => {
   const formAsistencia = useForm();
 
   useEffect(() => {
-    getEncuentroAll();
-    getPacientes();
-    getEventoAll();
+    let activo = true;
+    getEncuentroAll(() => activo);
+    getPacientes(() => activo);
+    getEventoAll(() => activo);
+    return () => {
+      activo = false;
+    };
   }, []);
 
-  const getEncuentroAll = async () => {
-    const resp = await encuentroRepository.getEncuentroAll();
-    if (resp.success) {
-      setEncuentro(resp.data.results);
+  const getEncuentroAll = async (isActivo = () => true) => {
+    try {
+      const resp = await encuentroRepository.getEncuentroAll();
+      if (!isActivo()) return;
+      if (resp.success) {
+        setEncuentro(resp.data.results);
+      }
+    } catch (error) {
+      logAsyncError(error, { context: 'obtener encuentros' });
     }
   };
 
-  const getPacientes = async () => {
-    const resp = await pacienteRepository.getPacientesEp();
-    if (resp.success) {
-      setPacientes(resp.data.results ?? resp.data);
+  const getPacientes = async (isActivo = () => true) => {
+    try {
+      const resp = await pacienteRepository.getPacientesEp();
+      if (!isActivo()) return;
+      if (resp.success) {
+        setPacientes(resp.data.results ?? resp.data);
+      }
+    } catch (error) {
+      logAsyncError(error, { context: 'obtener pacientes' });
     }
   };
 
-  const getEventoAll = async () => {
-    const resp = await eventRespository.getEventGestionAll();
-    if (resp.success) {
-      setEvento(resp.data.results);
+  const getEventoAll = async (isActivo = () => true) => {
+    try {
+      const resp = await eventRespository.getEventGestionAll();
+      if (!isActivo()) return;
+      if (resp.success) {
+        setEvento(resp.data.results);
+      }
+    } catch (error) {
+      logAsyncError(error, { context: 'obtener eventos' });
     }
   };
 
@@ -61,23 +81,27 @@ const Asistencia = () => {
 
   // Guardar la asistencia del día (lote bulk — RA-14)
   const guardarAsistencia = async (data) => {
-    const asistenciaData = pacientes.map((paciente) => ({
-      idpersonaep: paciente.idpersona,
-      idclasetaller: Number(data.fechaEncuentro),
-      estado: paciente.checked ? ESTADO_PRESENTE : ESTADO_AUSENTE,
-    }));
+    try {
+      const asistenciaData = pacientes.map((paciente) => ({
+        idpersonaep: paciente.idpersona,
+        idclasetaller: Number(data.fechaEncuentro),
+        estado: paciente.checked ? ESTADO_PRESENTE : ESTADO_AUSENTE,
+      }));
 
-    const resp = await asistenciaRepository.createAsistencia(asistenciaData);
-    if (resp.success) {
-      showToast('success', 'Se ha guardado con éxito');
-      formAsistencia.reset();
-      setPacientes(
-        pacientes.map((persona) => ({
-          ...persona,
-          checked: false,
-          justificado: false,
-        }))
-      );
+      const resp = await asistenciaRepository.createAsistencia(asistenciaData);
+      if (resp.success) {
+        showToast('success', 'Se ha guardado con éxito');
+        formAsistencia.reset();
+        setPacientes(
+          pacientes.map((persona) => ({
+            ...persona,
+            checked: false,
+            justificado: false,
+          }))
+        );
+      }
+    } catch (error) {
+      logAsyncError(error, { context: 'guardar asistencia' });
     }
   };
 
@@ -115,9 +139,7 @@ const Asistencia = () => {
   const handleAsistenciaCheck = (idpersona) => {
     setPacientes(
       pacientes.map((persona) =>
-        persona.idpersona === idpersona
-          ? { ...persona, checked: !persona.checked }
-          : persona
+        persona.idpersona === idpersona ? { ...persona, checked: !persona.checked } : persona
       )
     );
   };
@@ -127,96 +149,96 @@ const Asistencia = () => {
   });
 
   return (
-      <Container className="container panel-gris">
-        <h2 className="mt-4 text-center">Asistencia</h2>
-        <hr />
-        <div className="col-md-3">
-          <Form.Group className="mb-0">
-            <label htmlFor="fechaEncuentro" className="control-label">
-              Encuentro:
-            </label>
-            <select
-              className="form-select"
-              placeholder="Elija el encuentro"
-              id="fechaEncuentro"
-              {...fechaRegister}
-              onChange={(e) => {
-                fechaRegister.onChange(e);
-                handleEncuentroChange(e);
-              }}
-            >
-              <option value="">Elija el encuentro</option>
-              {encuentro.map((element) => (
-                <option key={element.idclasetaller} value={element.idclasetaller}>
-                  {utils.convertirFormatoFecha(element.fecha)}
-                </option>
-              ))}
-            </select>
-            {formAsistencia.formState.errors.fechaEncuentro && (
-              <small className="text-danger">
-                {formAsistencia.formState.errors.fechaEncuentro.message}
-              </small>
-            )}
-          </Form.Group>
-        </div>
-        <div className="row m-md-3 shadow mx-md-auto border-top-sm m-0 justify-content-center rounded container-lg ">
-          <table className="table table-striped">
-            <thead>
-              <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Persona con EP</th>
-                <th scope="col">Asistencia</th>
-                <th scope="col">Justificado</th>
+    <Container className="container panel-gris">
+      <h2 className="mt-4 text-center">Asistencia</h2>
+      <hr />
+      <div className="col-md-3">
+        <Form.Group className="mb-0">
+          <label htmlFor="fechaEncuentro" className="control-label">
+            Encuentro:
+          </label>
+          <select
+            className="form-select"
+            placeholder="Elija el encuentro"
+            id="fechaEncuentro"
+            {...fechaRegister}
+            onChange={(e) => {
+              fechaRegister.onChange(e);
+              handleEncuentroChange(e);
+            }}
+          >
+            <option value="">Elija el encuentro</option>
+            {encuentro.map((element) => (
+              <option key={element.idclasetaller} value={element.idclasetaller}>
+                {utils.convertirFormatoFecha(element.fecha)}
+              </option>
+            ))}
+          </select>
+          {formAsistencia.formState.errors.fechaEncuentro && (
+            <small className="text-danger">
+              {formAsistencia.formState.errors.fechaEncuentro.message}
+            </small>
+          )}
+        </Form.Group>
+      </div>
+      <div className="row m-md-3 shadow mx-md-auto border-top-sm m-0 justify-content-center rounded container-lg ">
+        <table className="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Persona con EP</th>
+              <th scope="col">Asistencia</th>
+              <th scope="col">Justificado</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pacientes.map((element) => (
+              <tr key={element.idpersona}>
+                <td>{element.idpersona}</td>
+                <td>{`${element.nombre} ${element.apellido}`}</td>
+                <td>
+                  <input
+                    type="checkbox"
+                    className="form-check-input"
+                    name="asistencia"
+                    id={`asistencia-${element.idpersona}`}
+                    value={element.idpersona}
+                    checked={element.checked || false}
+                    onChange={() => handleAsistenciaCheck(element.idpersona)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="checkbox"
+                    className="form-check-input"
+                    id={`justificado-${element.idpersona}`}
+                    value={element.idpersona}
+                    checked={element.justificado || false}
+                    readOnly
+                  />
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {pacientes.map((element) => (
-                <tr key={element.idpersona}>
-                  <td>{element.idpersona}</td>
-                  <td>{`${element.nombre} ${element.apellido}`}</td>
-                  <td>
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      name="asistencia"
-                      id={`asistencia-${element.idpersona}`}
-                      value={element.idpersona}
-                      checked={element.checked || false}
-                      onChange={() => handleAsistenciaCheck(element.idpersona)}
-                    />
-                  </td>
-                  <td>
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      id={`justificado-${element.idpersona}`}
-                      value={element.idpersona}
-                      checked={element.justificado || false}
-                      readOnly
-                    />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <div className={`mb-4 col-12 col-md-6 col-lg-4 col-xl-4 ${styles.buttonContainer}`}>
-            <button
-              type="button"
-              className={`btn btn-rojo ${styles.actionButton}`}
-              onClick={() => clear()}
-            >
-              Cancelar
-            </button>
-            <button
-              type="button"
-              className={`btn btn-verde ${styles.saveButton}`}
-              onClick={() => formAsistencia.handleSubmit(guardarAsistencia)()}
-            >
-              Guardar
-            </button>
-          </div>
+            ))}
+          </tbody>
+        </table>
+        <div className={`mb-4 col-12 col-md-6 col-lg-4 col-xl-4 ${styles.buttonContainer}`}>
+          <button
+            type="button"
+            className={`btn btn-rojo ${styles.actionButton}`}
+            onClick={() => clear()}
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            className={`btn btn-verde ${styles.saveButton}`}
+            onClick={() => formAsistencia.handleSubmit(guardarAsistencia)()}
+          >
+            Guardar
+          </button>
         </div>
-      </Container>
+      </div>
+    </Container>
   );
 };
 

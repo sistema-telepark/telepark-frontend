@@ -17,9 +17,7 @@ const Login = lazy(() => import(/* webpackChunkName: "login" */ './components/lo
 const AdminUsuarios = lazy(
   () => import(/* webpackChunkName: "admin-usuarios" */ './components/admin-users.component')
 );
-const Home = lazy(
-  () => import('./components/home.component')
-);
+const Home = lazy(() => import('./components/home.component'));
 const FichaMedica = lazy(
   () => import(/* webpackChunkName: "ficha-medica" */ './components/ficha-medica.component')
 );
@@ -73,6 +71,7 @@ const Familiar = lazy(
 
 function AppContent({ token, userName, userRole, setToken, setUserName, setUserRole }) {
   const location = useLocation();
+  const [retryKey, setRetryKey] = useState(0);
   const mostrarFooter = token && location.pathname !== '/home';
 
   useEffect(() => {
@@ -125,10 +124,11 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                     <ErrorFallbackRoute {...props} componentName="Login" />
                   )}
                   onError={logError}
+                  onReset={() => setRetryKey((k) => k + 1)}
                   resetKeys={[token]}
                 >
                   <Suspense fallback={<LoadingSpinner />}>
-                    <Login />
+                    <Login key={retryKey} />
                   </Suspense>
                 </ErrorBoundary>
               }
@@ -138,9 +138,18 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                 <Route
                   path="/home"
                   element={
-                    <Suspense fallback={<LoadingSpinner />}>
-                      <Home />
-                    </Suspense>
+                    <ErrorBoundary
+                      FallbackComponent={(props) => (
+                        <ErrorFallbackRoute {...props} componentName="Home" />
+                      )}
+                      onError={logError}
+                      onReset={() => setRetryKey((k) => k + 1)}
+                      resetKeys={[token]}
+                    >
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <Home key={retryKey} />
+                      </Suspense>
+                    </ErrorBoundary>
                   }
                 />
                 {userRole === true ? (
@@ -153,10 +162,11 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                             <ErrorFallbackRoute {...props} componentName="AdminUsuarios" />
                           )}
                           onError={logError}
+                          onReset={() => setRetryKey((k) => k + 1)}
                           resetKeys={[token]}
                         >
                           <Suspense fallback={<LoadingSpinner />}>
-                            <AdminUsuarios />
+                            <AdminUsuarios key={retryKey} />
                           </Suspense>
                         </ErrorBoundary>
                       }
@@ -169,10 +179,11 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                             <ErrorFallbackRoute {...props} componentName="AdminPersonas" />
                           )}
                           onError={logError}
+                          onReset={() => setRetryKey((k) => k + 1)}
                           resetKeys={[token]}
                         >
                           <Suspense fallback={<LoadingSpinner />}>
-                            <AdminPersonas />
+                            <AdminPersonas key={retryKey} />
                           </Suspense>
                         </ErrorBoundary>
                       }
@@ -188,10 +199,11 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                             <ErrorFallbackRoute {...props} componentName="AdminPersonas" />
                           )}
                           onError={logError}
+                          onReset={() => setRetryKey((k) => k + 1)}
                           resetKeys={[token]}
                         >
                           <Suspense fallback={<LoadingSpinner />}>
-                            <AdminPersonas />
+                            <AdminPersonas key={retryKey} />
                           </Suspense>
                         </ErrorBoundary>
                       }
@@ -207,10 +219,11 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                         <ErrorFallbackRoute {...props} componentName="FichaMedica" />
                       )}
                       onError={logError}
+                      onReset={() => setRetryKey((k) => k + 1)}
                       resetKeys={[token]}
                     >
                       <Suspense fallback={<LoadingSpinner />}>
-                        <FichaMedica />
+                        <FichaMedica key={retryKey} />
                       </Suspense>
                     </ErrorBoundary>
                   }
@@ -223,10 +236,11 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                         <ErrorFallbackRoute {...props} componentName="ListaDiagnostico" />
                       )}
                       onError={logError}
+                      onReset={() => setRetryKey((k) => k + 1)}
                       resetKeys={[token]}
                     >
                       <Suspense fallback={<LoadingSpinner />}>
-                        <ListaDiagnostico />
+                        <ListaDiagnostico key={retryKey} />
                       </Suspense>
                     </ErrorBoundary>
                   }
@@ -239,10 +253,11 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                         <ErrorFallbackRoute {...props} componentName="ListaEvolucion" />
                       )}
                       onError={logError}
+                      onReset={() => setRetryKey((k) => k + 1)}
                       resetKeys={[token]}
                     >
                       <Suspense fallback={<LoadingSpinner />}>
-                        <ListaEvolucion />
+                        <ListaEvolucion key={retryKey} />
                       </Suspense>
                     </ErrorBoundary>
                   }
@@ -255,10 +270,11 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                         <ErrorFallbackRoute {...props} componentName="ListaObraSocial" />
                       )}
                       onError={logError}
+                      onReset={() => setRetryKey((k) => k + 1)}
                       resetKeys={[token]}
                     >
                       <Suspense fallback={<LoadingSpinner />}>
-                        <ListaObraSocial />
+                        <ListaObraSocial key={retryKey} />
                       </Suspense>
                     </ErrorBoundary>
                   }
@@ -271,10 +287,11 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                         <ErrorFallbackRoute {...props} componentName="ListaIndicacion" />
                       )}
                       onError={logError}
+                      onReset={() => setRetryKey((k) => k + 1)}
                       resetKeys={[token]}
                     >
                       <Suspense fallback={<LoadingSpinner />}>
-                        <ListaIndicacion />
+                        <ListaIndicacion key={retryKey} />
                       </Suspense>
                     </ErrorBoundary>
                   }
@@ -287,10 +304,11 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                         <ErrorFallbackRoute {...props} componentName="ListaPaciente" />
                       )}
                       onError={logError}
+                      onReset={() => setRetryKey((k) => k + 1)}
                       resetKeys={[token]}
                     >
                       <Suspense fallback={<LoadingSpinner />}>
-                        <ListaPaciente />
+                        <ListaPaciente key={retryKey} />
                       </Suspense>
                     </ErrorBoundary>
                   }
@@ -303,10 +321,11 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                         <ErrorFallbackRoute {...props} componentName="Nomenclador" />
                       )}
                       onError={logError}
+                      onReset={() => setRetryKey((k) => k + 1)}
                       resetKeys={[token]}
                     >
                       <Suspense fallback={<LoadingSpinner />}>
-                        <Nomenclador />
+                        <Nomenclador key={retryKey} />
                       </Suspense>
                     </ErrorBoundary>
                   }
@@ -319,10 +338,11 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                         <ErrorFallbackRoute {...props} componentName="Events" />
                       )}
                       onError={logError}
+                      onReset={() => setRetryKey((k) => k + 1)}
                       resetKeys={[token]}
                     >
                       <Suspense fallback={<LoadingSpinner />}>
-                        <Events />
+                        <Events key={retryKey} />
                       </Suspense>
                     </ErrorBoundary>
                   }
@@ -335,10 +355,11 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                         <ErrorFallbackRoute {...props} componentName="TypeEvents" />
                       )}
                       onError={logError}
+                      onReset={() => setRetryKey((k) => k + 1)}
                       resetKeys={[token]}
                     >
                       <Suspense fallback={<LoadingSpinner />}>
-                        <TypeEvents />
+                        <TypeEvents key={retryKey} />
                       </Suspense>
                     </ErrorBoundary>
                   }
@@ -351,10 +372,11 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                         <ErrorFallbackRoute {...props} componentName="Talleres" />
                       )}
                       onError={logError}
+                      onReset={() => setRetryKey((k) => k + 1)}
                       resetKeys={[token]}
                     >
                       <Suspense fallback={<LoadingSpinner />}>
-                        <Talleres />
+                        <Talleres key={retryKey} />
                       </Suspense>
                     </ErrorBoundary>
                   }
@@ -367,10 +389,11 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                         <ErrorFallbackRoute {...props} componentName="Encuentro" />
                       )}
                       onError={logError}
+                      onReset={() => setRetryKey((k) => k + 1)}
                       resetKeys={[token]}
                     >
                       <Suspense fallback={<LoadingSpinner />}>
-                        <Encuentro />
+                        <Encuentro key={retryKey} />
                       </Suspense>
                     </ErrorBoundary>
                   }
@@ -383,10 +406,11 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                         <ErrorFallbackRoute {...props} componentName="Actividad" />
                       )}
                       onError={logError}
+                      onReset={() => setRetryKey((k) => k + 1)}
                       resetKeys={[token]}
                     >
                       <Suspense fallback={<LoadingSpinner />}>
-                        <Actividad />
+                        <Actividad key={retryKey} />
                       </Suspense>
                     </ErrorBoundary>
                   }
@@ -399,10 +423,11 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                         <ErrorFallbackRoute {...props} componentName="Asistencia" />
                       )}
                       onError={logError}
+                      onReset={() => setRetryKey((k) => k + 1)}
                       resetKeys={[token]}
                     >
                       <Suspense fallback={<LoadingSpinner />}>
-                        <Asistencia />
+                        <Asistencia key={retryKey} />
                       </Suspense>
                     </ErrorBoundary>
                   }
@@ -415,10 +440,11 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                         <ErrorFallbackRoute {...props} componentName="Consulta" />
                       )}
                       onError={logError}
+                      onReset={() => setRetryKey((k) => k + 1)}
                       resetKeys={[token]}
                     >
                       <Suspense fallback={<LoadingSpinner />}>
-                        <Consulta />
+                        <Consulta key={retryKey} />
                       </Suspense>
                     </ErrorBoundary>
                   }
@@ -431,10 +457,11 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                         <ErrorFallbackRoute {...props} componentName="Familiar" />
                       )}
                       onError={logError}
+                      onReset={() => setRetryKey((k) => k + 1)}
                       resetKeys={[token]}
                     >
                       <Suspense fallback={<LoadingSpinner />}>
-                        <Familiar />
+                        <Familiar key={retryKey} />
                       </Suspense>
                     </ErrorBoundary>
                   }

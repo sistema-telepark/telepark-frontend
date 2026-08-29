@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Swal from 'sweetalert2';
 import { Navigate, useNavigate } from 'react-router';
 import { authRepository } from '../services/auth.service';
@@ -8,9 +8,18 @@ import styles from '../styles/login.module.css';
 
 const Login = () => {
   const navigate = useNavigate();
+  const timerRef = useRef(null);
 
   const [campo, setCampo] = useState({});
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, []);
 
   // Valido los campos del formulario
   const validarFormulario = () => {
@@ -73,7 +82,7 @@ const Login = () => {
       timer: 1500,
     });
 
-    setTimeout(() => {
+    timerRef.current = setTimeout(() => {
       navigate('/home');
     }, 1500);
   };

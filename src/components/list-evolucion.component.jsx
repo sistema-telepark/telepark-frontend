@@ -6,6 +6,7 @@ import { evolucionRepository } from '../services/evolucion.service';
 import utils from '../utils/utils';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
 import styles from '../styles/list-evolucion.module.css';
+import { Spinner } from 'react-bootstrap';
 
 const ListaEvolucion = () => {
   const idEpElegido = useSelector((state) => state.global.idEpElegido);
@@ -20,6 +21,7 @@ const ListaEvolucion = () => {
   });
   const [idEditado, setIdEditado] = useState('');
   const [evoluciones, setEvoluciones] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!idEpElegido) {
@@ -32,10 +34,15 @@ const ListaEvolucion = () => {
 
   // Funcion que obtiene la lista de evolucion de un paciente
   const getEvoluciones = async () => {
-    let response = await evolucionRepository.get(idEpElegido);
+    setLoading(true);
+    try {
+      let response = await evolucionRepository.get(idEpElegido);
 
-    if (response?.success) {
-      setEvoluciones(response.data.results ?? response.data);
+      if (response?.success) {
+        setEvoluciones(response.data.results ?? response.data);
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -57,15 +64,12 @@ const ListaEvolucion = () => {
         idpersonaep: Number(idEpElegido),
         borrado: 0,
       };
-      evolucionRepository
-        .update(id, data)
-        .then((response) => {
-          if (response?.success) {
-            getEvoluciones();
-            notificacionGuardar();
-          }
-        })
-        .catch(() => undefined);
+      evolucionRepository.update(id, data).then((response) => {
+        if (response?.success) {
+          getEvoluciones();
+          notificacionGuardar();
+        }
+      });
       setCampo({ nroEvolucion: '', fecha: '' });
       setShow(false);
     }
@@ -97,15 +101,12 @@ const ListaEvolucion = () => {
         idpersonaep: Number(idEpElegido),
         borrado: 0,
       };
-      evolucionRepository
-        .create(data)
-        .then((response) => {
-          if (response?.success) {
-            getEvoluciones();
-            notificacionGuardar();
-          }
-        })
-        .catch(() => undefined);
+      evolucionRepository.create(data).then((response) => {
+        if (response?.success) {
+          getEvoluciones();
+          notificacionGuardar();
+        }
+      });
       setCampo({ nroEvolucion: '', fecha: '' });
       setShowNuevo(false);
     }
@@ -118,14 +119,11 @@ const ListaEvolucion = () => {
       idpersonaep: Number(idEpElegido),
       borrado: 1,
     };
-    evolucionRepository
-      .update(id, data)
-      .then((response) => {
-        if (response?.success) {
-          getEvoluciones();
-        }
-      })
-      .catch(() => undefined);
+    evolucionRepository.update(id, data).then((response) => {
+      if (response?.success) {
+        getEvoluciones();
+      }
+    });
     setShow(false);
   };
 
@@ -313,60 +311,72 @@ const ListaEvolucion = () => {
 
         <div className="row">
           <div className="col-12">
-            <table
-              className={
-                'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
-              }
-            >
-              <thead>
-                <tr>
-                  <th scope="col">Estado Evolutivo</th>
-                  <th scope="col">Descripción</th>
-                  <th scope="col">Fecha de Observación</th>
-                  <th scope="col">Acción</th>
-                </tr>
-              </thead>
-              <tbody className={styles.tableBodyMiddle}>
-                {evoluciones &&
-                  evoluciones
-                    .filter((evolucion) => evolucion.borrado === 0)
-                    .map((evolucion) => (
-                      <tr key={evolucion.idevolucion}>
-                        <td>Estado: {evolucion.escalaevolucion}</td>
-                        <td>{utils.describirEstado(evolucion.escalaevolucion)}</td>
-                        <td>{utils.convertirFormatoFecha(evolucion.fecha)}</td>
-                        <td>
-                          <button
-                            type="button"
-                            className={'btn btn-verde ' + styles.rowActionButton}
-                            onClick={() =>
-                              editar(
-                                evolucion.escalaevolucion,
-                                evolucion.fecha,
-                                evolucion.idevolucion
-                              )
-                            }
-                          >
-                            <PencilIcon />
-                          </button>
-                          <button
-                            type="button"
-                            className="btn btn-rojo"
-                            onClick={() =>
-                              notificacionEliminar(
-                                evolucion.escalaevolucion,
-                                evolucion.fecha,
-                                evolucion.idevolucion
-                              )
-                            }
-                          >
-                            <TrashIcon />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-              </tbody>
-            </table>
+            {loading ? (
+              <div className="text-center py-4">
+                <Spinner
+                  style={{ height: '4rem', width: '4rem' }}
+                  animation="border"
+                  variant="primary"
+                >
+                  Loading...
+                </Spinner>
+              </div>
+            ) : (
+              <table
+                className={
+                  'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
+                }
+              >
+                <thead>
+                  <tr>
+                    <th scope="col">Estado Evolutivo</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Fecha de Observación</th>
+                    <th scope="col">Acción</th>
+                  </tr>
+                </thead>
+                <tbody className={styles.tableBodyMiddle}>
+                  {evoluciones &&
+                    evoluciones
+                      .filter((evolucion) => evolucion.borrado === 0)
+                      .map((evolucion) => (
+                        <tr key={evolucion.idevolucion}>
+                          <td>Estado: {evolucion.escalaevolucion}</td>
+                          <td>{utils.describirEstado(evolucion.escalaevolucion)}</td>
+                          <td>{utils.convertirFormatoFecha(evolucion.fecha)}</td>
+                          <td>
+                            <button
+                              type="button"
+                              className={'btn btn-verde ' + styles.rowActionButton}
+                              onClick={() =>
+                                editar(
+                                  evolucion.escalaevolucion,
+                                  evolucion.fecha,
+                                  evolucion.idevolucion
+                                )
+                              }
+                            >
+                              <PencilIcon />
+                            </button>
+                            <button
+                              type="button"
+                              className="btn btn-rojo"
+                              onClick={() =>
+                                notificacionEliminar(
+                                  evolucion.escalaevolucion,
+                                  evolucion.fecha,
+                                  evolucion.idevolucion
+                                )
+                              }
+                            >
+                              <TrashIcon />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
       </div>
