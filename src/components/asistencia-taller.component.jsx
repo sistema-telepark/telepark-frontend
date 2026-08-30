@@ -7,6 +7,7 @@ import { asistenciaRepository } from '../services/asistencia.service';
 import { eventRespository } from '../services/event.service';
 import { showToast } from '../services/notification.service';
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
+import LoadingSpinner from './shared/loading-spinner';
 import utils from '../utils/utils';
 import styles from '../styles/asistencia-taller.module.css';
 
@@ -17,29 +18,27 @@ const Asistencia = () => {
   const [encuentro, setEncuentro] = useState([]);
   const [pacientes, setPacientes] = useState([]);
   const [evento, setEvento] = useState([]);
+
   const [loadError, setLoadError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const formAsistencia = useForm();
 
-  const recargar = () => {
-    getEncuentroAll();
-    getPacientes();
-    getEventoAll();
-  };
-
   useEffect(() => {
-    let activo = true;
-    getEncuentroAll(() => activo);
-    getPacientes(() => activo);
-    getEventoAll(() => activo);
-    return () => {
-      activo = false;
-    };
+    setLoading(true);
+    setLoadError(null);
+    Promise.all([getEncuentroAll(), getPacientes(), getEventoAll()])
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
 
-  const getEncuentroAll = async (isActivo = () => true) => {
+  const recargar = () => {
+    setLoadError(null);
+    Promise.all([getEncuentroAll(), getPacientes(), getEventoAll()]).catch(() => {});
+  };
+
+  const getEncuentroAll = async () => {
     const resp = await encuentroRepository.getEncuentroAll();
-    if (!isActivo()) return;
     if (resp.success) {
       setEncuentro(resp.data.results);
       setLoadError(null);
@@ -48,9 +47,8 @@ const Asistencia = () => {
     }
   };
 
-  const getPacientes = async (isActivo = () => true) => {
+  const getPacientes = async () => {
     const resp = await pacienteRepository.getPacientesEp();
-    if (!isActivo()) return;
     if (resp.success) {
       setPacientes(resp.data.results ?? resp.data);
       setLoadError(null);
@@ -59,9 +57,8 @@ const Asistencia = () => {
     }
   };
 
-  const getEventoAll = async (isActivo = () => true) => {
+  const getEventoAll = async () => {
     const resp = await eventRespository.getEventGestionAll();
-    if (!isActivo()) return;
     if (resp.success) {
       setEvento(resp.data.results);
       setLoadError(null);
@@ -150,13 +147,6 @@ const Asistencia = () => {
     <Container className="container panel-gris">
       <h2 className="mt-4 text-center">Asistencia</h2>
       <hr />
-      {loadError && (
-        <ErrorFallbackInline
-          error={{ message: loadError }}
-          resetErrorBoundary={recargar}
-          message="Error al cargar los datos. Intente nuevamente."
-        />
-      )}
       <div className="col-md-3">
         <Form.Group className="mb-0">
           <label htmlFor="fechaEncuentro" className="control-label">
@@ -243,6 +233,14 @@ const Asistencia = () => {
           </button>
         </div>
       </div>
+      {loading && <LoadingSpinner />}
+      {loadError && (
+        <ErrorFallbackInline
+          error={{ message: loadError }}
+          resetErrorBoundary={recargar}
+          message="Error al cargar los datos. Intente nuevamente."
+        />
+      )}
     </Container>
   );
 };

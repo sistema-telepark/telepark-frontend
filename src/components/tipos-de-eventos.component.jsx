@@ -4,10 +4,14 @@ import { eventRespository } from '../services/event.service';
 import Swal from 'sweetalert2';
 import { PencilIcon, PlusIcon, TrashIcon } from './icons/icons-shared';
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
+import LoadingSpinner from './shared/loading-spinner';
 
 const TypeEvents = () => {
   const [typeEvent, setTypeEvent] = useState([]);
+
   const [loadError, setLoadError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   const [form, setForm] = useState({
     idtipoevento: 0,
     nombre: '',
@@ -17,12 +21,17 @@ const TypeEvents = () => {
   const [modalEdit, setModalEdit] = useState(false);
 
   useEffect(() => {
-    let activo = true;
-    getEventAll(() => activo);
-    return () => {
-      activo = false;
-    };
+    setLoading(true);
+    setLoadError(null);
+    getEventAll()
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
+
+  const recargar = () => {
+    setLoadError(null);
+    getEventAll().catch(() => {});
+  };
 
   const handleChange = (e) => {
     if (e.target.id === 'desactivataller') {
@@ -126,9 +135,8 @@ const TypeEvents = () => {
       }
     });
   };
-  const getEventAll = async (isActivo = () => true) => {
+  const getEventAll = async () => {
     let response = await eventRespository.getEventAll();
-    if (!isActivo()) return;
     if (response?.success && response?.data) {
       setTypeEvent(response.data);
       setLoadError(null);
@@ -165,13 +173,6 @@ const TypeEvents = () => {
       <Container className="container panel-gris">
         <h2 className="mt-4 text-center">Tipos de eventos</h2>
         <hr />
-        {loadError && (
-          <ErrorFallbackInline
-            error={{ message: loadError }}
-            resetErrorBoundary={getEventAll}
-            message="Error al cargar los tipos de evento. Intente nuevamente."
-          />
-        )}
         <button className="btn btn-azul mb-2 mt-2" onClick={() => showModalInsert()}>
           <PlusIcon className="signoMas" /> Agregar
         </button>
@@ -222,6 +223,15 @@ const TypeEvents = () => {
           </table>
         </div>
       </Container>
+
+      {loading && <LoadingSpinner />}
+      {loadError && (
+        <ErrorFallbackInline
+          error={{ message: loadError }}
+          resetErrorBoundary={recargar}
+          message="Error al cargar los tipos de evento. Intente nuevamente."
+        />
+      )}
 
       <Modal show={modalInsert}>
         <Modal.Header>

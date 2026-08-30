@@ -6,6 +6,7 @@ import { actividadRepository } from '../services/actividad.service';
 import { showToast, showConfirm } from '../services/notification.service';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
+import LoadingSpinner from './shared/loading-spinner';
 import styles from '../styles/talleres.module.css';
 
 const TIPOS_TALLER = ['Educación física', 'Literario', 'Danza'];
@@ -30,28 +31,27 @@ const Talleres = () => {
   const [modalInsertAct, setModalInsertAct] = useState(false);
 
   const [loadError, setLoadError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const formInsert = useForm();
   const formEdit = useForm();
   const formAct = useForm();
 
-  const recargar = () => {
-    getTallerAll();
-    getActividades();
-  };
-
   useEffect(() => {
-    let activo = true;
-    getTallerAll(() => activo);
-    getActividades(() => activo);
-    return () => {
-      activo = false;
-    };
+    setLoading(true);
+    setLoadError(null);
+    Promise.all([getTallerAll(), getActividades()])
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
 
-  const getTallerAll = async (isActivo = () => true) => {
+  const recargar = () => {
+    setLoadError(null);
+    Promise.all([getTallerAll(), getActividades()]).catch(() => {});
+  };
+
+  const getTallerAll = async () => {
     const resp = await tallerRepository.getTallerAll();
-    if (!isActivo()) return;
     if (resp.success) {
       setTaller(resp.data.results);
       setLoadError(null);
@@ -60,9 +60,8 @@ const Talleres = () => {
     }
   };
 
-  const getActividades = async (isActivo = () => true) => {
+  const getActividades = async () => {
     const resp = await actividadRepository.getAll();
-    if (!isActivo()) return;
     if (resp.success) {
       setAct(resp.data.results);
       setLoadError(null);
@@ -187,13 +186,6 @@ const Talleres = () => {
       <Container className="container panel-gris">
         <h2 className="mt-4 text-center">Talleres</h2>
         <hr />
-        {loadError && (
-          <ErrorFallbackInline
-            error={{ message: loadError }}
-            resetErrorBoundary={recargar}
-            message="Error al cargar los datos. Intente nuevamente."
-          />
-        )}
         <button type="button" className="btn btn-azul mb-2 mt-2" onClick={() => showModalInsert()}>
           <PlusIcon />
           Agregar
@@ -245,6 +237,14 @@ const Talleres = () => {
             </tbody>
           </table>
         </div>
+        {loading && <LoadingSpinner />}
+        {loadError && (
+          <ErrorFallbackInline
+            error={{ message: loadError }}
+            resetErrorBoundary={recargar}
+            message="Error al cargar los datos. Intente nuevamente."
+          />
+        )}
       </Container>
 
       <Modal show={modalInsert}>

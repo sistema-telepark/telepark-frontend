@@ -6,8 +6,9 @@ import { indicacionRepository } from '../services/indicacion.service';
 import { medicamentoRepository } from '../services/medicamento.service';
 import utils from '../utils/utils';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
+import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
+import LoadingSpinner from './shared/loading-spinner';
 import styles from '../styles/list-indicacion.module.css';
-import { Spinner } from 'react-bootstrap';
 
 const ListaIndicacion = () => {
   const idEpElegido = useSelector((state) => state.global.idEpElegido);
@@ -28,8 +29,11 @@ const ListaIndicacion = () => {
   const [medicamentos, setMedicamentos] = useState();
   const [loading, setLoading] = useState(true);
 
+  const [loadError, setLoadError] = useState(null);
+
   useEffect(() => {
     setLoading(true);
+    setLoadError(null);
     const cargarInicial = async () => {
       try {
         await Promise.all([getIndicaciones(), getMedicamento()]);
@@ -44,6 +48,11 @@ const ListaIndicacion = () => {
     }
   }, [idEpElegido, navigate]);
 
+  const recargar = () => {
+    setLoadError(null);
+    Promise.all([getIndicaciones(), getMedicamento()]).catch(() => {});
+  };
+
   const getIndicaciones = async () => {
     if (!idEpElegido) return;
 
@@ -51,6 +60,9 @@ const ListaIndicacion = () => {
 
     if (response?.success && response?.data) {
       setIndicaciones(response.data.results ?? response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response?.error || 'No se pudieron cargar las indicaciones.');
     }
   };
 
@@ -59,6 +71,9 @@ const ListaIndicacion = () => {
 
     if (response?.success && response?.data) {
       setMedicamentos(response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response?.error || 'No se pudieron cargar los medicamentos.');
     }
   };
 
@@ -439,23 +454,12 @@ const ListaIndicacion = () => {
 
         <div className="row">
           <div className="col-12">
-            {loading ? (
-              <div className="text-center py-4">
-                <Spinner
-                  style={{ height: '4rem', width: '4rem' }}
-                  animation="border"
-                  variant="primary"
-                >
-                  Loading...
-                </Spinner>
-              </div>
-            ) : (
-              <table
-                className={
-                  'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
-                }
-              >
-                <thead>
+            <table
+              className={
+                'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
+              }
+            >
+              <thead>
                   <tr>
                     <th scope="col">Nombre de Medicamento</th>
                     <th scope="col">Dosis en mg</th>
@@ -514,6 +518,13 @@ const ListaIndicacion = () => {
                       ))}
                 </tbody>
               </table>
+            {loading && <LoadingSpinner />}
+            {loadError && (
+              <ErrorFallbackInline
+                error={{ message: loadError }}
+                resetErrorBoundary={recargar}
+                message="No se pudieron cargar las indicaciones. Intente nuevamente."
+              />
             )}
           </div>
         </div>

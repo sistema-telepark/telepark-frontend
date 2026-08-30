@@ -7,6 +7,7 @@ import { evolucionRepository } from '../services/evolucion.service';
 import { osRepository } from '../services/os.service';
 import { indicacionRepository } from '../services/indicacion.service';
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
+import LoadingSpinner from './shared/loading-spinner';
 import utils from '../utils/utils';
 import styles from '../styles/ficha-medica.module.css';
 
@@ -18,7 +19,9 @@ const FichaMedica = () => {
   const [evoluciones, setEvoluciones] = useState([]);
   const [osociales, setOsociales] = useState([]);
   const [indicaciones, setIndicaciones] = useState([]);
+
   const [loadError, setLoadError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!idEpElegido) {
@@ -30,11 +33,17 @@ const FichaMedica = () => {
       return;
     }
 
-    getDiagnosticos();
-    getEvoluciones();
-    getOs();
-    getIndicaciones();
+    setLoading(true);
+    setLoadError(null);
+    Promise.all([getDiagnosticos(), getEvoluciones(), getOs(), getIndicaciones()])
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, [idEpElegido, navigate]);
+
+  const recargar = () => {
+    setLoadError(null);
+    Promise.all([getDiagnosticos(), getEvoluciones(), getOs(), getIndicaciones()]).catch(() => {});
+  };
 
   const getDiagnosticos = async () => {
     let response = await diagnosticoRepository.get(idEpElegido);
@@ -80,13 +89,6 @@ const FichaMedica = () => {
     }
   };
 
-  const recargar = () => {
-    getDiagnosticos();
-    getEvoluciones();
-    getOs();
-    getIndicaciones();
-  };
-
   return (
     <main
       className={
@@ -99,13 +101,6 @@ const FichaMedica = () => {
           <b>Ficha Médica</b>
         </h2>
         <hr />
-        {loadError && (
-          <ErrorFallbackInline
-            error={{ message: loadError }}
-            resetErrorBoundary={recargar}
-            message="Error al cargar la ficha médica. Intente nuevamente."
-          />
-        )}
         <div className="row">
           <div className="col-12 col-md-12 col-lg-12 col-xl-12">
             <h5>
@@ -281,6 +276,14 @@ const FichaMedica = () => {
             </table>
           </div>
         </div>
+        {loading && <LoadingSpinner />}
+        {loadError && (
+          <ErrorFallbackInline
+            error={{ message: loadError }}
+            resetErrorBoundary={recargar}
+            message="Error al cargar la ficha médica. Intente nuevamente."
+          />
+        )}
       </div>
     </main>
   );

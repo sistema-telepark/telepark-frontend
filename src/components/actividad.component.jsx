@@ -6,33 +6,34 @@ import { showToast, showConfirm } from '../services/notification.service';
 import { PlusIcon, TrashIcon } from './icons/icons-shared';
 import { CheckIcon, CloseIcon } from './icons/icons-nomenclador';
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
+import LoadingSpinner from './shared/loading-spinner';
 import styles from '../styles/actividad.module.css';
 
 const Actividad = () => {
   const [actividades, setActividades] = useState([]);
   const [talleres, setTalleres] = useState([]);
   const [editId, setEditId] = useState(null);
+
   const [loadError, setLoadError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const formActividad = useForm();
 
-  const recargar = () => {
-    getActividades();
-    getTalleres();
-  };
-
   useEffect(() => {
-    let activo = true;
-    getActividades(() => activo);
-    getTalleres(() => activo);
-    return () => {
-      activo = false;
-    };
+    setLoading(true);
+    setLoadError(null);
+    Promise.all([getActividades(), getTalleres()])
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
 
-  const getActividades = async (isActivo = () => true) => {
+  const recargar = () => {
+    setLoadError(null);
+    Promise.all([getActividades(), getTalleres()]).catch(() => {});
+  };
+
+  const getActividades = async () => {
     const resp = await actividadRepository.getAll();
-    if (!isActivo()) return;
     if (resp.success) {
       setActividades(resp.data.results);
       setLoadError(null);
@@ -41,9 +42,8 @@ const Actividad = () => {
     }
   };
 
-  const getTalleres = async (isActivo = () => true) => {
+  const getTalleres = async () => {
     const resp = await tallerRepository.getTallerAll();
-    if (!isActivo()) return;
     if (resp.success) {
       setTalleres(resp.data.results);
       setLoadError(null);
@@ -100,15 +100,6 @@ const Actividad = () => {
 
   return (
     <div className="row">
-      {loadError && (
-        <div className="col-12">
-          <ErrorFallbackInline
-            error={{ message: loadError }}
-            resetErrorBoundary={recargar}
-            message="Error al cargar los datos. Intente nuevamente."
-          />
-        </div>
-      )}
       <div className={`mt-4 mb-4 col-12 col-md-12 col-lg-4 col-xl-4 ${styles.formColumn}`}>
         <div className="row">
           <div className="mb-2 col-12 col-md-12 col-lg-12 col-xl-12 input-group">
@@ -204,6 +195,16 @@ const Actividad = () => {
             </table>
           </div>
         </div>
+        {loading && <LoadingSpinner />}
+        {loadError && (
+          <div className="col-12">
+            <ErrorFallbackInline
+              error={{ message: loadError }}
+              resetErrorBoundary={recargar}
+              message="Error al cargar los datos. Intente nuevamente."
+            />
+          </div>
+        )}
       </div>
     </div>
   );

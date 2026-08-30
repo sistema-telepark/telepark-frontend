@@ -7,6 +7,8 @@ import utils from '../utils/utils';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
 import styles from '../styles/admin-users.module.css';
 import { showToast, showConfirm } from '../services/notification.service';
+import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
+import LoadingSpinner from './shared/loading-spinner';
 import { Form, Modal } from 'react-bootstrap';
 
 const AdminUsuarios = () => {
@@ -20,12 +22,11 @@ const AdminUsuarios = () => {
   const [usuariosFiltrados, setUsuariosFiltrados] = useState();
   const [idUsuario, setIdUsuario] = useState(null);
 
+  const [loadError, setLoadError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    let activo = true;
-    getUsers(() => activo);
-    return () => {
-      activo = false;
-    };
+    getUsers();
   }, []);
 
   const detectarCambio = (field, e) => {
@@ -116,18 +117,23 @@ const AdminUsuarios = () => {
 
   // El backend devuelve envelope DRF paginado {count,next,previous,results}
   // → normalizar a .results.
-  const getUsers = async (isActivo = () => true) => {
+  const getUsers = async () => {
+    setLoading(true);
+    setLoadError(null);
     let response = await userRepository.getUsers();
 
-    if (!isActivo()) return;
-    if (response && response.data) {
+    if (response?.success && response?.data) {
       let admin = TokenService.getUsername();
       let users = (response.data.results ?? response.data).filter((user) => {
         return user.username !== admin;
       });
       setUsuarios(users);
       setUsuariosFiltrados(undefined);
+      setLoadError(null);
+    } else {
+      setLoadError(response?.error || 'No se pudieron cargar los usuarios.');
     }
+    setLoading(false);
   };
 
   const editUser = (user) => {
@@ -668,6 +674,14 @@ const AdminUsuarios = () => {
             </tbody>
           </table>
         </div>
+        {loading && <LoadingSpinner />}
+        {loadError && (
+          <ErrorFallbackInline
+            error={{ message: loadError }}
+            resetErrorBoundary={getUsers}
+            message="No se pudieron cargar los usuarios. Intente nuevamente."
+          />
+        )}
       </div>
     </main>
   );

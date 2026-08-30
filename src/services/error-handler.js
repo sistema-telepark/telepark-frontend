@@ -73,7 +73,12 @@ export const withServiceHandler = (fn, options = {}) => {
         method: fn.name,
         response: error.response?.data,
       });
-      if (showNotification) {
+      // Los fallos de carga (operaciones de lectura) los muestra cada vista de
+      // forma inline con reintento; solo las escrituras notifican automáticamente
+      // (toast/modal). Evita el doble aviso (modal de la capa + alerta inline).
+      const method = (error.config?.method || '').toUpperCase();
+      const esLectura = ['GET', 'HEAD', 'OPTIONS'].includes(method);
+      if (showNotification && !esLectura) {
         const severity = forceSeverity || normalized.severity;
         if (severity === 'modal') {
           showModal('error', 'Error', normalized.message);

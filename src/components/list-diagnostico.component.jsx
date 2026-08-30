@@ -6,8 +6,9 @@ import { diagnosticoRepository } from '../services/diagnostico.service';
 import { enfermedadRepository } from '../services/enfermedad.service';
 import utils from '../utils/utils';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
+import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
+import LoadingSpinner from './shared/loading-spinner';
 import styles from '../styles/list-diagnostico.module.css';
-import { Spinner } from 'react-bootstrap';
 
 const ListaDiagnostico = () => {
   const idEpElegido = useSelector((state) => state.global.idEpElegido);
@@ -25,8 +26,11 @@ const ListaDiagnostico = () => {
   const [diagnosticos, setDiagnosticos] = useState();
   const [loading, setLoading] = useState(true);
 
+  const [loadError, setLoadError] = useState(null);
+
   useEffect(() => {
     setLoading(true);
+    setLoadError(null);
     const cargarInicial = async () => {
       try {
         await Promise.all([getEnfermedad(), getDiagnosticos()]);
@@ -41,11 +45,19 @@ const ListaDiagnostico = () => {
     }
   }, [idEpElegido, navigate]);
 
+  const recargar = () => {
+    setLoadError(null);
+    Promise.all([getEnfermedad(), getDiagnosticos()]).catch(() => {});
+  };
+
   const getEnfermedad = async () => {
     let response = await enfermedadRepository.getAll();
 
     if (response?.success && response?.data) {
       setEnfermedades(response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response?.error || 'No se pudieron cargar los datos.');
     }
   };
 
@@ -61,6 +73,9 @@ const ListaDiagnostico = () => {
 
     if (response?.success && response?.data) {
       setDiagnosticos(response.data.results ?? response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response?.error || 'No se pudieron cargar los datos.');
     }
   };
 
@@ -327,23 +342,12 @@ const ListaDiagnostico = () => {
 
         <div className="row">
           <div className="col-12">
-            {loading ? (
-              <div className="text-center py-4">
-                <Spinner
-                  style={{ height: '4rem', width: '4rem' }}
-                  animation="border"
-                  variant="primary"
-                >
-                  Loading...
-                </Spinner>
-              </div>
-            ) : (
-              <table
-                className={
-                  'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
-                }
-              >
-                <thead>
+            <table
+              className={
+                'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
+              }
+            >
+              <thead>
                   <tr>
                     <th scope="col">Nombre de Enfermedad</th>
                     <th scope="col">Fecha de Diagnóstico</th>
@@ -388,8 +392,15 @@ const ListaDiagnostico = () => {
                           </td>
                         </tr>
                       ))}
-                </tbody>
-              </table>
+</tbody>
+            </table>
+            {loading && <LoadingSpinner />}
+            {loadError && (
+              <ErrorFallbackInline
+                error={{ message: loadError }}
+                resetErrorBoundary={recargar}
+                message="No se pudieron cargar los diagnósticos. Intente nuevamente."
+              />
             )}
           </div>
         </div>

@@ -4,8 +4,10 @@ import { connect } from 'react-redux';
 import { cambiarID } from '../actions/global';
 import { pacienteRepository } from '../services/paciente.service';
 import '../styles/list-pacientes-ep.css';
-import { Alert, Spinner, Form, Modal } from 'react-bootstrap';
+import { Form, Modal } from 'react-bootstrap';
 import utils from '../utils/utils';
+import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
+import LoadingSpinner from './shared/loading-spinner';
 import {
   EyeIcon,
   ClipboardCheckIcon,
@@ -25,12 +27,13 @@ import PropTypes from 'prop-types';
 
 const ListaPaciente = (props) => {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
   const [buscar, setBuscar] = useState('');
   const [pacientes, setPacientes] = useState([]);
   const [modalInsert, setModalInsert] = useState(false);
   const [arrayProvincias, setArrayProvincias] = useState([]);
   const mostrarNotificacionAlCerrar = useRef(false);
+
+  const [loadError, setLoadError] = useState(null);
 
   useEffect(() => {
     getPacientes();
@@ -39,21 +42,15 @@ const ListaPaciente = (props) => {
   // Obtiene únicamente las personas que tienen ficha de EP.
   const getPacientes = async () => {
     setLoading(true);
-    setError(false);
-    try {
-      const response = await pacienteRepository.getPacientesEp();
-      if (response?.success && response?.data) {
-        setPacientes(response.data.results ?? response.data);
-      } else {
-        setError(true);
-        utils.notificacionError();
-      }
-    } catch {
-      setError(true);
-      utils.notificacionError();
-    } finally {
-      setLoading(false);
+    setLoadError(null);
+    const response = await pacienteRepository.getPacientesEp();
+    if (response?.success && response?.data) {
+      setPacientes(response.data.results ?? response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response.error || 'No se pudieron cargar los pacientes.');
     }
+    setLoading(false);
   };
 
   const {
@@ -75,6 +72,9 @@ const ListaPaciente = (props) => {
             provincia: provincia.nombre,
           }))
         );
+        setLoadError(null);
+      } else {
+        setLoadError(response.error || 'No se pudieron cargar las provincias.');
       }
     };
 
@@ -98,7 +98,7 @@ const ListaPaciente = (props) => {
   };
 
   const enviarFormulario = async (data) => {
-    const response = await pacienteRepository.guardarPaciente(data).catch(() => utils.errorSend());
+    const response = await pacienteRepository.guardarPaciente(data);
     if (response?.success) {
       reset();
       mostrarNotificacionAlCerrar.current = true;
@@ -150,23 +150,7 @@ const ListaPaciente = (props) => {
 
         <div className="row">
           <div className="col-12 col-md-12 col-lg-12 col-xl-12 text-center">
-            {error ? (
-              <Alert variant="danger" role="alert">
-                No se pudieron cargar los pacientes. Intente nuevamente.
-                <button
-                  type="button"
-                  className="btn btn-outline-danger btn-lg ms-2"
-                  onClick={getPacientes}
-                >
-                  Reintentar
-                </button>
-              </Alert>
-            ) : loading ? (
-              <Spinner className={styles.spinner} animation="border" variant="primary">
-                Loading...
-              </Spinner>
-            ) : (
-              <table className="table table-bordered table-hover shadow table-striped">
+            <table className="table table-bordered table-hover shadow table-striped">
                 <thead>
                   <tr>
                     <th scope="col">Nombre completo</th>
@@ -268,6 +252,15 @@ const ListaPaciente = (props) => {
                       ))}
                 </tbody>
               </table>
+            {loading && <LoadingSpinner />}
+            {loadError && (
+              <div className="text-start">
+                <ErrorFallbackInline
+                  error={{ message: loadError }}
+                  resetErrorBoundary={getPacientes}
+                  message="No se pudieron cargar los pacientes. Intente nuevamente."
+                />
+              </div>
             )}
           </div>
         </div>

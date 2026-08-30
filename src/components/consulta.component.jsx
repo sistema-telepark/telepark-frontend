@@ -7,6 +7,7 @@ import { pacienteRepository } from '../services/paciente.service';
 import { asistenciaRepository } from '../services/asistencia.service';
 import { eventRespository } from '../services/event.service';
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
+import LoadingSpinner from './shared/loading-spinner';
 import utils from '../utils/utils';
 import styles from '../styles/consulta.module.css';
 
@@ -25,27 +26,38 @@ const Consulta = () => {
   const [errores, setErrores] = useState({});
 
   const [evento, setEvento] = useState([]);
-  const [loadError, setLoadError] = useState(null);
 
-  const recargar = () => {
-    getTallerAll();
-    getActividades();
-    getEncuentroAll();
-    getPacientes();
-    getEventoAll();
-  };
+  const [loadError, setLoadError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const [form, setForm] = useState({
     fechaEncuentro: '',
   });
 
   useEffect(() => {
-    getTallerAll();
-    getActividades();
-    getEncuentroAll();
-    getPacientes();
-    getEventoAll();
+    setLoading(true);
+    setLoadError(null);
+    Promise.all([
+      getTallerAll(),
+      getActividades(),
+      getEncuentroAll(),
+      getPacientes(),
+      getEventoAll(),
+    ])
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
+
+  const recargar = () => {
+    setLoadError(null);
+    Promise.all([
+      getTallerAll(),
+      getActividades(),
+      getEncuentroAll(),
+      getPacientes(),
+      getEventoAll(),
+    ]).catch(() => {});
+  };
 
   const getTallerAll = async () => {
     const resp = await tallerRepository.getTallerAll();
@@ -116,9 +128,11 @@ const Consulta = () => {
     if (resp.success) {
       setAsistencia(resp.data);
       setMensajeSinDatos(resp.data.length === 0);
+      setLoadError(null);
     } else {
       setAsistencia([]);
-      setMensajeSinDatos(true);
+      setMensajeSinDatos(false);
+      setLoadError(resp.error);
     }
   };
 
@@ -129,9 +143,18 @@ const Consulta = () => {
 
     if (!respAsistencias.success || !respPacientes.success || !respEncuentros.success) {
       setFaltaC([]);
-      setMensajeSinDatosFC(true);
+      setMensajeSinDatosFC(false);
+      const primerError =
+        !respAsistencias.success && respAsistencias.error
+          ? respAsistencias.error
+          : !respPacientes.success && respPacientes.error
+            ? respPacientes.error
+            : respEncuentros.error;
+      setLoadError(primerError);
       return;
     }
+
+    setLoadError(null);
 
     const asistencias = respAsistencias.data.results;
     const pacientes = respPacientes.data.results;
@@ -183,13 +206,6 @@ const Consulta = () => {
       <Container className="container panel-gris">
         <h2 className="mt-4 text-center">Consultas</h2>
         <hr />
-        {loadError && (
-          <ErrorFallbackInline
-            error={{ message: loadError }}
-            resetErrorBoundary={recargar}
-            message="Error al cargar los datos. Intente nuevamente."
-          />
-        )}
 
         <div
           className={`row m-md-3 mx-auto justify-content-center rounded container-lg ${styles.whiteCard}`}
@@ -295,6 +311,14 @@ const Consulta = () => {
             </div>
           </div>
         </div>
+        {loading && <LoadingSpinner />}
+        {loadError && (
+          <ErrorFallbackInline
+            error={{ message: loadError }}
+            resetErrorBoundary={recargar}
+            message="Error al cargar los datos. Intente nuevamente."
+          />
+        )}
       </Container>
     </>
   );

@@ -4,6 +4,8 @@ import { enfermedadRepository } from '../services/enfermedad.service';
 import { medicamentoRepository } from '../services/medicamento.service';
 import { obrasocialRepository } from '../services/obrasocial.service';
 import { CheckIcon, CloseIcon, AddIcon, EditIcon, DeleteIcon } from './icons/icons-nomenclador';
+import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
+import LoadingSpinner from './shared/loading-spinner';
 import styles from '../styles/nomenclador.module.css';
 
 const Nomenclador = () => {
@@ -19,16 +21,29 @@ const Nomenclador = () => {
     idEditado: '',
   });
 
+  const [loadError, setLoadError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    getEnfermedad();
-    getMedicamento();
-    getObrasocial();
+    setLoading(true);
+    setLoadError(null);
+    Promise.all([getEnfermedad(), getMedicamento(), getObrasocial()])
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
+
+  const recargar = () => {
+    setLoadError(null);
+    Promise.all([getEnfermedad(), getMedicamento(), getObrasocial()]).catch(() => {});
+  };
 
   const getEnfermedad = async () => {
     const response = await enfermedadRepository.getAll();
     if (response?.success) {
       setEnfermedades(response?.data ?? []);
+      setLoadError(null);
+    } else {
+      setLoadError(response?.error || 'No se pudieron cargar los datos.');
     }
   };
 
@@ -36,6 +51,9 @@ const Nomenclador = () => {
     let response = await medicamentoRepository.getAll();
     if (response?.success) {
       setMedicamentos(response?.data ?? []);
+      setLoadError(null);
+    } else {
+      setLoadError(response?.error || 'No se pudieron cargar los datos.');
     }
   };
 
@@ -43,6 +61,9 @@ const Nomenclador = () => {
     let response = await obrasocialRepository.getAll();
     if (response?.success) {
       setObrasociales(response?.data ?? []);
+      setLoadError(null);
+    } else {
+      setLoadError(response?.error || 'No se pudieron cargar los datos.');
     }
   };
 
@@ -510,6 +531,14 @@ const Nomenclador = () => {
           </div>
         </div>
       </div>
+      {loading && <LoadingSpinner />}
+      {loadError && (
+        <ErrorFallbackInline
+          error={{ message: loadError }}
+          resetErrorBoundary={recargar}
+          message="No se pudieron cargar los datos. Intente nuevamente."
+        />
+      )}
     </main>
   );
 };

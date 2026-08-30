@@ -6,8 +6,9 @@ import { osRepository } from '../services/os.service';
 import utils from '../utils/utils';
 import ObraSocialForm from './list-obrasocial/obra-social-form.component';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
+import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
+import LoadingSpinner from './shared/loading-spinner';
 import styles from '../styles/list-obrasocial.module.css';
-import { Spinner } from 'react-bootstrap';
 
 const ListaObraSocial = (props) => {
   const [show, setShow] = useState(false);
@@ -20,8 +21,11 @@ const ListaObraSocial = (props) => {
   const { idEpElegido, nombreEpElegido } = props;
   const navigate = useNavigate();
 
+  const [loadError, setLoadError] = useState(null);
+
   useEffect(() => {
     setLoading(true);
+    setLoadError(null);
     const cargarInicial = async () => {
       try {
         await Promise.all([getObrasocial(), getOs()]);
@@ -36,10 +40,18 @@ const ListaObraSocial = (props) => {
     }
   }, [idEpElegido, navigate]);
 
+  const recargar = () => {
+    setLoadError(null);
+    Promise.all([getObrasocial(), getOs()]).catch(() => {});
+  };
+
   const getObrasocial = async () => {
     const response = await obrasocialRepository.getAll();
     if (response?.success) {
       setObraSociales(response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response?.error || 'No se pudieron cargar las obras sociales.');
     }
   };
 
@@ -49,6 +61,9 @@ const ListaObraSocial = (props) => {
     const response = await osRepository.get(idEpElegido);
     if (response?.success) {
       setOsociales(response.data.results ?? response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response?.error || 'No se pudieron cargar las obras sociales.');
     }
   };
 
@@ -177,18 +192,7 @@ const ListaObraSocial = (props) => {
 
       <div className="row">
         <div className="col-12 col-md-12 col-lg-12 col-xl-12">
-          {loading ? (
-            <div className="text-center py-4">
-              <Spinner
-                style={{ height: '4rem', width: '4rem' }}
-                animation="border"
-                variant="primary"
-              >
-                Loading...
-              </Spinner>
-            </div>
-          ) : (
-            <table className="table table-bordered table-hover shadow table-striped">
+          <table className="table table-bordered table-hover shadow table-striped">
               <thead>
                 <tr>
                   <th scope="col">Obra Social</th>
@@ -231,6 +235,13 @@ const ListaObraSocial = (props) => {
                     ))}
               </tbody>
             </table>
+          {loading && <LoadingSpinner />}
+          {loadError && (
+            <ErrorFallbackInline
+              error={{ message: loadError }}
+              resetErrorBoundary={recargar}
+              message="No se pudieron cargar las obras sociales. Intente nuevamente."
+            />
           )}
         </div>
       </div>

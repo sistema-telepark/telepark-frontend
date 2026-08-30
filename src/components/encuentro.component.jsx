@@ -8,6 +8,7 @@ import { actividadRealizadaRepository } from '../services/actividad-realizada.se
 import { showToast, showConfirm } from '../services/notification.service';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
+import LoadingSpinner from './shared/loading-spinner';
 import utils from '../utils/utils';
 import styles from '../styles/encuentro.module.css';
 
@@ -22,30 +23,28 @@ const Encuentro = () => {
   const [modalInsert, setModalInsert] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
   const [modalInsertAct, setModalInsertAct] = useState(false);
+
   const [loadError, setLoadError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const formInsert = useForm();
   const formEdit = useForm();
 
-  const recargar = () => {
-    getEncuentroAll();
-    getTallerAll();
-    getActividadAll();
-  };
-
   useEffect(() => {
-    let activo = true;
-    getEncuentroAll(() => activo);
-    getTallerAll(() => activo);
-    getActividadAll(() => activo);
-    return () => {
-      activo = false;
-    };
+    setLoading(true);
+    setLoadError(null);
+    Promise.all([getEncuentroAll(), getTallerAll(), getActividadAll()])
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
 
-  const getEncuentroAll = async (isActivo = () => true) => {
+  const recargar = () => {
+    setLoadError(null);
+    Promise.all([getEncuentroAll(), getTallerAll(), getActividadAll()]).catch(() => {});
+  };
+
+  const getEncuentroAll = async () => {
     const resp = await encuentroRepository.getEncuentroAll();
-    if (!isActivo()) return;
     if (resp.success) {
       setEncuentro(resp.data.results);
       setLoadError(null);
@@ -54,9 +53,8 @@ const Encuentro = () => {
     }
   };
 
-  const getTallerAll = async (isActivo = () => true) => {
+  const getTallerAll = async () => {
     const resp = await tallerRepository.getTallerAll();
-    if (!isActivo()) return;
     if (resp.success) {
       setTaller(resp.data.results);
       setLoadError(null);
@@ -65,9 +63,8 @@ const Encuentro = () => {
     }
   };
 
-  const getActividadAll = async (isActivo = () => true) => {
+  const getActividadAll = async () => {
     const resp = await actividadRepository.getAll();
-    if (!isActivo()) return;
     if (resp.success) {
       setActividad(resp.data.results);
       setLoadError(null);
@@ -248,13 +245,6 @@ const Encuentro = () => {
       <Container className="container panel-gris">
         <h2 className="mt-4 text-center">Encuentros</h2>
         <hr />
-        {loadError && (
-          <ErrorFallbackInline
-            error={{ message: loadError }}
-            resetErrorBoundary={recargar}
-            message="Error al cargar los datos. Intente nuevamente."
-          />
-        )}
         <button type="button" className="btn btn-azul mb-2 mt-2" onClick={() => showModalInsert()}>
           <PlusIcon />
           Agregar
@@ -309,6 +299,15 @@ const Encuentro = () => {
           </table>
         </div>
       </Container>
+
+      {loading && <LoadingSpinner />}
+      {loadError && (
+        <ErrorFallbackInline
+          error={{ message: loadError }}
+          resetErrorBoundary={recargar}
+          message="Error al cargar los datos. Intente nuevamente."
+        />
+      )}
 
       <Modal show={modalInsert}>
         <Modal.Header>

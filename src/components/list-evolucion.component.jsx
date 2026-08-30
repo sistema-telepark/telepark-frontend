@@ -5,8 +5,9 @@ import { useSelector } from 'react-redux';
 import { evolucionRepository } from '../services/evolucion.service';
 import utils from '../utils/utils';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
+import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
+import LoadingSpinner from './shared/loading-spinner';
 import styles from '../styles/list-evolucion.module.css';
-import { Spinner } from 'react-bootstrap';
 
 const ListaEvolucion = () => {
   const idEpElegido = useSelector((state) => state.global.idEpElegido);
@@ -23,6 +24,8 @@ const ListaEvolucion = () => {
   const [evoluciones, setEvoluciones] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [loadError, setLoadError] = useState(null);
+
   useEffect(() => {
     if (!idEpElegido) {
       setEvoluciones([]);
@@ -34,15 +37,16 @@ const ListaEvolucion = () => {
 
   const getEvoluciones = async () => {
     setLoading(true);
-    try {
-      let response = await evolucionRepository.get(idEpElegido);
+    setLoadError(null);
+    let response = await evolucionRepository.get(idEpElegido);
 
-      if (response?.success) {
-        setEvoluciones(response.data.results ?? response.data);
-      }
-    } finally {
-      setLoading(false);
+    if (response?.success) {
+      setEvoluciones(response.data.results ?? response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response?.error || 'No se pudieron cargar las evoluciones.');
     }
+    setLoading(false);
   };
 
   const editar = (nroEvolucion, fecha, idevolucion) => {
@@ -308,21 +312,10 @@ const ListaEvolucion = () => {
 
         <div className="row">
           <div className="col-12">
-            {loading ? (
-              <div className="text-center py-4">
-                <Spinner
-                  style={{ height: '4rem', width: '4rem' }}
-                  animation="border"
-                  variant="primary"
-                >
-                  Loading...
-                </Spinner>
-              </div>
-            ) : (
-              <table
-                className={
-                  'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
-                }
+            <table
+              className={
+                'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
+              }
               >
                 <thead>
                   <tr>
@@ -373,6 +366,13 @@ const ListaEvolucion = () => {
                       ))}
                 </tbody>
               </table>
+            {loading && <LoadingSpinner />}
+            {loadError && (
+              <ErrorFallbackInline
+                error={{ message: loadError }}
+                resetErrorBoundary={getEvoluciones}
+                message="No se pudieron cargar las evoluciones. Intente nuevamente."
+              />
             )}
           </div>
         </div>

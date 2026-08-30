@@ -1,5 +1,7 @@
 import React, { memo, useState, useEffect } from 'react';
 import { PencilIcon, TrashIcon } from './icons/icons-shared';
+import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
+import LoadingSpinner from './shared/loading-spinner';
 import styles from '../styles/add-paciente.module.css';
 import { eventRespository } from '../services/event.service';
 import Swal from 'sweetalert2';
@@ -16,13 +18,11 @@ const AdminPersonas = () => {
     borrado: 0,
   });
   const [modalEdit, setModalEdit] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(null);
 
   useEffect(() => {
-    let activo = true;
-    getPersonAll(() => activo);
-    return () => {
-      activo = false;
-    };
+    getPersonAll();
   }, []);
 
   const handleChange = (e) => {
@@ -104,12 +104,17 @@ const AdminPersonas = () => {
 
   // El backend responde envelope DRF paginado {count,next,previous,results}
   // → normalizar a .results.
-  const getPersonAll = async (isActivo = () => true) => {
+  const getPersonAll = async () => {
+    setLoading(true);
+    setLoadError(null);
     let response = await eventRespository.getAll();
-    if (!isActivo()) return;
     if (response?.success && response?.data) {
       setArrayPerson(response.data.results ?? response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response?.error || 'No se pudieron cargar las personas.');
     }
+    setLoading(false);
   };
 
   const eliminar = (persona) => {
@@ -217,6 +222,14 @@ const AdminPersonas = () => {
             </table>
           </div>
         </div>
+        {loading && <LoadingSpinner />}
+        {loadError && (
+          <ErrorFallbackInline
+            error={{ message: loadError }}
+            resetErrorBoundary={getPersonAll}
+            message="No se pudieron cargar las personas. Intente nuevamente."
+          />
+        )}
       </main>
 
       <Modal show={modalEdit}>

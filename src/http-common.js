@@ -9,13 +9,15 @@ const RETRY_CONFIG = {
   jitterPercent: 0.25,
 };
 
-// Solo estas requests se reintentan ante 502/503/504 (idempotentes).
+// Solo estas requests se reintentan (idempotentes): 502/503/504 y ERR_NETWORK/timeout.
 const IDEMPOTENT_METHODS = ['GET', 'HEAD', 'OPTIONS'];
 
 const RETRYABLE_STATUS_CODES = [502, 503, 504];
 
-// Error de red o timeout: reintentable para TODOS los métodos (no matchea ERR_CANCELED).
-const isNetworkError = (error) => error.code === 'ERR_NETWORK' || error.code === 'ECONNABORTED';
+// Error de red o timeout: reintentable solo para métodos idempotentes (no matchea ERR_CANCELED).
+const isNetworkError = (error, method) =>
+  (error.code === 'ERR_NETWORK' || error.code === 'ECONNABORTED') &&
+  IDEMPOTENT_METHODS.includes((method || '').toUpperCase());
 
 // 5xx transitorio: reintentable solo si la request es idempotente.
 const isRetryableServerError = (error) => {
@@ -41,6 +43,9 @@ const instance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  // Timeout global: corta peticiones colgadas (servidor caído sin cierre de TCP),
+  // evita spinners de carga infinitos. ECONNABORTED es reintentable (isNetworkError).
+  timeout: 20000,
 });
 
 instance.interceptors.request.use(
@@ -77,8 +82,9 @@ instance.interceptors.response.use(
         }
       }
     }
-    // Retry de red: ERR_NETWORK/timeout para todos los métodos; 502/503/504 solo idempotentes
-    if (originalConfig && (isNetworkError(err) || isRetryableServerError(err))) {
+    // Retry: ERR_NETWORK/timeout y 502/503/504 solo para métodos idempotentes
+    const method = (originalConfig?.method || '').toUpperCase();
+    if (originalConfig && (isNetworkError(err, method) || isRetryableServerError(err))) {
       const retryCount = originalConfig._retryCount || 0;
       if (retryCount < RETRY_CONFIG.maxRetries) {
         originalConfig._retryCount = retryCount + 1;
