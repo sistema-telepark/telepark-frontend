@@ -6,7 +6,7 @@ import { pacienteRepository } from '../services/paciente.service';
 import { asistenciaRepository } from '../services/asistencia.service';
 import { eventRespository } from '../services/event.service';
 import { showToast } from '../services/notification.service';
-import { logAsyncError } from './error-boundary/logError';
+import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
 import utils from '../utils/utils';
 import styles from '../styles/asistencia-taller.module.css';
 
@@ -17,8 +17,15 @@ const Asistencia = () => {
   const [encuentro, setEncuentro] = useState([]);
   const [pacientes, setPacientes] = useState([]);
   const [evento, setEvento] = useState([]);
+  const [loadError, setLoadError] = useState(null);
 
   const formAsistencia = useForm();
+
+  const recargar = () => {
+    getEncuentroAll();
+    getPacientes();
+    getEventoAll();
+  };
 
   useEffect(() => {
     let activo = true;
@@ -31,38 +38,35 @@ const Asistencia = () => {
   }, []);
 
   const getEncuentroAll = async (isActivo = () => true) => {
-    try {
-      const resp = await encuentroRepository.getEncuentroAll();
-      if (!isActivo()) return;
-      if (resp.success) {
-        setEncuentro(resp.data.results);
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'obtener encuentros' });
+    const resp = await encuentroRepository.getEncuentroAll();
+    if (!isActivo()) return;
+    if (resp.success) {
+      setEncuentro(resp.data.results);
+      setLoadError(null);
+    } else {
+      setLoadError(resp.error);
     }
   };
 
   const getPacientes = async (isActivo = () => true) => {
-    try {
-      const resp = await pacienteRepository.getPacientesEp();
-      if (!isActivo()) return;
-      if (resp.success) {
-        setPacientes(resp.data.results ?? resp.data);
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'obtener pacientes' });
+    const resp = await pacienteRepository.getPacientesEp();
+    if (!isActivo()) return;
+    if (resp.success) {
+      setPacientes(resp.data.results ?? resp.data);
+      setLoadError(null);
+    } else {
+      setLoadError(resp.error);
     }
   };
 
   const getEventoAll = async (isActivo = () => true) => {
-    try {
-      const resp = await eventRespository.getEventGestionAll();
-      if (!isActivo()) return;
-      if (resp.success) {
-        setEvento(resp.data.results);
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'obtener eventos' });
+    const resp = await eventRespository.getEventGestionAll();
+    if (!isActivo()) return;
+    if (resp.success) {
+      setEvento(resp.data.results);
+      setLoadError(null);
+    } else {
+      setLoadError(resp.error);
     }
   };
 
@@ -79,27 +83,23 @@ const Asistencia = () => {
 
   // Guarda la asistencia del día (lote bulk)
   const guardarAsistencia = async (data) => {
-    try {
-      const asistenciaData = pacientes.map((paciente) => ({
-        idpersonaep: paciente.idpersona,
-        idclasetaller: Number(data.fechaEncuentro),
-        estado: paciente.checked ? ESTADO_PRESENTE : ESTADO_AUSENTE,
-      }));
+    const asistenciaData = pacientes.map((paciente) => ({
+      idpersonaep: paciente.idpersona,
+      idclasetaller: Number(data.fechaEncuentro),
+      estado: paciente.checked ? ESTADO_PRESENTE : ESTADO_AUSENTE,
+    }));
 
-      const resp = await asistenciaRepository.createAsistencia(asistenciaData);
-      if (resp.success) {
-        showToast('success', 'Se ha guardado con éxito');
-        formAsistencia.reset();
-        setPacientes(
-          pacientes.map((persona) => ({
-            ...persona,
-            checked: false,
-            justificado: false,
-          }))
-        );
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'guardar asistencia' });
+    const resp = await asistenciaRepository.createAsistencia(asistenciaData);
+    if (resp.success) {
+      showToast('success', 'Se ha guardado con éxito');
+      formAsistencia.reset();
+      setPacientes(
+        pacientes.map((persona) => ({
+          ...persona,
+          checked: false,
+          justificado: false,
+        }))
+      );
     }
   };
 
@@ -150,6 +150,13 @@ const Asistencia = () => {
     <Container className="container panel-gris">
       <h2 className="mt-4 text-center">Asistencia</h2>
       <hr />
+      {loadError && (
+        <ErrorFallbackInline
+          error={{ message: loadError }}
+          resetErrorBoundary={recargar}
+          message="Error al cargar los datos. Intente nuevamente."
+        />
+      )}
       <div className="col-md-3">
         <Form.Group className="mb-0">
           <label htmlFor="fechaEncuentro" className="control-label">

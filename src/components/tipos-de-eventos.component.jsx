@@ -3,10 +3,11 @@ import { Container, Form, Modal } from 'react-bootstrap';
 import { eventRespository } from '../services/event.service';
 import Swal from 'sweetalert2';
 import { PencilIcon, PlusIcon, TrashIcon } from './icons/icons-shared';
-import { logAsyncError } from './error-boundary/logError';
+import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
 
 const TypeEvents = () => {
   const [typeEvent, setTypeEvent] = useState([]);
+  const [loadError, setLoadError] = useState(null);
   const [form, setForm] = useState({
     idtipoevento: 0,
     nombre: '',
@@ -59,14 +60,10 @@ const TypeEvents = () => {
   };
 
   const deleteTypeEvent = async (data) => {
-    try {
-      let modifidedEvent = {
-        borrado: 1,
-      };
-      await eventRespository.updateTypeEvent(data.idtipoevento, modifidedEvent);
-    } catch (error) {
-      logAsyncError(error, { context: 'eliminar tipo de evento' });
-    }
+    let modifidedEvent = {
+      borrado: 1,
+    };
+    await eventRespository.updateTypeEvent(data.idtipoevento, modifidedEvent);
   };
 
   const handleDelete = (data) => {
@@ -130,14 +127,13 @@ const TypeEvents = () => {
     });
   };
   const getEventAll = async (isActivo = () => true) => {
-    try {
-      let response = await eventRespository.getEventAll();
-      if (!isActivo()) return;
-      if (response?.success && response?.data) {
-        setTypeEvent(response.data);
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'obtener tipos de evento' });
+    let response = await eventRespository.getEventAll();
+    if (!isActivo()) return;
+    if (response?.success && response?.data) {
+      setTypeEvent(response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response.error);
     }
   };
 
@@ -169,6 +165,13 @@ const TypeEvents = () => {
       <Container className="container panel-gris">
         <h2 className="mt-4 text-center">Tipos de eventos</h2>
         <hr />
+        {loadError && (
+          <ErrorFallbackInline
+            error={{ message: loadError }}
+            resetErrorBoundary={getEventAll}
+            message="Error al cargar los tipos de evento. Intente nuevamente."
+          />
+        )}
         <button className="btn btn-azul mb-2 mt-2" onClick={() => showModalInsert()}>
           <PlusIcon className="signoMas" /> Agregar
         </button>

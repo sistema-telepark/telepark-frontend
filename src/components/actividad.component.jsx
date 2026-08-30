@@ -5,15 +5,21 @@ import { tallerRepository } from '../services/taller.service';
 import { showToast, showConfirm } from '../services/notification.service';
 import { PlusIcon, TrashIcon } from './icons/icons-shared';
 import { CheckIcon, CloseIcon } from './icons/icons-nomenclador';
-import { logAsyncError } from './error-boundary/logError';
+import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
 import styles from '../styles/actividad.module.css';
 
 const Actividad = () => {
   const [actividades, setActividades] = useState([]);
   const [talleres, setTalleres] = useState([]);
   const [editId, setEditId] = useState(null);
+  const [loadError, setLoadError] = useState(null);
 
   const formActividad = useForm();
+
+  const recargar = () => {
+    getActividades();
+    getTalleres();
+  };
 
   useEffect(() => {
     let activo = true;
@@ -25,26 +31,24 @@ const Actividad = () => {
   }, []);
 
   const getActividades = async (isActivo = () => true) => {
-    try {
-      const resp = await actividadRepository.getAll();
-      if (!isActivo()) return;
-      if (resp.success) {
-        setActividades(resp.data.results);
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'obtener actividades' });
+    const resp = await actividadRepository.getAll();
+    if (!isActivo()) return;
+    if (resp.success) {
+      setActividades(resp.data.results);
+      setLoadError(null);
+    } else {
+      setLoadError(resp.error);
     }
   };
 
   const getTalleres = async (isActivo = () => true) => {
-    try {
-      const resp = await tallerRepository.getTallerAll();
-      if (!isActivo()) return;
-      if (resp.success) {
-        setTalleres(resp.data.results);
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'obtener talleres' });
+    const resp = await tallerRepository.getTallerAll();
+    if (!isActivo()) return;
+    if (resp.success) {
+      setTalleres(resp.data.results);
+      setLoadError(null);
+    } else {
+      setLoadError(resp.error);
     }
   };
 
@@ -59,51 +63,52 @@ const Actividad = () => {
   };
 
   const onSubmit = async (data) => {
-    try {
-      if (editId) {
-        const resp = await actividadRepository.update(editId, {
-          nombre: data.nombre,
-          idtaller: data.idtaller,
-        });
-        if (resp.success) {
-          showToast('success', 'Se ha guardado con éxito');
-          getActividades();
-          setEditId(null);
-          formActividad.reset();
-        }
-        return;
-      }
-
-      const resp = await actividadRepository.create({
+    if (editId) {
+      const resp = await actividadRepository.update(editId, {
         nombre: data.nombre,
         idtaller: data.idtaller,
       });
       if (resp.success) {
         showToast('success', 'Se ha guardado con éxito');
         getActividades();
+        setEditId(null);
         formActividad.reset();
       }
-    } catch (error) {
-      logAsyncError(error, { context: 'guardar actividad' });
+      return;
+    }
+
+    const resp = await actividadRepository.create({
+      nombre: data.nombre,
+      idtaller: data.idtaller,
+    });
+    if (resp.success) {
+      showToast('success', 'Se ha guardado con éxito');
+      getActividades();
+      formActividad.reset();
     }
   };
 
   const eliminar = async (actividad) => {
-    try {
-      const ok = await showConfirm(`¿Seguro que desea eliminar la actividad: ${actividad.nombre}?`);
-      if (!ok) return;
-      const resp = await actividadRepository.delete(actividad.idactividad);
-      if (resp.success) {
-        showToast('success', 'Eliminado con éxito');
-        getActividades();
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'eliminar actividad' });
+    const ok = await showConfirm(`¿Seguro que desea eliminar la actividad: ${actividad.nombre}?`);
+    if (!ok) return;
+    const resp = await actividadRepository.delete(actividad.idactividad);
+    if (resp.success) {
+      showToast('success', 'Eliminado con éxito');
+      getActividades();
     }
   };
 
   return (
     <div className="row">
+      {loadError && (
+        <div className="col-12">
+          <ErrorFallbackInline
+            error={{ message: loadError }}
+            resetErrorBoundary={recargar}
+            message="Error al cargar los datos. Intente nuevamente."
+          />
+        </div>
+      )}
       <div className={`mt-4 mb-4 col-12 col-md-12 col-lg-4 col-xl-4 ${styles.formColumn}`}>
         <div className="row">
           <div className="mb-2 col-12 col-md-12 col-lg-12 col-xl-12 input-group">

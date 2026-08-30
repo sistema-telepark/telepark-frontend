@@ -3,6 +3,7 @@ import Swal from 'sweetalert2';
 import { Navigate, useNavigate } from 'react-router';
 import { authRepository } from '../services/auth.service';
 import { TokenService } from '../services/token.service';
+import { logAsyncError } from './error-boundary/logError';
 import logoTelepark from '../images/logo2022.png';
 import styles from '../styles/login.module.css';
 
@@ -48,11 +49,12 @@ const Login = () => {
         });
 
         if (response) {
-          TokenService.setUser(response.data);
+          TokenService.setUser(response);
           send();
         }
       } catch (error) {
-        errorSend();
+        logAsyncError(error, { context: 'iniciar sesión' });
+        errorSend(error);
       } finally {
         setLoading(false);
       }
@@ -79,12 +81,15 @@ const Login = () => {
     }, 1500);
   };
 
-  const errorSend = () => {
+  const errorSend = (error) => {
+    const esCredenciales = error?.response?.status === 401;
     Swal.fire({
       position: 'center',
       icon: 'error',
       title: 'No se permite el acceso',
-      text: 'El nombre de usuario o la contraseña ingresada son incorrectos.',
+      text: esCredenciales
+        ? 'El nombre de usuario o la contraseña ingresada son incorrectos.'
+        : 'Ocurrió un error al intentar iniciar sesión. Intente nuevamente.',
       confirmButtonText: 'OK',
     });
 

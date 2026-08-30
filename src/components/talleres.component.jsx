@@ -5,7 +5,7 @@ import { tallerRepository } from '../services/taller.service';
 import { actividadRepository } from '../services/actividad.service';
 import { showToast, showConfirm } from '../services/notification.service';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
-import { logAsyncError } from './error-boundary/logError';
+import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
 import styles from '../styles/talleres.module.css';
 
 const TIPOS_TALLER = ['Educación física', 'Literario', 'Danza'];
@@ -29,9 +29,16 @@ const Talleres = () => {
   const [modalEdit, setModalEdit] = useState(false);
   const [modalInsertAct, setModalInsertAct] = useState(false);
 
+  const [loadError, setLoadError] = useState(null);
+
   const formInsert = useForm();
   const formEdit = useForm();
   const formAct = useForm();
+
+  const recargar = () => {
+    getTallerAll();
+    getActividades();
+  };
 
   useEffect(() => {
     let activo = true;
@@ -43,26 +50,24 @@ const Talleres = () => {
   }, []);
 
   const getTallerAll = async (isActivo = () => true) => {
-    try {
-      const resp = await tallerRepository.getTallerAll();
-      if (!isActivo()) return;
-      if (resp.success) {
-        setTaller(resp.data.results);
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'obtener talleres' });
+    const resp = await tallerRepository.getTallerAll();
+    if (!isActivo()) return;
+    if (resp.success) {
+      setTaller(resp.data.results);
+      setLoadError(null);
+    } else {
+      setLoadError(resp.error);
     }
   };
 
   const getActividades = async (isActivo = () => true) => {
-    try {
-      const resp = await actividadRepository.getAll();
-      if (!isActivo()) return;
-      if (resp.success) {
-        setAct(resp.data.results);
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'obtener actividades' });
+    const resp = await actividadRepository.getAll();
+    if (!isActivo()) return;
+    if (resp.success) {
+      setAct(resp.data.results);
+      setLoadError(null);
+    } else {
+      setLoadError(resp.error);
     }
   };
 
@@ -102,47 +107,35 @@ const Talleres = () => {
   };
 
   const guardarNuevo = async (data) => {
-    try {
-      const resp = await tallerRepository.createTaller({ tipotaller: data.tipotaller });
-      if (resp.success) {
-        showToast('success', 'Se ha guardado con éxito');
-        setModalInsert(false);
-        formInsert.reset();
-        getTallerAll();
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'crear taller' });
+    const resp = await tallerRepository.createTaller({ tipotaller: data.tipotaller });
+    if (resp.success) {
+      showToast('success', 'Se ha guardado con éxito');
+      setModalInsert(false);
+      formInsert.reset();
+      getTallerAll();
     }
   };
 
   const editar = async (data) => {
-    try {
-      const resp = await tallerRepository.updateTaller(tallerEditando.idtaller, {
-        tipotaller: data.tipotaller,
-      });
-      if (resp.success) {
-        showToast('success', 'Se ha guardado con éxito');
-        setModalEdit(false);
-        formEdit.reset();
-        setTallerEditando(null);
-        getTallerAll();
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'actualizar taller' });
+    const resp = await tallerRepository.updateTaller(tallerEditando.idtaller, {
+      tipotaller: data.tipotaller,
+    });
+    if (resp.success) {
+      showToast('success', 'Se ha guardado con éxito');
+      setModalEdit(false);
+      formEdit.reset();
+      setTallerEditando(null);
+      getTallerAll();
     }
   };
 
   const deleteT = async (data) => {
-    try {
-      const ok = await showConfirm(`¿Seguro que desea eliminar el taller: ${data.tipotaller}?`);
-      if (!ok) return;
-      const resp = await tallerRepository.deleteTaller(data.idtaller);
-      if (resp.success) {
-        showToast('success', 'Eliminado con éxito');
-        setTaller(taller.filter((item) => item.idtaller !== data.idtaller));
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'eliminar taller' });
+    const ok = await showConfirm(`¿Seguro que desea eliminar el taller: ${data.tipotaller}?`);
+    if (!ok) return;
+    const resp = await tallerRepository.deleteTaller(data.idtaller);
+    if (resp.success) {
+      showToast('success', 'Eliminado con éxito');
+      setTaller(taller.filter((item) => item.idtaller !== data.idtaller));
     }
   };
 
@@ -158,38 +151,30 @@ const Talleres = () => {
   };
 
   const deleteA = async (data) => {
-    try {
-      const ok = await showConfirm(`¿Seguro que desea eliminar la actividad: ${data.nombre}?`);
-      if (!ok) return;
-      const resp = await actividadRepository.delete(data.idactividad);
-      if (resp.success) {
-        showToast('success', 'Eliminado con éxito');
-        getActividades();
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'eliminar actividad' });
+    const ok = await showConfirm(`¿Seguro que desea eliminar la actividad: ${data.nombre}?`);
+    if (!ok) return;
+    const resp = await actividadRepository.delete(data.idactividad);
+    if (resp.success) {
+      showToast('success', 'Eliminado con éxito');
+      getActividades();
     }
   };
 
   const guardarAct = async () => {
-    try {
-      const results = await Promise.all(
-        actividades.map((actividad) =>
-          actividadRepository.create({
-            nombre: actividad.nombre,
-            idtaller: tallerSeleccionado.idtaller,
-          })
-        )
-      );
-      if (results.every((resp) => resp.success)) {
-        showToast('success', 'Se ha guardado con éxito');
-        setModalInsertAct(false);
-        formAct.reset();
-        setActividades([]);
-        getActividades();
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'crear actividades' });
+    const results = await Promise.all(
+      actividades.map((actividad) =>
+        actividadRepository.create({
+          nombre: actividad.nombre,
+          idtaller: tallerSeleccionado.idtaller,
+        })
+      )
+    );
+    if (results.every((resp) => resp.success)) {
+      showToast('success', 'Se ha guardado con éxito');
+      setModalInsertAct(false);
+      formAct.reset();
+      setActividades([]);
+      getActividades();
     }
   };
 
@@ -202,6 +187,13 @@ const Talleres = () => {
       <Container className="container panel-gris">
         <h2 className="mt-4 text-center">Talleres</h2>
         <hr />
+        {loadError && (
+          <ErrorFallbackInline
+            error={{ message: loadError }}
+            resetErrorBoundary={recargar}
+            message="Error al cargar los datos. Intente nuevamente."
+          />
+        )}
         <button type="button" className="btn btn-azul mb-2 mt-2" onClick={() => showModalInsert()}>
           <PlusIcon />
           Agregar

@@ -7,7 +7,6 @@ import utils from '../utils/utils';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
 import styles from '../styles/admin-users.module.css';
 import { showToast, showConfirm } from '../services/notification.service';
-import { logAsyncError } from './error-boundary/logError';
 import { Form, Modal } from 'react-bootstrap';
 
 const AdminUsuarios = () => {
@@ -195,8 +194,7 @@ const AdminUsuarios = () => {
             clear();
             getUsers();
           }
-        })
-        .catch((error) => logAsyncError(error, { context: 'actualizar usuario' }));
+        });
     }
   };
 
@@ -222,8 +220,7 @@ const AdminUsuarios = () => {
             clear();
             getUsers();
           }
-        })
-        .catch((error) => logAsyncError(error, { context: 'crear usuario' }));
+        });
     }
   };
 

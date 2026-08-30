@@ -87,20 +87,8 @@ instance.interceptors.response.use(
         return instance(originalConfig);
       }
     }
-    // Normalizar estructura del error para el downstream
-    if (err.response) {
-      const { status, data } = err.response;
-      if (status === 422 && Array.isArray(data)) {
-        err.response.data = { message: data.map((e) => e.msg || e).join(', ') };
-      }
-      if (status === 400 && typeof data === 'object' && !data.message) {
-        const fieldErrors = Object.entries(data)
-          .filter(([key]) => !['detail', 'message'].includes(key))
-          .map(([key, value]) => `${key}: ${Array.isArray(value) ? value.join(', ') : value}`)
-          .join('; ');
-        err.response.data = { message: data.detail || fieldErrors || 'Solicitud inválida' };
-      }
-    }
+    // La normalización de mensajes (400 por campo, 422 DRF) se hace en
+    // error-handler.js (formatValidationErrors/normalizeError), fuente única.
     return Promise.reject(err);
   }
 );

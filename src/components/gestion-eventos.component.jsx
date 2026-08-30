@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { eventRespository } from '../services/event.service';
 import Swal from 'sweetalert2';
 import { PlusIcon } from './icons/icons-shared';
+import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
 import styles from '../styles/gestion-eventos.module.css';
 
 const initialEvents = {
@@ -16,7 +17,13 @@ const Events = () => {
   const [typeEvent, setTypeEvent] = useState([]);
   const [namePersonEP, setNamePersonEP] = useState([]);
   const [events, setEvents] = useState(initialEvents);
+  const [loadError, setLoadError] = useState(null);
   const formRef = useRef(null);
+
+  const recargar = () => {
+    getPersonEpAll();
+    getTipeEvent();
+  };
 
   useEffect(() => {
     let activo = true;
@@ -34,6 +41,9 @@ const Events = () => {
     if (!isActivo()) return;
     if (response?.success && response?.data) {
       setNamePersonEP(response.data.results ?? response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response.error);
     }
   };
 
@@ -42,6 +52,9 @@ const Events = () => {
     if (!isActivo()) return;
     if (response?.success && response?.data) {
       setTypeEvent(response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response.error);
     }
   };
 
@@ -112,6 +125,13 @@ const Events = () => {
         <main className="justify-content-center row container-lg m-md-3 shadow mx-md-auto border-top-sm m-0 panel-gris">
           <h2 className="mt-4 text-center">Gestión de eventos</h2>
           <hr />
+          {loadError && (
+            <ErrorFallbackInline
+              error={{ message: loadError }}
+              resetErrorBoundary={recargar}
+              message="Error al cargar los datos. Intente nuevamente."
+            />
+          )}
           <div className="row">
             <div className="form-grup mb-4">
               <label htmlFor="fechaDesde" className="control-label">

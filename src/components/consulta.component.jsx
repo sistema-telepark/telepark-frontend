@@ -6,7 +6,7 @@ import { encuentroRepository } from '../services/encuentro.service';
 import { pacienteRepository } from '../services/paciente.service';
 import { asistenciaRepository } from '../services/asistencia.service';
 import { eventRespository } from '../services/event.service';
-import { logAsyncError } from './error-boundary/logError';
+import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
 import utils from '../utils/utils';
 import styles from '../styles/consulta.module.css';
 
@@ -25,6 +25,15 @@ const Consulta = () => {
   const [errores, setErrores] = useState({});
 
   const [evento, setEvento] = useState([]);
+  const [loadError, setLoadError] = useState(null);
+
+  const recargar = () => {
+    getTallerAll();
+    getActividades();
+    getEncuentroAll();
+    getPacientes();
+    getEventoAll();
+  };
 
   const [form, setForm] = useState({
     fechaEncuentro: '',
@@ -39,57 +48,52 @@ const Consulta = () => {
   }, []);
 
   const getTallerAll = async () => {
-    try {
-      const resp = await tallerRepository.getTallerAll();
-      if (resp.success) {
-        setTaller(resp.data.results);
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'obtener talleres' });
+    const resp = await tallerRepository.getTallerAll();
+    if (resp.success) {
+      setTaller(resp.data.results);
+      setLoadError(null);
+    } else {
+      setLoadError(resp.error);
     }
   };
 
   const getActividades = async () => {
-    try {
-      const resp = await actividadRepository.getAll();
-      if (resp.success) {
-        setAct(resp.data.results);
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'obtener actividades' });
+    const resp = await actividadRepository.getAll();
+    if (resp.success) {
+      setAct(resp.data.results);
+      setLoadError(null);
+    } else {
+      setLoadError(resp.error);
     }
   };
 
   const getEncuentroAll = async () => {
-    try {
-      const resp = await encuentroRepository.getEncuentroAll();
-      if (resp.success) {
-        setEncuentro(resp.data.results);
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'obtener encuentros' });
+    const resp = await encuentroRepository.getEncuentroAll();
+    if (resp.success) {
+      setEncuentro(resp.data.results);
+      setLoadError(null);
+    } else {
+      setLoadError(resp.error);
     }
   };
 
   const getPacientes = async () => {
-    try {
-      const resp = await pacienteRepository.getPacientesEp();
-      if (resp.success) {
-        setPacientes(resp.data.results ?? resp.data);
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'obtener pacientes' });
+    const resp = await pacienteRepository.getPacientesEp();
+    if (resp.success) {
+      setPacientes(resp.data.results ?? resp.data);
+      setLoadError(null);
+    } else {
+      setLoadError(resp.error);
     }
   };
 
   const getEventoAll = async () => {
-    try {
-      const resp = await eventRespository.getEventGestionAll();
-      if (resp.success) {
-        setEvento(resp.data.results);
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'obtener eventos' });
+    const resp = await eventRespository.getEventGestionAll();
+    if (resp.success) {
+      setEvento(resp.data.results);
+      setLoadError(null);
+    } else {
+      setLoadError(resp.error);
     }
   };
 
@@ -101,80 +105,72 @@ const Consulta = () => {
   };
 
   const consultarAsistencia = async () => {
-    try {
-      if (!form.fechaEncuentro) {
-        setErrores({ fecha: 'Debe elegir un encuentro.' });
-        setAsistencia([]);
-        return;
-      }
-      setErrores({});
+    if (!form.fechaEncuentro) {
+      setErrores({ fecha: 'Debe elegir un encuentro.' });
+      setAsistencia([]);
+      return;
+    }
+    setErrores({});
 
-      const resp = await asistenciaRepository.getAsistenciaByEncuentro(form.fechaEncuentro);
-      if (resp.success) {
-        setAsistencia(resp.data);
-        setMensajeSinDatos(resp.data.length === 0);
-      } else {
-        setAsistencia([]);
-        setMensajeSinDatos(true);
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'consultar asistencia' });
+    const resp = await asistenciaRepository.getAsistenciaByEncuentro(form.fechaEncuentro);
+    if (resp.success) {
+      setAsistencia(resp.data);
+      setMensajeSinDatos(resp.data.length === 0);
+    } else {
+      setAsistencia([]);
+      setMensajeSinDatos(true);
     }
   };
 
   const consultarFaltasC = async () => {
-    try {
-      const respAsistencias = await asistenciaRepository.getAsistenciaAll();
-      const respPacientes = await pacienteRepository.getPacientesEp();
-      const respEncuentros = await encuentroRepository.getEncuentroAll();
+    const respAsistencias = await asistenciaRepository.getAsistenciaAll();
+    const respPacientes = await pacienteRepository.getPacientesEp();
+    const respEncuentros = await encuentroRepository.getEncuentroAll();
 
-      if (!respAsistencias.success || !respPacientes.success || !respEncuentros.success) {
-        setFaltaC([]);
-        setMensajeSinDatosFC(true);
-        return;
-      }
-
-      const asistencias = respAsistencias.data.results;
-      const pacientes = respPacientes.data.results;
-      const encuentros = respEncuentros.data.results;
-
-      // Ordenar encuentros por fecha (del más reciente al más antiguo)
-      const encuentrosOrdenados = [...encuentros].sort(
-        (a, b) => new Date(b.fecha) - new Date(a.fecha)
-      );
-      const ultimosDosEncuentros = encuentrosOrdenados.slice(0, 2).map((enc) => enc.idclasetaller);
-
-      // Filtrar asistencias de los últimos dos encuentros con estado Ausente
-      const asistenciasFiltradas = asistencias.filter(
-        (asistenciaItem) =>
-          ultimosDosEncuentros.includes(asistenciaItem.idclasetaller) &&
-          asistenciaItem.estado === ESTADO_AUSENTE
-      );
-
-      // Agrupar asistencias por paciente
-      const faltasPorPaciente = asistenciasFiltradas.reduce((acc, asistenciaItem) => {
-        const { idpersonaep } = asistenciaItem;
-        if (!acc[idpersonaep]) {
-          acc[idpersonaep] = 0;
-        }
-        acc[idpersonaep]++;
-        return acc;
-      }, {});
-
-      // Filtrar pacientes con faltas en ambos encuentros
-      const pacientesConFaltasConsecutivas = Object.entries(faltasPorPaciente)
-        .filter(([, count]) => count === 2)
-        .map(([idpersonaep]) => idpersonaep);
-
-      const pacientesFiltrados = pacientes.filter((paciente) =>
-        pacientesConFaltasConsecutivas.includes(String(paciente.idpersona))
-      );
-
-      setFaltaC(pacientesFiltrados);
-      setMensajeSinDatosFC(pacientesFiltrados.length === 0);
-    } catch (error) {
-      logAsyncError(error, { context: 'consultar faltas consecutivas' });
+    if (!respAsistencias.success || !respPacientes.success || !respEncuentros.success) {
+      setFaltaC([]);
+      setMensajeSinDatosFC(true);
+      return;
     }
+
+    const asistencias = respAsistencias.data.results;
+    const pacientes = respPacientes.data.results;
+    const encuentros = respEncuentros.data.results;
+
+    // Ordenar encuentros por fecha (del más reciente al más antiguo)
+    const encuentrosOrdenados = [...encuentros].sort(
+      (a, b) => new Date(b.fecha) - new Date(a.fecha)
+    );
+    const ultimosDosEncuentros = encuentrosOrdenados.slice(0, 2).map((enc) => enc.idclasetaller);
+
+    // Filtrar asistencias de los últimos dos encuentros con estado Ausente
+    const asistenciasFiltradas = asistencias.filter(
+      (asistenciaItem) =>
+        ultimosDosEncuentros.includes(asistenciaItem.idclasetaller) &&
+        asistenciaItem.estado === ESTADO_AUSENTE
+    );
+
+    // Agrupar asistencias por paciente
+    const faltasPorPaciente = asistenciasFiltradas.reduce((acc, asistenciaItem) => {
+      const { idpersonaep } = asistenciaItem;
+      if (!acc[idpersonaep]) {
+        acc[idpersonaep] = 0;
+      }
+      acc[idpersonaep]++;
+      return acc;
+    }, {});
+
+    // Filtrar pacientes con faltas en ambos encuentros
+    const pacientesConFaltasConsecutivas = Object.entries(faltasPorPaciente)
+      .filter(([, count]) => count === 2)
+      .map(([idpersonaep]) => idpersonaep);
+
+    const pacientesFiltrados = pacientes.filter((paciente) =>
+      pacientesConFaltasConsecutivas.includes(String(paciente.idpersona))
+    );
+
+    setFaltaC(pacientesFiltrados);
+    setMensajeSinDatosFC(pacientesFiltrados.length === 0);
   };
 
   const obtenerNombre = (idpersonaep) => {
@@ -187,6 +183,13 @@ const Consulta = () => {
       <Container className="container panel-gris">
         <h2 className="mt-4 text-center">Consultas</h2>
         <hr />
+        {loadError && (
+          <ErrorFallbackInline
+            error={{ message: loadError }}
+            resetErrorBoundary={recargar}
+            message="Error al cargar los datos. Intente nuevamente."
+          />
+        )}
 
         <div
           className={`row m-md-3 mx-auto justify-content-center rounded container-lg ${styles.whiteCard}`}

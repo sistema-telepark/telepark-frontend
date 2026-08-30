@@ -6,7 +6,7 @@ import { diagnosticoRepository } from '../services/diagnostico.service';
 import { evolucionRepository } from '../services/evolucion.service';
 import { osRepository } from '../services/os.service';
 import { indicacionRepository } from '../services/indicacion.service';
-import { logAsyncError } from './error-boundary/logError';
+import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
 import utils from '../utils/utils';
 import styles from '../styles/ficha-medica.module.css';
 
@@ -18,6 +18,7 @@ const FichaMedica = () => {
   const [evoluciones, setEvoluciones] = useState([]);
   const [osociales, setOsociales] = useState([]);
   const [indicaciones, setIndicaciones] = useState([]);
+  const [loadError, setLoadError] = useState(null);
 
   useEffect(() => {
     if (!idEpElegido) {
@@ -36,51 +37,54 @@ const FichaMedica = () => {
   }, [idEpElegido, navigate]);
 
   const getDiagnosticos = async () => {
-    try {
-      let response = await diagnosticoRepository.get(idEpElegido);
+    let response = await diagnosticoRepository.get(idEpElegido);
 
-      if (response?.success) {
-        setDiagnosticos(response.data.results ?? response.data);
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'obtener diagnosticos' });
+    if (response?.success) {
+      setDiagnosticos(response.data.results ?? response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response.error);
     }
   };
 
   const getEvoluciones = async () => {
-    try {
-      let response = await evolucionRepository.get(idEpElegido);
+    let response = await evolucionRepository.get(idEpElegido);
 
-      if (response?.success) {
-        setEvoluciones(response.data.results ?? response.data);
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'obtener evoluciones' });
+    if (response?.success) {
+      setEvoluciones(response.data.results ?? response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response.error);
     }
   };
 
   const getOs = async () => {
-    try {
-      let response = await osRepository.get(idEpElegido);
+    let response = await osRepository.get(idEpElegido);
 
-      if (response?.success) {
-        setOsociales(response.data.results ?? response.data);
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'obtener coberturas' });
+    if (response?.success) {
+      setOsociales(response.data.results ?? response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response.error);
     }
   };
 
   const getIndicaciones = async () => {
-    try {
-      let response = await indicacionRepository.get(idEpElegido);
+    let response = await indicacionRepository.get(idEpElegido);
 
-      if (response?.success) {
-        setIndicaciones(response.data.results ?? response.data);
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'obtener indicaciones' });
+    if (response?.success) {
+      setIndicaciones(response.data.results ?? response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response.error);
     }
+  };
+
+  const recargar = () => {
+    getDiagnosticos();
+    getEvoluciones();
+    getOs();
+    getIndicaciones();
   };
 
   return (
@@ -95,6 +99,13 @@ const FichaMedica = () => {
           <b>Ficha Médica</b>
         </h2>
         <hr />
+        {loadError && (
+          <ErrorFallbackInline
+            error={{ message: loadError }}
+            resetErrorBoundary={recargar}
+            message="Error al cargar la ficha médica. Intente nuevamente."
+          />
+        )}
         <div className="row">
           <div className="col-12 col-md-12 col-lg-12 col-xl-12">
             <h5>

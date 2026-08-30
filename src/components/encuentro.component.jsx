@@ -7,7 +7,7 @@ import { actividadRepository } from '../services/actividad.service';
 import { actividadRealizadaRepository } from '../services/actividad-realizada.service';
 import { showToast, showConfirm } from '../services/notification.service';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
-import { logAsyncError } from './error-boundary/logError';
+import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
 import utils from '../utils/utils';
 import styles from '../styles/encuentro.module.css';
 
@@ -22,9 +22,16 @@ const Encuentro = () => {
   const [modalInsert, setModalInsert] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
   const [modalInsertAct, setModalInsertAct] = useState(false);
+  const [loadError, setLoadError] = useState(null);
 
   const formInsert = useForm();
   const formEdit = useForm();
+
+  const recargar = () => {
+    getEncuentroAll();
+    getTallerAll();
+    getActividadAll();
+  };
 
   useEffect(() => {
     let activo = true;
@@ -37,51 +44,46 @@ const Encuentro = () => {
   }, []);
 
   const getEncuentroAll = async (isActivo = () => true) => {
-    try {
-      const resp = await encuentroRepository.getEncuentroAll();
-      if (!isActivo()) return;
-      if (resp.success) {
-        setEncuentro(resp.data.results);
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'obtener encuentros' });
+    const resp = await encuentroRepository.getEncuentroAll();
+    if (!isActivo()) return;
+    if (resp.success) {
+      setEncuentro(resp.data.results);
+      setLoadError(null);
+    } else {
+      setLoadError(resp.error);
     }
   };
 
   const getTallerAll = async (isActivo = () => true) => {
-    try {
-      const resp = await tallerRepository.getTallerAll();
-      if (!isActivo()) return;
-      if (resp.success) {
-        setTaller(resp.data.results);
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'obtener talleres' });
+    const resp = await tallerRepository.getTallerAll();
+    if (!isActivo()) return;
+    if (resp.success) {
+      setTaller(resp.data.results);
+      setLoadError(null);
+    } else {
+      setLoadError(resp.error);
     }
   };
 
   const getActividadAll = async (isActivo = () => true) => {
-    try {
-      const resp = await actividadRepository.getAll();
-      if (!isActivo()) return;
-      if (resp.success) {
-        setActividad(resp.data.results);
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'obtener actividades' });
+    const resp = await actividadRepository.getAll();
+    if (!isActivo()) return;
+    if (resp.success) {
+      setActividad(resp.data.results);
+      setLoadError(null);
+    } else {
+      setLoadError(resp.error);
     }
   };
 
   // Las actividades realizadas de una clase llegan como array plano
   const getActividadesRealizadas = async (idclasetaller) => {
-    try {
-      const resp =
-        await actividadRealizadaRepository.getActividadesRealizadasByClase(idclasetaller);
-      if (resp.success) {
-        setActividadRealizada(resp.data);
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'obtener actividades realizadas' });
+    const resp = await actividadRealizadaRepository.getActividadesRealizadasByClase(idclasetaller);
+    if (resp.success) {
+      setActividadRealizada(resp.data);
+      setLoadError(null);
+    } else {
+      setLoadError(resp.error);
     }
   };
 
@@ -95,83 +97,71 @@ const Encuentro = () => {
 
   // Guardar o eliminar las actividades realizadas del encuentro según su estado
   const guardarActividadesSeleccionadas = async () => {
-    try {
-      const actividadesSeleccionadas = actividad.filter((act) => act.checked);
+    const actividadesSeleccionadas = actividad.filter((act) => act.checked);
 
-      const actividadesToSave = actividadesSeleccionadas
-        .filter(
-          (seleccionada) =>
-            !actividadRealizada.some(
-              (realizada) => realizada.idactividad === seleccionada.idactividad
-            )
-        )
-        .map((actividadItem) => ({
-          idactividad: actividadItem.idactividad,
-          idclasetaller: encuentroSeleccionado.idclasetaller,
-        }));
-
-      const actividadesADeseleccionar = actividadRealizada.filter(
-        (realizada) =>
-          !actividadesSeleccionadas.some(
-            (seleccionada) => seleccionada.idactividad === realizada.idactividad
+    const actividadesToSave = actividadesSeleccionadas
+      .filter(
+        (seleccionada) =>
+          !actividadRealizada.some(
+            (realizada) => realizada.idactividad === seleccionada.idactividad
           )
-      );
-      const idsActividadesADeseleccionar = actividadesADeseleccionar.map(
-        (realizada) => realizada.idactividadrealizada
-      );
+      )
+      .map((actividadItem) => ({
+        idactividad: actividadItem.idactividad,
+        idclasetaller: encuentroSeleccionado.idclasetaller,
+      }));
 
-      const createResults = await Promise.all(
-        actividadesToSave.map((actividadItem) => actividadRealizadaRepository.create(actividadItem))
-      );
-      const deleteResults = await Promise.all(
-        idsActividadesADeseleccionar.map((id) => actividadRealizadaRepository.delete(id))
-      );
+    const actividadesADeseleccionar = actividadRealizada.filter(
+      (realizada) =>
+        !actividadesSeleccionadas.some(
+          (seleccionada) => seleccionada.idactividad === realizada.idactividad
+        )
+    );
+    const idsActividadesADeseleccionar = actividadesADeseleccionar.map(
+      (realizada) => realizada.idactividadrealizada
+    );
 
-      const resultados = [...createResults, ...deleteResults];
-      if (resultados.every((resp) => resp.success)) {
-        showToast('success', 'Se ha guardado con éxito');
-        setModalInsertAct(false);
-        getActividadesRealizadas(encuentroSeleccionado.idclasetaller);
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'guardar actividades seleccionadas' });
+    const createResults = await Promise.all(
+      actividadesToSave.map((actividadItem) => actividadRealizadaRepository.create(actividadItem))
+    );
+    const deleteResults = await Promise.all(
+      idsActividadesADeseleccionar.map((id) => actividadRealizadaRepository.delete(id))
+    );
+
+    const resultados = [...createResults, ...deleteResults];
+    if (resultados.every((resp) => resp.success)) {
+      showToast('success', 'Se ha guardado con éxito');
+      setModalInsertAct(false);
+      getActividadesRealizadas(encuentroSeleccionado.idclasetaller);
     }
   };
 
   const guardarNuevo = async (data) => {
-    try {
-      const resp = await encuentroRepository.createEncuentro({
-        fecha: data.fecha,
-        virtual: data.virtual ? 1 : 0,
-        idtaller: data.idtaller,
-      });
-      if (resp.success) {
-        showToast('success', 'Se ha guardado con éxito');
-        setModalInsert(false);
-        formInsert.reset();
-        getEncuentroAll();
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'crear encuentro' });
+    const resp = await encuentroRepository.createEncuentro({
+      fecha: data.fecha,
+      virtual: data.virtual ? 1 : 0,
+      idtaller: data.idtaller,
+    });
+    if (resp.success) {
+      showToast('success', 'Se ha guardado con éxito');
+      setModalInsert(false);
+      formInsert.reset();
+      getEncuentroAll();
     }
   };
 
   const guardarEdicion = async (data) => {
-    try {
-      const resp = await encuentroRepository.updateEncuentro(encuentroEditando.idclasetaller, {
-        fecha: data.fecha,
-        virtual: data.virtual ? 1 : 0,
-        idtaller: data.idtaller,
-      });
-      if (resp.success) {
-        showToast('success', 'Se ha guardado con éxito');
-        setModalEdit(false);
-        formEdit.reset();
-        setEncuentroEditando(null);
-        getEncuentroAll();
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'actualizar encuentro' });
+    const resp = await encuentroRepository.updateEncuentro(encuentroEditando.idclasetaller, {
+      fecha: data.fecha,
+      virtual: data.virtual ? 1 : 0,
+      idtaller: data.idtaller,
+    });
+    if (resp.success) {
+      showToast('success', 'Se ha guardado con éxito');
+      setModalEdit(false);
+      formEdit.reset();
+      setEncuentroEditando(null);
+      getEncuentroAll();
     }
   };
 
@@ -202,41 +192,35 @@ const Encuentro = () => {
   };
 
   const eliminarEncuentro = async (data) => {
-    try {
-      const ok = await showConfirm(
-        `¿Seguro que desea eliminar el encuentro con fecha: ${utils.convertirFormatoFecha(data.fecha)}?`,
-        `Código: ${data.idclasetaller}`
-      );
-      if (!ok) return;
-      const resp = await encuentroRepository.deleteEncuentro(data.idclasetaller);
-      if (resp.success) {
-        showToast('success', 'Eliminado con éxito');
-        setEncuentro(encuentro.filter((item) => item.idclasetaller !== data.idclasetaller));
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'eliminar encuentro' });
+    const ok = await showConfirm(
+      `¿Seguro que desea eliminar el encuentro con fecha: ${utils.convertirFormatoFecha(data.fecha)}?`,
+      `Código: ${data.idclasetaller}`
+    );
+    if (!ok) return;
+    const resp = await encuentroRepository.deleteEncuentro(data.idclasetaller);
+    if (resp.success) {
+      showToast('success', 'Eliminado con éxito');
+      setEncuentro(encuentro.filter((item) => item.idclasetaller !== data.idclasetaller));
     }
   };
 
   // Al cargar las actividades del encuentro, marca las previamente guardadas
   const showModalInsertAct = async (data) => {
-    try {
-      setEncuentroSeleccionado(data);
-      setModalInsertAct(true);
+    setEncuentroSeleccionado(data);
+    setModalInsertAct(true);
 
-      const resp = await actividadRealizadaRepository.getActividadesRealizadasByClase(
-        data.idclasetaller
-      );
-      if (resp.success) {
-        setActividadRealizada(resp.data);
-        const actividadesConEstado = actividad.map((act) => ({
-          ...act,
-          checked: resp.data.some((realizada) => realizada.idactividad === act.idactividad),
-        }));
-        setActividad(actividadesConEstado);
-      }
-    } catch (error) {
-      logAsyncError(error, { context: 'obtener actividades realizadas por clase' });
+    const resp = await actividadRealizadaRepository.getActividadesRealizadasByClase(
+      data.idclasetaller
+    );
+    if (resp.success) {
+      setActividadRealizada(resp.data);
+      const actividadesConEstado = actividad.map((act) => ({
+        ...act,
+        checked: resp.data.some((realizada) => realizada.idactividad === act.idactividad),
+      }));
+      setActividad(actividadesConEstado);
+    } else {
+      setLoadError(resp.error);
     }
   };
 
@@ -264,6 +248,13 @@ const Encuentro = () => {
       <Container className="container panel-gris">
         <h2 className="mt-4 text-center">Encuentros</h2>
         <hr />
+        {loadError && (
+          <ErrorFallbackInline
+            error={{ message: loadError }}
+            resetErrorBoundary={recargar}
+            message="Error al cargar los datos. Intente nuevamente."
+          />
+        )}
         <button type="button" className="btn btn-azul mb-2 mt-2" onClick={() => showModalInsert()}>
           <PlusIcon />
           Agregar

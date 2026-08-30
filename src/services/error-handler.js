@@ -6,18 +6,26 @@ const formatValidationErrors = (data) => {
   if (typeof data === 'string') return data;
   if (Array.isArray(data)) {
     return data
-      .map((item) => formatValidationErrors(item))
+      .map((item) => {
+        if (item && typeof item === 'object') {
+          // Forma DRF: [{ field, msg }, ...] — usar solo el mensaje
+          return item.msg || formatValidationErrors(item);
+        }
+        return formatValidationErrors(item);
+      })
       .filter(Boolean)
       .join(', ');
   }
-
-  return Object.entries(data)
-    .map(([field, value]) => {
-      const message = formatValidationErrors(value);
-      return message ? `${field}: ${message}` : '';
-    })
-    .filter(Boolean)
-    .join('; ');
+  if (typeof data === 'object') {
+    return Object.entries(data)
+      .map(([field, value]) => {
+        const message = formatValidationErrors(value);
+        return message ? `${field}: ${message}` : '';
+      })
+      .filter(Boolean)
+      .join('; ');
+  }
+  return '';
 };
 
 export const normalizeError = (error) => {
@@ -59,10 +67,10 @@ export const withServiceHandler = (fn, options = {}) => {
       return { success: true, data: result };
     } catch (error) {
       const normalized = normalizeError(error);
+      // NOTA: no se loguean los args (pueden contener credenciales/contraseñas).
       logAsyncError(error, {
         service: context,
         method: fn.name,
-        args,
         response: error.response?.data,
       });
       if (showNotification) {
