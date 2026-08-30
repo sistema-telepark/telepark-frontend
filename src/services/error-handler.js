@@ -5,23 +5,39 @@ const formatValidationErrors = (data) => {
   if (!data) return '';
   if (typeof data === 'string') return data;
   if (Array.isArray(data)) {
-    return data.map((item) => formatValidationErrors(item)).filter(Boolean).join(', ');
+    return data
+      .map((item) => {
+        if (item && typeof item === 'object') {
+          // Forma DRF: [{ field, msg }, ...] — usar solo el mensaje
+          return item.msg || formatValidationErrors(item);
+        }
+        return formatValidationErrors(item);
+      })
+      .filter(Boolean)
+      .join(', ');
   }
-
-  return Object.entries(data)
-    .map(([field, value]) => {
-      const message = formatValidationErrors(value);
-      return message ? `${field}: ${message}` : '';
-    })
-    .filter(Boolean)
-    .join('; ');
+  if (typeof data === 'object') {
+    return Object.entries(data)
+      .map(([field, value]) => {
+        const message = formatValidationErrors(value);
+        return message ? `${field}: ${message}` : '';
+      })
+      .filter(Boolean)
+      .join('; ');
+  }
+  return '';
 };
 
 export const normalizeError = (error) => {
   if (error.response) {
     const { status, data } = error.response;
+    const rawMessage = data?.message || data?.detail;
+    // Si detail/message es objeto {campo:[msgs]} (400 por campo), aplanarlo con
+    // formatValidationErrors — evita renderizar "[object Object]".
     const message =
-      data?.message || data?.detail || formatValidationErrors(data) || `Error ${status}`;
+      rawMessage && typeof rawMessage === 'object'
+        ? formatValidationErrors(rawMessage)
+        : rawMessage || formatValidationErrors(data) || `Error ${status}`;
     return {
       message,
       status,
@@ -51,13 +67,18 @@ export const withServiceHandler = (fn, options = {}) => {
       return { success: true, data: result };
     } catch (error) {
       const normalized = normalizeError(error);
+      // NOTA: no se loguean los args (pueden contener credenciales/contraseñas).
       logAsyncError(error, {
         service: context,
         method: fn.name,
-        args,
         response: error.response?.data,
       });
-      if (showNotification) {
+      // Los fallos de carga (operaciones de lectura) los muestra cada vista de
+      // forma inline con reintento; solo las escrituras notifican automáticamente
+      // (toast/modal). Evita el doble aviso (modal de la capa + alerta inline).
+      const method = (error.config?.method || '').toUpperCase();
+      const esLectura = ['GET', 'HEAD', 'OPTIONS'].includes(method);
+      if (showNotification && !esLectura) {
         const severity = forceSeverity || normalized.severity;
         if (severity === 'modal') {
           showModal('error', 'Error', normalized.message);

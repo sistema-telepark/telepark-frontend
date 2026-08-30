@@ -5,6 +5,8 @@ import { tallerRepository } from '../services/taller.service';
 import { actividadRepository } from '../services/actividad.service';
 import { showToast, showConfirm } from '../services/notification.service';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
+import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
+import LoadingSpinner from './shared/loading-spinner';
 import styles from '../styles/talleres.module.css';
 
 const TIPOS_TALLER = ['Educación física', 'Literario', 'Danza'];
@@ -28,28 +30,43 @@ const Talleres = () => {
   const [modalEdit, setModalEdit] = useState(false);
   const [modalInsertAct, setModalInsertAct] = useState(false);
 
+  const [loadError, setLoadError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   const formInsert = useForm();
   const formEdit = useForm();
   const formAct = useForm();
 
   useEffect(() => {
-    getTallerAll();
-    getActividades();
+    setLoading(true);
+    setLoadError(null);
+    Promise.all([getTallerAll(), getActividades()])
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
 
-  // Función que obtiene la lista de talleres
+  const recargar = () => {
+    setLoadError(null);
+    Promise.all([getTallerAll(), getActividades()]).catch(() => {});
+  };
+
   const getTallerAll = async () => {
     const resp = await tallerRepository.getTallerAll();
     if (resp.success) {
       setTaller(resp.data.results);
+      setLoadError(null);
+    } else {
+      setLoadError(resp.error);
     }
   };
 
-  // Función que obtiene la lista de actividades
   const getActividades = async () => {
     const resp = await actividadRepository.getAll();
     if (resp.success) {
       setAct(resp.data.results);
+      setLoadError(null);
+    } else {
+      setLoadError(resp.error);
     }
   };
 
@@ -88,7 +105,6 @@ const Talleres = () => {
     setModalInsertAct(false);
   };
 
-  // Guardar datos de un nuevo taller
   const guardarNuevo = async (data) => {
     const resp = await tallerRepository.createTaller({ tipotaller: data.tipotaller });
     if (resp.success) {
@@ -99,7 +115,6 @@ const Talleres = () => {
     }
   };
 
-  // Editar un taller existente
   const editar = async (data) => {
     const resp = await tallerRepository.updateTaller(tallerEditando.idtaller, {
       tipotaller: data.tipotaller,
@@ -113,7 +128,6 @@ const Talleres = () => {
     }
   };
 
-  // Borrar un taller con confirmación y DELETE real
   const deleteT = async (data) => {
     const ok = await showConfirm(`¿Seguro que desea eliminar el taller: ${data.tipotaller}?`);
     if (!ok) return;
@@ -124,7 +138,6 @@ const Talleres = () => {
     }
   };
 
-  // Agregar una actividad pendiente al lote local del taller
   const cargarNuevo = (data) => {
     const nuevaActividad = { nombre: data.nombre, idLocal: generarIdLocal() };
     setActividades([...actividades, nuevaActividad]);
@@ -136,7 +149,6 @@ const Talleres = () => {
     setActividades(actividades.filter((actividad) => actividad.idLocal !== idLocal));
   };
 
-  // Borrar una actividad persistida con confirmación y DELETE real
   const deleteA = async (data) => {
     const ok = await showConfirm(`¿Seguro que desea eliminar la actividad: ${data.nombre}?`);
     if (!ok) return;
@@ -147,7 +159,6 @@ const Talleres = () => {
     }
   };
 
-  // Guardar el lote de actividades pendientes del taller
   const guardarAct = async () => {
     const results = await Promise.all(
       actividades.map((actividad) =>
@@ -175,11 +186,7 @@ const Talleres = () => {
       <Container className="container panel-gris">
         <h2 className="mt-4 text-center">Talleres</h2>
         <hr />
-        <button
-          type="button"
-          className="btn btn-azul mb-2 mt-2"
-          onClick={() => showModalInsert()}
-        >
+        <button type="button" className="btn btn-azul mb-2 mt-2" onClick={() => showModalInsert()}>
           <PlusIcon />
           Agregar
         </button>
@@ -230,9 +237,16 @@ const Talleres = () => {
             </tbody>
           </table>
         </div>
+        {loading && <LoadingSpinner />}
+        {loadError && (
+          <ErrorFallbackInline
+            error={{ message: loadError }}
+            resetErrorBoundary={recargar}
+            message="Error al cargar los datos. Intente nuevamente."
+          />
+        )}
       </Container>
 
-      {/* nuevo taller */}
       <Modal show={modalInsert}>
         <Modal.Header>
           <div>
@@ -285,7 +299,6 @@ const Talleres = () => {
         </Modal.Footer>
       </Modal>
 
-      {/* editar taller */}
       <Modal show={modalEdit}>
         <Modal.Header>
           <div>
@@ -352,7 +365,6 @@ const Talleres = () => {
         </Modal.Footer>
       </Modal>
 
-      {/* guardar actividades */}
       <Modal show={modalInsertAct}>
         <Modal.Header>
           <div>

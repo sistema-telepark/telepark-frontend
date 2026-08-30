@@ -1,9 +1,8 @@
 import http from '../http-common';
 import { withServiceHandler } from './error-handler';
 
-// Encuentro = ClaseTaller (Telepark API.yaml:557) — renombrado semántico RA-16.
-// El servicio conserva los nombres de método *Encuentro* (merge-map §3.1) pero
-// contrata los endpoints de clase de taller; los ids son idclasetaller.
+// Encuentro = ClaseTaller: los métodos se llaman *Encuentro* pero contratan
+// los endpoints de clase de taller; los ids son idclasetaller.
 const encuentros = {
   async getEncuentroAll() {
     const response = await http.get(`/clases-taller`);

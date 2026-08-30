@@ -6,6 +6,8 @@ import { indicacionRepository } from '../services/indicacion.service';
 import { medicamentoRepository } from '../services/medicamento.service';
 import utils from '../utils/utils';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
+import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
+import LoadingSpinner from './shared/loading-spinner';
 import styles from '../styles/list-indicacion.module.css';
 
 const ListaIndicacion = () => {
@@ -25,34 +27,53 @@ const ListaIndicacion = () => {
   const [idEditado, setIdEditado] = useState('');
   const [indicaciones, setIndicaciones] = useState([]);
   const [medicamentos, setMedicamentos] = useState();
+  const [loading, setLoading] = useState(true);
+
+  const [loadError, setLoadError] = useState(null);
 
   useEffect(() => {
-    if (idEpElegido) {
-      getIndicaciones();
-    } else {
+    setLoading(true);
+    setLoadError(null);
+    const cargarInicial = async () => {
+      try {
+        await Promise.all([getIndicaciones(), getMedicamento()]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    cargarInicial();
+    if (!idEpElegido) {
       setIndicaciones([]);
       navigate('/list-pacientes', { replace: true });
     }
-    getMedicamento();
   }, [idEpElegido, navigate]);
 
-  // Funcion que obtiene la lista de indicaciones de un paciente
+  const recargar = () => {
+    setLoadError(null);
+    Promise.all([getIndicaciones(), getMedicamento()]).catch(() => {});
+  };
+
   const getIndicaciones = async () => {
     if (!idEpElegido) return;
 
     let response = await indicacionRepository.get(idEpElegido);
 
-    if (response?.success) {
+    if (response?.success && response?.data) {
       setIndicaciones(response.data.results ?? response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response?.error || 'No se pudieron cargar las indicaciones.');
     }
   };
 
-  // Funcion que obtiene la lista de medicamentos
   const getMedicamento = async () => {
     let response = await medicamentoRepository.getAll();
 
-    if (response) {
+    if (response?.success && response?.data) {
       setMedicamentos(response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response?.error || 'No se pudieron cargar los medicamentos.');
     }
   };
 
@@ -86,15 +107,12 @@ const ListaIndicacion = () => {
         idmedicamento: Number(idMedicamento),
         borrado: 0,
       };
-      indicacionRepository
-        .update(id, data)
-        .then((response) => {
-          if (response?.success) {
-            getIndicaciones();
-            notificacionGuardar();
-          }
-        })
-        .catch(() => undefined);
+      indicacionRepository.update(id, data).then((response) => {
+        if (response?.success) {
+          getIndicaciones();
+          notificacionGuardar();
+        }
+      });
       setCampo({ medicamento: '', dosis: '', hora: '', fecha: '', estado: '' });
       setShow(false);
     }
@@ -138,15 +156,12 @@ const ListaIndicacion = () => {
         idmedicamento: Number(idMedicamento),
         borrado: 0,
       };
-      indicacionRepository
-        .create(data)
-        .then((response) => {
-          if (response?.success) {
-            getIndicaciones();
-            notificacionGuardar();
-          }
-        })
-        .catch(() => undefined);
+      indicacionRepository.create(data).then((response) => {
+        if (response?.success) {
+          getIndicaciones();
+          notificacionGuardar();
+        }
+      });
       setCampo({ medicamento: '', dosis: '', hora: '', fecha: '', estado: '' });
       setShowNuevo(false);
     }
@@ -169,18 +184,14 @@ const ListaIndicacion = () => {
       idmedicamento: Number(idmedicamento),
       borrado: 1,
     };
-    indicacionRepository
-      .update(id, data)
-      .then((response) => {
-        if (response?.success) {
-          getIndicaciones();
-        }
-      })
-      .catch(() => undefined);
+    indicacionRepository.update(id, data).then((response) => {
+      if (response?.success) {
+        getIndicaciones();
+      }
+    });
     setShow(false);
   };
 
-  //notificaciones
   const notificacionGuardar = () => {
     const Toast = Swal.mixin({
       toast: true,
@@ -238,7 +249,6 @@ const ListaIndicacion = () => {
           );
           swalWithBootstrapButtons.fire('Eliminado!', 'Se ha eliminado el registro', 'success');
         } else if (
-          /* Read more about handling dismissals below */
           result.dismiss === Swal.DismissReason.cancel
         ) {
           swalWithBootstrapButtons.fire('Cancelado', 'No se eliminaron registros', 'error');
@@ -450,64 +460,72 @@ const ListaIndicacion = () => {
               }
             >
               <thead>
-                <tr>
-                  <th scope="col">Nombre de Medicamento</th>
-                  <th scope="col">Dosis en mg</th>
-                  <th scope="col">Hora de Toma</th>
-                  <th scope="col">Fecha de Prescripción</th>
-                  <th scope="col">Estado</th>
-                  <th scope="col">Acción</th>
-                </tr>
-              </thead>
-              <tbody className={styles.tableBodyMiddle}>
-                {indicaciones &&
-                  indicaciones
-                    .filter((indicacion) => indicacion.borrado === 0)
-                    .map((indicacion) => (
-                      <tr key={indicacion.idindicacion}>
-                        <td>{indicacion.idmedicamento.nombre}</td>
-                        <td>{indicacion.cantidadmiligramos} mg</td>
-                        <td>Cada {utils.convertirFormatoHora(indicacion.horadetoma)} hs</td>
-                        <td>{utils.convertirFormatoFecha(indicacion.fechaprescripcion)}</td>
-                        <td>{utils.convertirEstado(indicacion.estavigente)}</td>
-                        <td>
-                          <button
-                            type="button"
-                            className={'btn btn-verde ' + styles.rowActionButton}
-                            onClick={() =>
-                              editar(
-                                indicacion.cantidadmiligramos,
-                                indicacion.estavigente,
-                                indicacion.fechaprescripcion,
-                                indicacion.horadetoma,
-                                indicacion.idmedicamento.idmedicamento,
-                                indicacion.idindicacion
-                              )
-                            }
-                          >
-                            <PencilIcon />
-                          </button>
-                          <button
-                            type="button"
-                            className="btn btn-rojo"
-                            onClick={() =>
-                              notificacionEliminar(
-                                indicacion.cantidadmiligramos,
-                                indicacion.estavigente,
-                                indicacion.fechaprescripcion,
-                                indicacion.horadetoma,
-                                indicacion.idmedicamento.idmedicamento,
-                                indicacion.idindicacion
-                              )
-                            }
-                          >
-                            <TrashIcon />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-              </tbody>
-            </table>
+                  <tr>
+                    <th scope="col">Nombre de Medicamento</th>
+                    <th scope="col">Dosis en mg</th>
+                    <th scope="col">Hora de Toma</th>
+                    <th scope="col">Fecha de Prescripción</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Acción</th>
+                  </tr>
+                </thead>
+                <tbody className={styles.tableBodyMiddle}>
+                  {indicaciones &&
+                    indicaciones
+                      .filter((indicacion) => indicacion.borrado === 0)
+                      .map((indicacion) => (
+                        <tr key={indicacion.idindicacion}>
+                          <td>{indicacion.idmedicamento.nombre}</td>
+                          <td>{indicacion.cantidadmiligramos} mg</td>
+                          <td>Cada {utils.convertirFormatoHora(indicacion.horadetoma)} hs</td>
+                          <td>{utils.convertirFormatoFecha(indicacion.fechaprescripcion)}</td>
+                          <td>{utils.convertirEstado(indicacion.estavigente)}</td>
+                          <td>
+                            <button
+                              type="button"
+                              className={'btn btn-verde ' + styles.rowActionButton}
+                              onClick={() =>
+                                editar(
+                                  indicacion.cantidadmiligramos,
+                                  indicacion.estavigente,
+                                  indicacion.fechaprescripcion,
+                                  indicacion.horadetoma,
+                                  indicacion.idmedicamento.idmedicamento,
+                                  indicacion.idindicacion
+                                )
+                              }
+                            >
+                              <PencilIcon />
+                            </button>
+                            <button
+                              type="button"
+                              className="btn btn-rojo"
+                              onClick={() =>
+                                notificacionEliminar(
+                                  indicacion.cantidadmiligramos,
+                                  indicacion.estavigente,
+                                  indicacion.fechaprescripcion,
+                                  indicacion.horadetoma,
+                                  indicacion.idmedicamento.idmedicamento,
+                                  indicacion.idindicacion
+                                )
+                              }
+                            >
+                              <TrashIcon />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                </tbody>
+              </table>
+            {loading && <LoadingSpinner />}
+            {loadError && (
+              <ErrorFallbackInline
+                error={{ message: loadError }}
+                resetErrorBoundary={recargar}
+                message="No se pudieron cargar las indicaciones. Intente nuevamente."
+              />
+            )}
           </div>
         </div>
       </div>

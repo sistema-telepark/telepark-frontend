@@ -3,9 +3,15 @@ import { Container, Form, Modal } from 'react-bootstrap';
 import { eventRespository } from '../services/event.service';
 import Swal from 'sweetalert2';
 import { PencilIcon, PlusIcon, TrashIcon } from './icons/icons-shared';
+import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
+import LoadingSpinner from './shared/loading-spinner';
 
 const TypeEvents = () => {
   const [typeEvent, setTypeEvent] = useState([]);
+
+  const [loadError, setLoadError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   const [form, setForm] = useState({
     idtipoevento: 0,
     nombre: '',
@@ -15,8 +21,17 @@ const TypeEvents = () => {
   const [modalEdit, setModalEdit] = useState(false);
 
   useEffect(() => {
-    getEventAll();
+    setLoading(true);
+    setLoadError(null);
+    getEventAll()
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
+
+  const recargar = () => {
+    setLoadError(null);
+    getEventAll().catch(() => {});
+  };
 
   const handleChange = (e) => {
     if (e.target.id === 'desactivataller') {
@@ -53,7 +68,6 @@ const TypeEvents = () => {
     setModalEdit(false);
   };
 
-  // Función que obtiene para eliminar un tipos de evento
   const deleteTypeEvent = async (data) => {
     let modifidedEvent = {
       borrado: 1,
@@ -72,22 +86,14 @@ const TypeEvents = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire('Eliminado con exito!', `Se elimino el evento ${data.nombre}`, 'success');
-        let cont = 0;
-        let list = typeEvent;
-        list.map((listdata) => {
-          if (data.idtipoevento === listdata.idtipoevento) {
-            list.splice(cont, 1);
-          }
-          return cont++;
-        });
+        setTypeEvent((prev) => prev.filter((item) => item.idtipoevento !== data.idtipoevento));
         deleteTypeEvent(data);
-        setTypeEvent(list);
       }
     });
   };
 
   const edit = (data) => {
-    let list = typeEvent;
+    let list = [...typeEvent];
     let modifidedEvent;
     list.map((listdata) => {
       if (data.idtipoevento === listdata.idtipoevento) {
@@ -102,18 +108,13 @@ const TypeEvents = () => {
       return list;
     });
 
-    eventRespository
-      .updateTypeEvent(data.idtipoevento, modifidedEvent)
-      .then((response) => {
-        if (response) {
-          notificacionExito();
-          clear();
-          getEventAll();
-        }
-      })
-      .catch(() => {
-        notificacionError();
-      });
+    eventRespository.updateTypeEvent(data.idtipoevento, modifidedEvent).then((response) => {
+      if (response?.success) {
+        notificacionExito();
+        clear();
+        getEventAll();
+      }
+    });
     setTypeEvent(list);
     setModalEdit(false);
   };
@@ -125,25 +126,22 @@ const TypeEvents = () => {
       desactivataller: form.desactivataller === true ? 1 : 0,
       borrado: 0,
     };
-    eventRespository
-      .createTypeEvent(data)
-      .then((response) => {
-        if (response) {
-          setModalInsert(false);
-          notificacionExito();
-          clear();
-          getEventAll();
-        }
-      })
-      .catch(() => {
-        notificacionError();
-      });
+    eventRespository.createTypeEvent(data).then((response) => {
+      if (response?.success) {
+        setModalInsert(false);
+        notificacionExito();
+        clear();
+        getEventAll();
+      }
+    });
   };
-  // Función que obtiene la lista de tipos de eventos
   const getEventAll = async () => {
     let response = await eventRespository.getEventAll();
-    if (response) {
+    if (response?.success && response?.data) {
       setTypeEvent(response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response.error);
     }
   };
 
@@ -151,7 +149,6 @@ const TypeEvents = () => {
     setForm({ idtipoevento: 0, nombre: '', desactivataller: 0 });
   };
 
-  //notificaciones
   const notificacionExito = () => {
     const Toast = Swal.mixin({
       toast: true,
@@ -168,26 +165,6 @@ const TypeEvents = () => {
     Toast.fire({
       icon: 'success',
       title: 'Se ha guardado con éxito',
-    });
-  };
-
-  //notificaciones
-  const notificacionError = () => {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer);
-        toast.addEventListener('mouseleave', Swal.resumeTimer);
-      },
-    });
-
-    Toast.fire({
-      icon: 'error',
-      title: 'Error: Hubo un problema en la carga.',
     });
   };
 
@@ -247,6 +224,15 @@ const TypeEvents = () => {
         </div>
       </Container>
 
+      {loading && <LoadingSpinner />}
+      {loadError && (
+        <ErrorFallbackInline
+          error={{ message: loadError }}
+          resetErrorBoundary={recargar}
+          message="Error al cargar los tipos de evento. Intente nuevamente."
+        />
+      )}
+
       <Modal show={modalInsert}>
         <Modal.Header>
           <div>
@@ -293,8 +279,6 @@ const TypeEvents = () => {
           </button>
         </Modal.Footer>
       </Modal>
-
-      {/* EDITAR */}
 
       <Modal show={modalEdit}>
         <Modal.Header>

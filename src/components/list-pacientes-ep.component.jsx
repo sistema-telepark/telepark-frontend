@@ -4,8 +4,10 @@ import { connect } from 'react-redux';
 import { cambiarID } from '../actions/global';
 import { pacienteRepository } from '../services/paciente.service';
 import '../styles/list-pacientes-ep.css';
-import { Spinner, Form, Modal } from 'react-bootstrap';
+import { Form, Modal } from 'react-bootstrap';
 import utils from '../utils/utils';
+import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
+import LoadingSpinner from './shared/loading-spinner';
 import {
   EyeIcon,
   ClipboardCheckIcon,
@@ -31,19 +33,24 @@ const ListaPaciente = (props) => {
   const [arrayProvincias, setArrayProvincias] = useState([]);
   const mostrarNotificacionAlCerrar = useRef(false);
 
+  const [loadError, setLoadError] = useState(null);
+
   useEffect(() => {
     getPacientes();
   }, []);
 
   // Obtiene únicamente las personas que tienen ficha de EP.
   const getPacientes = async () => {
-    const response = await pacienteRepository
-      .getPacientesEp()
-      .catch(() => utils.notificacionError());
-    if (response?.success) {
+    setLoading(true);
+    setLoadError(null);
+    const response = await pacienteRepository.getPacientesEp();
+    if (response?.success && response?.data) {
       setPacientes(response.data.results ?? response.data);
-      setLoading(false);
+      setLoadError(null);
+    } else {
+      setLoadError(response.error || 'No se pudieron cargar los pacientes.');
     }
+    setLoading(false);
   };
 
   const {
@@ -58,13 +65,16 @@ const ListaPaciente = (props) => {
   useEffect(() => {
     const cargarProvincias = async () => {
       const response = await provinciaRepository.getAll();
-      if (response && response.data) {
+      if (response?.success && response?.data) {
         setArrayProvincias(
           response.data.map((provincia) => ({
             idprovincia: provincia.idprovincia,
             provincia: provincia.nombre,
           }))
         );
+        setLoadError(null);
+      } else {
+        setLoadError(response.error || 'No se pudieron cargar las provincias.');
       }
     };
 
@@ -79,7 +89,7 @@ const ListaPaciente = (props) => {
     if (mostrarNotificacionAlCerrar.current) {
       mostrarNotificacionAlCerrar.current = false;
       document.activeElement?.blur();
-      setTimeout(() => utils.send(), 0);
+      utils.send();
     }
   };
 
@@ -88,8 +98,8 @@ const ListaPaciente = (props) => {
   };
 
   const enviarFormulario = async (data) => {
-    const response = await pacienteRepository.guardarPaciente(data).catch(() => utils.errorSend());
-    if (response) {
+    const response = await pacienteRepository.guardarPaciente(data);
+    if (response?.success) {
       reset();
       mostrarNotificacionAlCerrar.current = true;
       handleModalInsert();
@@ -101,12 +111,10 @@ const ListaPaciente = (props) => {
     enviarFormulario(data);
   };
 
-  // Funcion que guarda el valor del buscador
   const detectarCambio = (e) => {
     setBuscar(e.target.value);
   };
 
-  // Funcion que navega a las diferentes secciones
   const verSeccion = (id, nombre, apellido) => {
     const idpersona = id;
     const nombrepersona = nombre + ' ' + apellido;
@@ -125,11 +133,7 @@ const ListaPaciente = (props) => {
 
         <div className="row mb-4">
           <div className="col-12 col-md-12 col-lg-12 col-xl-12">
-            <button
-              type="button"
-              className="btn btn-azul mb-3"
-              onClick={() => showModalInsert()}
-            >
+            <button type="button" className="btn btn-azul mb-3" onClick={() => showModalInsert()}>
               <PlusIcon />
               Agregar
             </button>
@@ -146,12 +150,7 @@ const ListaPaciente = (props) => {
 
         <div className="row">
           <div className="col-12 col-md-12 col-lg-12 col-xl-12 text-center">
-            {loading ? (
-              <Spinner className={styles.spinner} animation="border" variant="primary">
-                Loading...
-              </Spinner>
-            ) : (
-              <table className="table table-bordered table-hover shadow table-striped">
+            <table className="table table-bordered table-hover shadow table-striped">
                 <thead>
                   <tr>
                     <th scope="col">Nombre completo</th>
@@ -253,12 +252,20 @@ const ListaPaciente = (props) => {
                       ))}
                 </tbody>
               </table>
+            {loading && <LoadingSpinner />}
+            {loadError && (
+              <div className="text-start">
+                <ErrorFallbackInline
+                  error={{ message: loadError }}
+                  resetErrorBoundary={getPacientes}
+                  message="No se pudieron cargar los pacientes. Intente nuevamente."
+                />
+              </div>
             )}
           </div>
         </div>
       </main>
 
-      {/* AGREGAR PERSONA CON EP */}
       <Modal show={modalInsert} onExit={handleModalInsertClosed} restoreFocus={false}>
         <Modal.Header className="justify-content-center">
           <h2 className="mb-0">Agregar persona con EP</h2>

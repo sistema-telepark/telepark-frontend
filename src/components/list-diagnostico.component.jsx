@@ -6,6 +6,8 @@ import { diagnosticoRepository } from '../services/diagnostico.service';
 import { enfermedadRepository } from '../services/enfermedad.service';
 import utils from '../utils/utils';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
+import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
+import LoadingSpinner from './shared/loading-spinner';
 import styles from '../styles/list-diagnostico.module.css';
 
 const ListaDiagnostico = () => {
@@ -22,30 +24,45 @@ const ListaDiagnostico = () => {
   const [idEditado, setIdEditado] = useState('');
   const [enfermedades, setEnfermedades] = useState();
   const [diagnosticos, setDiagnosticos] = useState();
+  const [loading, setLoading] = useState(true);
+
+  const [loadError, setLoadError] = useState(null);
 
   useEffect(() => {
-    getEnfermedad();
-    if (idEpElegido) {
-      getDiagnosticos();
-    } else {
+    setLoading(true);
+    setLoadError(null);
+    const cargarInicial = async () => {
+      try {
+        await Promise.all([getEnfermedad(), getDiagnosticos()]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    cargarInicial();
+    if (!idEpElegido) {
       setDiagnosticos([]);
       navigate('/list-pacientes', { replace: true });
     }
   }, [idEpElegido, navigate]);
 
-  // Funcion que obtiene la lista de enfermedades
+  const recargar = () => {
+    setLoadError(null);
+    Promise.all([getEnfermedad(), getDiagnosticos()]).catch(() => {});
+  };
+
   const getEnfermedad = async () => {
     let response = await enfermedadRepository.getAll();
 
-    if (response) {
+    if (response?.success && response?.data) {
       setEnfermedades(response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response?.error || 'No se pudieron cargar los datos.');
     }
   };
 
-  // Funcion que obtiene la lista de diagnosticos de un paciente
-  // M02 (HITL 2026-08-11): no llamar al service con idEpElegido vacío
-  // (redux inicial '') — antes armaba `/personas-ep//diagnosticos` → 404.
-  // Normalizar listado paginado DRF a .results (patrón RA-13).
+  // No llamar al service con idEpElegido vacío (estado inicial '') — antes
+  // armaba `/personas-ep//diagnosticos` → 404. Normalizar listado paginado a .results.
   const getDiagnosticos = async () => {
     if (!idEpElegido) {
       setDiagnosticos([]);
@@ -54,8 +71,11 @@ const ListaDiagnostico = () => {
 
     let response = await diagnosticoRepository.get(idEpElegido);
 
-    if (response && response.data) {
+    if (response?.success && response?.data) {
       setDiagnosticos(response.data.results ?? response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response?.error || 'No se pudieron cargar los datos.');
     }
   };
 
@@ -77,15 +97,12 @@ const ListaDiagnostico = () => {
         idenfermedad: Number(idEnfermedad),
         borrado: 0,
       };
-      diagnosticoRepository
-        .update(id, data)
-        .then((response) => {
-          if (response?.success) {
-            getDiagnosticos();
-            notificacionGuardar();
-          }
-        })
-        .catch(() => undefined);
+      diagnosticoRepository.update(id, data).then((response) => {
+        if (response?.success) {
+          getDiagnosticos();
+          notificacionGuardar();
+        }
+      });
       setCampo({ enfermedad: '', fecha: '' });
       setShow(false);
     }
@@ -117,15 +134,12 @@ const ListaDiagnostico = () => {
         idenfermedad: Number(idEnfermedad),
         borrado: 0,
       };
-      diagnosticoRepository
-        .create(data)
-        .then((reponse) => {
-          if (reponse?.success) {
-            getDiagnosticos();
-            notificacionGuardar();
-          }
-        })
-        .catch(() => undefined);
+      diagnosticoRepository.create(data).then((reponse) => {
+        if (reponse?.success) {
+          getDiagnosticos();
+          notificacionGuardar();
+        }
+      });
       setCampo({ enfermedad: '', fecha: '' });
       setShowNuevo(false);
     }
@@ -138,18 +152,14 @@ const ListaDiagnostico = () => {
       idenfermedad: Number(idenfermedad),
       borrado: 1,
     };
-    diagnosticoRepository
-      .update(id, data)
-      .then((response) => {
-        if (response) {
-          getDiagnosticos();
-        }
-      })
-      .catch(() => undefined);
+    diagnosticoRepository.update(id, data).then((response) => {
+      if (response?.success) {
+        getDiagnosticos();
+      }
+    });
     setShow(false);
   };
 
-  //notificaciones
   const notificacionGuardar = () => {
     const Toast = Swal.mixin({
       toast: true,
@@ -193,7 +203,6 @@ const ListaDiagnostico = () => {
           eliminar(idenfermedad, fecha, idDiagnostico);
           swalWithBootstrapButtons.fire('Eliminado!', 'Se ha eliminado el registro', 'success');
         } else if (
-          /* Read more about handling dismissals below */
           result.dismiss === Swal.DismissReason.cancel
         ) {
           swalWithBootstrapButtons.fire('Cancelado', 'No se eliminaron registros', 'error');
@@ -339,52 +348,60 @@ const ListaDiagnostico = () => {
               }
             >
               <thead>
-                <tr>
-                  <th scope="col">Nombre de Enfermedad</th>
-                  <th scope="col">Fecha de Diagnóstico</th>
-                  <th scope="col">Acción</th>
-                </tr>
-              </thead>
-              <tbody className={styles.tableBodyMiddle}>
-                {diagnosticos &&
-                  diagnosticos
-                    .filter((diagnostico) => diagnostico.borrado === 0)
-                    .map((diagnostico) => (
-                      <tr key={diagnostico.iddiagnostico}>
-                        <td>{diagnostico.idenfermedad.nombre}</td>
-                        <td>{utils.convertirFormatoFecha(diagnostico.fecha)}</td>
-                        <td>
-                          <button
-                            type="button"
-                            className={'btn btn-verde ' + styles.rowActionButton}
-                            onClick={() =>
-                              editar(
-                                diagnostico.idenfermedad.idenfermedad,
-                                diagnostico.fecha,
-                                diagnostico.iddiagnostico
-                              )
-                            }
-                          >
-                            <PencilIcon />
-                          </button>
-                          <button
-                            type="button"
-                            className="btn btn-rojo"
-                            onClick={() =>
-                              notificacionEliminar(
-                                diagnostico.idenfermedad.idenfermedad,
-                                diagnostico.fecha,
-                                diagnostico.iddiagnostico
-                              )
-                            }
-                          >
-                            <TrashIcon />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-              </tbody>
+                  <tr>
+                    <th scope="col">Nombre de Enfermedad</th>
+                    <th scope="col">Fecha de Diagnóstico</th>
+                    <th scope="col">Acción</th>
+                  </tr>
+                </thead>
+                <tbody className={styles.tableBodyMiddle}>
+                  {diagnosticos &&
+                    diagnosticos
+                      .filter((diagnostico) => diagnostico.borrado === 0)
+                      .map((diagnostico) => (
+                        <tr key={diagnostico.iddiagnostico}>
+                          <td>{diagnostico.idenfermedad.nombre}</td>
+                          <td>{utils.convertirFormatoFecha(diagnostico.fecha)}</td>
+                          <td>
+                            <button
+                              type="button"
+                              className={'btn btn-verde ' + styles.rowActionButton}
+                              onClick={() =>
+                                editar(
+                                  diagnostico.idenfermedad.idenfermedad,
+                                  diagnostico.fecha,
+                                  diagnostico.iddiagnostico
+                                )
+                              }
+                            >
+                              <PencilIcon />
+                            </button>
+                            <button
+                              type="button"
+                              className="btn btn-rojo"
+                              onClick={() =>
+                                notificacionEliminar(
+                                  diagnostico.idenfermedad.idenfermedad,
+                                  diagnostico.fecha,
+                                  diagnostico.iddiagnostico
+                                )
+                              }
+                            >
+                              <TrashIcon />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+</tbody>
             </table>
+            {loading && <LoadingSpinner />}
+            {loadError && (
+              <ErrorFallbackInline
+                error={{ message: loadError }}
+                resetErrorBoundary={recargar}
+                message="No se pudieron cargar los diagnósticos. Intente nuevamente."
+              />
+            )}
           </div>
         </div>
       </div>

@@ -7,6 +7,8 @@ import { actividadRepository } from '../services/actividad.service';
 import { actividadRealizadaRepository } from '../services/actividad-realizada.service';
 import { showToast, showConfirm } from '../services/notification.service';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
+import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
+import LoadingSpinner from './shared/loading-spinner';
 import utils from '../utils/utils';
 import styles from '../styles/encuentro.module.css';
 
@@ -22,48 +24,66 @@ const Encuentro = () => {
   const [modalEdit, setModalEdit] = useState(false);
   const [modalInsertAct, setModalInsertAct] = useState(false);
 
+  const [loadError, setLoadError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   const formInsert = useForm();
   const formEdit = useForm();
 
   useEffect(() => {
-    getEncuentroAll();
-    getTallerAll();
-    getActividadAll();
+    setLoading(true);
+    setLoadError(null);
+    Promise.all([getEncuentroAll(), getTallerAll(), getActividadAll()])
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
 
-  // Función que obtiene la lista de encuentros
+  const recargar = () => {
+    setLoadError(null);
+    Promise.all([getEncuentroAll(), getTallerAll(), getActividadAll()]).catch(() => {});
+  };
+
   const getEncuentroAll = async () => {
     const resp = await encuentroRepository.getEncuentroAll();
     if (resp.success) {
       setEncuentro(resp.data.results);
+      setLoadError(null);
+    } else {
+      setLoadError(resp.error);
     }
   };
 
-  // Función que obtiene la lista de talleres
   const getTallerAll = async () => {
     const resp = await tallerRepository.getTallerAll();
     if (resp.success) {
       setTaller(resp.data.results);
+      setLoadError(null);
+    } else {
+      setLoadError(resp.error);
     }
   };
 
-  // Función que obtiene la lista de actividades
   const getActividadAll = async () => {
     const resp = await actividadRepository.getAll();
     if (resp.success) {
       setActividad(resp.data.results);
+      setLoadError(null);
+    } else {
+      setLoadError(resp.error);
     }
   };
 
-  // Función que obtiene las actividades realizadas de una clase (array plano — RA-13)
+  // Las actividades realizadas de una clase llegan como array plano
   const getActividadesRealizadas = async (idclasetaller) => {
     const resp = await actividadRealizadaRepository.getActividadesRealizadasByClase(idclasetaller);
     if (resp.success) {
       setActividadRealizada(resp.data);
+      setLoadError(null);
+    } else {
+      setLoadError(resp.error);
     }
   };
 
-  /** manejador de estados de los checkboxes de actividades */
   const handleActividadCheck = (idactividad) => {
     setActividad((prevActividades) =>
       prevActividades.map((act) =>
@@ -127,7 +147,6 @@ const Encuentro = () => {
     }
   };
 
-  // Edita un encuentro
   const guardarEdicion = async (data) => {
     const resp = await encuentroRepository.updateEncuentro(encuentroEditando.idclasetaller, {
       fecha: data.fecha,
@@ -153,7 +172,6 @@ const Encuentro = () => {
     setModalInsert(false);
   };
 
-  // Al editar un encuentro muestra sus valores
   const showModalEdit = (data) => {
     setEncuentroEditando(data);
     formEdit.reset({
@@ -170,7 +188,6 @@ const Encuentro = () => {
     setModalEdit(false);
   };
 
-  // Función que obtiene para eliminar un encuentro
   const eliminarEncuentro = async (data) => {
     const ok = await showConfirm(
       `¿Seguro que desea eliminar el encuentro con fecha: ${utils.convertirFormatoFecha(data.fecha)}?`,
@@ -199,6 +216,8 @@ const Encuentro = () => {
         checked: resp.data.some((realizada) => realizada.idactividad === act.idactividad),
       }));
       setActividad(actividadesConEstado);
+    } else {
+      setLoadError(resp.error);
     }
   };
 
@@ -226,11 +245,7 @@ const Encuentro = () => {
       <Container className="container panel-gris">
         <h2 className="mt-4 text-center">Encuentros</h2>
         <hr />
-        <button
-          type="button"
-          className="btn btn-azul mb-2 mt-2"
-          onClick={() => showModalInsert()}
-        >
+        <button type="button" className="btn btn-azul mb-2 mt-2" onClick={() => showModalInsert()}>
           <PlusIcon />
           Agregar
         </button>
@@ -285,7 +300,15 @@ const Encuentro = () => {
         </div>
       </Container>
 
-      {/* nuevo encuentro */}
+      {loading && <LoadingSpinner />}
+      {loadError && (
+        <ErrorFallbackInline
+          error={{ message: loadError }}
+          resetErrorBoundary={recargar}
+          message="Error al cargar los datos. Intente nuevamente."
+        />
+      )}
+
       <Modal show={modalInsert}>
         <Modal.Header>
           <div>
@@ -372,7 +395,6 @@ const Encuentro = () => {
         </Modal.Footer>
       </Modal>
 
-      {/* editar encuentro */}
       <Modal show={modalEdit}>
         <Modal.Header>
           <div>
@@ -470,7 +492,6 @@ const Encuentro = () => {
         </Modal.Footer>
       </Modal>
 
-      {/* elegir actividades */}
       <Modal show={modalInsertAct}>
         <Modal.Header>
           <div>

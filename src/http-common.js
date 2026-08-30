@@ -1,6 +1,40 @@
 import axios from 'axios';
 import { TokenService } from './services/token.service';
 
+// Política de retry de red: 1 request original + 2 reintentos = 3 intentos totales.
+const RETRY_CONFIG = {
+  maxRetries: 2,
+  baseDelayMs: 500,
+  backoffFactor: 2,
+  jitterPercent: 0.25,
+};
+
+// Solo estas requests se reintentan (idempotentes): 502/503/504 y ERR_NETWORK/timeout.
+const IDEMPOTENT_METHODS = ['GET', 'HEAD', 'OPTIONS'];
+
+const RETRYABLE_STATUS_CODES = [502, 503, 504];
+
+// Error de red o timeout: reintentable solo para métodos idempotentes (no matchea ERR_CANCELED).
+const isNetworkError = (error, method) =>
+  (error.code === 'ERR_NETWORK' || error.code === 'ECONNABORTED') &&
+  IDEMPOTENT_METHODS.includes((method || '').toUpperCase());
+
+// 5xx transitorio: reintentable solo si la request es idempotente.
+const isRetryableServerError = (error) => {
+  if (!error.response) return false;
+  const method = (error.config?.method || '').toUpperCase();
+  return (
+    RETRYABLE_STATUS_CODES.includes(error.response.status) && IDEMPOTENT_METHODS.includes(method)
+  );
+};
+
+// Backoff exponencial base 500 ms ×2 con jitter ±25%.
+const getRetryDelayMs = (attempt) => {
+  const base = RETRY_CONFIG.baseDelayMs * Math.pow(RETRY_CONFIG.backoffFactor, attempt - 1);
+  const jitter = 1 + (Math.random() * 2 - 1) * RETRY_CONFIG.jitterPercent;
+  return Math.round(base * jitter);
+};
+
 const instance = axios.create({
   baseURL:
     import.meta.env.REACT_APP_API_URL ||
@@ -9,6 +43,9 @@ const instance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  // Timeout global: corta peticiones colgadas (servidor caído sin cierre de TCP),
+  // evita spinners de carga infinitos. ECONNABORTED es reintentable (isNetworkError).
+  timeout: 20000,
 });
 
 instance.interceptors.request.use(
@@ -45,20 +82,19 @@ instance.interceptors.response.use(
         }
       }
     }
-    // Normalizar estructura del error para el downstream
-    if (err.response) {
-      const { status, data } = err.response;
-      if (status === 422 && Array.isArray(data)) {
-        err.response.data = { message: data.map((e) => e.msg || e).join(', ') };
-      }
-      if (status === 400 && typeof data === 'object' && !data.message) {
-        const fieldErrors = Object.entries(data)
-          .filter(([key]) => !['detail', 'message'].includes(key))
-          .map(([key, value]) => `${key}: ${Array.isArray(value) ? value.join(', ') : value}`)
-          .join('; ');
-        err.response.data = { message: data.detail || fieldErrors || 'Solicitud inválida' };
+    // Retry: ERR_NETWORK/timeout y 502/503/504 solo para métodos idempotentes
+    const method = (originalConfig?.method || '').toUpperCase();
+    if (originalConfig && (isNetworkError(err, method) || isRetryableServerError(err))) {
+      const retryCount = originalConfig._retryCount || 0;
+      if (retryCount < RETRY_CONFIG.maxRetries) {
+        originalConfig._retryCount = retryCount + 1;
+        const delayMs = getRetryDelayMs(retryCount + 1);
+        await new Promise((resolve) => setTimeout(resolve, delayMs));
+        return instance(originalConfig);
       }
     }
+    // La normalización de mensajes (400 por campo, 422 DRF) se hace en
+    // error-handler.js (formatValidationErrors/normalizeError), fuente única.
     return Promise.reject(err);
   }
 );

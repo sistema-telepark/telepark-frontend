@@ -3,8 +3,17 @@ import { withServiceHandler } from './error-handler';
 
 const os = {
   async get(personaep_pk) {
-    const response = await http.get(`/personas-ep/${personaep_pk}/coberturas`);
-    return response.data;
+    try {
+      const response = await http.get(`/personas-ep/${personaep_pk}/coberturas`);
+      return response.data.results ?? response.data;
+    } catch (error) {
+      // 404 de sub-recurso de PersonaEp se traduce a lista vacía silenciosa
+      // (sin propagar error al componente).
+      if (error.response?.status === 404) {
+        return [];
+      }
+      throw error;
+    }
   },
   async create(data) {
     const response = await http.post(`/coberturas`, data);

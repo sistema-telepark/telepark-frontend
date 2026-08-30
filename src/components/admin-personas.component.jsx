@@ -1,5 +1,7 @@
 import React, { memo, useState, useEffect } from 'react';
 import { PencilIcon, TrashIcon } from './icons/icons-shared';
+import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
+import LoadingSpinner from './shared/loading-spinner';
 import styles from '../styles/add-paciente.module.css';
 import { eventRespository } from '../services/event.service';
 import Swal from 'sweetalert2';
@@ -16,6 +18,8 @@ const AdminPersonas = () => {
     borrado: 0,
   });
   const [modalEdit, setModalEdit] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(null);
 
   useEffect(() => {
     getPersonAll();
@@ -33,33 +37,25 @@ const AdminPersonas = () => {
   };
 
   const edit = (data) => {
-    let list = arrayPerson;
-    let modifidedPerson;
-    list.map((listdata) => {
-      if (data.idpersona === listdata.idpersona) {
-        modifidedPerson = {
-          id: data.idpersona,
-          nombre: data.nombre,
-          apellido: data.apellido,
-          telefono: data.telefono,
-          borrado: listdata.borrado,
-        };
-        return modifidedPerson;
+    let list = [...arrayPerson];
+    let modifidedPerson = list.find((listdata) => data.idpersona === listdata.idpersona);
+    if (!modifidedPerson) {
+      return;
+    }
+    modifidedPerson = {
+      id: data.idpersona,
+      nombre: data.nombre,
+      apellido: data.apellido,
+      telefono: data.telefono,
+      borrado: modifidedPerson.borrado,
+    };
+    eventRespository.updatePerson(data.idpersona, modifidedPerson).then((response) => {
+      if (response?.success) {
+        notificacionExito();
+        clear();
+        getPersonAll();
       }
-      return list;
     });
-    eventRespository
-      .updatePerson(data.idpersona, modifidedPerson)
-      .then((response) => {
-        if (response) {
-          notificacionExito();
-          clear();
-          getPersonAll();
-        }
-      })
-      .catch(() => {
-        notificacionError();
-      });
     setModalEdit(false);
   };
 
@@ -87,7 +83,6 @@ const AdminPersonas = () => {
     });
   };
 
-  //notificaciones
   const notificacionExito = () => {
     const Toast = Swal.mixin({
       toast: true,
@@ -107,41 +102,25 @@ const AdminPersonas = () => {
     });
   };
 
-  const notificacionError = () => {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer);
-        toast.addEventListener('mouseleave', Swal.resumeTimer);
-      },
-    });
-
-    Toast.fire({
-      icon: 'error',
-      title: 'Error: Hubo un problema en la carga.',
-    });
-  };
-
-  // Función que obtiene la lista de TODAS las personas
-  // B01 (HITL 2026-08-11): el backend responde envelope DRF paginado
-  // {count,next,previous,results} → normalizar a .results (patrón RA-13,
-  // consistente con los componentes del módulo Taller).
+  // El backend responde envelope DRF paginado {count,next,previous,results}
+  // → normalizar a .results.
   const getPersonAll = async () => {
+    setLoading(true);
+    setLoadError(null);
     let response = await eventRespository.getAll();
-    if (response?.success) {
+    if (response?.success && response?.data) {
       setArrayPerson(response.data.results ?? response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response?.error || 'No se pudieron cargar las personas.');
     }
+    setLoading(false);
   };
 
   const eliminar = (persona) => {
     let arrayPersonas = arrayPerson.filter(function (e) {
       return e.idpersona !== persona.idpersona;
     });
-    // modifico el borrado logico de la persona
     persona.borrado = 1;
     Swal.fire({
       title: `¿Seguro que desea eliminar a  ${persona.nombre}?`,
@@ -153,17 +132,12 @@ const AdminPersonas = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire('Eliminado con exito!', `Se elimino a${persona.nombre}`, 'success');
-        eventRespository
-          .updatePerson(persona.idpersona, persona)
-          .then((response) => {
-            if (response) {
-              notificacionExito();
-              getPersonAll();
-            }
-          })
-          .catch(() => {
-            notificacionError();
-          });
+        eventRespository.updatePerson(persona.idpersona, persona).then((response) => {
+          if (response?.success) {
+            notificacionExito();
+            getPersonAll();
+          }
+        });
         setArrayPerson(arrayPersonas);
         setSearchArrayperson(arrayPerson);
       }
@@ -248,9 +222,16 @@ const AdminPersonas = () => {
             </table>
           </div>
         </div>
+        {loading && <LoadingSpinner />}
+        {loadError && (
+          <ErrorFallbackInline
+            error={{ message: loadError }}
+            resetErrorBoundary={getPersonAll}
+            message="No se pudieron cargar las personas. Intente nuevamente."
+          />
+        )}
       </main>
 
-      {/* EDITAR */}
       <Modal show={modalEdit}>
         <Modal.Header>
           <div>

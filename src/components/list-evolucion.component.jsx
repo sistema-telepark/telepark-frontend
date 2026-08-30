@@ -5,6 +5,8 @@ import { useSelector } from 'react-redux';
 import { evolucionRepository } from '../services/evolucion.service';
 import utils from '../utils/utils';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
+import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
+import LoadingSpinner from './shared/loading-spinner';
 import styles from '../styles/list-evolucion.module.css';
 
 const ListaEvolucion = () => {
@@ -20,6 +22,9 @@ const ListaEvolucion = () => {
   });
   const [idEditado, setIdEditado] = useState('');
   const [evoluciones, setEvoluciones] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const [loadError, setLoadError] = useState(null);
 
   useEffect(() => {
     if (!idEpElegido) {
@@ -30,13 +35,18 @@ const ListaEvolucion = () => {
     getEvoluciones();
   }, [idEpElegido, navigate]);
 
-  // Funcion que obtiene la lista de evolucion de un paciente
   const getEvoluciones = async () => {
+    setLoading(true);
+    setLoadError(null);
     let response = await evolucionRepository.get(idEpElegido);
 
     if (response?.success) {
       setEvoluciones(response.data.results ?? response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response?.error || 'No se pudieron cargar las evoluciones.');
     }
+    setLoading(false);
   };
 
   const editar = (nroEvolucion, fecha, idevolucion) => {
@@ -57,15 +67,12 @@ const ListaEvolucion = () => {
         idpersonaep: Number(idEpElegido),
         borrado: 0,
       };
-      evolucionRepository
-        .update(id, data)
-        .then((response) => {
-          if (response?.success) {
-            getEvoluciones();
-            notificacionGuardar();
-          }
-        })
-        .catch(() => undefined);
+      evolucionRepository.update(id, data).then((response) => {
+        if (response?.success) {
+          getEvoluciones();
+          notificacionGuardar();
+        }
+      });
       setCampo({ nroEvolucion: '', fecha: '' });
       setShow(false);
     }
@@ -97,15 +104,12 @@ const ListaEvolucion = () => {
         idpersonaep: Number(idEpElegido),
         borrado: 0,
       };
-      evolucionRepository
-        .create(data)
-        .then((response) => {
-          if (response?.success) {
-            getEvoluciones();
-            notificacionGuardar();
-          }
-        })
-        .catch(() => undefined);
+      evolucionRepository.create(data).then((response) => {
+        if (response?.success) {
+          getEvoluciones();
+          notificacionGuardar();
+        }
+      });
       setCampo({ nroEvolucion: '', fecha: '' });
       setShowNuevo(false);
     }
@@ -118,18 +122,14 @@ const ListaEvolucion = () => {
       idpersonaep: Number(idEpElegido),
       borrado: 1,
     };
-    evolucionRepository
-      .update(id, data)
-      .then((response) => {
-        if (response?.success) {
-          getEvoluciones();
-        }
-      })
-      .catch(() => undefined);
+    evolucionRepository.update(id, data).then((response) => {
+      if (response?.success) {
+        getEvoluciones();
+      }
+    });
     setShow(false);
   };
 
-  //notificaciones
   const notificacionGuardar = () => {
     const Toast = Swal.mixin({
       toast: true,
@@ -173,7 +173,6 @@ const ListaEvolucion = () => {
           eliminar(escalaevolucion, fecha, idEvolucion);
           swalWithBootstrapButtons.fire('Eliminado!', 'Se ha eliminado el registro', 'success');
         } else if (
-          /* Read more about handling dismissals below */
           result.dismiss === Swal.DismissReason.cancel
         ) {
           swalWithBootstrapButtons.fire('Cancelado', 'No se eliminaron registros', 'error');
@@ -317,56 +316,64 @@ const ListaEvolucion = () => {
               className={
                 'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
               }
-            >
-              <thead>
-                <tr>
-                  <th scope="col">Estado Evolutivo</th>
-                  <th scope="col">Descripción</th>
-                  <th scope="col">Fecha de Observación</th>
-                  <th scope="col">Acción</th>
-                </tr>
-              </thead>
-              <tbody className={styles.tableBodyMiddle}>
-                {evoluciones &&
-                  evoluciones
-                    .filter((evolucion) => evolucion.borrado === 0)
-                    .map((evolucion) => (
-                      <tr key={evolucion.idevolucion}>
-                        <td>Estado: {evolucion.escalaevolucion}</td>
-                        <td>{utils.describirEstado(evolucion.escalaevolucion)}</td>
-                        <td>{utils.convertirFormatoFecha(evolucion.fecha)}</td>
-                        <td>
-                          <button
-                            type="button"
-                            className={'btn btn-verde ' + styles.rowActionButton}
-                            onClick={() =>
-                              editar(
-                                evolucion.escalaevolucion,
-                                evolucion.fecha,
-                                evolucion.idevolucion
-                              )
-                            }
-                          >
-                            <PencilIcon />
-                          </button>
-                          <button
-                            type="button"
-                            className="btn btn-rojo"
-                            onClick={() =>
-                              notificacionEliminar(
-                                evolucion.escalaevolucion,
-                                evolucion.fecha,
-                                evolucion.idevolucion
-                              )
-                            }
-                          >
-                            <TrashIcon />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-              </tbody>
-            </table>
+              >
+                <thead>
+                  <tr>
+                    <th scope="col">Estado Evolutivo</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Fecha de Observación</th>
+                    <th scope="col">Acción</th>
+                  </tr>
+                </thead>
+                <tbody className={styles.tableBodyMiddle}>
+                  {evoluciones &&
+                    evoluciones
+                      .filter((evolucion) => evolucion.borrado === 0)
+                      .map((evolucion) => (
+                        <tr key={evolucion.idevolucion}>
+                          <td>Estado: {evolucion.escalaevolucion}</td>
+                          <td>{utils.describirEstado(evolucion.escalaevolucion)}</td>
+                          <td>{utils.convertirFormatoFecha(evolucion.fecha)}</td>
+                          <td>
+                            <button
+                              type="button"
+                              className={'btn btn-verde ' + styles.rowActionButton}
+                              onClick={() =>
+                                editar(
+                                  evolucion.escalaevolucion,
+                                  evolucion.fecha,
+                                  evolucion.idevolucion
+                                )
+                              }
+                            >
+                              <PencilIcon />
+                            </button>
+                            <button
+                              type="button"
+                              className="btn btn-rojo"
+                              onClick={() =>
+                                notificacionEliminar(
+                                  evolucion.escalaevolucion,
+                                  evolucion.fecha,
+                                  evolucion.idevolucion
+                                )
+                              }
+                            >
+                              <TrashIcon />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                </tbody>
+              </table>
+            {loading && <LoadingSpinner />}
+            {loadError && (
+              <ErrorFallbackInline
+                error={{ message: loadError }}
+                resetErrorBoundary={getEvoluciones}
+                message="No se pudieron cargar las evoluciones. Intente nuevamente."
+              />
+            )}
           </div>
         </div>
       </div>

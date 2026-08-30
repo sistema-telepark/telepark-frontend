@@ -2,6 +2,8 @@ import React, { useRef, useState, useEffect } from 'react';
 import { eventRespository } from '../services/event.service';
 import Swal from 'sweetalert2';
 import { PlusIcon } from './icons/icons-shared';
+import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
+import LoadingSpinner from './shared/loading-spinner';
 import styles from '../styles/gestion-eventos.module.css';
 
 const initialEvents = {
@@ -16,28 +18,44 @@ const Events = () => {
   const [typeEvent, setTypeEvent] = useState([]);
   const [namePersonEP, setNamePersonEP] = useState([]);
   const [events, setEvents] = useState(initialEvents);
+
+  const [loadError, setLoadError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   const formRef = useRef(null);
 
   useEffect(() => {
-    getPersonEpAll();
-    getTipeEvent();
+    setLoading(true);
+    setLoadError(null);
+    Promise.all([getPersonEpAll(), getTipeEvent()])
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
 
-  // Función que obtiene la lista de personas con ep
-  // B01 (HITL 2026-08-11): /personas-ep devuelve envelope DRF paginado
-  // {count,next,previous,results} → normalizar a .results (patrón RA-13).
+  const recargar = () => {
+    setLoadError(null);
+    Promise.all([getPersonEpAll(), getTipeEvent()]).catch(() => {});
+  };
+
+  // El backend devuelve envelope DRF paginado {count,next,previous,results}
+  // → normalizar a .results.
   const getPersonEpAll = async () => {
     let response = await eventRespository.getPersonEp();
-    if (response && response.data) {
+    if (response?.success && response?.data) {
       setNamePersonEP(response.data.results ?? response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response.error);
     }
   };
 
-  // Función que obtiene la lista de tipos de eventos
   const getTipeEvent = async () => {
     let response = await eventRespository.getEventAll();
-    if (response) {
+    if (response?.success && response?.data) {
       setTypeEvent(response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response.error);
     }
   };
 
@@ -59,21 +77,15 @@ const Events = () => {
       borrado: 0,
     };
 
-    eventRespository
-      .createEvent(data)
-      .then((response) => {
-        if (response) {
-          setEvents(initialEvents);
-          formRef.current.reset();
-          notificacionExito();
-        }
-      })
-      .catch(() => {
-        notificacionError();
-      });
+    eventRespository.createEvent(data).then((response) => {
+      if (response?.success) {
+        setEvents(initialEvents);
+        formRef.current.reset();
+        notificacionExito();
+      }
+    });
   };
 
-  //notificaciones
   const notificacionExito = () => {
     const Toast = Swal.mixin({
       toast: true,
@@ -92,26 +104,6 @@ const Events = () => {
       title: 'Se ha guardado con éxito',
     });
   };
-  //notificaciones
-  const notificacionError = () => {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer);
-        toast.addEventListener('mouseleave', Swal.resumeTimer);
-      },
-    });
-
-    Toast.fire({
-      icon: 'error',
-      title: 'Error: Hubo un problema en la carga.',
-    });
-  };
-
   const validateDate = (fechaDesde, fechaHasta) => {
     if (fechaDesde !== '' && fechaHasta !== '') {
       return fechaDesde > fechaHasta;
@@ -241,16 +233,20 @@ const Events = () => {
           </div>
           <div className="row">
             <div className=" justify-content-center  d-flex mb-4">
-              <button
-                type="submit"
-                className="btn btn-azul mb-2 mt-2"
-                disabled={validate}
-              >
+              <button type="submit" className="btn btn-azul mb-2 mt-2" disabled={validate}>
                 <PlusIcon className="signoMas" />
                 Agregar
               </button>
             </div>
           </div>
+          {loading && <LoadingSpinner />}
+          {loadError && (
+            <ErrorFallbackInline
+              error={{ message: loadError }}
+              resetErrorBoundary={recargar}
+              message="Error al cargar los datos. Intente nuevamente."
+            />
+          )}
         </main>
       </form>
     </div>

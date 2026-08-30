@@ -1,27 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Swal from 'sweetalert2';
 import { Navigate, useNavigate } from 'react-router';
 import { authRepository } from '../services/auth.service';
 import { TokenService } from '../services/token.service';
+import { logAsyncError } from './error-boundary/logError';
 import logoTelepark from '../images/logo2022.png';
 import styles from '../styles/login.module.css';
 
 const Login = () => {
   const navigate = useNavigate();
+  const timerRef = useRef(null);
 
   const [campo, setCampo] = useState({});
   const [loading, setLoading] = useState(false);
 
-  // Valido los campos del formulario
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, []);
+
   const validarFormulario = () => {
     let formularioValido = true;
 
-    // user
     if (!campo['user']) {
       formularioValido = false;
     }
 
-    // Pass
     if (!campo['pass']) {
       formularioValido = false;
     }
@@ -29,12 +36,9 @@ const Login = () => {
     return formularioValido;
   };
 
-  // Una vez que los campos del formulario han sido llenado correctamente
-  // Se envía la petición de autenticación al API
   const enviarFormulario = async (e) => {
     e.preventDefault();
 
-    // Si la validación de los campos del formulario ha sido realizada
     if (validarFormulario()) {
       setLoading(true);
 
@@ -45,11 +49,12 @@ const Login = () => {
         });
 
         if (response) {
-          TokenService.setUser(response.data);
+          TokenService.setUser(response);
           send();
         }
       } catch (error) {
-        errorSend();
+        logAsyncError(error, { context: 'iniciar sesión' });
+        errorSend(error);
       } finally {
         setLoading(false);
       }
@@ -58,9 +63,7 @@ const Login = () => {
     }
   };
 
-  // Detectamos cuando un campo del formulario es llenado y por ende cambia de estado
   const detectarCambio = (field, e) => {
-    // Cambio de estado de campo — inmutable
     setCampo({ ...campo, [field]: e.target.value });
   };
 
@@ -73,17 +76,20 @@ const Login = () => {
       timer: 1500,
     });
 
-    setTimeout(() => {
+    timerRef.current = setTimeout(() => {
       navigate('/home');
     }, 1500);
   };
 
-  const errorSend = () => {
+  const errorSend = (error) => {
+    const esCredenciales = error?.response?.status === 401;
     Swal.fire({
       position: 'center',
       icon: 'error',
       title: 'No se permite el acceso',
-      text: 'El nombre de usuario o la contraseña ingresada son incorrectos.',
+      text: esCredenciales
+        ? 'El nombre de usuario o la contraseña ingresada son incorrectos.'
+        : 'Ocurrió un error al intentar iniciar sesión. Intente nuevamente.',
       confirmButtonText: 'OK',
     });
 

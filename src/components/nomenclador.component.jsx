@@ -4,6 +4,8 @@ import { enfermedadRepository } from '../services/enfermedad.service';
 import { medicamentoRepository } from '../services/medicamento.service';
 import { obrasocialRepository } from '../services/obrasocial.service';
 import { CheckIcon, CloseIcon, AddIcon, EditIcon, DeleteIcon } from './icons/icons-nomenclador';
+import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
+import LoadingSpinner from './shared/loading-spinner';
 import styles from '../styles/nomenclador.module.css';
 
 const Nomenclador = () => {
@@ -19,49 +21,62 @@ const Nomenclador = () => {
     idEditado: '',
   });
 
+  const [loadError, setLoadError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    getEnfermedad();
-    getMedicamento();
-    getObrasocial();
+    setLoading(true);
+    setLoadError(null);
+    Promise.all([getEnfermedad(), getMedicamento(), getObrasocial()])
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
 
-  // Funcion que obtiene la lista de enfermedades
+  const recargar = () => {
+    setLoadError(null);
+    Promise.all([getEnfermedad(), getMedicamento(), getObrasocial()]).catch(() => {});
+  };
+
   const getEnfermedad = async () => {
-    const response = await enfermedadRepository.getAll().catch(() => undefined);
-    if (response) {
-      setEnfermedades(response.data);
+    const response = await enfermedadRepository.getAll();
+    if (response?.success) {
+      setEnfermedades(response?.data ?? []);
+      setLoadError(null);
+    } else {
+      setLoadError(response?.error || 'No se pudieron cargar los datos.');
     }
   };
 
-  // Funcion que obtiene la lista de medicamentos
   const getMedicamento = async () => {
-    let response = await medicamentoRepository.getAll().catch(() => undefined);
-    if (response) {
-      setMedicamentos(response.data);
+    let response = await medicamentoRepository.getAll();
+    if (response?.success) {
+      setMedicamentos(response?.data ?? []);
+      setLoadError(null);
+    } else {
+      setLoadError(response?.error || 'No se pudieron cargar los datos.');
     }
   };
 
-  // Funcion que obtiene la lista de obras sociales
   const getObrasocial = async () => {
-    let response = await obrasocialRepository.getAll().catch(() => undefined);
-    if (response) {
-      setObrasociales(response.data);
+    let response = await obrasocialRepository.getAll();
+    if (response?.success) {
+      setObrasociales(response?.data ?? []);
+      setLoadError(null);
+    } else {
+      setLoadError(response?.error || 'No se pudieron cargar los datos.');
     }
   };
 
-  // Funcion que guarda el valor de los campos
   const detectarCambio = (e) => {
     const { name, value } = e.target;
     setCampo({ ...campo, [name]: value });
   };
 
-  // Funcion que guarda el valor del checkbox
   const detectarCheck = (e) => {
     const { name, checked } = e.target;
     setCampo({ ...campo, [name]: utils.convertirCheck(checked) });
   };
 
-  // Funcion que habilita la edicion de un registro de la tabla seleccionada
   const editar = (tipo, info, id) => {
     setType(tipo);
     switch (tipo) {
@@ -79,13 +94,11 @@ const Nomenclador = () => {
     }
   };
 
-  // Funcion que cancela la edicion de la tabla seleccionada
   const cancelar = () => {
     setType('');
     setCampo({ enfermedad: '', medicamento: '', obrasocial: '', isChecked: 0, idEditado: '' });
   };
 
-  // Funcion que guarda la edicion de la tabla seleccionada
   const guardar = async (tipo) => {
     let nombre = campo[tipo];
     let esestatal = tipo === 'obrasocial' ? campo.isChecked : undefined;
@@ -94,10 +107,8 @@ const Nomenclador = () => {
       switch (tipo) {
         case 'enfermedad':
           {
-            const response = await enfermedadRepository
-              .update(id, { nombre })
-              .catch(() => undefined);
-            if (response) {
+            const response = await enfermedadRepository.update(id, { nombre });
+            if (response?.success) {
               getEnfermedad();
               utils.notificacionGuardar();
             }
@@ -105,10 +116,8 @@ const Nomenclador = () => {
           break;
         case 'medicamento':
           {
-            const response = await medicamentoRepository
-              .update(id, { nombre })
-              .catch(() => undefined);
-            if (response) {
+            const response = await medicamentoRepository.update(id, { nombre });
+            if (response?.success) {
               getMedicamento();
               utils.notificacionGuardar();
             }
@@ -116,10 +125,8 @@ const Nomenclador = () => {
           break;
         case 'obrasocial':
           {
-            const response = await obrasocialRepository
-              .update(id, { nombre, esestatal })
-              .catch(() => undefined);
-            if (response) {
+            const response = await obrasocialRepository.update(id, { nombre, esestatal });
+            if (response?.success) {
               getObrasocial();
               utils.notificacionGuardar();
             }
@@ -132,29 +139,28 @@ const Nomenclador = () => {
     }
   };
 
-  // Funcion que elimina un registro de la tabla elegida
   const eliminar = async (tipo, id) => {
     switch (tipo) {
       case 'enfermedad':
         {
-          const response = await enfermedadRepository.delete(id).catch(() => undefined);
-          if (response) {
+          const response = await enfermedadRepository.delete(id);
+          if (response?.success) {
             getEnfermedad();
           }
         }
         break;
       case 'medicamento':
         {
-          const response = await medicamentoRepository.delete(id).catch(() => undefined);
-          if (response) {
+          const response = await medicamentoRepository.delete(id);
+          if (response?.success) {
             getMedicamento();
           }
         }
         break;
       case 'obrasocial':
         {
-          const response = await obrasocialRepository.delete(id).catch(() => undefined);
-          if (response) {
+          const response = await obrasocialRepository.delete(id);
+          if (response?.success) {
             getObrasocial();
           }
         }
@@ -165,7 +171,6 @@ const Nomenclador = () => {
     cancelar();
   };
 
-  // Funcion que agrega un registro a la tabla elegida
   const cargarNuevo = async (tipo) => {
     let nombre = campo[tipo];
     let esestatal = tipo === 'obrasocial' ? campo.isChecked : false;
@@ -173,8 +178,8 @@ const Nomenclador = () => {
       switch (tipo) {
         case 'enfermedad':
           {
-            const response = await enfermedadRepository.create({ nombre }).catch(() => undefined);
-            if (response) {
+            const response = await enfermedadRepository.create({ nombre });
+            if (response?.success) {
               getEnfermedad();
               utils.notificacionGuardar();
             }
@@ -182,8 +187,8 @@ const Nomenclador = () => {
           break;
         case 'medicamento':
           {
-            const response = await medicamentoRepository.create({ nombre }).catch(() => undefined);
-            if (response) {
+            const response = await medicamentoRepository.create({ nombre });
+            if (response?.success) {
               getMedicamento();
               utils.notificacionGuardar();
             }
@@ -191,10 +196,8 @@ const Nomenclador = () => {
           break;
         case 'obrasocial':
           {
-            const response = await obrasocialRepository
-              .create({ nombre, esestatal })
-              .catch(() => undefined);
-            if (response) {
+            const response = await obrasocialRepository.create({ nombre, esestatal });
+            if (response?.success) {
               getObrasocial();
               utils.notificacionGuardar();
             }
@@ -416,7 +419,7 @@ const Nomenclador = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="mt-3 col-12 col-md-12 col-lg-4 col-xl-4">
           <div className="row">
             <div className="col-12 col-md-12 col-lg-12 col-xl-12 input-group">
@@ -528,6 +531,14 @@ const Nomenclador = () => {
           </div>
         </div>
       </div>
+      {loading && <LoadingSpinner />}
+      {loadError && (
+        <ErrorFallbackInline
+          error={{ message: loadError }}
+          resetErrorBoundary={recargar}
+          message="No se pudieron cargar los datos. Intente nuevamente."
+        />
+      )}
     </main>
   );
 };

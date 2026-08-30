@@ -1,7 +1,6 @@
 import http from '../http-common';
 import { withServiceHandler } from './error-handler';
 
-// D-H4 RESUELTA (PO, 2026-08-10 — Opción C): default según Telepark API.yaml:332
 const ASISTENCIA_PATH = '/asistencias-taller';
 
 const asistencias = {
@@ -9,8 +8,8 @@ const asistencias = {
     const response = await http.get(ASISTENCIA_PATH);
     return response.data;
   },
-  // RA-14: bulk — el componente asistencia-taller.js envía un array; 1 POST por
-  // item (el YAML:354 documenta body UNO AsistenciaTaller). Sin rollback (S12).
+  // El componente envía un array; se hace 1 POST por item (el body es UNO
+  // AsistenciaTaller). Sin rollback.
   async createAsistencia(data) {
     if (Array.isArray(data)) {
       const responses = await Promise.all(data.map((item) => http.post(ASISTENCIA_PATH, item)));
@@ -27,9 +26,9 @@ const asistencias = {
     const response = await http.delete(`${ASISTENCIA_PATH}/${id}`);
     return response.data;
   },
-  // RA-13: el YAML NO expone /asistenciataller/encuentro/{id}; se recorre la
-  // paginación de /asistencias-taller (envelope DRF, Telepark API.yaml:4853) y
-  // se filtra client-side por idclasetaller (el id del encuentro = idclasetaller).
+  // El backend no expone /asistenciataller/encuentro/{id}; se recorre la
+  // paginación de /asistencias-taller (envelope DRF) y se filtra client-side
+  // por idclasetaller (el id del encuentro = idclasetaller).
   async getAsistenciaByEncuentro(idClaseTaller) {
     const resultados = [];
     let nextUrl = ASISTENCIA_PATH;
