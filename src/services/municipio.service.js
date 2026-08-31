@@ -8,7 +8,7 @@ const municipios = {
   },
   async getByProvincia(idprovincia) {
     const response = await http.get(`/municipios`, { params: { idprovincia } });
-    return response.data; // array plano (backend desactiva paginación con filtro)
+    return response.data.results ?? response.data;
   },
 };
 
