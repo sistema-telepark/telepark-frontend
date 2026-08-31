@@ -8,7 +8,7 @@ const localidades = {
   },
   async getByMunicipio(idmunicipio) {
     const response = await http.get(`/localidades`, { params: { idmunicipio } });
-    return response.data;
+    return response.data.results ?? response.data;
   },
 };
 
