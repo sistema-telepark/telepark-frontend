@@ -162,10 +162,11 @@ const ListaPaciente = (props) => {
                     pacientes
                       .filter(
                         (paciente) =>
-                          paciente.nombre.toLowerCase().includes(buscar) ||
-                          paciente.apellido.toLowerCase().includes(buscar) ||
-                          paciente.nombre.toUpperCase().includes(buscar) ||
-                          paciente.apellido.toUpperCase().includes(buscar)
+                          paciente.borrado !== true &&
+                          (paciente.nombre.toLowerCase().includes(buscar) ||
+                            paciente.apellido.toLowerCase().includes(buscar) ||
+                            paciente.nombre.toUpperCase().includes(buscar) ||
+                            paciente.apellido.toUpperCase().includes(buscar))
                       )
                       .map((paciente) => (
                         <tr key={paciente.idpersona ?? paciente.id}>

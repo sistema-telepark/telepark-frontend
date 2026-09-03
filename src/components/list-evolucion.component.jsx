@@ -65,7 +65,7 @@ const ListaEvolucion = () => {
         escalaevolucion: Number(escala),
         fecha: fechaEvolucion,
         idpersonaep: Number(idEpElegido),
-        borrado: 0,
+        borrado: false,
       };
       evolucionRepository.update(id, data).then((response) => {
         if (response?.success) {
@@ -102,7 +102,7 @@ const ListaEvolucion = () => {
         escalaevolucion: Number(escala),
         fecha: fechaEvolucion,
         idpersonaep: Number(idEpElegido),
-        borrado: 0,
+        borrado: false,
       };
       evolucionRepository.create(data).then((response) => {
         if (response?.success) {
@@ -120,7 +120,7 @@ const ListaEvolucion = () => {
       escalaevolucion: Number(escalaevolucion),
       fecha: fecha,
       idpersonaep: Number(idEpElegido),
-      borrado: 1,
+      borrado: true,
     };
     evolucionRepository.update(id, data).then((response) => {
       if (response?.success) {
@@ -328,7 +328,7 @@ const ListaEvolucion = () => {
                 <tbody className={styles.tableBodyMiddle}>
                   {evoluciones &&
                     evoluciones
-                      .filter((evolucion) => evolucion.borrado === 0)
+                      .filter((evolucion) => evolucion.borrado === false)
                       .map((evolucion) => (
                         <tr key={evolucion.idevolucion}>
                           <td>Estado: {evolucion.escalaevolucion}</td>

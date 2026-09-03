@@ -105,7 +105,7 @@ const ListaIndicacion = () => {
         horadetoma: horaMedicamento,
         idpersonaep: Number(idEpElegido),
         idmedicamento: Number(idMedicamento),
-        borrado: 0,
+        borrado: false,
       };
       indicacionRepository.update(id, data).then((response) => {
         if (response?.success) {
@@ -154,7 +154,7 @@ const ListaIndicacion = () => {
         horadetoma: horaMedicamento,
         idpersonaep: Number(idEpElegido),
         idmedicamento: Number(idMedicamento),
-        borrado: 0,
+        borrado: false,
       };
       indicacionRepository.create(data).then((response) => {
         if (response?.success) {
@@ -182,7 +182,7 @@ const ListaIndicacion = () => {
       horadetoma: horadetoma,
       idpersonaep: Number(idEpElegido),
       idmedicamento: Number(idmedicamento),
-      borrado: 1,
+      borrado: true,
     };
     indicacionRepository.update(id, data).then((response) => {
       if (response?.success) {
@@ -472,7 +472,7 @@ const ListaIndicacion = () => {
                 <tbody className={styles.tableBodyMiddle}>
                   {indicaciones &&
                     indicaciones
-                      .filter((indicacion) => indicacion.borrado === 0)
+                      .filter((indicacion) => indicacion.borrado === false)
                       .map((indicacion) => (
                         <tr key={indicacion.idindicacion}>
                           <td>{indicacion.idmedicamento.nombre}</td>

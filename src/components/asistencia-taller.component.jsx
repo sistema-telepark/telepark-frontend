@@ -50,7 +50,7 @@ const Asistencia = () => {
   const getPacientes = async () => {
     const resp = await pacienteRepository.getPacientesEp();
     if (resp.success) {
-      setPacientes(resp.data.results ?? resp.data);
+      setPacientes((resp.data.results ?? resp.data).filter((paciente) => paciente.borrado !== true));
       setLoadError(null);
     } else {
       setLoadError(resp.error);

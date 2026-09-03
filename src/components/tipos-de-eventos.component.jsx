@@ -70,7 +70,7 @@ const TypeEvents = () => {
 
   const deleteTypeEvent = async (data) => {
     let modifidedEvent = {
-      borrado: 1,
+      borrado: true,
     };
     await eventRespository.updateTypeEvent(data.idtipoevento, modifidedEvent);
   };
@@ -101,7 +101,7 @@ const TypeEvents = () => {
           id: data.idtipoevento,
           nombre: data.nombre,
           desactivataller: data.desactivataller === true ? 1 : 0,
-          borrado: 0,
+          borrado: false,
         };
         return modifidedEvent;
       }
@@ -124,7 +124,7 @@ const TypeEvents = () => {
     data = {
       nombre: form.nombre,
       desactivataller: form.desactivataller === true ? 1 : 0,
-      borrado: 0,
+      borrado: false,
     };
     eventRespository.createTypeEvent(data).then((response) => {
       if (response?.success) {
@@ -188,7 +188,7 @@ const TypeEvents = () => {
             </thead>
             <tbody>
               {typeEvent
-                .filter((element) => element.borrado === 0)
+                .filter((element) => element.borrado === false)
                 .map((element) => (
                   <tr key={element.idtipoevento}>
                     <td>{element.idtipoevento}</td>

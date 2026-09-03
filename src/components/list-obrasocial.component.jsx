@@ -97,7 +97,7 @@ const ListaObraSocial = (props) => {
       const data = {
         idpersonaep: Number(idEpElegido),
         idobrasocial: Number(idObrasocial),
-        borrado: 0,
+        borrado: false,
       };
       const response = await osRepository.create(data);
       if (response?.success) {
@@ -116,7 +116,7 @@ const ListaObraSocial = (props) => {
       const data = {
         idpersonaep: Number(idEpElegido),
         idobrasocial: Number(idObrasocial),
-        borrado: 0,
+        borrado: false,
       };
       const response = await osRepository.update(id, data);
       if (response?.success) {
@@ -132,7 +132,7 @@ const ListaObraSocial = (props) => {
     const data = {
       idpersonaep: Number(idEpElegido),
       idobrasocial: Number(info.idobrasocial),
-      borrado: 1,
+      borrado: true,
     };
     const response = await osRepository.update(id, data);
     if (response?.success) {
@@ -203,7 +203,7 @@ const ListaObraSocial = (props) => {
               <tbody className={styles.tableBodyMiddle}>
                 {osociales &&
                   osociales
-                    .filter((osocial) => osocial.borrado === 0)
+                    .filter((osocial) => osocial.borrado === false)
                     .map((osocial) => (
                       <tr key={osocial.idos}>
                         <td>{osocial.idobrasocial.nombre}</td>
