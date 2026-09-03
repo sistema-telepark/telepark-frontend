@@ -15,7 +15,7 @@ const AdminPersonas = () => {
     nombre: '',
     apellido: '',
     telefono: 0,
-    borrado: 0,
+    borrado: false,
   });
   const [modalEdit, setModalEdit] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -79,7 +79,7 @@ const AdminPersonas = () => {
       nombre: '',
       apellido: '',
       telefono: 0,
-      borrado: 0,
+      borrado: false,
     });
   };
 
@@ -121,7 +121,7 @@ const AdminPersonas = () => {
     let arrayPersonas = arrayPerson.filter(function (e) {
       return e.idpersona !== persona.idpersona;
     });
-    persona.borrado = 1;
+    persona.borrado = true;
     Swal.fire({
       title: `¿Seguro que desea eliminar a  ${persona.nombre}?`,
       icon: 'warning',
@@ -146,7 +146,7 @@ const AdminPersonas = () => {
 
   const terminoBusqueda = buscar.trim().toLowerCase();
   const arrayPersonIspaciente = arrayPerson.filter((person) => {
-    if (person.borrado === 1) return false;
+    if (person.borrado === true) return false;
     if (!terminoBusqueda) return true;
 
     return [person.idpersona, person.nombre, person.apellido, person.telefono]

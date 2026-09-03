@@ -95,7 +95,7 @@ const ListaDiagnostico = () => {
         fecha: fechaEnfermedad,
         idpersonaep: Number(idEpElegido),
         idenfermedad: Number(idEnfermedad),
-        borrado: 0,
+        borrado: false,
       };
       diagnosticoRepository.update(id, data).then((response) => {
         if (response?.success) {
@@ -132,7 +132,7 @@ const ListaDiagnostico = () => {
         fecha: fechaEnfermedad,
         idpersonaep: Number(idEpElegido),
         idenfermedad: Number(idEnfermedad),
-        borrado: 0,
+        borrado: false,
       };
       diagnosticoRepository.create(data).then((reponse) => {
         if (reponse?.success) {
@@ -150,7 +150,7 @@ const ListaDiagnostico = () => {
       fecha: fecha,
       idpersonaep: Number(idEpElegido),
       idenfermedad: Number(idenfermedad),
-      borrado: 1,
+      borrado: true,
     };
     diagnosticoRepository.update(id, data).then((response) => {
       if (response?.success) {
@@ -357,7 +357,7 @@ const ListaDiagnostico = () => {
                 <tbody className={styles.tableBodyMiddle}>
                   {diagnosticos &&
                     diagnosticos
-                      .filter((diagnostico) => diagnostico.borrado === 0)
+                      .filter((diagnostico) => diagnostico.borrado === false)
                       .map((diagnostico) => (
                         <tr key={diagnostico.iddiagnostico}>
                           <td>{diagnostico.idenfermedad.nombre}</td>

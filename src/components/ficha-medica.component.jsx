@@ -137,7 +137,7 @@ const FichaMedica = () => {
               <tbody className={styles.tableBodyMiddle}>
                 {diagnosticos &&
                   diagnosticos
-                    .filter((diagnostico) => diagnostico.borrado === 0)
+                    .filter((diagnostico) => diagnostico.borrado === false)
                     .map((diagnostico, index) => (
                       <tr key={diagnostico.iddiagnostico}>
                         <td>{diagnostico.idenfermedad.nombre}</td>
@@ -178,7 +178,7 @@ const FichaMedica = () => {
               <tbody className={styles.tableBodyMiddle}>
                 {evoluciones &&
                   evoluciones
-                    .filter((evolucion) => evolucion.borrado === 0)
+                    .filter((evolucion) => evolucion.borrado === false)
                     .map((evolucion, index) => (
                       <tr key={evolucion.idevolucion}>
                         <td>Estado: {evolucion.escalaevolucion}</td>
@@ -219,7 +219,7 @@ const FichaMedica = () => {
               <tbody className={styles.tableBodyMiddle}>
                 {osociales &&
                   osociales
-                    .filter((osocial) => osocial.borrado === 0)
+                    .filter((osocial) => osocial.borrado === false)
                     .map((osocial, index) => (
                       <tr key={osocial.idos}>
                         <td>{osocial.idobrasocial.nombre}</td>
@@ -262,7 +262,7 @@ const FichaMedica = () => {
               <tbody className={styles.tableBodyMiddle}>
                 {indicaciones &&
                   indicaciones
-                    .filter((indicacion) => indicacion.borrado === 0)
+                    .filter((indicacion) => indicacion.borrado === false)
                     .map((indicacion, index) => (
                       <tr key={indicacion.idindicacion}>
                         <td>{indicacion.idmedicamento.nombre}</td>
