@@ -235,7 +235,7 @@ const AdminPersonas = () => {
       <Modal show={modalEdit}>
         <Modal.Header>
           <div>
-            <h2>Editar la persona con ep</h2>
+            <h3>Editar Persona</h3>
           </div>
         </Modal.Header>
         <Modal.Body>
