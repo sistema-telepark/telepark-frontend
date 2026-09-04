@@ -172,9 +172,7 @@ const ListaEvolucion = () => {
         if (result.isConfirmed) {
           eliminar(escalaevolucion, fecha, idEvolucion);
           swalWithBootstrapButtons.fire('Eliminado!', 'Se ha eliminado el registro', 'success');
-        } else if (
-          result.dismiss === Swal.DismissReason.cancel
-        ) {
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
           swalWithBootstrapButtons.fire('Cancelado', 'No se eliminaron registros', 'error');
         }
       });
@@ -316,56 +314,56 @@ const ListaEvolucion = () => {
               className={
                 'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
               }
-              >
-                <thead>
-                  <tr>
-                    <th scope="col">Estado Evolutivo</th>
-                    <th scope="col">Descripción</th>
-                    <th scope="col">Fecha de Observación</th>
-                    <th scope="col">Acción</th>
-                  </tr>
-                </thead>
-                <tbody className={styles.tableBodyMiddle}>
-                  {evoluciones &&
-                    evoluciones
-                      .filter((evolucion) => evolucion.borrado === false)
-                      .map((evolucion) => (
-                        <tr key={evolucion.idevolucion}>
-                          <td>Estado: {evolucion.escalaevolucion}</td>
-                          <td>{utils.describirEstado(evolucion.escalaevolucion)}</td>
-                          <td>{utils.convertirFormatoFecha(evolucion.fecha)}</td>
-                          <td>
-                            <button
-                              type="button"
-                              className={'btn btn-verde ' + styles.rowActionButton}
-                              onClick={() =>
-                                editar(
-                                  evolucion.escalaevolucion,
-                                  evolucion.fecha,
-                                  evolucion.idevolucion
-                                )
-                              }
-                            >
-                              <PencilIcon />
-                            </button>
-                            <button
-                              type="button"
-                              className="btn btn-rojo"
-                              onClick={() =>
-                                notificacionEliminar(
-                                  evolucion.escalaevolucion,
-                                  evolucion.fecha,
-                                  evolucion.idevolucion
-                                )
-                              }
-                            >
-                              <TrashIcon />
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                </tbody>
-              </table>
+            >
+              <thead>
+                <tr>
+                  <th scope="col">Estado Evolutivo</th>
+                  <th scope="col">Descripción</th>
+                  <th scope="col">Fecha de Observación</th>
+                  <th scope="col">Acción</th>
+                </tr>
+              </thead>
+              <tbody className={styles.tableBodyMiddle}>
+                {evoluciones &&
+                  evoluciones
+                    .filter((evolucion) => evolucion.borrado === false)
+                    .map((evolucion) => (
+                      <tr key={evolucion.idevolucion}>
+                        <td>Estado: {evolucion.escalaevolucion}</td>
+                        <td>{utils.describirEstado(evolucion.escalaevolucion)}</td>
+                        <td>{utils.convertirFormatoFecha(evolucion.fecha)}</td>
+                        <td>
+                          <button
+                            type="button"
+                            className={'btn btn-verde ' + styles.rowActionButton}
+                            onClick={() =>
+                              editar(
+                                evolucion.escalaevolucion,
+                                evolucion.fecha,
+                                evolucion.idevolucion
+                              )
+                            }
+                          >
+                            <PencilIcon />
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-rojo"
+                            onClick={() =>
+                              notificacionEliminar(
+                                evolucion.escalaevolucion,
+                                evolucion.fecha,
+                                evolucion.idevolucion
+                              )
+                            }
+                          >
+                            <TrashIcon />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+              </tbody>
+            </table>
             {loading && <LoadingSpinner />}
             {loadError && (
               <ErrorFallbackInline

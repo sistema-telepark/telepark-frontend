@@ -155,12 +155,7 @@ MedicalRecordIcon.propTypes = {
   className: PropTypes.string,
 };
 
-export const SearchSidebarIcon = ({
-  size = 16,
-  color = 'currentColor',
-  className,
-  ...rest
-}) => (
+export const SearchSidebarIcon = ({ size = 16, color = 'currentColor', className, ...rest }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={size}

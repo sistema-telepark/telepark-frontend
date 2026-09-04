@@ -1,7 +1,6 @@
 import Swal from 'sweetalert2';
 
 class Utils {
-  
   convertirFormatoFecha(string) {
     var info = string.split('-');
     return info[2] + '/' + info[1] + '/' + info[0];
@@ -13,7 +12,7 @@ class Utils {
   }
 
   convertirEstado(estado) {
-    if (estado === 1) {
+    if (estado === true) {
       return 'Vigente';
     } else {
       return 'Caducado';
@@ -21,18 +20,10 @@ class Utils {
   }
 
   convertirTipo(tipo) {
-    if (tipo === 1) {
+    if (tipo === true) {
       return 'Publica';
     } else {
       return 'Privada';
-    }
-  }
-
-  convertirCheck(opcion) {
-    if (opcion === false) {
-      return 0;
-    } else {
-      return 1;
     }
   }
 
@@ -130,9 +121,7 @@ class Utils {
       .then((result) => {
         if (result.isConfirmed) {
           funcion(info, id);
-        } else if (
-          result.dismiss === Swal.DismissReason.cancel
-        ) {
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
           swalWithBootstrapButtons.fire('Cancelado', 'No se eliminaron registros', 'error');
         }
       });

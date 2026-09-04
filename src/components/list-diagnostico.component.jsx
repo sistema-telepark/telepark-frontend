@@ -202,9 +202,7 @@ const ListaDiagnostico = () => {
         if (result.isConfirmed) {
           eliminar(idenfermedad, fecha, idDiagnostico);
           swalWithBootstrapButtons.fire('Eliminado!', 'Se ha eliminado el registro', 'success');
-        } else if (
-          result.dismiss === Swal.DismissReason.cancel
-        ) {
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
           swalWithBootstrapButtons.fire('Cancelado', 'No se eliminaron registros', 'error');
         }
       });
@@ -348,51 +346,51 @@ const ListaDiagnostico = () => {
               }
             >
               <thead>
-                  <tr>
-                    <th scope="col">Nombre de Enfermedad</th>
-                    <th scope="col">Fecha de Diagnóstico</th>
-                    <th scope="col">Acción</th>
-                  </tr>
-                </thead>
-                <tbody className={styles.tableBodyMiddle}>
-                  {diagnosticos &&
-                    diagnosticos
-                      .filter((diagnostico) => diagnostico.borrado === false)
-                      .map((diagnostico) => (
-                        <tr key={diagnostico.iddiagnostico}>
-                          <td>{diagnostico.idenfermedad.nombre}</td>
-                          <td>{utils.convertirFormatoFecha(diagnostico.fecha)}</td>
-                          <td>
-                            <button
-                              type="button"
-                              className={'btn btn-verde ' + styles.rowActionButton}
-                              onClick={() =>
-                                editar(
-                                  diagnostico.idenfermedad.idenfermedad,
-                                  diagnostico.fecha,
-                                  diagnostico.iddiagnostico
-                                )
-                              }
-                            >
-                              <PencilIcon />
-                            </button>
-                            <button
-                              type="button"
-                              className="btn btn-rojo"
-                              onClick={() =>
-                                notificacionEliminar(
-                                  diagnostico.idenfermedad.idenfermedad,
-                                  diagnostico.fecha,
-                                  diagnostico.iddiagnostico
-                                )
-                              }
-                            >
-                              <TrashIcon />
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-</tbody>
+                <tr>
+                  <th scope="col">Nombre de Enfermedad</th>
+                  <th scope="col">Fecha de Diagnóstico</th>
+                  <th scope="col">Acción</th>
+                </tr>
+              </thead>
+              <tbody className={styles.tableBodyMiddle}>
+                {diagnosticos &&
+                  diagnosticos
+                    .filter((diagnostico) => diagnostico.borrado === false)
+                    .map((diagnostico) => (
+                      <tr key={diagnostico.iddiagnostico}>
+                        <td>{diagnostico.idenfermedad.nombre}</td>
+                        <td>{utils.convertirFormatoFecha(diagnostico.fecha)}</td>
+                        <td>
+                          <button
+                            type="button"
+                            className={'btn btn-verde ' + styles.rowActionButton}
+                            onClick={() =>
+                              editar(
+                                diagnostico.idenfermedad.idenfermedad,
+                                diagnostico.fecha,
+                                diagnostico.iddiagnostico
+                              )
+                            }
+                          >
+                            <PencilIcon />
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-rojo"
+                            onClick={() =>
+                              notificacionEliminar(
+                                diagnostico.idenfermedad.idenfermedad,
+                                diagnostico.fecha,
+                                diagnostico.iddiagnostico
+                              )
+                            }
+                          >
+                            <TrashIcon />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+              </tbody>
             </table>
             {loading && <LoadingSpinner />}
             {loadError && (

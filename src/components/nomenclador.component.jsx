@@ -17,7 +17,7 @@ const Nomenclador = () => {
     enfermedad: '',
     medicamento: '',
     obrasocial: '',
-    isChecked: 0,
+    isChecked: false,
     idEditado: '',
   });
 
@@ -74,7 +74,7 @@ const Nomenclador = () => {
 
   const detectarCheck = (e) => {
     const { name, checked } = e.target;
-    setCampo({ ...campo, [name]: utils.convertirCheck(checked) });
+    setCampo({ ...campo, [name]: checked });
   };
 
   const editar = (tipo, info, id) => {
@@ -96,7 +96,7 @@ const Nomenclador = () => {
 
   const cancelar = () => {
     setType('');
-    setCampo({ enfermedad: '', medicamento: '', obrasocial: '', isChecked: 0, idEditado: '' });
+    setCampo({ enfermedad: '', medicamento: '', obrasocial: '', isChecked: false, idEditado: '' });
   };
 
   const guardar = async (tipo) => {

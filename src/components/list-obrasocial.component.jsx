@@ -193,48 +193,48 @@ const ListaObraSocial = (props) => {
       <div className="row">
         <div className="col-12 col-md-12 col-lg-12 col-xl-12">
           <table className="table table-bordered table-hover shadow table-striped">
-              <thead>
-                <tr>
-                  <th scope="col">Obra Social</th>
-                  <th scope="col">Tipo</th>
-                  <th scope="col">Acción</th>
-                </tr>
-              </thead>
-              <tbody className={styles.tableBodyMiddle}>
-                {osociales &&
-                  osociales
-                    .filter((osocial) => osocial.borrado === false)
-                    .map((osocial) => (
-                      <tr key={osocial.idos}>
-                        <td>{osocial.idobrasocial.nombre}</td>
-                        <td>{utils.convertirTipo(osocial.idobrasocial.esestatal)}</td>
-                        <td>
-                          <button
-                            type="button"
-                            className={'btn btn-verde ' + styles.rowActionButton}
-                            onClick={() => editar(osocial.idobrasocial.idobrasocial, osocial.idos)}
-                          >
-                            <PencilIcon />
-                          </button>
+            <thead>
+              <tr>
+                <th scope="col">Obra Social</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Acción</th>
+              </tr>
+            </thead>
+            <tbody className={styles.tableBodyMiddle}>
+              {osociales &&
+                osociales
+                  .filter((osocial) => osocial.borrado === false)
+                  .map((osocial) => (
+                    <tr key={osocial.idos}>
+                      <td>{osocial.idobrasocial.nombre}</td>
+                      <td>{utils.convertirTipo(osocial.idobrasocial.esestatal)}</td>
+                      <td>
+                        <button
+                          type="button"
+                          className={'btn btn-verde ' + styles.rowActionButton}
+                          onClick={() => editar(osocial.idobrasocial.idobrasocial, osocial.idos)}
+                        >
+                          <PencilIcon />
+                        </button>
 
-                          <button
-                            type="button"
-                            className="btn btn-rojo"
-                            onClick={() =>
-                              utils.notificacionEliminar(
-                                { idobrasocial: osocial.idobrasocial.idobrasocial },
-                                osocial.idos,
-                                eliminar
-                              )
-                            }
-                          >
-                            <TrashIcon />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-              </tbody>
-            </table>
+                        <button
+                          type="button"
+                          className="btn btn-rojo"
+                          onClick={() =>
+                            utils.notificacionEliminar(
+                              { idobrasocial: osocial.idobrasocial.idobrasocial },
+                              osocial.idos,
+                              eliminar
+                            )
+                          }
+                        >
+                          <TrashIcon />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+            </tbody>
+          </table>
           {loading && <LoadingSpinner />}
           {loadError && (
             <ErrorFallbackInline
