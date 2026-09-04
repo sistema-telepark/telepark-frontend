@@ -192,15 +192,13 @@ const AdminUsuarios = () => {
         };
       }
 
-      userRepository
-        .updateUser(idUsuario, data)
-        .then((response) => {
-          if (response && response.success) {
-            notificacionExito();
-            clear();
-            getUsers();
-          }
-        });
+      userRepository.updateUser(idUsuario, data).then((response) => {
+        if (response && response.success) {
+          notificacionExito();
+          clear();
+          getUsers();
+        }
+      });
     }
   };
 
@@ -218,15 +216,13 @@ const AdminUsuarios = () => {
         is_active: campo.isActive === 'true' ? true : false,
       };
 
-      userRepository
-        .createUser(data)
-        .then((response) => {
-          if (response && response.success) {
-            notificacionExito();
-            clear();
-            getUsers();
-          }
-        });
+      userRepository.createUser(data).then((response) => {
+        if (response && response.success) {
+          notificacionExito();
+          clear();
+          getUsers();
+        }
+      });
     }
   };
 

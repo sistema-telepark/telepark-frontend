@@ -15,7 +15,7 @@ const TypeEvents = () => {
   const [form, setForm] = useState({
     idtipoevento: 0,
     nombre: '',
-    desactivataller: 0,
+    desactivataller: false,
   });
   const [modalInsert, setModalInsert] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
@@ -100,7 +100,7 @@ const TypeEvents = () => {
         modifidedEvent = {
           id: data.idtipoevento,
           nombre: data.nombre,
-          desactivataller: data.desactivataller === true ? 1 : 0,
+          desactivataller: data.desactivataller,
           borrado: false,
         };
         return modifidedEvent;
@@ -123,7 +123,7 @@ const TypeEvents = () => {
     let data = {};
     data = {
       nombre: form.nombre,
-      desactivataller: form.desactivataller === true ? 1 : 0,
+      desactivataller: form.desactivataller,
       borrado: false,
     };
     eventRespository.createTypeEvent(data).then((response) => {
@@ -146,7 +146,7 @@ const TypeEvents = () => {
   };
 
   const clear = () => {
-    setForm({ idtipoevento: 0, nombre: '', desactivataller: 0 });
+    setForm({ idtipoevento: 0, nombre: '', desactivataller: false });
   };
 
   const notificacionExito = () => {
@@ -197,7 +197,7 @@ const TypeEvents = () => {
                       <input
                         disabled={true}
                         type="checkbox"
-                        checked={element.desactivataller === 1 ? true : false}
+                        checked={element.desactivataller}
                         className="form-check-input"
                       />
                     </td>
@@ -325,7 +325,7 @@ const TypeEvents = () => {
                 id="desactivataller"
                 className="form-check-input"
                 onChange={handleChange}
-                defaultChecked={form.desactivataller === 1 ? true : false}
+                defaultChecked={form.desactivataller}
               />
             </Form.Group>
           </Form>

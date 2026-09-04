@@ -151,108 +151,108 @@ const ListaPaciente = (props) => {
         <div className="row">
           <div className="col-12 col-md-12 col-lg-12 col-xl-12 text-center">
             <table className="table table-bordered table-hover shadow table-striped">
-                <thead>
-                  <tr>
-                    <th scope="col">Nombre completo</th>
-                    <th scope="col">Acción</th>
-                  </tr>
-                </thead>
-                <tbody className={styles.tableBodyMiddle}>
-                  {pacientes &&
-                    pacientes
-                      .filter(
-                        (paciente) =>
-                          paciente.borrado !== true &&
-                          (paciente.nombre.toLowerCase().includes(buscar) ||
-                            paciente.apellido.toLowerCase().includes(buscar) ||
-                            paciente.nombre.toUpperCase().includes(buscar) ||
-                            paciente.apellido.toUpperCase().includes(buscar))
-                      )
-                      .map((paciente) => (
-                        <tr key={paciente.idpersona ?? paciente.id}>
-                          <td>
-                            {paciente.nombre} {paciente.apellido}
-                          </td>
-                          <td>
-                            <Link
-                              to="/ficha"
-                              onClick={() =>
-                                verSeccion(paciente.idpersona, paciente.nombre, paciente.apellido)
-                              }
+              <thead>
+                <tr>
+                  <th scope="col">Nombre completo</th>
+                  <th scope="col">Acción</th>
+                </tr>
+              </thead>
+              <tbody className={styles.tableBodyMiddle}>
+                {pacientes &&
+                  pacientes
+                    .filter(
+                      (paciente) =>
+                        paciente.borrado !== true &&
+                        (paciente.nombre.toLowerCase().includes(buscar) ||
+                          paciente.apellido.toLowerCase().includes(buscar) ||
+                          paciente.nombre.toUpperCase().includes(buscar) ||
+                          paciente.apellido.toUpperCase().includes(buscar))
+                    )
+                    .map((paciente) => (
+                      <tr key={paciente.idpersona ?? paciente.id}>
+                        <td>
+                          {paciente.nombre} {paciente.apellido}
+                        </td>
+                        <td>
+                          <Link
+                            to="/ficha"
+                            onClick={() =>
+                              verSeccion(paciente.idpersona, paciente.nombre, paciente.apellido)
+                            }
+                          >
+                            <button
+                              type="button"
+                              title="Ver Ficha Médica"
+                              className={'btn ' + styles.actionButtonVerde}
                             >
-                              <button
-                                type="button"
-                                title="Ver Ficha Médica"
-                                className={'btn ' + styles.actionButtonVerde}
-                              >
-                                <EyeIcon />
-                              </button>
-                            </Link>
+                              <EyeIcon />
+                            </button>
+                          </Link>
 
-                            <Link
-                              to="/list-diagnostico"
-                              onClick={() =>
-                                verSeccion(paciente.idpersona, paciente.nombre, paciente.apellido)
-                              }
+                          <Link
+                            to="/list-diagnostico"
+                            onClick={() =>
+                              verSeccion(paciente.idpersona, paciente.nombre, paciente.apellido)
+                            }
+                          >
+                            <button
+                              type="button"
+                              title="Ver Diagnósticos"
+                              className={'btn ' + styles.actionButtonNaranja}
                             >
-                              <button
-                                type="button"
-                                title="Ver Diagnósticos"
-                                className={'btn ' + styles.actionButtonNaranja}
-                              >
-                                <ClipboardCheckIcon />
-                              </button>
-                            </Link>
+                              <ClipboardCheckIcon />
+                            </button>
+                          </Link>
 
-                            <Link
-                              to="/list-evolucion"
-                              onClick={() =>
-                                verSeccion(paciente.idpersona, paciente.nombre, paciente.apellido)
-                              }
+                          <Link
+                            to="/list-evolucion"
+                            onClick={() =>
+                              verSeccion(paciente.idpersona, paciente.nombre, paciente.apellido)
+                            }
+                          >
+                            <button
+                              type="button"
+                              title="Ver Evolución"
+                              className={'btn ' + styles.actionButtonRojo}
                             >
-                              <button
-                                type="button"
-                                title="Ver Evolución"
-                                className={'btn ' + styles.actionButtonRojo}
-                              >
-                                <ClipboardDataIcon />
-                              </button>
-                            </Link>
+                              <ClipboardDataIcon />
+                            </button>
+                          </Link>
 
-                            <Link
-                              to="/list-obrasocial"
-                              onClick={() =>
-                                verSeccion(paciente.idpersona, paciente.nombre, paciente.apellido)
-                              }
+                          <Link
+                            to="/list-obrasocial"
+                            onClick={() =>
+                              verSeccion(paciente.idpersona, paciente.nombre, paciente.apellido)
+                            }
+                          >
+                            <button
+                              type="button"
+                              title="Ver Obra Social"
+                              className={'btn ' + styles.actionButtonVioleta}
                             >
-                              <button
-                                type="button"
-                                title="Ver Obra Social"
-                                className={'btn ' + styles.actionButtonVioleta}
-                              >
-                                <JournalPlusIcon />
-                              </button>
-                            </Link>
+                              <JournalPlusIcon />
+                            </button>
+                          </Link>
 
-                            <Link
-                              to="/list-indicacion"
-                              onClick={() =>
-                                verSeccion(paciente.idpersona, paciente.nombre, paciente.apellido)
-                              }
+                          <Link
+                            to="/list-indicacion"
+                            onClick={() =>
+                              verSeccion(paciente.idpersona, paciente.nombre, paciente.apellido)
+                            }
+                          >
+                            <button
+                              type="button"
+                              title="Ver Indicaciones Médicas"
+                              className={'btn ' + styles.actionButtonAzul}
                             >
-                              <button
-                                type="button"
-                                title="Ver Indicaciones Médicas"
-                                className={'btn ' + styles.actionButtonAzul}
-                              >
-                                <JournalTextIcon />
-                              </button>
-                            </Link>
-                          </td>
-                        </tr>
-                      ))}
-                </tbody>
-              </table>
+                              <JournalTextIcon />
+                            </button>
+                          </Link>
+                        </td>
+                      </tr>
+                    ))}
+              </tbody>
+            </table>
             {loading && <LoadingSpinner />}
             {loadError && (
               <div className="text-start">

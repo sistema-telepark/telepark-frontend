@@ -136,7 +136,7 @@ const Encuentro = () => {
   const guardarNuevo = async (data) => {
     const resp = await encuentroRepository.createEncuentro({
       fecha: data.fecha,
-      virtual: data.virtual ? 1 : 0,
+      virtual: data.virtual,
       idtaller: data.idtaller,
     });
     if (resp.success) {
@@ -150,7 +150,7 @@ const Encuentro = () => {
   const guardarEdicion = async (data) => {
     const resp = await encuentroRepository.updateEncuentro(encuentroEditando.idclasetaller, {
       fecha: data.fecha,
-      virtual: data.virtual ? 1 : 0,
+      virtual: data.virtual,
       idtaller: data.idtaller,
     });
     if (resp.success) {
@@ -176,7 +176,7 @@ const Encuentro = () => {
     setEncuentroEditando(data);
     formEdit.reset({
       fecha: data.fecha,
-      virtual: data.virtual === 1,
+      virtual: data.virtual,
       idtaller: data.idtaller,
     });
     setModalEdit(true);
@@ -264,7 +264,7 @@ const Encuentro = () => {
                 <tr key={element.idclasetaller}>
                   <td>{element.idclasetaller}</td>
                   <td>{utils.convertirFormatoFecha(element.fecha)}</td>
-                  <td>{element.virtual === 1 ? 'Sí' : ''}</td>
+                  <td>{element.virtual ? 'Sí' : ''}</td>
                   <td>
                     <button
                       type="button"

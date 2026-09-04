@@ -81,7 +81,13 @@ const ListaIndicacion = () => {
     setShow(true);
     setShowNuevo(false);
     setIdEditado(idindicacion);
-    setCampo({ medicamento: medicamento, dosis: dosis, hora: hora, fecha: fecha, estado: estado });
+    setCampo({
+      medicamento: medicamento,
+      dosis: dosis,
+      hora: hora,
+      fecha: fecha,
+      estado: estado === true ? 'true' : 'false',
+    });
   };
 
   const guardar = () => {
@@ -100,7 +106,7 @@ const ListaIndicacion = () => {
     ) {
       let data = {
         cantidadmiligramos: Number(dosisMedicamento),
-        estavigente: Number(estadoMedicamento),
+        estavigente: estadoMedicamento === 'true',
         fechaprescripcion: fechaMedicamento,
         horadetoma: horaMedicamento,
         idpersonaep: Number(idEpElegido),
@@ -149,7 +155,7 @@ const ListaIndicacion = () => {
     ) {
       let data = {
         cantidadmiligramos: Number(dosisMedicamento),
-        estavigente: Number(estadoMedicamento),
+        estavigente: estadoMedicamento === 'true',
         fechaprescripcion: fechaMedicamento,
         horadetoma: horaMedicamento,
         idpersonaep: Number(idEpElegido),
@@ -177,7 +183,7 @@ const ListaIndicacion = () => {
   ) => {
     var data = {
       cantidadmiligramos: Number(cantidadmiligramos),
-      estavigente: Number(estavigente),
+      estavigente: estavigente === true,
       fechaprescripcion: fechaprescripcion,
       horadetoma: horadetoma,
       idpersonaep: Number(idEpElegido),
@@ -248,9 +254,7 @@ const ListaIndicacion = () => {
             idIndicacion
           );
           swalWithBootstrapButtons.fire('Eliminado!', 'Se ha eliminado el registro', 'success');
-        } else if (
-          result.dismiss === Swal.DismissReason.cancel
-        ) {
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
           swalWithBootstrapButtons.fire('Cancelado', 'No se eliminaron registros', 'error');
         }
       });
@@ -339,8 +343,8 @@ const ListaIndicacion = () => {
                   value={campo['estado'] || ''}
                 >
                   <option value="">Elegir</option>
-                  <option value="1">Vigente</option>
-                  <option value="0">Caducado</option>
+                  <option value="true">Vigente</option>
+                  <option value="false">Caducado</option>
                 </select>
               </div>
               <div className={'mb-4 col-12 col-md-6 col-lg-4 col-xl-4 ' + styles.formActions}>
@@ -426,8 +430,8 @@ const ListaIndicacion = () => {
                   value={campo['estado']}
                 >
                   <option value="">Elegir</option>
-                  <option value="1">Vigente</option>
-                  <option value="0">Caducado</option>
+                  <option value="true">Vigente</option>
+                  <option value="false">Caducado</option>
                 </select>
               </div>
               <div className={'mb-4 col-12 col-md-6 col-lg-4 col-xl-4 ' + styles.formActions}>
@@ -460,64 +464,64 @@ const ListaIndicacion = () => {
               }
             >
               <thead>
-                  <tr>
-                    <th scope="col">Nombre de Medicamento</th>
-                    <th scope="col">Dosis en mg</th>
-                    <th scope="col">Hora de Toma</th>
-                    <th scope="col">Fecha de Prescripción</th>
-                    <th scope="col">Estado</th>
-                    <th scope="col">Acción</th>
-                  </tr>
-                </thead>
-                <tbody className={styles.tableBodyMiddle}>
-                  {indicaciones &&
-                    indicaciones
-                      .filter((indicacion) => indicacion.borrado === false)
-                      .map((indicacion) => (
-                        <tr key={indicacion.idindicacion}>
-                          <td>{indicacion.idmedicamento.nombre}</td>
-                          <td>{indicacion.cantidadmiligramos} mg</td>
-                          <td>Cada {utils.convertirFormatoHora(indicacion.horadetoma)} hs</td>
-                          <td>{utils.convertirFormatoFecha(indicacion.fechaprescripcion)}</td>
-                          <td>{utils.convertirEstado(indicacion.estavigente)}</td>
-                          <td>
-                            <button
-                              type="button"
-                              className={'btn btn-verde ' + styles.rowActionButton}
-                              onClick={() =>
-                                editar(
-                                  indicacion.cantidadmiligramos,
-                                  indicacion.estavigente,
-                                  indicacion.fechaprescripcion,
-                                  indicacion.horadetoma,
-                                  indicacion.idmedicamento.idmedicamento,
-                                  indicacion.idindicacion
-                                )
-                              }
-                            >
-                              <PencilIcon />
-                            </button>
-                            <button
-                              type="button"
-                              className="btn btn-rojo"
-                              onClick={() =>
-                                notificacionEliminar(
-                                  indicacion.cantidadmiligramos,
-                                  indicacion.estavigente,
-                                  indicacion.fechaprescripcion,
-                                  indicacion.horadetoma,
-                                  indicacion.idmedicamento.idmedicamento,
-                                  indicacion.idindicacion
-                                )
-                              }
-                            >
-                              <TrashIcon />
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                </tbody>
-              </table>
+                <tr>
+                  <th scope="col">Nombre de Medicamento</th>
+                  <th scope="col">Dosis en mg</th>
+                  <th scope="col">Hora de Toma</th>
+                  <th scope="col">Fecha de Prescripción</th>
+                  <th scope="col">Estado</th>
+                  <th scope="col">Acción</th>
+                </tr>
+              </thead>
+              <tbody className={styles.tableBodyMiddle}>
+                {indicaciones &&
+                  indicaciones
+                    .filter((indicacion) => indicacion.borrado === false)
+                    .map((indicacion) => (
+                      <tr key={indicacion.idindicacion}>
+                        <td>{indicacion.idmedicamento.nombre}</td>
+                        <td>{indicacion.cantidadmiligramos} mg</td>
+                        <td>Cada {utils.convertirFormatoHora(indicacion.horadetoma)} hs</td>
+                        <td>{utils.convertirFormatoFecha(indicacion.fechaprescripcion)}</td>
+                        <td>{utils.convertirEstado(indicacion.estavigente)}</td>
+                        <td>
+                          <button
+                            type="button"
+                            className={'btn btn-verde ' + styles.rowActionButton}
+                            onClick={() =>
+                              editar(
+                                indicacion.cantidadmiligramos,
+                                indicacion.estavigente,
+                                indicacion.fechaprescripcion,
+                                indicacion.horadetoma,
+                                indicacion.idmedicamento.idmedicamento,
+                                indicacion.idindicacion
+                              )
+                            }
+                          >
+                            <PencilIcon />
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-rojo"
+                            onClick={() =>
+                              notificacionEliminar(
+                                indicacion.cantidadmiligramos,
+                                indicacion.estavigente,
+                                indicacion.fechaprescripcion,
+                                indicacion.horadetoma,
+                                indicacion.idmedicamento.idmedicamento,
+                                indicacion.idindicacion
+                              )
+                            }
+                          >
+                            <TrashIcon />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+              </tbody>
+            </table>
             {loading && <LoadingSpinner />}
             {loadError && (
               <ErrorFallbackInline
