@@ -90,7 +90,7 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
       </div>
 
       <div className="row">
-        <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-3">
+        <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-4">
           <label className="col-form-label">Provincia</label>
           <select
             type="text"
@@ -114,7 +114,7 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
             <small className="field-error">{errors['provincia' + tipo].message}</small>
           )}
         </div>
-        <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-3">
+        <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-4">
           <label className="col-form-label">Departamento</label>
           <select
             type="text"
@@ -139,7 +139,7 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
             <small className="field-error">{errors['departamento' + tipo].message}</small>
           )}
         </div>
-        <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-3">
+        <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-4">
           <label className="col-form-label">Localidad</label>
           <select
             className="form-select"
@@ -162,7 +162,9 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
             <small className="field-error">{errors['localidad' + tipo].message}</small>
           )}
         </div>
-        <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-3">
+      </div>
+      <div className="row justify-content-center">
+        <div className="mt-2 col-12 col-md-6">
           <label className="col-form-label">Calle</label>
           <input
             type="text"
@@ -179,9 +181,7 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
             <small className="field-error">{errors['calle' + tipo].message}</small>
           )}
         </div>
-      </div>
-      <div className="row">
-        <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-3">
+        <div className="mt-2 col-12 col-md-6">
           <label className="col-form-label">Número</label>
           <input
             type="tel"
@@ -202,24 +202,9 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
             <small className="field-error">{errors['numero' + tipo].message}</small>
           )}
         </div>
-        <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-3">
-          <label className="col-form-label">Depto</label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Departamento"
-            {...register('deptoEdificio' + tipo, {
-              pattern: {
-                value: /^[a-zA-Z0-9]+$/g,
-                message: 'El campo debe contener solo letras y números',
-              },
-            })}
-          />
-          {errors['deptoEdificio' + tipo] && (
-            <small className="field-error">{errors['deptoEdificio' + tipo].message}</small>
-          )}
-        </div>
-        <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-3">
+      </div>
+      <div className="row justify-content-center">
+        <div className="mt-2 col-12 col-md-6">
           <label className="col-form-label">Piso</label>
           <input
             type="tel"
@@ -234,6 +219,23 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
           />
           {errors['piso' + tipo] && (
             <small className="field-error">{errors['piso' + tipo].message}</small>
+          )}
+        </div>
+        <div className="mt-2 col-12 col-md-6">
+          <label className="col-form-label">Depto</label>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Departamento"
+            {...register('deptoEdificio' + tipo, {
+              pattern: {
+                value: /^[a-zA-Z0-9]+$/g,
+                message: 'El campo debe contener solo letras y números',
+              },
+            })}
+          />
+          {errors['deptoEdificio' + tipo] && (
+            <small className="field-error">{errors['deptoEdificio' + tipo].message}</small>
           )}
         </div>
       </div>

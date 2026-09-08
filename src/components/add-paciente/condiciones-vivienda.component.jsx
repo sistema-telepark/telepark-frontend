@@ -5,7 +5,7 @@ import styles from '../../styles/condiciones-vivienda.module.css';
 const CondicionesVivienda = ({ register }) => {
   return (
     <div className="row mt-3 justify-content-center">
-      <div className="col-12 col-md-12 col-lg-4 col-xl-3">
+      <div className="col-12 col-md-12 col-lg-4 col-xl-4">
         <label>
           <input
             className={'form-check-input ' + styles.checkboxMargin}
@@ -16,7 +16,7 @@ const CondicionesVivienda = ({ register }) => {
         </label>
       </div>
 
-      <div className="col-12 col-md-12 col-lg-4 col-xl-3">
+      <div className="col-12 col-md-12 col-lg-4 col-xl-4">
         <label>
           <input
             className={'form-check-input ' + styles.checkboxMargin}
@@ -27,7 +27,7 @@ const CondicionesVivienda = ({ register }) => {
         </label>
       </div>
 
-      <div className="col-12 col-md-12 col-lg-4 col-xl-3">
+      <div className="col-12 col-md-12 col-lg-4 col-xl-4">
         <label className={styles.checkLabel}>
           <input
             className={'form-check-input ' + styles.checkboxMargin}

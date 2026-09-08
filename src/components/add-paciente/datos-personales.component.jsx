@@ -13,7 +13,7 @@ const DatosPersonales = ({ register, errors, tipo }) => {
       </div>
 
       <div className="row">
-        <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-3">
+        <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-4">
           <label className="col-form-label">Nombre</label>
           <input
             type="text"
@@ -34,7 +34,7 @@ const DatosPersonales = ({ register, errors, tipo }) => {
             <small className="field-error">{errors['nombre' + tipo].message}</small>
           )}
         </div>
-        <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-3">
+        <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-4">
           <label className="col-form-label">Apellido</label>
           <input
             type="text"
@@ -55,7 +55,7 @@ const DatosPersonales = ({ register, errors, tipo }) => {
             <small className="field-error">{errors['apellido' + tipo].message}</small>
           )}
         </div>
-        <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-3">
+        <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-4">
           <label className="col-form-label">Sexo</label>
           <select
             type="text"
@@ -76,12 +76,13 @@ const DatosPersonales = ({ register, errors, tipo }) => {
             <small className="field-error">{errors['sexo' + tipo].message}</small>
           )}
         </div>
-        <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-3">
-          <label className="col-form-label">Fecha de Nacimiento</label>
+      </div>
+      <div className="row justify-content-center">
+        <div className="mt-2 col-12 col-md-6">
+          <label className="col-form-label">F. de Nacimiento</label>
           <input
             type="date"
             className="form-control"
-            placeholder="Fecha de Nacimiento"
             max={utils.fechaActual()}
             {...register('nacimiento' + tipo, {
               required: {
@@ -94,9 +95,7 @@ const DatosPersonales = ({ register, errors, tipo }) => {
             <small className="field-error">{errors['nacimiento' + tipo].message}</small>
           )}
         </div>
-      </div>
-      <div className="row">
-        <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-3">
+        <div className="mt-2 col-12 col-md-6">
           <label className="col-form-label">Teléfono</label>
           <input
             type="tel"
