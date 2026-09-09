@@ -66,7 +66,11 @@ instance.interceptors.response.use(
   },
   async (err) => {
     const originalConfig = err.config;
-    if (originalConfig.url !== '/auth/login' && err.response) {
+    if (
+      originalConfig.url !== '/auth/login' &&
+      originalConfig.url !== '/auth/refresh' &&
+      err.response
+    ) {
       // Access Token was expired
       if (err.response.status === 401 && !originalConfig._retry) {
         originalConfig._retry = true;
@@ -78,6 +82,7 @@ instance.interceptors.response.use(
           TokenService.updateLocalAccessToken(accessToken);
           return instance(originalConfig);
         } catch (_error) {
+          TokenService.removeUser();
           return Promise.reject(_error);
         }
       }
