@@ -342,10 +342,8 @@ const AdminUsuarios = () => {
       </form>
 
       <Modal show={showNuevo}>
-        <Modal.Header>
-          <h4>
-            Agregar Usuario
-          </h4>
+        <Modal.Header className="justify-content-center">
+          <h4 className="mb-0">Agregar Usuario</h4>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={(e) => e.preventDefault()}>
@@ -487,10 +485,8 @@ const AdminUsuarios = () => {
       </Modal>
 
       <Modal show={show}>
-        <Modal.Header>
-          <h4>
-            Editar Usuario
-          </h4>
+        <Modal.Header className="justify-content-center">
+          <h4 className="mb-0">Editar Usuario</h4>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={(e) => e.preventDefault()}>
@@ -627,8 +623,8 @@ const AdminUsuarios = () => {
       </Modal>
 
       <Modal show={!!usuarioAEliminar} onHide={() => setUsuarioAEliminar(null)}>
-        <Modal.Header>
-          <h4>Eliminar Usuario</h4>
+        <Modal.Header className="justify-content-center">
+          <h4 className="mb-0">Eliminar Usuario</h4>
         </Modal.Header>
         <Modal.Body>
           <p>

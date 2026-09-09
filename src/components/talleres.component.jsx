@@ -248,10 +248,8 @@ const Talleres = () => {
       </Container>
 
       <Modal show={modalInsert}>
-        <Modal.Header>
-          <div>
-            <h2>Ingresar nuevo taller</h2>
-          </div>
+        <Modal.Header className="justify-content-center">
+          <h4 className="mb-0">Ingresar nuevo taller</h4>
         </Modal.Header>
         <Modal.Body>
           <div className="row">
@@ -300,10 +298,8 @@ const Talleres = () => {
       </Modal>
 
       <Modal show={modalEdit}>
-        <Modal.Header>
-          <div>
-            <h2>Editar taller</h2>
-          </div>
+        <Modal.Header className="justify-content-center">
+          <h4 className="mb-0">Editar taller</h4>
         </Modal.Header>
         <Modal.Body>
           <div className="row">
@@ -368,7 +364,7 @@ const Talleres = () => {
       <Modal show={modalInsertAct}>
         <Modal.Header>
           <div>
-            <h3>Actividades del taller:</h3>
+            <h5>Actividades del taller:</h5>
             <label className="control-label">
               {tallerSeleccionado ? tallerSeleccionado.tipotaller : ''}{' '}
               <h6>Código: {tallerSeleccionado ? tallerSeleccionado.idtaller : ''} </h6>

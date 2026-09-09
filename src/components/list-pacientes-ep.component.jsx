@@ -269,7 +269,7 @@ const ListaPaciente = (props) => {
 
       <Modal show={modalInsert} onExit={handleModalInsertClosed} restoreFocus={false}>
         <Modal.Header className="justify-content-center">
-          <h2 className="mb-0">Agregar persona con EP</h2>
+          <h4 className="mb-0">Agregar persona con EP</h4>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit(customSubmit)}>
@@ -287,7 +287,7 @@ const ListaPaciente = (props) => {
             <br />
             <div className="row mt-4">
               <div className="col-12 col-md-12 col-lg-12 col-xl-12">
-                <h3>Otros Datos</h3>
+                <h5>Otros Datos</h5>
                 <hr />
               </div>
             </div>
@@ -380,7 +380,7 @@ const ListaPaciente = (props) => {
             </div>
             <div className={'row ' + addPacienteStyles.referenteSection}>
               <div className="col-12 col-md-12 col-lg-12 col-xl-12">
-                <h2 className="text-center">Referente</h2>
+                <h4 className="text-center">Referente</h4>
               </div>
             </div>
             <br />

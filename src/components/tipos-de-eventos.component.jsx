@@ -234,10 +234,8 @@ const TypeEvents = () => {
       )}
 
       <Modal show={modalInsert}>
-        <Modal.Header>
-          <div>
-            <h2>Nuevo tipo de evento</h2>
-          </div>
+        <Modal.Header className="justify-content-center">
+          <h4 className="mb-0">Nuevo tipo de evento</h4>
         </Modal.Header>
         <Modal.Body>
           <Form.Group className="mb-0">
@@ -281,10 +279,8 @@ const TypeEvents = () => {
       </Modal>
 
       <Modal show={modalEdit}>
-        <Modal.Header>
-          <div>
-            <h2>Editar tipo de evento</h2>
-          </div>
+        <Modal.Header className="justify-content-center">
+          <h4 className="mb-0">Editar tipo de evento</h4>
         </Modal.Header>
         <Modal.Body>
           <Form>

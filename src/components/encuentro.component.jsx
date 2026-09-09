@@ -310,10 +310,8 @@ const Encuentro = () => {
       )}
 
       <Modal show={modalInsert}>
-        <Modal.Header>
-          <div>
-            <h2>Nuevo Encuentro</h2>
-          </div>
+        <Modal.Header className="justify-content-center">
+          <h4 className="mb-0">Nuevo Encuentro</h4>
         </Modal.Header>
         <Modal.Body>
           <div className="row">
@@ -396,10 +394,8 @@ const Encuentro = () => {
       </Modal>
 
       <Modal show={modalEdit}>
-        <Modal.Header>
-          <div>
-            <h2>Editar encuentro</h2>
-          </div>
+        <Modal.Header className="justify-content-center">
+          <h4 className="mb-0">Editar encuentro</h4>
         </Modal.Header>
         <Modal.Body>
           <div className="row">
@@ -495,7 +491,7 @@ const Encuentro = () => {
       <Modal show={modalInsertAct}>
         <Modal.Header>
           <div>
-            <h3>Actividades del encuentro:</h3>
+            <h5>Actividades del encuentro:</h5>
             <label className="control-label">
               <div>
                 {encuentroSeleccionado
