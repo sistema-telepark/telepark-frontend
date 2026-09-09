@@ -73,12 +73,21 @@
 /* El img del toggle (logo de 150px por App.css) no debe ocupar layout en
    desktop cerrado: el botón queda de 35px y centrado en el sidebar de 50px. */
 .sidebar .logo-details .menu-toggle img {
-  display: none;
+  visibility: hidden;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
-/* RF-04: en desktop abierto el logo vuelve a ser visible junto a la hamburguesa. */
+/* RF-04: en desktop abierto el logo vuelve a ser visible junto a la hamburguesa.
+   T-02.2: fade suave que arranca cuando el sidebar termina de abrirse (0.5s de delay). */
 .sidebar.open .logo-details .menu-toggle img {
-  display: inline-block;
+  visibility: visible;
+  opacity: 1;
+  width: 150px;
+  height: auto;
+  transition: visibility 0.5s, opacity 0.5s;
+  transition-delay: 0.2s;
 }
 
 .sidebar .nav-list {
@@ -272,10 +281,14 @@
   }
 
   /* RF-02: en móvil el toggle es el logo (el svg queda oculto arriba). Sin esta
-     regla, el display:none global del img (mayor especificidad que
+     regla, el ocultamiento global del img (mayor especificidad que
      .links_name) lo dejaría invisible. */
   .sidebar .logo-details .menu-toggle img {
-    display: inline-block;
+    visibility: visible;
+    opacity: 1;
+    width: 150px;
+    height: auto;
+    transition: none;
   }
 
   /* T-02.1: Área de toque mínima 48px para logout en móvil (WCAG 2.5.5) */
