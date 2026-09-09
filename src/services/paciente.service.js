@@ -22,7 +22,7 @@ const pacientes = {
       ocupacionactual: data.ocupacionAEP,
       direccion: {
         calle: data.calleEP,
-        departamento: data.departamentoEP || null,
+        departamento: data.deptoEdificioEP || null,
         numero: valorNumerico(data.numeroEP),
         piso: valorNumerico(data.pisoEP),
         idlocalidad: valorNumerico(data.localidadEP),
@@ -35,7 +35,7 @@ const pacientes = {
         fechanacimiento: data.nacimientoR,
         direccion: {
           calle: data.calleR,
-          departamento: data.departamentoR || null,
+          departamento: data.deptoEdificioR || null,
           numero: valorNumerico(data.numeroR),
           piso: valorNumerico(data.pisoR),
           idlocalidad: valorNumerico(data.localidadR),

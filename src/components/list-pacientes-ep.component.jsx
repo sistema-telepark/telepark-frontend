@@ -291,8 +291,8 @@ const ListaPaciente = (props) => {
                 <hr />
               </div>
             </div>
-            <div className="row">
-              <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-3">
+            <div className="row justify-content-center">
+              <div className="mt-2 col-12 col-md-6">
                 <label className="col-form-label">Maxima Escolaridad</label>
                 <select
                   type="text"
@@ -315,7 +315,7 @@ const ListaPaciente = (props) => {
                   <small className="field-error">{errors['escolaridadEP'].message}</small>
                 )}
               </div>
-              <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-3">
+              <div className="mt-2 col-12 col-md-6">
                 <label className="col-form-label">Nivel Completado</label>
                 <select
                   type="text"
@@ -335,7 +335,7 @@ const ListaPaciente = (props) => {
                   <small className="field-error">{errors['nivelCompletoEP'].message}</small>
                 )}
               </div>
-              <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-3">
+              <div className="mt-2 col-12 col-md-6">
                 <label className="col-form-label">Ocupacion Previa</label>
                 <select
                   type="text"
@@ -356,7 +356,7 @@ const ListaPaciente = (props) => {
                   <small className="field-error">{errors['ocupacionPEP'].message}</small>
                 )}
               </div>
-              <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-3">
+              <div className="mt-2 col-12 col-md-6">
                 <label className="col-form-label">Ocupacion Actual</label>
                 <select
                   type="text"

@@ -1,44 +1,44 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { municipioRepository } from '../../services/municipio.service';
+import { departamentoRepository } from '../../services/departamento.service';
 import { localidadRepository } from '../../services/localidad.service';
 
 const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) => {
-  const [municipios, setMunicipios] = useState([]);
+  const [departamentos, setDepartamentos] = useState([]);
   const [localidades, setLocalidades] = useState([]);
-  const [cargandoMunicipios, setCargandoMunicipios] = useState(false);
+  const [cargandoDepartamentos, setCargandoDepartamentos] = useState(false);
   const [cargandoLocalidades, setCargandoLocalidades] = useState(false);
   const provinciaSeleccionada = watch('provincia' + tipo);
-  const municipioSeleccionado = watch('municipio' + tipo);
+  const departamentoSeleccionado = watch('departamento' + tipo);
 
   useEffect(() => {
     let activo = true;
 
     if (!provinciaSeleccionada) {
-      setMunicipios([]);
-      setCargandoMunicipios(false);
+      setDepartamentos([]);
+      setCargandoDepartamentos(false);
       return undefined;
     }
 
-    setCargandoMunicipios(true);
-    setValue('municipio' + tipo, '');
-    const cargarMunicipios = async () => {
+    setCargandoDepartamentos(true);
+    setValue('departamento' + tipo, '');
+    const cargarDepartamentos = async () => {
       try {
-        const response = await municipioRepository.getByProvincia(provinciaSeleccionada);
+        const response = await departamentoRepository.getByProvincia(provinciaSeleccionada);
         if (activo) {
           if (response && response.data) {
-            setMunicipios(response.data);
+            setDepartamentos(response.data);
           } else {
-            setMunicipios([]);
+            setDepartamentos([]);
           }
         }
       } finally {
         if (activo) {
-          setCargandoMunicipios(false);
+          setCargandoDepartamentos(false);
         }
       }
     };
-    cargarMunicipios();
+    cargarDepartamentos();
 
     return () => {
       activo = false;
@@ -50,7 +50,7 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
 
     setValue('localidad' + tipo, '');
 
-    if (!municipioSeleccionado) {
+    if (!departamentoSeleccionado) {
       setLocalidades([]);
       setCargandoLocalidades(false);
       return undefined;
@@ -59,7 +59,7 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
     setCargandoLocalidades(true);
     const cargarLocalidades = async () => {
       try {
-        const response = await localidadRepository.getByMunicipio(municipioSeleccionado);
+        const response = await localidadRepository.getByDepartamento(departamentoSeleccionado);
         if (activo) {
           if (response && response.data) {
             setLocalidades(response.data);
@@ -78,7 +78,7 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
     return () => {
       activo = false;
     };
-  }, [municipioSeleccionado, setValue, tipo]);
+  }, [departamentoSeleccionado, setValue, tipo]);
 
   return (
     <div>
@@ -90,7 +90,7 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
       </div>
 
       <div className="row">
-        <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-3">
+        <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-4">
           <label className="col-form-label">Provincia</label>
           <select
             type="text"
@@ -114,36 +114,36 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
             <small className="field-error">{errors['provincia' + tipo].message}</small>
           )}
         </div>
-        <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-3">
-          <label className="col-form-label">Municipio</label>
+        <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-4">
+          <label className="col-form-label">Departamento</label>
           <select
             type="text"
             className="form-select"
-            disabled={!provinciaSeleccionada || cargandoMunicipios}
-            {...register('municipio' + tipo, {
+            disabled={!provinciaSeleccionada || cargandoDepartamentos}
+            {...register('departamento' + tipo, {
               required: {
                 value: true,
                 message: 'Debe seleccionar una opción',
               },
             })}
           >
-            <option value="">Municipio</option>
-            {municipios &&
-              municipios.map((municipio) => (
-                <option value={municipio.idmunicipio} key={municipio.idmunicipio}>
-                  {municipio.nombre}
+            <option value="">Departamento</option>
+            {departamentos &&
+              departamentos.map((departamento) => (
+                <option value={departamento.iddepartamento} key={departamento.iddepartamento}>
+                  {departamento.nombre}
                 </option>
               ))}
           </select>
-          {errors['municipio' + tipo] && (
-            <small className="field-error">{errors['municipio' + tipo].message}</small>
+          {errors['departamento' + tipo] && (
+            <small className="field-error">{errors['departamento' + tipo].message}</small>
           )}
         </div>
-        <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-3">
+        <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-4">
           <label className="col-form-label">Localidad</label>
           <select
             className="form-select"
-            disabled={!municipioSeleccionado || cargandoLocalidades}
+            disabled={!departamentoSeleccionado || cargandoLocalidades}
             {...register('localidad' + tipo, {
               required: {
                 value: true,
@@ -162,7 +162,9 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
             <small className="field-error">{errors['localidad' + tipo].message}</small>
           )}
         </div>
-        <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-3">
+      </div>
+      <div className="row justify-content-center">
+        <div className="mt-2 col-12 col-md-6">
           <label className="col-form-label">Calle</label>
           <input
             type="text"
@@ -179,9 +181,7 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
             <small className="field-error">{errors['calle' + tipo].message}</small>
           )}
         </div>
-      </div>
-      <div className="row">
-        <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-3">
+        <div className="mt-2 col-12 col-md-6">
           <label className="col-form-label">Número</label>
           <input
             type="tel"
@@ -202,24 +202,9 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
             <small className="field-error">{errors['numero' + tipo].message}</small>
           )}
         </div>
-        <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-3">
-          <label className="col-form-label">Departamento</label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Departamento"
-            {...register('departamento' + tipo, {
-              pattern: {
-                value: /^[a-zA-Z0-9]+$/g,
-                message: 'El campo debe contener solo letras y números',
-              },
-            })}
-          />
-          {errors['departamento' + tipo] && (
-            <small className="field-error">{errors['departamento' + tipo].message}</small>
-          )}
-        </div>
-        <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-3">
+      </div>
+      <div className="row justify-content-center">
+        <div className="mt-2 col-12 col-md-6">
           <label className="col-form-label">Piso</label>
           <input
             type="tel"
@@ -234,6 +219,23 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
           />
           {errors['piso' + tipo] && (
             <small className="field-error">{errors['piso' + tipo].message}</small>
+          )}
+        </div>
+        <div className="mt-2 col-12 col-md-6">
+          <label className="col-form-label">Depto</label>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Departamento"
+            {...register('deptoEdificio' + tipo, {
+              pattern: {
+                value: /^[a-zA-Z0-9]+$/g,
+                message: 'El campo debe contener solo letras y números',
+              },
+            })}
+          />
+          {errors['deptoEdificio' + tipo] && (
+            <small className="field-error">{errors['deptoEdificio' + tipo].message}</small>
           )}
         </div>
       </div>
