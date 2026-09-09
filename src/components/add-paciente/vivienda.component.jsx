@@ -84,7 +84,7 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
     <div>
       <div className="row mt-4">
         <div className="col-12 col-md-12 col-lg-12 col-xl-12">
-          <h3>Datos de Vivienda</h3>
+          <h5>Datos de Vivienda</h5>
           <hr />
         </div>
       </div>

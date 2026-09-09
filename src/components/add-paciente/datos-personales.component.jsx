@@ -7,7 +7,7 @@ const DatosPersonales = ({ register, errors, tipo }) => {
     <div>
       <div className="row">
         <div className="col-12 col-md-12 col-lg-12 col-xl-12">
-          <h3>Datos Personales</h3>
+          <h5>Datos Personales</h5>
           <hr />
         </div>
       </div>

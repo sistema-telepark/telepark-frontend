@@ -233,10 +233,8 @@ const AdminPersonas = () => {
       </main>
 
       <Modal show={modalEdit}>
-        <Modal.Header>
-          <div>
-            <h3>Editar Persona</h3>
-          </div>
+        <Modal.Header className="justify-content-center">
+          <h4 className="mb-0">Editar Persona</h4>
         </Modal.Header>
         <Modal.Body>
           <Form>
