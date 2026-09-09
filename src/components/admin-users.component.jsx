@@ -6,7 +6,7 @@ import { TokenService } from '../services/token.service';
 import utils from '../utils/utils';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
 import styles from '../styles/admin-users.module.css';
-import { showToast, showConfirm } from '../services/notification.service';
+import { showToast } from '../services/notification.service';
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
 import LoadingSpinner from './shared/loading-spinner';
 import { Form, Modal } from 'react-bootstrap';
@@ -24,6 +24,8 @@ const AdminUsuarios = () => {
 
   const [loadError, setLoadError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [guardando, setGuardando] = useState(false);
+  const [usuarioAEliminar, setUsuarioAEliminar] = useState(null);
 
   useEffect(() => {
     getUsers();
@@ -152,13 +154,18 @@ const AdminUsuarios = () => {
     setError('');
   };
 
-  const eliminarUsuario = async (usuario) => {
-    const ok = await showConfirm(`¿Seguro que desea eliminar al usuario: ${usuario.username}?`);
-    if (!ok) return;
+  const eliminarUsuario = (usuario) => {
+    setUsuarioAEliminar(usuario);
+  };
+
+  const confirmarEliminacion = async () => {
+    const usuario = usuarioAEliminar;
+    if (!usuario) return;
+    setUsuarioAEliminar(null);
     const resp = await userRepository.deleteUser(usuario.id);
     if (resp.success) {
       showToast('success', 'Eliminado con éxito');
-      setUsuarios(usuarios.filter((u) => u.id !== usuario.id));
+      setUsuarios((prev) => prev.filter((u) => u.id !== usuario.id));
     }
   };
 
@@ -168,62 +175,53 @@ const AdminUsuarios = () => {
       return;
     }
 
-    let data = {};
-    if (validarFormulario()) {
-      cargando();
-      if (!campo['password']) {
-        data = {
-          user: campo.username,
-          first_name: campo.firstname,
-          last_name: campo.lastname,
-          email: campo.email,
-          is_active: campo.isActive === 'true' ? true : false,
-          ...(campo.role ? { is_superuser: campo.role === 'true' } : {}),
-        };
-      } else {
-        data = {
-          user: campo.username,
-          first_name: campo.firstname,
-          last_name: campo.lastname,
-          email: campo.email,
-          password: campo.password,
-          is_active: campo.isActive === 'true' ? true : false,
-          ...(campo.role ? { is_superuser: campo.role === 'true' } : {}),
-        };
-      }
+    if (!validarFormulario()) return;
+    setGuardando(true);
+    const data = {
+      user: campo.username,
+      first_name: campo.firstname,
+      last_name: campo.lastname,
+      email: campo.email,
+      is_active: campo.isActive === 'true' ? true : false,
+      ...(campo.password ? { password: campo.password } : {}),
+      ...(campo.role ? { is_superuser: campo.role === 'true' } : {}),
+    };
 
-      userRepository.updateUser(idUsuario, data).then((response) => {
+    userRepository
+      .updateUser(idUsuario, data)
+      .then((response) => {
         if (response && response.success) {
           notificacionExito();
           clear();
           getUsers();
         }
-      });
-    }
+      })
+      .finally(() => setGuardando(false));
   };
 
   const guardarNuevo = () => {
-    let data = {};
-    if (validarFormulario()) {
-      cargando();
-      data = {
-        user: campo.username,
-        email: campo.email,
-        first_name: campo.firstname,
-        last_name: campo.lastname,
-        password: campo.password,
-        is_superuser: campo.role === 'true',
-        is_active: campo.isActive === 'true' ? true : false,
-      };
+    if (!validarFormulario()) return;
+    setGuardando(true);
+    const data = {
+      user: campo.username,
+      email: campo.email,
+      first_name: campo.firstname,
+      last_name: campo.lastname,
+      password: campo.password,
+      is_superuser: campo.role === 'true',
+      is_active: campo.isActive === 'true' ? true : false,
+    };
 
-      userRepository.createUser(data).then((response) => {
+    userRepository
+      .createUser(data)
+      .then((response) => {
         if (response && response.success) {
           notificacionExito();
           clear();
           getUsers();
         }
-      });
-    }
+      })
+      .finally(() => setGuardando(false));
   };
 
   const clear = () => {
@@ -296,17 +294,6 @@ const AdminUsuarios = () => {
     });
   };
 
-  const cargando = () => {
-    Swal.fire({
-      title: 'Espere...',
-      html: 'Procesando su solicitud.',
-      didOpen: () => {
-        Swal.showLoading();
-      },
-      willClose: () => {},
-    });
-  };
-
   // Filtra la lista de usuarios cargada en memoria; normaliza el término una
   // sola vez (case-insensitive) y busca sobre username, first_name y last_name.
   const buscar = (valor = campo.buscador) => {
@@ -357,7 +344,7 @@ const AdminUsuarios = () => {
       <Modal show={showNuevo}>
         <Modal.Header>
           <h4>
-            Agregar Usuario <span className={styles.required}>(*) Campos Requeridos</span>
+            Agregar Usuario
           </h4>
         </Modal.Header>
         <Modal.Body>
@@ -405,7 +392,9 @@ const AdminUsuarios = () => {
                 />
                 <span className={styles.required}>{error['email']}</span>
               </div>
-              <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
+            </div>
+            <div className="row justify-content-center">
+              <div className="mb-4 col-12 col-md-6">
                 <label className="col-form-label">
                   Nombre de Usuario <label className={styles.required}>*</label>
                 </label>
@@ -419,7 +408,7 @@ const AdminUsuarios = () => {
                 />
                 <span className={styles.required}>{error['username']}</span>
               </div>
-              <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
+              <div className="mb-4 col-12 col-md-6">
                 <label className="col-form-label">
                   Contraseña <label className={styles.required}>*</label>
                 </label>
@@ -435,7 +424,9 @@ const AdminUsuarios = () => {
                   {error['password']}
                 </span>
               </div>
-              <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
+            </div>
+            <div className="row justify-content-center">
+              <div className="mb-4 col-12 col-md-6">
                 <label htmlFor="role" className="col-form-label">
                   Rol <label className={styles.required}>*</label>
                 </label>
@@ -452,7 +443,7 @@ const AdminUsuarios = () => {
                 </select>
                 <span className={styles.required}>{error['role']}</span>
               </div>
-              <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
+              <div className="mb-4 col-12 col-md-6">
                 <label htmlFor="isActive" className="col-form-label">
                   Estado <label className={styles.required}>*</label>
                 </label>
@@ -477,6 +468,7 @@ const AdminUsuarios = () => {
             type="submit"
             className={'btn btn-rojo ' + styles.cancelButton}
             onClick={() => clear()}
+            disabled={guardando}
           >
             Cancelar
           </button>
@@ -484,8 +476,12 @@ const AdminUsuarios = () => {
             type="submit"
             className={'btn btn-verde ms-3 ' + styles.submitButton}
             onClick={() => guardarNuevo()}
+            disabled={guardando}
           >
-            Guardar
+            {guardando && (
+              <span className="spinner-border spinner-border-sm me-2" aria-hidden="true" />
+            )}
+            {guardando ? 'Procesando...' : 'Guardar'}
           </button>
         </Modal.Footer>
       </Modal>
@@ -493,7 +489,7 @@ const AdminUsuarios = () => {
       <Modal show={show}>
         <Modal.Header>
           <h4>
-            Editar Usuario <span className={styles.required}>(*) Campos Requeridos</span>
+            Editar Usuario
           </h4>
         </Modal.Header>
         <Modal.Body>
@@ -541,13 +537,15 @@ const AdminUsuarios = () => {
                 />
                 <span className={styles.required}>{error['email']}</span>
               </div>
-              <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
+            </div>
+            <div className="row justify-content-center">
+              <div className="mb-4 col-12 col-md-6">
                 <label className="col-form-label">
                   Nombre de Usuario <label className={styles.required}>*</label>
                 </label>
                 <input
                   type="text"
-                  disabled="true"
+                  disabled
                   className="form-control"
                   placeholder="Nombre de usuario..."
                   id="username"
@@ -555,7 +553,7 @@ const AdminUsuarios = () => {
                   value={campo['username'] || ''}
                 />
               </div>
-              <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
+              <div className="mb-4 col-12 col-md-6">
                 <label className="col-form-label">Nueva Contraseña</label>
                 <input
                   type="password"
@@ -569,7 +567,9 @@ const AdminUsuarios = () => {
                   {error['password']}
                 </span>
               </div>
-              <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
+            </div>
+            <div className="row justify-content-center">
+              <div className="mb-4 col-12 col-md-6">
                 <label htmlFor="role" className="col-form-label">
                   Rol <label className={styles.required}>*</label>
                 </label>
@@ -585,7 +585,7 @@ const AdminUsuarios = () => {
                   <option value="true">Administrador</option>
                 </select>
               </div>
-              <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
+              <div className="mb-4 col-12 col-md-6">
                 <label htmlFor="isActive" className="col-form-label">
                   Estado <label className={styles.required}>*</label>
                 </label>
@@ -608,6 +608,7 @@ const AdminUsuarios = () => {
             type="submit"
             className={'btn btn-rojo ' + styles.cancelButton}
             onClick={() => clear()}
+            disabled={guardando}
           >
             Cancelar
           </button>
@@ -615,8 +616,41 @@ const AdminUsuarios = () => {
             type="submit"
             className={'btn btn-verde ms-3 ' + styles.submitButton}
             onClick={() => guardar()}
+            disabled={guardando}
           >
-            Guardar
+            {guardando && (
+              <span className="spinner-border spinner-border-sm me-2" aria-hidden="true" />
+            )}
+            {guardando ? 'Procesando...' : 'Guardar'}
+          </button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={!!usuarioAEliminar} onHide={() => setUsuarioAEliminar(null)}>
+        <Modal.Header>
+          <h4>Eliminar Usuario</h4>
+        </Modal.Header>
+        <Modal.Body>
+          <p>
+            ¿Seguro que desea eliminar al usuario:{' '}
+            <strong>{usuarioAEliminar?.username}</strong>?
+          </p>
+          <p className="text-danger mb-0">Esta acción no se puede deshacer.</p>
+        </Modal.Body>
+        <Modal.Footer className="justify-content-center">
+          <button
+            type="button"
+            className={'btn btn-rojo ' + styles.cancelButton}
+            onClick={() => setUsuarioAEliminar(null)}
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            className={'btn btn-verde ms-3 ' + styles.submitButton}
+            onClick={confirmarEliminacion}
+          >
+            Sí, eliminar
           </button>
         </Modal.Footer>
       </Modal>
