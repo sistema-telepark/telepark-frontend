@@ -286,9 +286,9 @@ const ListaEvolucion = () => {
               <thead>
                 <tr>
                   <th scope="col">Estado Evolutivo</th>
-                  <th scope="col">Descripción</th>
+                  <th scope="col" className={styles.descriptionColumn}>Descripción</th>
                   <th scope="col">Fecha de Observación</th>
-                  <th scope="col">Acción</th>
+                  <th scope="col" className={styles.actionColumn}>Acción</th>
                 </tr>
               </thead>
               <tbody className={styles.tableBodyMiddle}>
@@ -298,9 +298,9 @@ const ListaEvolucion = () => {
                     .map((evolucion) => (
                       <tr key={evolucion.idevolucion}>
                         <td>Estado: {evolucion.escalaevolucion}</td>
-                        <td>{utils.describirEstado(evolucion.escalaevolucion)}</td>
+                        <td className={styles.descriptionColumn}>{utils.describirEstado(evolucion.escalaevolucion)}</td>
                         <td>{utils.convertirFormatoFecha(evolucion.fecha)}</td>
-                        <td>
+                        <td className={styles.actionColumn}>
                           <button
                             type="button"
                             className={'btn btn-verde ' + styles.rowActionButton}
