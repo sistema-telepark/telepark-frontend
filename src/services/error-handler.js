@@ -1,5 +1,5 @@
 import { logAsyncError } from '../components/error-boundary/logError';
-import { showToast, showModal } from './notification.service';
+import { showAlert, showToast } from './notification.service';
 
 const formatValidationErrors = (data) => {
   if (!data) return '';
@@ -81,7 +81,7 @@ export const withServiceHandler = (fn, options = {}) => {
       if (showNotification && !esLectura) {
         const severity = forceSeverity || normalized.severity;
         if (severity === 'modal') {
-          showModal('error', 'Error', normalized.message);
+          showAlert('danger', 'Error', normalized.message);
         } else {
           showToast('error', normalized.message, { timer: 4000 });
         }

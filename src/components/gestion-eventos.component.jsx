@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { eventRespository } from '../services/event.service';
-import Swal from 'sweetalert2';
+import { showToast } from '../services/notification.service';
 import { PlusIcon } from './icons/icons-shared';
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
 import LoadingSpinner from './shared/loading-spinner';
@@ -83,29 +83,11 @@ const Events = () => {
       if (response?.success) {
         setEvents(initialEvents);
         formRef.current.reset();
-        notificacionExito();
+        showToast('success', 'Se ha guardado con éxito');
       }
     });
   };
 
-  const notificacionExito = () => {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer);
-        toast.addEventListener('mouseleave', Swal.resumeTimer);
-      },
-    });
-
-    Toast.fire({
-      icon: 'success',
-      title: 'Se ha guardado con éxito',
-    });
-  };
   const validateDate = (fechaDesde, fechaHasta) => {
     if (fechaDesde !== '' && fechaHasta !== '') {
       return fechaDesde > fechaHasta;

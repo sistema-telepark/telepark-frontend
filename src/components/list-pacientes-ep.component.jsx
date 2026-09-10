@@ -267,7 +267,7 @@ const ListaPaciente = (props) => {
         </div>
       </main>
 
-      <Modal show={modalInsert} onExit={handleModalInsertClosed} restoreFocus={false}>
+      <Modal show={modalInsert} onExit={handleModalInsertClosed} restoreFocus={false} scrollable>
         <Modal.Header className="justify-content-center">
           <h4 className="mb-0">Agregar persona con EP</h4>
         </Modal.Header>

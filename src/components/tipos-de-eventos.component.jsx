@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Form, Modal } from 'react-bootstrap';
 import { eventRespository } from '../services/event.service';
-import Swal from 'sweetalert2';
+import { showConfirm, showToast } from '../services/notification.service';
 import { PencilIcon, PlusIcon, TrashIcon } from './icons/icons-shared';
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
 import LoadingSpinner from './shared/loading-spinner';
@@ -75,21 +75,18 @@ const TypeEvents = () => {
     await eventRespository.updateTypeEvent(data.idtipoevento, modifidedEvent);
   };
 
-  const handleDelete = (data) => {
-    Swal.fire({
+  const handleDelete = async (data) => {
+    const confirmado = await showConfirm({
       title: `¿Seguro que desea eliminar el tipo de evento ${data.nombre}?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Si, Eliminar el tipo de evento',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire('Eliminado con exito!', `Se elimino el evento ${data.nombre}`, 'success');
-        setTypeEvent((prev) => prev.filter((item) => item.idtipoevento !== data.idtipoevento));
-        deleteTypeEvent(data);
-      }
+      confirmLabel: 'Si, Eliminar el tipo de evento',
+      variant: 'warning',
     });
+    if (!confirmado) return;
+    showToast('success', 'Eliminado con exito!', {
+      message: `Se elimino el evento ${data.nombre}`,
+    });
+    setTypeEvent((prev) => prev.filter((item) => item.idtipoevento !== data.idtipoevento));
+    deleteTypeEvent(data);
   };
 
   const edit = (data) => {
@@ -110,7 +107,7 @@ const TypeEvents = () => {
 
     eventRespository.updateTypeEvent(data.idtipoevento, modifidedEvent).then((response) => {
       if (response?.success) {
-        notificacionExito();
+        showToast('success', 'Se ha guardado con éxito');
         clear();
         getEventAll();
       }
@@ -129,7 +126,7 @@ const TypeEvents = () => {
     eventRespository.createTypeEvent(data).then((response) => {
       if (response?.success) {
         setModalInsert(false);
-        notificacionExito();
+        showToast('success', 'Se ha guardado con éxito');
         clear();
         getEventAll();
       }
@@ -147,25 +144,6 @@ const TypeEvents = () => {
 
   const clear = () => {
     setForm({ idtipoevento: 0, nombre: '', desactivataller: false });
-  };
-
-  const notificacionExito = () => {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer);
-        toast.addEventListener('mouseleave', Swal.resumeTimer);
-      },
-    });
-
-    Toast.fire({
-      icon: 'success',
-      title: 'Se ha guardado con éxito',
-    });
   };
 
   return (

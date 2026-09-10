@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/list-pacientes-ep.css';
 import { userRepository } from '../services/users.service';
-import Swal from 'sweetalert2';
 import { TokenService } from '../services/token.service';
 import utils from '../utils/utils';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
@@ -171,7 +170,7 @@ const AdminUsuarios = () => {
 
   const guardar = () => {
     if (!idUsuario) {
-      notificacionError();
+      showToast('danger', 'Error: Hubo un problema en la carga.');
       return;
     }
 
@@ -191,7 +190,7 @@ const AdminUsuarios = () => {
       .updateUser(idUsuario, data)
       .then((response) => {
         if (response && response.success) {
-          notificacionExito();
+          showToast('success', 'Se ha guardado con éxito');
           clear();
           getUsers();
         }
@@ -216,7 +215,7 @@ const AdminUsuarios = () => {
       .createUser(data)
       .then((response) => {
         if (response && response.success) {
-          notificacionExito();
+          showToast('success', 'Se ha guardado con éxito');
           clear();
           getUsers();
         }
@@ -253,44 +252,6 @@ const AdminUsuarios = () => {
       email: '',
       role: '',
       isActive: '',
-    });
-  };
-
-  const notificacionExito = () => {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer);
-        toast.addEventListener('mouseleave', Swal.resumeTimer);
-      },
-    });
-
-    Toast.fire({
-      icon: 'success',
-      title: 'Se ha guardado con éxito',
-    });
-  };
-
-  const notificacionError = () => {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer);
-        toast.addEventListener('mouseleave', Swal.resumeTimer);
-      },
-    });
-
-    Toast.fire({
-      icon: 'error',
-      title: 'Error: Hubo un problema en la carga.',
     });
   };
 
@@ -628,8 +589,7 @@ const AdminUsuarios = () => {
         </Modal.Header>
         <Modal.Body>
           <p>
-            ¿Seguro que desea eliminar al usuario:{' '}
-            <strong>{usuarioAEliminar?.username}</strong>?
+            ¿Seguro que desea eliminar al usuario: <strong>{usuarioAEliminar?.username}</strong>?
           </p>
           <p className="text-danger mb-0">Esta acción no se puede deshacer.</p>
         </Modal.Body>

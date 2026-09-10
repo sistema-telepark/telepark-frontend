@@ -4,7 +4,7 @@ import ErrorFallbackInline from './error-boundary/error-fallback-inline.componen
 import LoadingSpinner from './shared/loading-spinner';
 import styles from '../styles/add-paciente.module.css';
 import { eventRespository } from '../services/event.service';
-import Swal from 'sweetalert2';
+import { showConfirm, showToast } from '../services/notification.service';
 import { Form, Modal } from 'react-bootstrap';
 
 const AdminPersonas = () => {
@@ -51,7 +51,7 @@ const AdminPersonas = () => {
     };
     eventRespository.updatePerson(data.idpersona, modifidedPerson).then((response) => {
       if (response?.success) {
-        notificacionExito();
+        showToast('success', 'Se ha guardado con éxito');
         clear();
         getPersonAll();
       }
@@ -83,25 +83,6 @@ const AdminPersonas = () => {
     });
   };
 
-  const notificacionExito = () => {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer);
-        toast.addEventListener('mouseleave', Swal.resumeTimer);
-      },
-    });
-
-    Toast.fire({
-      icon: 'success',
-      title: 'Se ha guardado con éxito',
-    });
-  };
-
   // El backend responde envelope DRF paginado {count,next,previous,results}
   // → normalizar a .results.
   const getPersonAll = async () => {
@@ -117,31 +98,24 @@ const AdminPersonas = () => {
     setLoading(false);
   };
 
-  const eliminar = (persona) => {
-    let arrayPersonas = arrayPerson.filter(function (e) {
-      return e.idpersona !== persona.idpersona;
-    });
-    persona.borrado = true;
-    Swal.fire({
+  const eliminar = async (persona) => {
+    const confirmado = await showConfirm({
       title: `¿Seguro que desea eliminar a  ${persona.nombre}?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: `Si, Eliminar el a ${persona.nombre}`,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire('Eliminado con exito!', `Se elimino a${persona.nombre}`, 'success');
-        eventRespository.updatePerson(persona.idpersona, persona).then((response) => {
-          if (response?.success) {
-            notificacionExito();
-            getPersonAll();
-          }
-        });
-        setArrayPerson(arrayPersonas);
-        setSearchArrayperson(arrayPerson);
+      confirmLabel: `Si, Eliminar el a ${persona.nombre}`,
+      variant: 'warning',
+    });
+    if (!confirmado) return;
+    const arrayPersonas = arrayPerson.filter((e) => e.idpersona !== persona.idpersona);
+    persona.borrado = true;
+    showToast('success', 'Eliminado con exito!', { message: `Se elimino a${persona.nombre}` });
+    eventRespository.updatePerson(persona.idpersona, persona).then((response) => {
+      if (response?.success) {
+        showToast('success', 'Se ha guardado con éxito');
+        getPersonAll();
       }
     });
+    setArrayPerson(arrayPersonas);
+    setSearchArrayperson(arrayPerson);
   };
 
   const terminoBusqueda = buscar.trim().toLowerCase();

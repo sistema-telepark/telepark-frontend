@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Swal from 'sweetalert2';
 import { Navigate, useNavigate } from 'react-router';
 import { authRepository } from '../services/auth.service';
 import { TokenService } from '../services/token.service';
+import { showAlert } from '../services/notification.service';
 import { logAsyncError } from './error-boundary/logError';
 import logoTelepark from '../images/logo2022.png';
 import styles from '../styles/login.module.css';
@@ -68,13 +68,7 @@ const Login = () => {
   };
 
   const send = () => {
-    Swal.fire({
-      position: 'center',
-      icon: 'success',
-      title: 'Acceso Permitido',
-      showConfirmButton: false,
-      timer: 1500,
-    });
+    showAlert('success', 'Acceso Permitido', undefined, { autoHideMs: 1500 });
 
     timerRef.current = setTimeout(() => {
       navigate('/home');
@@ -83,15 +77,13 @@ const Login = () => {
 
   const errorSend = (error) => {
     const esCredenciales = error?.response?.status === 401;
-    Swal.fire({
-      position: 'center',
-      icon: 'error',
-      title: 'No se permite el acceso',
-      text: esCredenciales
+    showAlert(
+      'danger',
+      'No se permite el acceso',
+      esCredenciales
         ? 'El nombre de usuario o la contraseña ingresada son incorrectos.'
-        : 'Ocurrió un error al intentar iniciar sesión. Intente nuevamente.',
-      confirmButtonText: 'OK',
-    });
+        : 'Ocurrió un error al intentar iniciar sesión. Intente nuevamente.'
+    );
 
     setCampo({
       user: '',

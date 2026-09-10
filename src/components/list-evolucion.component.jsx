@@ -1,8 +1,8 @@
 import React, { memo, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import Swal from 'sweetalert2';
 import { useSelector } from 'react-redux';
 import { evolucionRepository } from '../services/evolucion.service';
+import { showConfirm, showToast } from '../services/notification.service';
 import utils from '../utils/utils';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
@@ -70,7 +70,7 @@ const ListaEvolucion = () => {
       evolucionRepository.update(id, data).then((response) => {
         if (response?.success) {
           getEvoluciones();
-          notificacionGuardar();
+          showToast('success', 'Se ha guardado con éxito');
         }
       });
       setCampo({ nroEvolucion: '', fecha: '' });
@@ -107,7 +107,7 @@ const ListaEvolucion = () => {
       evolucionRepository.create(data).then((response) => {
         if (response?.success) {
           getEvoluciones();
-          notificacionGuardar();
+          showToast('success', 'Se ha guardado con éxito');
         }
       });
       setCampo({ nroEvolucion: '', fecha: '' });
@@ -130,52 +130,20 @@ const ListaEvolucion = () => {
     setShow(false);
   };
 
-  const notificacionGuardar = () => {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer);
-        toast.addEventListener('mouseleave', Swal.resumeTimer);
-      },
+  const notificacionEliminar = async (escalaevolucion, fecha, idEvolucion) => {
+    const confirmado = await showConfirm({
+      title: 'Estas seguro?',
+      message: 'No podrás revertir esto!',
+      confirmLabel: 'Si!',
+      cancelLabel: 'No',
+      variant: 'warning',
     });
-
-    Toast.fire({
-      icon: 'success',
-      title: 'Se ha guardado con éxito',
-    });
-  };
-
-  const notificacionEliminar = (escalaevolucion, fecha, idEvolucion) => {
-    const swalWithBootstrapButtons = Swal.mixin({
-      customClass: {
-        confirmButton: 'btn btn-success margenbutton',
-        cancelButton: 'btn btn-danger',
-      },
-      buttonsStyling: false,
-    });
-
-    swalWithBootstrapButtons
-      .fire({
-        title: 'Estas seguro?',
-        text: 'No podrás revertir esto!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Si!',
-        cancelButtonText: 'No',
-        reverseButtons: true,
-      })
-      .then((result) => {
-        if (result.isConfirmed) {
-          eliminar(escalaevolucion, fecha, idEvolucion);
-          swalWithBootstrapButtons.fire('Eliminado!', 'Se ha eliminado el registro', 'success');
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-          swalWithBootstrapButtons.fire('Cancelado', 'No se eliminaron registros', 'error');
-        }
-      });
+    if (confirmado) {
+      eliminar(escalaevolucion, fecha, idEvolucion);
+      showToast('success', 'Eliminado!', { message: 'Se ha eliminado el registro' });
+    } else {
+      showToast('danger', 'Cancelado', { message: 'No se eliminaron registros' });
+    }
   };
 
   return (
