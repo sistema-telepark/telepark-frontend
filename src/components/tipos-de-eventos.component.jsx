@@ -81,7 +81,10 @@ const TypeEvents = () => {
       confirmLabel: 'Sí',
       variant: 'warning',
     });
-    if (!confirmado) return;
+    if (!confirmado) {
+      showToast('danger', 'Cancelado', { message: 'No se eliminaron registros' });
+      return;
+    }
     const response = await deleteTypeEvent(data);
     if (response?.success) {
       showToast('success', 'Eliminado con éxito');

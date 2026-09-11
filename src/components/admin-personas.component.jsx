@@ -104,7 +104,10 @@ const AdminPersonas = () => {
       confirmLabel: `Sí`,
       variant: 'warning',
     });
-    if (!confirmado) return;
+    if (!confirmado) {
+      showToast('danger', 'Cancelado', { message: 'No se eliminaron registros' });
+      return;
+    }
     const arrayPersonas = arrayPerson.filter((e) => e.idpersona !== persona.idpersona);
     persona.borrado = true;
     eventRespository.updatePerson(persona.idpersona, persona).then((response) => {
@@ -176,7 +179,7 @@ const AdminPersonas = () => {
                     <td>
                       <button
                         type="button"
-                        className="btn btn-verde me-1"
+                        className="btn btn-verde me-2"
                         onClick={() => showModalEdit(person)}
                       >
                         <PencilIcon />

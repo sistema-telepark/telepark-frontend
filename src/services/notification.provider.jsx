@@ -176,15 +176,17 @@ export const NotificationProvider = ({ children }) => {
               </h4>
             </Modal.Header>
             {alertState.message && <Modal.Body>{alertState.message}</Modal.Body>}
-            <Modal.Footer className="justify-content-center">
-              <button
-                type="button"
-                className={`btn btn-verde ${styles.actionButton}`}
-                onClick={closeAlert}
-              >
-                Aceptar
-              </button>
-            </Modal.Footer>
+            {alertState && !alertState.autoHideMs && (
+              <Modal.Footer className="justify-content-center">
+                <button
+                  type="button"
+                  className={`btn btn-verde ${styles.actionButton}`}
+                  onClick={closeAlert}
+                >
+                  Aceptar
+                </button>
+              </Modal.Footer>
+            )}
           </>
         )}
       </Modal>

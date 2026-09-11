@@ -168,6 +168,11 @@ const AdminUsuarios = () => {
     }
   };
 
+  const cancelarEliminacion = () => {
+    setUsuarioAEliminar(null);
+    showToast('danger', 'Cancelado', { message: 'No se eliminaron registros' });
+  };
+
   const guardar = () => {
     if (!idUsuario) {
       showToast('danger', 'Error: Hubo un problema en la carga.');
@@ -583,7 +588,7 @@ const AdminUsuarios = () => {
         </Modal.Footer>
       </Modal>
 
-      <Modal show={!!usuarioAEliminar} onHide={() => setUsuarioAEliminar(null)}>
+      <Modal show={!!usuarioAEliminar} onHide={cancelarEliminacion}>
         <Modal.Header className="justify-content-center">
           <h4 className="mb-0">Eliminar Usuario</h4>
         </Modal.Header>
@@ -597,7 +602,7 @@ const AdminUsuarios = () => {
           <button
             type="button"
             className={'btn btn-rojo ' + styles.cancelButton}
-            onClick={() => setUsuarioAEliminar(null)}
+            onClick={cancelarEliminacion}
           >
             Cancelar
           </button>

@@ -130,7 +130,10 @@ const Talleres = () => {
 
   const deleteT = async (data) => {
     const ok = await showConfirm(`¿Seguro que desea eliminar el taller: ${data.tipotaller}?`);
-    if (!ok) return;
+    if (!ok) {
+      showToast('danger', 'Cancelado', { message: 'No se eliminaron registros' });
+      return;
+    }
     const resp = await tallerRepository.deleteTaller(data.idtaller);
     if (resp.success) {
       showToast('success', 'Eliminado con éxito');
@@ -151,7 +154,10 @@ const Talleres = () => {
 
   const deleteA = async (data) => {
     const ok = await showConfirm(`¿Seguro que desea eliminar la actividad: ${data.nombre}?`);
-    if (!ok) return;
+    if (!ok) {
+      showToast('danger', 'Cancelado', { message: 'No se eliminaron registros' });
+      return;
+    }
     const resp = await actividadRepository.delete(data.idactividad);
     if (resp.success) {
       showToast('success', 'Eliminado con éxito');
