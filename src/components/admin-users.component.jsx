@@ -606,7 +606,7 @@ const AdminUsuarios = () => {
             className={'btn btn-verde ms-3 ' + styles.submitButton}
             onClick={confirmarEliminacion}
           >
-            Sí, eliminar
+            Sí
           </button>
         </Modal.Footer>
       </Modal>

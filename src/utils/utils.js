@@ -1,4 +1,4 @@
-import { showAlert, showConfirm, showToast } from '../services/notification.service';
+import { showConfirm, showToast } from '../services/notification.service';
 
 class Utils {
   convertirFormatoFecha(string) {
@@ -88,14 +88,14 @@ class Utils {
     showConfirm({
       title: 'Estas seguro?',
       message: 'No podrás revertir esto!',
-      confirmLabel: 'Si!',
+      confirmLabel: 'Sí',
       cancelLabel: 'No',
       variant: 'warning',
     }).then((confirmed) => {
       if (confirmed) {
         funcion(info, id);
       } else {
-        showAlert('danger', 'Cancelado', 'No se eliminaron registros');
+        showToast('danger', 'Cancelado', { message: 'No se eliminaron registros' });
       }
     });
   }
@@ -105,11 +105,13 @@ class Utils {
   }
 
   send() {
-    showAlert('success', 'Formulario enviado con éxito!', undefined, { autoHideMs: 1500 });
+    showToast('success', 'Formulario enviado con éxito!', { autoHideMs: 1500 });
   }
 
   errorSend() {
-    showAlert('danger', 'Hubo un error al enviar el formulario!', 'Intentelo mas tarde.');
+    showToast('danger', 'Hubo un error al enviar el formulario!', {
+      message: 'Intentelo mas tarde.',
+    });
   }
 }
 

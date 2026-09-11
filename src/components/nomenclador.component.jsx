@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { showToast } from '../services/notification.service';
 import utils from '../utils/utils';
 import { enfermedadRepository } from '../services/enfermedad.service';
 import { medicamentoRepository } from '../services/medicamento.service';
@@ -146,6 +147,7 @@ const Nomenclador = () => {
           const response = await enfermedadRepository.delete(id);
           if (response?.success) {
             getEnfermedad();
+            showToast('success', 'Eliminado con éxito');
           }
         }
         break;
@@ -154,6 +156,7 @@ const Nomenclador = () => {
           const response = await medicamentoRepository.delete(id);
           if (response?.success) {
             getMedicamento();
+            showToast('success', 'Eliminado con éxito');
           }
         }
         break;
@@ -162,6 +165,7 @@ const Nomenclador = () => {
           const response = await obrasocialRepository.delete(id);
           if (response?.success) {
             getObrasocial();
+            showToast('success', 'Eliminado con éxito');
           }
         }
         break;

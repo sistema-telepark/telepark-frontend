@@ -125,6 +125,7 @@ const ListaEvolucion = () => {
     evolucionRepository.update(id, data).then((response) => {
       if (response?.success) {
         getEvoluciones();
+        showToast('success', 'Eliminado con éxito');
       }
     });
     setShow(false);
@@ -134,13 +135,12 @@ const ListaEvolucion = () => {
     const confirmado = await showConfirm({
       title: 'Estas seguro?',
       message: 'No podrás revertir esto!',
-      confirmLabel: 'Si!',
+      confirmLabel: 'Sí',
       cancelLabel: 'No',
       variant: 'warning',
     });
     if (confirmado) {
       eliminar(escalaevolucion, fecha, idEvolucion);
-      showToast('success', 'Eliminado!', { message: 'Se ha eliminado el registro' });
     } else {
       showToast('danger', 'Cancelado', { message: 'No se eliminaron registros' });
     }
@@ -286,9 +286,13 @@ const ListaEvolucion = () => {
               <thead>
                 <tr>
                   <th scope="col">Estado Evolutivo</th>
-                  <th scope="col" className={styles.descriptionColumn}>Descripción</th>
+                  <th scope="col" className={styles.descriptionColumn}>
+                    Descripción
+                  </th>
                   <th scope="col">Fecha de Observación</th>
-                  <th scope="col" className={styles.actionColumn}>Acción</th>
+                  <th scope="col" className={styles.actionColumn}>
+                    Acción
+                  </th>
                 </tr>
               </thead>
               <tbody className={styles.tableBodyMiddle}>
@@ -298,7 +302,9 @@ const ListaEvolucion = () => {
                     .map((evolucion) => (
                       <tr key={evolucion.idevolucion}>
                         <td>Estado: {evolucion.escalaevolucion}</td>
-                        <td className={styles.descriptionColumn}>{utils.describirEstado(evolucion.escalaevolucion)}</td>
+                        <td className={styles.descriptionColumn}>
+                          {utils.describirEstado(evolucion.escalaevolucion)}
+                        </td>
                         <td>{utils.convertirFormatoFecha(evolucion.fecha)}</td>
                         <td className={styles.actionColumn}>
                           <button

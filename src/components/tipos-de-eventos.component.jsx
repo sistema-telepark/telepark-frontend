@@ -72,21 +72,21 @@ const TypeEvents = () => {
     let modifidedEvent = {
       borrado: true,
     };
-    await eventRespository.updateTypeEvent(data.idtipoevento, modifidedEvent);
+    return eventRespository.updateTypeEvent(data.idtipoevento, modifidedEvent);
   };
 
   const handleDelete = async (data) => {
     const confirmado = await showConfirm({
       title: `¿Seguro que desea eliminar el tipo de evento ${data.nombre}?`,
-      confirmLabel: 'Si, Eliminar el tipo de evento',
+      confirmLabel: 'Sí',
       variant: 'warning',
     });
     if (!confirmado) return;
-    showToast('success', 'Eliminado con exito!', {
-      message: `Se elimino el evento ${data.nombre}`,
-    });
+    const response = await deleteTypeEvent(data);
+    if (response?.success) {
+      showToast('success', 'Eliminado con éxito');
+    }
     setTypeEvent((prev) => prev.filter((item) => item.idtipoevento !== data.idtipoevento));
-    deleteTypeEvent(data);
   };
 
   const edit = (data) => {
@@ -182,7 +182,7 @@ const TypeEvents = () => {
                     <td>
                       <button
                         type="button"
-                        className="btn btn-verde me-1"
+                        className="btn btn-verde me-2"
                         onClick={() => showModalEdit(element)}
                       >
                         <PencilIcon />

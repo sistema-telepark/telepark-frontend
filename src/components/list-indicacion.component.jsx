@@ -193,6 +193,7 @@ const ListaIndicacion = () => {
     indicacionRepository.update(id, data).then((response) => {
       if (response?.success) {
         getIndicaciones();
+        showToast('success', 'Eliminado con éxito');
       }
     });
     setShow(false);
@@ -209,7 +210,7 @@ const ListaIndicacion = () => {
     const confirmado = await showConfirm({
       title: 'Estas seguro?',
       message: 'No podrás revertir esto!',
-      confirmLabel: 'Si!',
+      confirmLabel: 'Sí',
       cancelLabel: 'No',
       variant: 'warning',
     });
@@ -222,7 +223,6 @@ const ListaIndicacion = () => {
         idmedicamento,
         idIndicacion
       );
-      showToast('success', 'Eliminado!', { message: 'Se ha eliminado el registro' });
     } else {
       showToast('danger', 'Cancelado', { message: 'No se eliminaron registros' });
     }

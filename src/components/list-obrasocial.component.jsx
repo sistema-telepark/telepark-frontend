@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { obrasocialRepository } from '../services/obrasocial.service';
 import { osRepository } from '../services/os.service';
+import { showToast } from '../services/notification.service';
 import utils from '../utils/utils';
 import ObraSocialForm from './list-obrasocial/obra-social-form.component';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
@@ -137,6 +138,7 @@ const ListaObraSocial = (props) => {
     const response = await osRepository.update(id, data);
     if (response?.success) {
       getOs();
+      showToast('success', 'Eliminado con éxito');
       setShow(false);
     }
   };

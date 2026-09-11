@@ -101,16 +101,15 @@ const AdminPersonas = () => {
   const eliminar = async (persona) => {
     const confirmado = await showConfirm({
       title: `¿Seguro que desea eliminar a  ${persona.nombre}?`,
-      confirmLabel: `Si, Eliminar el a ${persona.nombre}`,
+      confirmLabel: `Sí`,
       variant: 'warning',
     });
     if (!confirmado) return;
     const arrayPersonas = arrayPerson.filter((e) => e.idpersona !== persona.idpersona);
     persona.borrado = true;
-    showToast('success', 'Eliminado con exito!', { message: `Se elimino a${persona.nombre}` });
     eventRespository.updatePerson(persona.idpersona, persona).then((response) => {
       if (response?.success) {
-        showToast('success', 'Se ha guardado con éxito');
+        showToast('success', 'Eliminado con éxito');
         getPersonAll();
       }
     });

@@ -155,6 +155,7 @@ const ListaDiagnostico = () => {
     diagnosticoRepository.update(id, data).then((response) => {
       if (response?.success) {
         getDiagnosticos();
+        showToast('success', 'Eliminado con éxito');
       }
     });
     setShow(false);
@@ -164,13 +165,12 @@ const ListaDiagnostico = () => {
     const confirmado = await showConfirm({
       title: 'Estas seguro?',
       message: 'No podrás revertir esto!',
-      confirmLabel: 'Si!',
+      confirmLabel: 'Sí',
       cancelLabel: 'No',
       variant: 'warning',
     });
     if (confirmado) {
       eliminar(idenfermedad, fecha, idDiagnostico);
-      showToast('success', 'Eliminado!', { message: 'Se ha eliminado el registro' });
     } else {
       showToast('danger', 'Cancelado', { message: 'No se eliminaron registros' });
     }

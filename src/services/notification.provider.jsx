@@ -160,7 +160,7 @@ export const NotificationProvider = ({ children }) => {
                 className={`btn btn-verde ms-3 ${styles.actionButton}`}
                 onClick={() => resolveConfirm(true)}
               >
-                {confirmState.confirmLabel || 'Sí, eliminar'}
+                {confirmState.confirmLabel || 'Sí'}
               </button>
             </Modal.Footer>
           </>
