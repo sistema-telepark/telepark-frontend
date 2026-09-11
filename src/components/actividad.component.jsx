@@ -90,7 +90,10 @@ const Actividad = () => {
 
   const eliminar = async (actividad) => {
     const ok = await showConfirm(`¿Seguro que desea eliminar la actividad: ${actividad.nombre}?`);
-    if (!ok) return;
+    if (!ok) {
+      showToast('danger', 'Cancelado', { message: 'No se eliminaron registros' });
+      return;
+    }
     const resp = await actividadRepository.delete(actividad.idactividad);
     if (resp.success) {
       showToast('success', 'Eliminado con éxito');

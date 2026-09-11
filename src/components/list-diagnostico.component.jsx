@@ -1,9 +1,9 @@
 import React, { memo, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import Swal from 'sweetalert2';
 import { useSelector } from 'react-redux';
 import { diagnosticoRepository } from '../services/diagnostico.service';
 import { enfermedadRepository } from '../services/enfermedad.service';
+import { showConfirm, showToast } from '../services/notification.service';
 import utils from '../utils/utils';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
@@ -100,7 +100,7 @@ const ListaDiagnostico = () => {
       diagnosticoRepository.update(id, data).then((response) => {
         if (response?.success) {
           getDiagnosticos();
-          notificacionGuardar();
+          showToast('success', 'Se ha guardado con éxito');
         }
       });
       setCampo({ enfermedad: '', fecha: '' });
@@ -137,7 +137,7 @@ const ListaDiagnostico = () => {
       diagnosticoRepository.create(data).then((reponse) => {
         if (reponse?.success) {
           getDiagnosticos();
-          notificacionGuardar();
+          showToast('success', 'Se ha guardado con éxito');
         }
       });
       setCampo({ enfermedad: '', fecha: '' });
@@ -155,57 +155,25 @@ const ListaDiagnostico = () => {
     diagnosticoRepository.update(id, data).then((response) => {
       if (response?.success) {
         getDiagnosticos();
+        showToast('success', 'Eliminado con éxito');
       }
     });
     setShow(false);
   };
 
-  const notificacionGuardar = () => {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer);
-        toast.addEventListener('mouseleave', Swal.resumeTimer);
-      },
+  const notificacionEliminar = async (idenfermedad, fecha, idDiagnostico) => {
+    const confirmado = await showConfirm({
+      title: 'Estas seguro?',
+      message: 'No podrás revertir esto!',
+      confirmLabel: 'Sí',
+      cancelLabel: 'No',
+      variant: 'warning',
     });
-
-    Toast.fire({
-      icon: 'success',
-      title: 'Se ha guardado con éxito',
-    });
-  };
-
-  const notificacionEliminar = (idenfermedad, fecha, idDiagnostico) => {
-    const swalWithBootstrapButtons = Swal.mixin({
-      customClass: {
-        confirmButton: 'btn btn-success margenbutton',
-        cancelButton: 'btn btn-danger',
-      },
-      buttonsStyling: false,
-    });
-
-    swalWithBootstrapButtons
-      .fire({
-        title: 'Estas seguro?',
-        text: 'No podrás revertir esto!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Si!',
-        cancelButtonText: 'No',
-        reverseButtons: true,
-      })
-      .then((result) => {
-        if (result.isConfirmed) {
-          eliminar(idenfermedad, fecha, idDiagnostico);
-          swalWithBootstrapButtons.fire('Eliminado!', 'Se ha eliminado el registro', 'success');
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-          swalWithBootstrapButtons.fire('Cancelado', 'No se eliminaron registros', 'error');
-        }
-      });
+    if (confirmado) {
+      eliminar(idenfermedad, fecha, idDiagnostico);
+    } else {
+      showToast('danger', 'Cancelado', { message: 'No se eliminaron registros' });
+    }
   };
 
   return (

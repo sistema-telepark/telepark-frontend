@@ -11,6 +11,7 @@ import ProtectedRoute from './components/shared/protected-route';
 import ErrorFallbackRoute from './components/error-boundary/error-fallback-route.component';
 import { logError } from './components/error-boundary/logError';
 import { TokenService } from './services/token.service';
+import { NotificationProvider } from './services/notification.provider';
 
 // Lazy imports con webpackChunkName — se cargan bajo demanda
 const Login = lazy(() => import(/* webpackChunkName: "login" */ './components/login.component'));
@@ -499,14 +500,16 @@ function App() {
         v7_relativeSplatPath: true,
       }}
     >
-      <AppContent
-        token={token}
-        userName={userName}
-        userRole={userRole}
-        setToken={setToken}
-        setUserName={setUserName}
-        setUserRole={setUserRole}
-      />
+      <NotificationProvider>
+        <AppContent
+          token={token}
+          userName={userName}
+          userRole={userRole}
+          setToken={setToken}
+          setUserName={setUserName}
+          setUserRole={setUserRole}
+        />
+      </NotificationProvider>
     </Router>
   );
 }

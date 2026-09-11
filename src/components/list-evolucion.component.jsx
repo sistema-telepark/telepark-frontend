@@ -1,8 +1,8 @@
 import React, { memo, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import Swal from 'sweetalert2';
 import { useSelector } from 'react-redux';
 import { evolucionRepository } from '../services/evolucion.service';
+import { showConfirm, showToast } from '../services/notification.service';
 import utils from '../utils/utils';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
@@ -70,7 +70,7 @@ const ListaEvolucion = () => {
       evolucionRepository.update(id, data).then((response) => {
         if (response?.success) {
           getEvoluciones();
-          notificacionGuardar();
+          showToast('success', 'Se ha guardado con éxito');
         }
       });
       setCampo({ nroEvolucion: '', fecha: '' });
@@ -107,7 +107,7 @@ const ListaEvolucion = () => {
       evolucionRepository.create(data).then((response) => {
         if (response?.success) {
           getEvoluciones();
-          notificacionGuardar();
+          showToast('success', 'Se ha guardado con éxito');
         }
       });
       setCampo({ nroEvolucion: '', fecha: '' });
@@ -125,57 +125,25 @@ const ListaEvolucion = () => {
     evolucionRepository.update(id, data).then((response) => {
       if (response?.success) {
         getEvoluciones();
+        showToast('success', 'Eliminado con éxito');
       }
     });
     setShow(false);
   };
 
-  const notificacionGuardar = () => {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer);
-        toast.addEventListener('mouseleave', Swal.resumeTimer);
-      },
+  const notificacionEliminar = async (escalaevolucion, fecha, idEvolucion) => {
+    const confirmado = await showConfirm({
+      title: 'Estas seguro?',
+      message: 'No podrás revertir esto!',
+      confirmLabel: 'Sí',
+      cancelLabel: 'No',
+      variant: 'warning',
     });
-
-    Toast.fire({
-      icon: 'success',
-      title: 'Se ha guardado con éxito',
-    });
-  };
-
-  const notificacionEliminar = (escalaevolucion, fecha, idEvolucion) => {
-    const swalWithBootstrapButtons = Swal.mixin({
-      customClass: {
-        confirmButton: 'btn btn-success margenbutton',
-        cancelButton: 'btn btn-danger',
-      },
-      buttonsStyling: false,
-    });
-
-    swalWithBootstrapButtons
-      .fire({
-        title: 'Estas seguro?',
-        text: 'No podrás revertir esto!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Si!',
-        cancelButtonText: 'No',
-        reverseButtons: true,
-      })
-      .then((result) => {
-        if (result.isConfirmed) {
-          eliminar(escalaevolucion, fecha, idEvolucion);
-          swalWithBootstrapButtons.fire('Eliminado!', 'Se ha eliminado el registro', 'success');
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-          swalWithBootstrapButtons.fire('Cancelado', 'No se eliminaron registros', 'error');
-        }
-      });
+    if (confirmado) {
+      eliminar(escalaevolucion, fecha, idEvolucion);
+    } else {
+      showToast('danger', 'Cancelado', { message: 'No se eliminaron registros' });
+    }
   };
 
   return (
@@ -318,9 +286,13 @@ const ListaEvolucion = () => {
               <thead>
                 <tr>
                   <th scope="col">Estado Evolutivo</th>
-                  <th scope="col">Descripción</th>
+                  <th scope="col" className={styles.descriptionColumn}>
+                    Descripción
+                  </th>
                   <th scope="col">Fecha de Observación</th>
-                  <th scope="col">Acción</th>
+                  <th scope="col" className={styles.actionColumn}>
+                    Acción
+                  </th>
                 </tr>
               </thead>
               <tbody className={styles.tableBodyMiddle}>
@@ -330,9 +302,11 @@ const ListaEvolucion = () => {
                     .map((evolucion) => (
                       <tr key={evolucion.idevolucion}>
                         <td>Estado: {evolucion.escalaevolucion}</td>
-                        <td>{utils.describirEstado(evolucion.escalaevolucion)}</td>
+                        <td className={styles.descriptionColumn}>
+                          {utils.describirEstado(evolucion.escalaevolucion)}
+                        </td>
                         <td>{utils.convertirFormatoFecha(evolucion.fecha)}</td>
-                        <td>
+                        <td className={styles.actionColumn}>
                           <button
                             type="button"
                             className={'btn btn-verde ' + styles.rowActionButton}

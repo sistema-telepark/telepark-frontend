@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import Swal from 'sweetalert2';
 import { useSelector } from 'react-redux';
 import { indicacionRepository } from '../services/indicacion.service';
 import { medicamentoRepository } from '../services/medicamento.service';
+import { showConfirm, showToast } from '../services/notification.service';
 import utils from '../utils/utils';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
@@ -116,7 +116,7 @@ const ListaIndicacion = () => {
       indicacionRepository.update(id, data).then((response) => {
         if (response?.success) {
           getIndicaciones();
-          notificacionGuardar();
+          showToast('success', 'Se ha guardado con éxito');
         }
       });
       setCampo({ medicamento: '', dosis: '', hora: '', fecha: '', estado: '' });
@@ -165,7 +165,7 @@ const ListaIndicacion = () => {
       indicacionRepository.create(data).then((response) => {
         if (response?.success) {
           getIndicaciones();
-          notificacionGuardar();
+          showToast('success', 'Se ha guardado con éxito');
         }
       });
       setCampo({ medicamento: '', dosis: '', hora: '', fecha: '', estado: '' });
@@ -193,31 +193,13 @@ const ListaIndicacion = () => {
     indicacionRepository.update(id, data).then((response) => {
       if (response?.success) {
         getIndicaciones();
+        showToast('success', 'Eliminado con éxito');
       }
     });
     setShow(false);
   };
 
-  const notificacionGuardar = () => {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer);
-        toast.addEventListener('mouseleave', Swal.resumeTimer);
-      },
-    });
-
-    Toast.fire({
-      icon: 'success',
-      title: 'Se ha guardado con éxito',
-    });
-  };
-
-  const notificacionEliminar = (
+  const notificacionEliminar = async (
     cantidadmiligramos,
     estavigente,
     fechaprescripcion,
@@ -225,39 +207,25 @@ const ListaIndicacion = () => {
     idmedicamento,
     idIndicacion
   ) => {
-    const swalWithBootstrapButtons = Swal.mixin({
-      customClass: {
-        confirmButton: 'btn btn-success margenbutton',
-        cancelButton: 'btn btn-danger',
-      },
-      buttonsStyling: false,
+    const confirmado = await showConfirm({
+      title: 'Estas seguro?',
+      message: 'No podrás revertir esto!',
+      confirmLabel: 'Sí',
+      cancelLabel: 'No',
+      variant: 'warning',
     });
-
-    swalWithBootstrapButtons
-      .fire({
-        title: 'Estas seguro?',
-        text: 'No podrás revertir esto!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Si!',
-        cancelButtonText: 'No',
-        reverseButtons: true,
-      })
-      .then((result) => {
-        if (result.isConfirmed) {
-          eliminar(
-            cantidadmiligramos,
-            estavigente,
-            fechaprescripcion,
-            horadetoma,
-            idmedicamento,
-            idIndicacion
-          );
-          swalWithBootstrapButtons.fire('Eliminado!', 'Se ha eliminado el registro', 'success');
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-          swalWithBootstrapButtons.fire('Cancelado', 'No se eliminaron registros', 'error');
-        }
-      });
+    if (confirmado) {
+      eliminar(
+        cantidadmiligramos,
+        estavigente,
+        fechaprescripcion,
+        horadetoma,
+        idmedicamento,
+        idIndicacion
+      );
+    } else {
+      showToast('danger', 'Cancelado', { message: 'No se eliminaron registros' });
+    }
   };
 
   return (

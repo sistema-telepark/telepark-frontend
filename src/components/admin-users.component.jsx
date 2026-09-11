@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/list-pacientes-ep.css';
 import { userRepository } from '../services/users.service';
-import Swal from 'sweetalert2';
 import { TokenService } from '../services/token.service';
 import utils from '../utils/utils';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
@@ -169,9 +168,14 @@ const AdminUsuarios = () => {
     }
   };
 
+  const cancelarEliminacion = () => {
+    setUsuarioAEliminar(null);
+    showToast('danger', 'Cancelado', { message: 'No se eliminaron registros' });
+  };
+
   const guardar = () => {
     if (!idUsuario) {
-      notificacionError();
+      showToast('danger', 'Error: Hubo un problema en la carga.');
       return;
     }
 
@@ -191,7 +195,7 @@ const AdminUsuarios = () => {
       .updateUser(idUsuario, data)
       .then((response) => {
         if (response && response.success) {
-          notificacionExito();
+          showToast('success', 'Se ha guardado con éxito');
           clear();
           getUsers();
         }
@@ -216,7 +220,7 @@ const AdminUsuarios = () => {
       .createUser(data)
       .then((response) => {
         if (response && response.success) {
-          notificacionExito();
+          showToast('success', 'Se ha guardado con éxito');
           clear();
           getUsers();
         }
@@ -253,44 +257,6 @@ const AdminUsuarios = () => {
       email: '',
       role: '',
       isActive: '',
-    });
-  };
-
-  const notificacionExito = () => {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer);
-        toast.addEventListener('mouseleave', Swal.resumeTimer);
-      },
-    });
-
-    Toast.fire({
-      icon: 'success',
-      title: 'Se ha guardado con éxito',
-    });
-  };
-
-  const notificacionError = () => {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer);
-        toast.addEventListener('mouseleave', Swal.resumeTimer);
-      },
-    });
-
-    Toast.fire({
-      icon: 'error',
-      title: 'Error: Hubo un problema en la carga.',
     });
   };
 
@@ -622,14 +588,13 @@ const AdminUsuarios = () => {
         </Modal.Footer>
       </Modal>
 
-      <Modal show={!!usuarioAEliminar} onHide={() => setUsuarioAEliminar(null)}>
+      <Modal show={!!usuarioAEliminar} onHide={cancelarEliminacion}>
         <Modal.Header className="justify-content-center">
           <h4 className="mb-0">Eliminar Usuario</h4>
         </Modal.Header>
         <Modal.Body>
           <p>
-            ¿Seguro que desea eliminar al usuario:{' '}
-            <strong>{usuarioAEliminar?.username}</strong>?
+            ¿Seguro que desea eliminar al usuario: <strong>{usuarioAEliminar?.username}</strong>?
           </p>
           <p className="text-danger mb-0">Esta acción no se puede deshacer.</p>
         </Modal.Body>
@@ -637,7 +602,7 @@ const AdminUsuarios = () => {
           <button
             type="button"
             className={'btn btn-rojo ' + styles.cancelButton}
-            onClick={() => setUsuarioAEliminar(null)}
+            onClick={cancelarEliminacion}
           >
             Cancelar
           </button>
@@ -646,7 +611,7 @@ const AdminUsuarios = () => {
             className={'btn btn-verde ms-3 ' + styles.submitButton}
             onClick={confirmarEliminacion}
           >
-            Sí, eliminar
+            Sí
           </button>
         </Modal.Footer>
       </Modal>

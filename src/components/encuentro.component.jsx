@@ -193,7 +193,10 @@ const Encuentro = () => {
       `¿Seguro que desea eliminar el encuentro con fecha: ${utils.convertirFormatoFecha(data.fecha)}?`,
       `Código: ${data.idclasetaller}`
     );
-    if (!ok) return;
+    if (!ok) {
+      showToast('danger', 'Cancelado', { message: 'No se eliminaron registros' });
+      return;
+    }
     const resp = await encuentroRepository.deleteEncuentro(data.idclasetaller);
     if (resp.success) {
       showToast('success', 'Eliminado con éxito');

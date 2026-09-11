@@ -1,4 +1,4 @@
-import Swal from 'sweetalert2';
+import { showConfirm, showToast } from '../services/notification.service';
 
 class Utils {
   convertirFormatoFecha(string) {
@@ -81,88 +81,36 @@ class Utils {
   }
 
   notificacionGuardar() {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer);
-        toast.addEventListener('mouseleave', Swal.resumeTimer);
-      },
-    });
-
-    Toast.fire({
-      icon: 'success',
-      title: 'Se ha guardado con éxito',
-    });
+    showToast('success', 'Se ha guardado con éxito');
   }
 
   notificacionEliminar(info, id, funcion) {
-    const swalWithBootstrapButtons = Swal.mixin({
-      customClass: {
-        confirmButton: 'btn btn-success margenbutton',
-        cancelButton: 'btn btn-danger',
-      },
-      buttonsStyling: false,
+    showConfirm({
+      title: 'Estas seguro?',
+      message: 'No podrás revertir esto!',
+      confirmLabel: 'Sí',
+      cancelLabel: 'No',
+      variant: 'warning',
+    }).then((confirmed) => {
+      if (confirmed) {
+        funcion(info, id);
+      } else {
+        showToast('danger', 'Cancelado', { message: 'No se eliminaron registros' });
+      }
     });
-
-    swalWithBootstrapButtons
-      .fire({
-        title: 'Estas seguro?',
-        text: 'No podrás revertir esto!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Si!',
-        cancelButtonText: 'No',
-        reverseButtons: true,
-      })
-      .then((result) => {
-        if (result.isConfirmed) {
-          funcion(info, id);
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-          swalWithBootstrapButtons.fire('Cancelado', 'No se eliminaron registros', 'error');
-        }
-      });
   }
 
   notificacionError() {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer);
-        toast.addEventListener('mouseleave', Swal.resumeTimer);
-      },
-    });
-
-    Toast.fire({
-      icon: 'error',
-      title: 'Hubo un error en la solicitud',
-    });
+    showToast('danger', 'Hubo un error en la solicitud');
   }
 
   send() {
-    Swal.fire({
-      position: 'center',
-      icon: 'success',
-      title: 'Formulario enviado con éxito!',
-      showConfirmButton: false,
-      timer: 1500,
-    });
+    showToast('success', 'Formulario enviado con éxito!', { autoHideMs: 1500 });
   }
 
   errorSend() {
-    Swal.fire({
-      position: 'center',
-      icon: 'error',
-      title: 'Hubo un error al enviar el formulario!',
-      text: 'Intentelo mas tarde.',
-      confirmButtonText: 'OK',
+    showToast('danger', 'Hubo un error al enviar el formulario!', {
+      message: 'Intentelo mas tarde.',
     });
   }
 }

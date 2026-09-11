@@ -1,60 +1,20 @@
-import Swal from 'sweetalert2';
+import { getNotificationDispatcher } from './notification.provider';
 
-const Toast = Swal.mixin({
-  toast: true,
-  position: 'top-end',
-  showConfirmButton: false,
-  timer: 3000,
-  timerProgressBar: true,
-  didOpen: (toast) => {
-    toast.addEventListener('mouseenter', Swal.stopTimer);
-    toast.addEventListener('mouseleave', Swal.resumeTimer);
-  },
-});
-
-const Modal = Swal.mixin({
-  customClass: {
-    confirmButton: 'btn btn-success margenbutton',
-    cancelButton: 'btn btn-danger',
-  },
-  buttonsStyling: false,
-});
-
-export const showToast = (icon, title, options = {}) => {
-  Toast.fire({ icon, title, ...options });
+const dispatch = (method, ...args) => {
+  const current = getNotificationDispatcher();
+  if (!current || typeof current[method] !== 'function') return undefined;
+  return current[method](...args);
 };
 
-export const showModal = (icon, title, text, options = {}) => {
-  Modal.fire({
-    icon,
-    title,
-    text,
-    showConfirmButton: true,
-    ...options,
-  });
+export const showToast = (variant, title, options = {}) => {
+  dispatch('pushToast', variant, title, options);
 };
 
-export const showConfirm = async (title, text, options = {}) => {
-  const result = await Modal.fire({
-    title,
-    text,
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Sí, confirmar',
-    cancelButtonText: 'Cancelar',
-    reverseButtons: true,
-    ...options,
-  });
-  return result.isConfirmed;
+export const showAlert = (variant, title, message, options = {}) => {
+  return dispatch('openAlert', variant, title, message, options) ?? Promise.resolve();
 };
 
-export const showLoading = (title = 'Procesando...', html) => {
-  Swal.fire({
-    title,
-    html,
-    allowOutsideClick: false,
-    didOpen: () => Swal.showLoading(),
-  });
+export const showConfirm = (title, text, options = {}) => {
+  const config = title && typeof title === 'object' ? title : { title, message: text, ...options };
+  return dispatch('openConfirm', config) ?? Promise.resolve(false);
 };
-
-export const closeLoading = () => Swal.close();
