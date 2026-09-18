@@ -166,12 +166,12 @@ const Consulta = () => {
     const encuentrosOrdenados = [...encuentros].sort(
       (a, b) => new Date(b.fecha) - new Date(a.fecha)
     );
-    const ultimosDosEncuentros = encuentrosOrdenados.slice(0, 2).map((enc) => enc.idclasetaller);
+    const ultimosDosEncuentros = encuentrosOrdenados.slice(0, 2).map((enc) => enc.idencuentro);
 
     // Filtrar asistencias de los últimos dos encuentros con estado Ausente
     const asistenciasFiltradas = asistencias.filter(
       (asistenciaItem) =>
-        ultimosDosEncuentros.includes(asistenciaItem.idclasetaller) &&
+        ultimosDosEncuentros.includes(asistenciaItem.idencuentro) &&
         asistenciaItem.estado === ESTADO_AUSENTE
     );
 
@@ -222,7 +222,7 @@ const Consulta = () => {
               >
                 <option value="">Elija el encuentro</option>
                 {encuentro.map((element) => (
-                  <option key={element.idclasetaller} value={element.idclasetaller}>
+                  <option key={element.idencuentro} value={element.idencuentro}>
                     {utils.convertirFormatoFecha(element.fecha)}
                   </option>
                 ))}

@@ -1,27 +1,25 @@
 import http from '../http-common';
 import { withServiceHandler } from './error-handler';
 
-// Encuentro = ClaseTaller: los métodos se llaman *Encuentro* pero contratan
-// los endpoints de clase de taller; los ids son idclasetaller.
 const encuentros = {
   async getEncuentroAll() {
-    const response = await http.get(`/clases-taller`);
+    const response = await http.get(`/encuentros`);
     return response.data;
   },
   async getEncuentroGestionAll() {
-    const response = await http.get(`/clases-taller`);
+    const response = await http.get(`/encuentros`);
     return response.data;
   },
   async createEncuentro(data) {
-    const response = await http.post(`/clases-taller`, data);
+    const response = await http.post(`/encuentros`, data);
     return response.data;
   },
   async updateEncuentro(id, data) {
-    const response = await http.put(`/clases-taller/${id}`, data);
+    const response = await http.put(`/encuentros/${id}`, data);
     return response.data;
   },
   async deleteEncuentro(id) {
-    const response = await http.delete(`/clases-taller/${id}`);
+    const response = await http.delete(`/encuentros/${id}`);
     return response.data;
   },
 };

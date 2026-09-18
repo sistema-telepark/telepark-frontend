@@ -74,8 +74,8 @@ const Encuentro = () => {
   };
 
   // Las actividades realizadas de una clase llegan como array plano
-  const getActividadesRealizadas = async (idclasetaller) => {
-    const resp = await actividadRealizadaRepository.getActividadesRealizadasByClase(idclasetaller);
+  const getActividadesRealizadas = async (idencuentro) => {
+    const resp = await actividadRealizadaRepository.getActividadesRealizadasByClase(idencuentro);
     if (resp.success) {
       setActividadRealizada(resp.data);
       setLoadError(null);
@@ -105,7 +105,7 @@ const Encuentro = () => {
       )
       .map((actividadItem) => ({
         idactividad: actividadItem.idactividad,
-        idclasetaller: encuentroSeleccionado.idclasetaller,
+        idencuentro: encuentroSeleccionado.idencuentro,
       }));
 
     const actividadesADeseleccionar = actividadRealizada.filter(
@@ -129,7 +129,7 @@ const Encuentro = () => {
     if (resultados.every((resp) => resp.success)) {
       showToast('success', 'Se ha guardado con éxito');
       setModalInsertAct(false);
-      getActividadesRealizadas(encuentroSeleccionado.idclasetaller);
+      getActividadesRealizadas(encuentroSeleccionado.idencuentro);
     }
   };
 
@@ -148,7 +148,7 @@ const Encuentro = () => {
   };
 
   const guardarEdicion = async (data) => {
-    const resp = await encuentroRepository.updateEncuentro(encuentroEditando.idclasetaller, {
+    const resp = await encuentroRepository.updateEncuentro(encuentroEditando.idencuentro, {
       fecha: data.fecha,
       virtual: data.virtual,
       idtaller: data.idtaller,
@@ -191,16 +191,16 @@ const Encuentro = () => {
   const eliminarEncuentro = async (data) => {
     const ok = await showConfirm(
       `¿Seguro que desea eliminar el encuentro con fecha: ${utils.convertirFormatoFecha(data.fecha)}?`,
-      `Código: ${data.idclasetaller}`
+      `Código: ${data.idencuentro}`
     );
     if (!ok) {
       showToast('danger', 'Cancelado', { message: 'No se eliminaron registros' });
       return;
     }
-    const resp = await encuentroRepository.deleteEncuentro(data.idclasetaller);
+    const resp = await encuentroRepository.deleteEncuentro(data.idencuentro);
     if (resp.success) {
       showToast('success', 'Eliminado con éxito');
-      setEncuentro(encuentro.filter((item) => item.idclasetaller !== data.idclasetaller));
+      setEncuentro(encuentro.filter((item) => item.idencuentro !== data.idencuentro));
     }
   };
 
@@ -210,7 +210,7 @@ const Encuentro = () => {
     setModalInsertAct(true);
 
     const resp = await actividadRealizadaRepository.getActividadesRealizadasByClase(
-      data.idclasetaller
+      data.idencuentro
     );
     if (resp.success) {
       setActividadRealizada(resp.data);
@@ -264,8 +264,8 @@ const Encuentro = () => {
             </thead>
             <tbody>
               {encuentro.map((element) => (
-                <tr key={element.idclasetaller}>
-                  <td>{element.idclasetaller}</td>
+                <tr key={element.idencuentro}>
+                  <td>{element.idencuentro}</td>
                   <td>{utils.convertirFormatoFecha(element.fecha)}</td>
                   <td>{element.virtual ? 'Sí' : ''}</td>
                   <td>
@@ -404,16 +404,16 @@ const Encuentro = () => {
           <div className="row">
             <div className="col-md-12">
               <Form.Group className="mb-0">
-                <label htmlFor="idclasetaller" className="control-label">
+                <label htmlFor="idencuentro" className="control-label">
                   Código:
                 </label>
                 <input
                   type="text"
-                  name="idclasetaller"
-                  id="idclasetaller"
+                  name="idencuentro"
+                  id="idencuentro"
                   className="form-control"
                   readOnly
-                  value={encuentroEditando ? encuentroEditando.idclasetaller : ''}
+                  value={encuentroEditando ? encuentroEditando.idencuentro : ''}
                 />
               </Form.Group>
             </div>
@@ -501,7 +501,7 @@ const Encuentro = () => {
                   ? utils.convertirFormatoFecha(encuentroSeleccionado.fecha)
                   : ''}
               </div>
-              <h6>Código: {encuentroSeleccionado ? encuentroSeleccionado.idclasetaller : ''}</h6>
+              <h6>Código: {encuentroSeleccionado ? encuentroSeleccionado.idencuentro : ''}</h6>
             </label>
           </div>
         </Modal.Header>

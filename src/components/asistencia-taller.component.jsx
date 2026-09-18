@@ -84,7 +84,7 @@ const Asistencia = () => {
   const guardarAsistencia = async (data) => {
     const asistenciaData = pacientes.map((paciente) => ({
       idpersonaep: paciente.idpersona,
-      idclasetaller: Number(data.fechaEncuentro),
+      idencuentro: Number(data.fechaEncuentro),
       estado: paciente.checked ? ESTADO_PRESENTE : ESTADO_AUSENTE,
     }));
 
@@ -106,7 +106,7 @@ const Asistencia = () => {
   const handleEncuentroChange = (e) => {
     const selectedEncuentroId = Number(e.target.value);
     const encuentroSeleccionado = encuentro.find(
-      (enc) => Number(enc.idclasetaller) === selectedEncuentroId
+      (enc) => Number(enc.idencuentro) === selectedEncuentroId
     );
 
     if (encuentroSeleccionado) {
@@ -166,7 +166,7 @@ const Asistencia = () => {
           >
             <option value="">Elija el encuentro</option>
             {encuentro.map((element) => (
-              <option key={element.idclasetaller} value={element.idclasetaller}>
+              <option key={element.idencuentro} value={element.idencuentro}>
                 {utils.convertirFormatoFecha(element.fecha)}
               </option>
             ))}
