@@ -92,9 +92,13 @@ const Encuentro = () => {
     );
   };
 
+  const actividadesDelTaller = encuentroSeleccionado
+    ? actividad.filter((act) => Number(act.idtaller) === Number(encuentroSeleccionado.idtaller))
+    : [];
+
   // Guardar o eliminar las actividades realizadas del encuentro según su estado
   const guardarActividadesSeleccionadas = async () => {
-    const actividadesSeleccionadas = actividad.filter((act) => act.checked);
+    const actividadesSeleccionadas = actividadesDelTaller.filter((act) => act.checked);
 
     const actividadesToSave = actividadesSeleccionadas
       .filter(
@@ -216,7 +220,9 @@ const Encuentro = () => {
       setActividadRealizada(resp.data);
       const actividadesConEstado = actividad.map((act) => ({
         ...act,
-        checked: resp.data.some((realizada) => realizada.idactividad === act.idactividad),
+        checked:
+          Number(act.idtaller) === Number(data.idtaller) &&
+          resp.data.some((realizada) => realizada.idactividad === act.idactividad),
       }));
       setActividad(actividadesConEstado);
     } else {
@@ -230,7 +236,7 @@ const Encuentro = () => {
   };
 
   // Agrupa las actividades por taller; el nombre del taller será la clave
-  const actividadesPorTaller = actividad.reduce((acc, actividadItem) => {
+  const actividadesPorTaller = actividadesDelTaller.reduce((acc, actividadItem) => {
     const tallerObj = taller.find((tallerItem) => tallerItem.idtaller === actividadItem.idtaller);
     const tallerNombre = tallerObj?.tipotaller || 'Taller sin nombre';
 
@@ -256,18 +262,21 @@ const Encuentro = () => {
           <table className="table table-striped">
             <thead>
               <tr>
-                <th scope="col">ID</th>
                 <th scope="col">Fecha</th>
                 <th scope="col">Virtual</th>
+                <th scope="col">Taller</th>
                 <th scope="col">Acción</th>
               </tr>
             </thead>
             <tbody>
               {encuentro.map((element) => (
                 <tr key={element.idencuentro}>
-                  <td>{element.idencuentro}</td>
                   <td>{utils.convertirFormatoFecha(element.fecha)}</td>
                   <td>{element.virtual ? 'Sí' : ''}</td>
+                  <td>
+                    {taller.find((t) => Number(t.idtaller) === Number(element.idtaller))
+                      ?.tipotaller ?? 'Sin taller'}
+                  </td>
                   <td>
                     <button
                       type="button"
