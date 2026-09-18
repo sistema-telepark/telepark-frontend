@@ -4,8 +4,8 @@ import { withServiceHandler } from './error-handler';
 const actividadesRealizadas = {
   // El backend no expone /actividadrealizada/{id}/actividades; se recorre la
   // paginación de /actividades-realizadas (envelope DRF {count,next,results})
-  // y se filtra client-side por idclasetaller.
-  async getActividadesRealizadasByClase(idClaseTaller) {
+  // y se filtra client-side por idencuentro.
+  async getActividadesRealizadasByClase(idEncuentro) {
     const resultados = [];
     let nextUrl = `/actividades-realizadas`;
     while (nextUrl) {
@@ -15,7 +15,7 @@ const actividadesRealizadas = {
       if (resultados.length >= count) break; // guard: cortar al cubrir count
       nextUrl = next; // URL absoluta del envelope; axios la usa tal cual
     }
-    return resultados.filter((item) => Number(item.idclasetaller) === Number(idClaseTaller));
+    return resultados.filter((item) => Number(item.idencuentro) === Number(idEncuentro));
   },
   async getAll() {
     const response = await http.get(`/actividades-realizadas`);
@@ -41,7 +41,7 @@ export const actividadRealizadaRepository = {
   getActividadesRealizadasByClase: withServiceHandler(
     actividadesRealizadas.getActividadesRealizadasByClase,
     {
-      context: 'obtener actividades de una clase',
+      context: 'obtener actividades de un encuentro',
     }
   ),
   getAll: withServiceHandler(actividadesRealizadas.getAll, {
