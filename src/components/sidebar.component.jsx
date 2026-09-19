@@ -56,17 +56,23 @@ const Sidebar = () => {
           </a>
           <span className="tooltip">Home</span>
         </li>
-        {user_role === true ? (
-          <li className={current_url === '/list-usuarios' ? 'active' : ''}>
-            <a href="./list-usuarios">
-              <AdminUsersIcon />
-              <span className="links_name">Administrar Usuarios</span>
-            </a>
-            <span className="tooltip">Administrar Usuarios</span>
-          </li>
-        ) : (
-          ''
-        )}
+
+        <li className={current_url === '/list-pacientes' ? 'active' : ''}>
+          <a href="./list-pacientes">
+            <MedicalRecordIcon />
+            <span className="links_name">Ficha Médica</span>
+          </a>
+          <span className="tooltip">Ficha Médica</span>
+        </li>
+
+        <li className={current_url === '/familiar' ? 'active' : ''}>
+          <a href="./familiar" aria-label="Ingresar/Modificar Familiar">
+            <FamilyIcon />
+            <span className="links_name">Familiares</span>
+          </a>
+          <span className="tooltip">Familiares</span>
+        </li>
+
         <li className={current_url === '/add-paciente' ? 'active' : ''}>
           <a href="./add-paciente">
             <SearchSidebarIcon />
@@ -75,68 +81,52 @@ const Sidebar = () => {
           <span className="tooltip">Buscar Personas</span>
         </li>
 
-        <li className={current_url === '/familiar' ? 'active' : ''}>
-          <a href="./familiar" aria-label="Ingresar/Modificar Familiar">
-            <FamilyIcon />
-            <span className="links_name">Ingresar/Modificar Familiar</span>
-          </a>
-          <span className="tooltip">Ingresar/Modificar Familiar</span>
-        </li>
-
-        <li className={current_url === '/list-pacientes' ? 'active' : ''}>
-          <a href="./list-pacientes">
-            <MedicalRecordIcon />
-            <span className="links_name">Ficha Medica</span>
-          </a>
-          <span className="tooltip">Administrar Ficha Medica de Personas con EP</span>
-        </li>
-
         <li className={current_url === '/nomenclador' ? 'active' : ''}>
           <a href="./nomenclador">
             <NomencladorIcon />
-            <span className="links_name">Modificar Nomencladores</span>
+            <span className="links_name">Nomencladores</span>
           </a>
-          <span className="tooltip">Modificar Nomencladores</span>
-        </li>
-
-        <li className={current_url === '/events' ? 'active' : ''}>
-          <a href="./events">
-            <CalendarIcon />
-            <span className="links_name">Ingresar Evento</span>
-          </a>
-          <span className="tooltip">Ingresar Evento Persona con EP</span>
+          <span className="tooltip">Nomencladores</span>
         </li>
 
         <li className={current_url === '/type-events' ? 'active' : ''}>
           <a href="./type-events">
             <TableIcon />
-            <span className="links_name">Ingresar/Modificar Tipo de evento</span>
+            <span className="links_name">Tipos de evento</span>
           </a>
-          <span className="tooltip">Ingresar/Modificar Tipo de evento</span>
+          <span className="tooltip">Tipos de evento</span>
+        </li>
+
+        <li className={current_url === '/events' ? 'active' : ''}>
+          <a href="./events">
+            <CalendarIcon />
+            <span className="links_name">Eventos</span>
+          </a>
+          <span className="tooltip">Eventos</span>
         </li>
 
         <li className={current_url === '/taller' ? 'active' : ''}>
           <a href="./taller" aria-label="Ingresar/Modificar taller">
             <ClipboardDataIcon />
-            <span className="links_name">Ingresar/Modificar taller</span>
+            <span className="links_name">Talleres</span>
           </a>
-          <span className="tooltip">Ingresar/Modificar taller</span>
+          <span className="tooltip">Talleres</span>
         </li>
 
         <li className={current_url === '/encuentro' ? 'active' : ''}>
           <a href="./encuentro" aria-label="Ingresar/Modificar encuentro">
             <CalendarIcon />
-            <span className="links_name">Ingresar/Modificar encuentro</span>
+            <span className="links_name">Encuentros</span>
           </a>
-          <span className="tooltip">Ingresar/Modificar encuentro</span>
+          <span className="tooltip">Encuentros</span>
         </li>
 
         <li className={current_url === '/asistencia' ? 'active' : ''}>
           <a href="./asistencia" aria-label="Registrar asistencia">
             <ClipboardCheckIcon />
-            <span className="links_name">Registrar asistencia</span>
+            <span className="links_name">Asistencias</span>
           </a>
-          <span className="tooltip">Registrar asistencia</span>
+          <span className="tooltip">Asistencias</span>
         </li>
 
         <li className={current_url === '/consulta' ? 'active' : ''}>
@@ -148,6 +138,17 @@ const Sidebar = () => {
         </li>
 
         <hr className="hr_sidebar"></hr>
+        {user_role === true ? (
+          <li className={current_url === '/list-usuarios' ? 'active' : ''}>
+            <a href="./list-usuarios">
+              <AdminUsersIcon />
+              <span className="links_name">Administrar Usuarios</span>
+            </a>
+            <span className="tooltip">Administrar Usuarios</span>
+          </li>
+        ) : (
+          ''
+        )}
 
         <li>
           <a href="/" onClick={logout}>

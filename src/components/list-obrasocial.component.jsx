@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router';
+import { useForm } from 'react-hook-form';
+import { Modal } from 'react-bootstrap';
 import { obrasocialRepository } from '../services/obrasocial.service';
 import { osRepository } from '../services/os.service';
 import { showToast } from '../services/notification.service';
 import utils from '../utils/utils';
-import ObraSocialForm from './list-obrasocial/obra-social-form.component';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
 import LoadingSpinner from './shared/loading-spinner';
@@ -14,7 +15,6 @@ import styles from '../styles/list-obrasocial.module.css';
 const ListaObraSocial = (props) => {
   const [show, setShow] = useState(false);
   const [showNuevo, setShowNuevo] = useState(false);
-  const [campo, setCampo] = useState({ obrasocial: '' });
   const [idEditado, setIdEditado] = useState('');
   const [obrasociales, setObraSociales] = useState([]);
   const [osociales, setOsociales] = useState([]);
@@ -23,6 +23,9 @@ const ListaObraSocial = (props) => {
   const navigate = useNavigate();
 
   const [loadError, setLoadError] = useState(null);
+
+  const formNuevo = useForm();
+  const formEdit = useForm();
 
   useEffect(() => {
     setLoading(true);
@@ -68,64 +71,53 @@ const ListaObraSocial = (props) => {
     }
   };
 
-  const detectarCambio = (e) => {
-    const { name, value } = e.target;
-    setCampo({ ...campo, [name]: value });
-  };
-
   const agregar = () => {
+    formNuevo.reset({ obrasocial: '' });
     setShow(false);
     setShowNuevo(true);
-    setCampo({ ...campo, obrasocial: '' });
   };
 
   const editar = (obrasocial, idos) => {
+    setIdEditado(idos);
+    formEdit.reset({ obrasocial });
     setShow(true);
     setShowNuevo(false);
-    setIdEditado(idos);
-    setCampo({ obrasocial: obrasocial });
   };
 
   const cancelar = () => {
+    formNuevo.reset();
+    formEdit.reset();
     setShow(false);
     setShowNuevo(false);
-    setCampo({ ...campo, obrasocial: '' });
   };
 
-  const cargarNuevo = async () => {
-    const idObrasocial = campo.obrasocial;
-    if (idObrasocial !== '') {
-      const data = {
-        idpersonaep: Number(idEpElegido),
-        idobrasocial: Number(idObrasocial),
-        borrado: false,
-      };
-      const response = await osRepository.create(data);
-      if (response?.success) {
-        getOs();
-        utils.notificacionGuardar();
-        setShow(false);
-        setCampo({ ...campo, obrasocial: '' });
-      }
+  const cargarNuevo = async (data) => {
+    const payload = {
+      idpersonaep: Number(idEpElegido),
+      idobrasocial: Number(data.obrasocial),
+      borrado: false,
+    };
+    const response = await osRepository.create(payload);
+    if (response?.success) {
+      getOs();
+      utils.notificacionGuardar();
+      formNuevo.reset();
+      setShowNuevo(false);
     }
   };
 
-  const guardar = async () => {
-    const idObrasocial = campo.obrasocial;
-    const id = idEditado;
-    if (idObrasocial !== '') {
-      const data = {
-        idpersonaep: Number(idEpElegido),
-        idobrasocial: Number(idObrasocial),
-        borrado: false,
-      };
-      const response = await osRepository.update(id, data);
-      if (response?.success) {
-        getOs();
-        utils.notificacionGuardar();
-        setShow(false);
-        setCampo({ ...campo, obrasocial: '' });
-      }
+  const guardar = async (data) => {
+    const payload = {
+      idpersonaep: Number(idEpElegido),
+      idobrasocial: Number(data.obrasocial),
+      borrado: false,
+    };
+    const response = await osRepository.update(idEditado, payload);
+    if (response?.success) {
+      getOs();
+      utils.notificacionGuardar();
+      formEdit.reset();
+      setShow(false);
     }
   };
 
@@ -166,31 +158,95 @@ const ListaObraSocial = (props) => {
         </div>
       </div>
 
-      {showNuevo ? (
-        <ObraSocialForm
-          titulo={'Cargar Obra Social'}
-          funcionCambiar={detectarCambio}
-          obrasociales={obrasociales}
-          funcionConfirmar={cargarNuevo}
-          funcionCancelar={cancelar}
-          value={campo.obrasocial}
-        />
-      ) : (
-        ''
-      )}
+      <Modal show={showNuevo}>
+        <Modal.Header className="justify-content-center">
+          <h4 className="mb-0">Cargar Obra Social</h4>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="row justify-content-center">
+            <div className="col-12 col-md-6 col-lg-6 col-xl-6">
+              <label className="col-form-label">Obra Social</label>
+              <select
+                className="form-select"
+                id="obrasocial"
+                {...formNuevo.register('obrasocial', {
+                  required: 'Debe seleccionar una obra social.',
+                })}
+              >
+                <option value="">Elegir</option>
+                {obrasociales &&
+                  obrasociales.map((obrasocial) => (
+                    <option value={obrasocial.idobrasocial} key={obrasocial.idobrasocial}>
+                      {obrasocial.nombre}
+                    </option>
+                  ))}
+              </select>
+              {formNuevo.formState.errors.obrasocial && (
+                <small className="text-danger" role="alert">
+                  {formNuevo.formState.errors.obrasocial.message}
+                </small>
+              )}
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer className="justify-content-center">
+          <button type="button" className="btn btn-rojo" onClick={() => cancelar()}>
+            Cancelar
+          </button>
+          <button
+            type="button"
+            className="btn btn-verde ms-3"
+            onClick={() => formNuevo.handleSubmit(cargarNuevo)()}
+          >
+            Guardar
+          </button>
+        </Modal.Footer>
+      </Modal>
 
-      {show ? (
-        <ObraSocialForm
-          titulo={'Editar Obra Social'}
-          funcionCambiar={detectarCambio}
-          obrasociales={obrasociales}
-          funcionConfirmar={guardar}
-          funcionCancelar={cancelar}
-          value={campo.obrasocial}
-        />
-      ) : (
-        ''
-      )}
+      <Modal show={show}>
+        <Modal.Header className="justify-content-center">
+          <h4 className="mb-0">Editar Obra Social</h4>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="row justify-content-center">
+            <div className="col-12 col-md-6 col-lg-6 col-xl-6">
+              <label className="col-form-label">Obra Social</label>
+              <select
+                className="form-select"
+                id="obrasocial"
+                {...formEdit.register('obrasocial', {
+                  required: 'Debe seleccionar una obra social.',
+                })}
+              >
+                <option value="">Elegir</option>
+                {obrasociales &&
+                  obrasociales.map((obrasocial) => (
+                    <option value={obrasocial.idobrasocial} key={obrasocial.idobrasocial}>
+                      {obrasocial.nombre}
+                    </option>
+                  ))}
+              </select>
+              {formEdit.formState.errors.obrasocial && (
+                <small className="text-danger" role="alert">
+                  {formEdit.formState.errors.obrasocial.message}
+                </small>
+              )}
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer className="justify-content-center">
+          <button type="button" className="btn btn-rojo" onClick={() => cancelar()}>
+            Cancelar
+          </button>
+          <button
+            type="button"
+            className="btn btn-verde ms-3"
+            onClick={() => formEdit.handleSubmit(guardar)()}
+          >
+            Guardar
+          </button>
+        </Modal.Footer>
+      </Modal>
 
       <div className="row">
         <div className="col-12 col-md-12 col-lg-12 col-xl-12">

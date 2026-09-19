@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { Container, Form, Modal } from 'react-bootstrap';
 import { eventRespository } from '../services/event.service';
 import { showConfirm, showToast } from '../services/notification.service';
@@ -12,13 +13,11 @@ const TypeEvents = () => {
   const [loadError, setLoadError] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const [form, setForm] = useState({
-    idtipoevento: 0,
-    nombre: '',
-    desactivataller: false,
-  });
   const [modalInsert, setModalInsert] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
+
+  const formInsert = useForm();
+  const formEdit = useForm();
 
   useEffect(() => {
     setLoading(true);
@@ -33,38 +32,27 @@ const TypeEvents = () => {
     getEventAll().catch(() => {});
   };
 
-  const handleChange = (e) => {
-    if (e.target.id === 'desactivataller') {
-      setForm({
-        ...form,
-        [e.target.name]: e.target.checked,
-      });
-    } else {
-      setForm({
-        ...form,
-        [e.target.name]: e.target.value,
-      });
-    }
-  };
-
   const showModalInsert = () => {
+    formInsert.reset({ nombre: '', desactivataller: false });
     setModalInsert(true);
   };
 
   const handleModalInsert = () => {
+    formInsert.reset();
     setModalInsert(false);
   };
 
   const showModalEdit = (data) => {
-    setModalEdit(true);
-    setForm({
+    formEdit.reset({
       idtipoevento: data.idtipoevento,
       nombre: data.nombre,
       desactivataller: data.desactivataller,
     });
+    setModalEdit(true);
   };
 
   const handleModalEdit = () => {
+    formEdit.reset();
     setModalEdit(false);
   };
 
@@ -93,40 +81,30 @@ const TypeEvents = () => {
   };
 
   const edit = (data) => {
-    let list = [...typeEvent];
-    let modifidedEvent;
-    list.map((listdata) => {
-      if (data.idtipoevento === listdata.idtipoevento) {
-        modifidedEvent = {
-          id: data.idtipoevento,
-          nombre: data.nombre,
-          desactivataller: data.desactivataller,
-          borrado: false,
-        };
-        return modifidedEvent;
-      }
-      return list;
-    });
+    const payload = {
+      id: data.idtipoevento,
+      nombre: data.nombre,
+      desactivataller: data.desactivataller,
+      borrado: false,
+    };
 
-    eventRespository.updateTypeEvent(data.idtipoevento, modifidedEvent).then((response) => {
+    eventRespository.updateTypeEvent(data.idtipoevento, payload).then((response) => {
       if (response?.success) {
         showToast('success', 'Se ha guardado con éxito');
         clear();
         getEventAll();
       }
     });
-    setTypeEvent(list);
     setModalEdit(false);
   };
 
-  const guardarNuevo = () => {
-    let data = {};
-    data = {
-      nombre: form.nombre,
-      desactivataller: form.desactivataller,
+  const guardarNuevo = (data) => {
+    const payload = {
+      nombre: data.nombre,
+      desactivataller: data.desactivataller,
       borrado: false,
     };
-    eventRespository.createTypeEvent(data).then((response) => {
+    eventRespository.createTypeEvent(payload).then((response) => {
       if (response?.success) {
         setModalInsert(false);
         showToast('success', 'Se ha guardado con éxito');
@@ -146,7 +124,8 @@ const TypeEvents = () => {
   };
 
   const clear = () => {
-    setForm({ idtipoevento: 0, nombre: '', desactivataller: false });
+    formInsert.reset();
+    formEdit.reset();
   };
 
   return (
@@ -228,8 +207,13 @@ const TypeEvents = () => {
               name="nombre"
               id="nombre"
               className="form-control"
-              onChange={handleChange}
+              {...formInsert.register('nombre', { required: 'Debe ingresar el nombre.' })}
             />
+            {formInsert.formState.errors.nombre && (
+              <span className="text-danger" role="alert">
+                {formInsert.formState.errors.nombre.message}
+              </span>
+            )}
           </Form.Group>
           <Form.Group className="mb-0">
             <label htmlFor="desactivataller" className="control-label">
@@ -240,20 +224,19 @@ const TypeEvents = () => {
               name="desactivataller"
               id="desactivataller"
               className="form-check-input"
-              onChange={handleChange}
+              {...formInsert.register('desactivataller')}
             />
           </Form.Group>
         </Modal.Body>
-        <Modal.Footer>
-          <button
-            type="button"
-            className="btn btn-rojo"
-            data-bs-dismiss="modal"
-            onClick={() => handleModalInsert()}
-          >
+        <Modal.Footer className="justify-content-center">
+          <button type="button" className="btn btn-rojo" onClick={() => handleModalInsert()}>
             Cancelar
           </button>
-          <button type="button" className="btn btn-verde" onClick={() => guardarNuevo()}>
+          <button
+            type="button"
+            className="btn btn-verde ms-3"
+            onClick={() => formInsert.handleSubmit(guardarNuevo)()}
+          >
             Guardar
           </button>
         </Modal.Footer>
@@ -275,8 +258,7 @@ const TypeEvents = () => {
                 id="idtipoevento"
                 className="form-control"
                 readOnly
-                onChange={handleChange}
-                value={form.idtipoevento}
+                {...formEdit.register('idtipoevento')}
               />
             </Form.Group>
             <Form.Group className="mb-0">
@@ -288,9 +270,13 @@ const TypeEvents = () => {
                 name="nombre"
                 id="nombre"
                 className="form-control"
-                onChange={handleChange}
-                value={form.nombre}
+                {...formEdit.register('nombre', { required: 'Debe ingresar el nombre.' })}
               />
+              {formEdit.formState.errors.nombre && (
+                <span className="text-danger" role="alert">
+                  {formEdit.formState.errors.nombre.message}
+                </span>
+              )}
             </Form.Group>
             <Form.Group className="mb-0">
               <label htmlFor="desactivataller" className="control-label">
@@ -301,22 +287,20 @@ const TypeEvents = () => {
                 name="desactivataller"
                 id="desactivataller"
                 className="form-check-input"
-                onChange={handleChange}
-                defaultChecked={form.desactivataller}
+                {...formEdit.register('desactivataller')}
               />
             </Form.Group>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
-          <button
-            type="button"
-            className="btn btn-rojo"
-            data-bs-dismiss="modal"
-            onClick={() => handleModalEdit()}
-          >
+        <Modal.Footer className="justify-content-center">
+          <button type="button" className="btn btn-rojo" onClick={() => handleModalEdit()}>
             Cancelar
           </button>
-          <button type="button" className="btn btn-verde" onClick={() => edit(form)}>
+          <button
+            type="button"
+            className="btn btn-verde ms-3"
+            onClick={() => formEdit.handleSubmit(edit)()}
+          >
             Guardar
           </button>
         </Modal.Footer>

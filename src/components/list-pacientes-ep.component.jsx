@@ -401,7 +401,7 @@ const ListaPaciente = (props) => {
           <button type="button" className="btn btn-rojo" onClick={() => handleModalInsert()}>
             Cancelar
           </button>
-          <button type="button" className="btn btn-verde" onClick={handleSubmit(customSubmit)}>
+          <button type="button" className="btn btn-verde ms-3" onClick={handleSubmit(customSubmit)}>
             Guardar
           </button>
         </Modal.Footer>

@@ -391,13 +391,13 @@ const Encuentro = () => {
             </div>
           </div>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer className="justify-content-center">
           <button type="button" className="btn btn-rojo" onClick={() => handleModalInsert()}>
             Cancelar
           </button>
           <button
             type="button"
-            className="btn btn-verde"
+            className="btn btn-verde ms-3"
             onClick={() => formInsert.handleSubmit(guardarNuevo)()}
           >
             Guardar
@@ -486,13 +486,13 @@ const Encuentro = () => {
             </div>
           </div>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer className="justify-content-center">
           <button type="button" className="btn btn-rojo" onClick={() => handleModalEdit()}>
             Cancelar
           </button>
           <button
             type="button"
-            className="btn btn-verde"
+            className="btn btn-verde ms-3"
             onClick={() => formEdit.handleSubmit(guardarEdicion)()}
           >
             Guardar
@@ -549,13 +549,13 @@ const Encuentro = () => {
             </div>
           </div>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer className="justify-content-center">
           <button type="button" className="btn btn-rojo" onClick={() => handleModalInsertAct()}>
             Cancelar
           </button>
           <button
             type="button"
-            className="btn btn-verde"
+            className="btn btn-verde ms-3"
             onClick={() => guardarActividadesSeleccionadas()}
           >
             Guardar
