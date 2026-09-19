@@ -397,7 +397,7 @@ const Encuentro = () => {
           </button>
           <button
             type="button"
-            className="btn btn-verde"
+            className="btn btn-verde ms-3"
             onClick={() => formInsert.handleSubmit(guardarNuevo)()}
           >
             Guardar
@@ -492,7 +492,7 @@ const Encuentro = () => {
           </button>
           <button
             type="button"
-            className="btn btn-verde"
+            className="btn btn-verde ms-3"
             onClick={() => formEdit.handleSubmit(guardarEdicion)()}
           >
             Guardar
@@ -555,7 +555,7 @@ const Encuentro = () => {
           </button>
           <button
             type="button"
-            className="btn btn-verde"
+            className="btn btn-verde ms-3"
             onClick={() => guardarActividadesSeleccionadas()}
           >
             Guardar

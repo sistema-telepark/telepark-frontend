@@ -295,7 +295,7 @@ const Talleres = () => {
           </button>
           <button
             type="button"
-            className="btn btn-verde"
+            className="btn btn-verde ms-3"
             onClick={() => formInsert.handleSubmit(guardarNuevo)()}
           >
             Guardar
@@ -359,7 +359,7 @@ const Talleres = () => {
           </button>
           <button
             type="button"
-            className="btn btn-verde"
+            className="btn btn-verde ms-3"
             onClick={() => formEdit.handleSubmit(editar)()}
           >
             Guardar
@@ -452,7 +452,7 @@ const Talleres = () => {
           <button type="button" className="btn btn-rojo" onClick={() => handleModalInsertAct()}>
             Cancelar
           </button>
-          <button type="button" className="btn btn-verde" onClick={() => guardarAct()}>
+          <button type="button" className="btn btn-verde ms-3" onClick={() => guardarAct()}>
             Guardar
           </button>
         </Modal.Footer>

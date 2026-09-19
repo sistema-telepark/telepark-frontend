@@ -269,7 +269,7 @@ const AdminPersonas = () => {
           </button>
           <button
             type="button"
-            className="btn btn-verde"
+            className="btn btn-verde ms-3"
             onClick={() => formEdit.handleSubmit(edit)()}
           >
             Guardar
