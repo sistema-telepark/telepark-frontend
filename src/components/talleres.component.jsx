@@ -289,7 +289,7 @@ const Talleres = () => {
             </div>
           </div>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer className="justify-content-center">
           <button type="button" className="btn btn-rojo" onClick={() => handleModalInsert()}>
             Cancelar
           </button>
@@ -353,7 +353,7 @@ const Talleres = () => {
             </div>
           </div>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer className="justify-content-center">
           <button type="button" className="btn btn-rojo" onClick={() => handleModalEdit()}>
             Cancelar
           </button>
@@ -448,7 +448,7 @@ const Talleres = () => {
             </div>
           </div>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer className="justify-content-center">
           <button type="button" className="btn btn-rojo" onClick={() => handleModalInsertAct()}>
             Cancelar
           </button>
