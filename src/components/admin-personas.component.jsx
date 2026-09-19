@@ -1,4 +1,5 @@
 import React, { memo, useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { PencilIcon, TrashIcon } from './icons/icons-shared';
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
 import LoadingSpinner from './shared/loading-spinner';
@@ -10,27 +11,15 @@ import { Form, Modal } from 'react-bootstrap';
 const AdminPersonas = () => {
   const [arrayPerson, setArrayPerson] = useState([]);
   const [buscar, setBuscar] = useState('');
-  const [searchArrayperson, setSearchArrayperson] = useState({
-    idpersona: 0,
-    nombre: '',
-    apellido: '',
-    telefono: 0,
-    borrado: false,
-  });
   const [modalEdit, setModalEdit] = useState(false);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(null);
 
+  const formEdit = useForm();
+
   useEffect(() => {
     getPersonAll();
   }, []);
-
-  const handleChange = (e) => {
-    setSearchArrayperson({
-      ...searchArrayperson,
-      [e.target.name]: e.target.value,
-    });
-  };
 
   const detectarCambioBusqueda = (e) => {
     setBuscar(e.target.value);
@@ -38,18 +27,18 @@ const AdminPersonas = () => {
 
   const edit = (data) => {
     let list = [...arrayPerson];
-    let modifidedPerson = list.find((listdata) => data.idpersona === listdata.idpersona);
+    let modifidedPerson = list.find((listdata) => Number(data.idpersona) === listdata.idpersona);
     if (!modifidedPerson) {
       return;
     }
     modifidedPerson = {
-      id: data.idpersona,
+      id: Number(data.idpersona),
       nombre: data.nombre,
       apellido: data.apellido,
       telefono: data.telefono,
       borrado: modifidedPerson.borrado,
     };
-    eventRespository.updatePerson(data.idpersona, modifidedPerson).then((response) => {
+    eventRespository.updatePerson(Number(data.idpersona), modifidedPerson).then((response) => {
       if (response?.success) {
         showToast('success', 'Se ha guardado con éxito');
         clear();
@@ -61,7 +50,7 @@ const AdminPersonas = () => {
 
   const showModalEdit = (data) => {
     setModalEdit(true);
-    setSearchArrayperson({
+    formEdit.reset({
       idpersona: data.idpersona,
       nombre: data.nombre,
       apellido: data.apellido,
@@ -70,17 +59,12 @@ const AdminPersonas = () => {
   };
 
   const handleModalEdit = () => {
+    formEdit.reset();
     setModalEdit(false);
   };
 
   const clear = () => {
-    setSearchArrayperson({
-      idpersona: 0,
-      nombre: '',
-      apellido: '',
-      telefono: 0,
-      borrado: false,
-    });
+    formEdit.reset();
   };
 
   // El backend responde envelope DRF paginado {count,next,previous,results}
@@ -117,7 +101,6 @@ const AdminPersonas = () => {
       }
     });
     setArrayPerson(arrayPersonas);
-    setSearchArrayperson(arrayPerson);
   };
 
   const terminoBusqueda = buscar.trim().toLowerCase();
@@ -224,8 +207,7 @@ const AdminPersonas = () => {
                 id="idpersona"
                 className="form-control"
                 readOnly
-                onChange={handleChange}
-                value={searchArrayperson.idpersona}
+                {...formEdit.register('idpersona')}
               />
             </Form.Group>
             <Form.Group className="mb-0">
@@ -237,9 +219,13 @@ const AdminPersonas = () => {
                 name="nombre"
                 id="nombre"
                 className="form-control"
-                onChange={handleChange}
-                value={searchArrayperson.nombre}
+                {...formEdit.register('nombre', { required: 'Por favor, ingresa el nombre.' })}
               />
+              {formEdit.formState.errors.nombre && (
+                <span className="text-danger" role="alert">
+                  {formEdit.formState.errors.nombre.message}
+                </span>
+              )}
             </Form.Group>
             <Form.Group className="mb-0">
               <label htmlFor="apellido" className="control-label">
@@ -250,9 +236,13 @@ const AdminPersonas = () => {
                 name="apellido"
                 id="apellido"
                 className="form-control"
-                onChange={handleChange}
-                value={searchArrayperson.apellido}
+                {...formEdit.register('apellido', { required: 'Por favor, ingresa el apellido.' })}
               />
+              {formEdit.formState.errors.apellido && (
+                <span className="text-danger" role="alert">
+                  {formEdit.formState.errors.apellido.message}
+                </span>
+              )}
             </Form.Group>
             <Form.Group className="mb-0">
               <label htmlFor="telefono" className="control-label">
@@ -263,22 +253,25 @@ const AdminPersonas = () => {
                 name="telefono"
                 id="telefono"
                 className="form-control"
-                onChange={handleChange}
-                value={searchArrayperson.telefono}
+                {...formEdit.register('telefono', { required: 'Por favor, ingresa el teléfono.' })}
               />
+              {formEdit.formState.errors.telefono && (
+                <span className="text-danger" role="alert">
+                  {formEdit.formState.errors.telefono.message}
+                </span>
+              )}
             </Form.Group>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
-          <button
-            type="button"
-            className="btn btn-rojo"
-            data-bs-dismiss="modal"
-            onClick={() => handleModalEdit()}
-          >
+        <Modal.Footer className="justify-content-center">
+          <button type="button" className="btn btn-rojo" onClick={() => handleModalEdit()}>
             Cancelar
           </button>
-          <button type="button" className="btn btn-verde" onClick={() => edit(searchArrayperson)}>
+          <button
+            type="button"
+            className="btn btn-verde"
+            onClick={() => formEdit.handleSubmit(edit)()}
+          >
             Guardar
           </button>
         </Modal.Footer>

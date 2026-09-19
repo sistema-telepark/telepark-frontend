@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import '../styles/list-pacientes-ep.css';
 import { userRepository } from '../services/users.service';
 import { TokenService } from '../services/token.service';
@@ -13,107 +14,32 @@ import { Form, Modal } from 'react-bootstrap';
 const AdminUsuarios = () => {
   const [showNuevo, setShowNuevo] = useState(false);
   const [show, setShow] = useState(false);
-  const [campo, setCampo] = useState({
-    buscador: '',
-  });
-  const [error, setError] = useState({});
+  const [buscador, setBuscador] = useState('');
   const [usuarios, setUsuarios] = useState();
   const [usuariosFiltrados, setUsuariosFiltrados] = useState();
   const [idUsuario, setIdUsuario] = useState(null);
+  const [usernameEditado, setUsernameEditado] = useState('');
 
   const [loadError, setLoadError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [guardando, setGuardando] = useState(false);
   const [usuarioAEliminar, setUsuarioAEliminar] = useState(null);
 
+  const formNuevo = useForm();
+  const formEdit = useForm();
+
   useEffect(() => {
     getUsers();
   }, []);
 
-  const detectarCambio = (field, e) => {
-    setCampo({ ...campo, [field]: e.target.value });
-    if (field === 'buscador') {
-      buscar(e.target.value);
-    }
+  const detectarCambioBuscador = (e) => {
+    const valor = e.target.value;
+    setBuscador(valor);
+    buscar(valor);
     // Si el usuario vació el buscador (o apretó la cruz nativa 'X'), restauramos la lista completa
-    if (field === 'buscador' && e.target.value.trim() === '') {
+    if (valor.trim() === '') {
       setUsuariosFiltrados(undefined);
     }
-  };
-
-  const validarFormulario = () => {
-    let error = {};
-    let formularioValido = true;
-
-    if (showNuevo) {
-      if (!campo['username']) {
-        formularioValido = false;
-        error['username'] = 'Por favor, ingresa el nombre de usuario.';
-      }
-
-      if (!campo['firstname']) {
-        formularioValido = false;
-        error['firstname'] = 'Por favor, ingresa el nombre.';
-      }
-
-      if (!campo['lastname']) {
-        formularioValido = false;
-        error['lastname'] = 'Por favor, ingresa el apellido.';
-      }
-
-      if (!campo['password']) {
-        formularioValido = false;
-        error['password'] = 'Por favor, ingresa la contraseña.';
-      } else if (campo['password'].length < 8) {
-        formularioValido = false;
-        error['password'] = 'La contraseña debe tener al menos 8 caracteres.';
-      }
-
-      if (!campo['role']) {
-        formularioValido = false;
-        error['role'] = 'Por favor, ingresa el role de usuario.';
-      }
-
-      if (!campo['isActive']) {
-        formularioValido = false;
-        error['isActive'] = 'Por favor, ingresa el estado.';
-      }
-
-      if (!campo['email']) {
-        formularioValido = false;
-        error['email'] = 'Por favor, ingresa el email.';
-      } else if (!/^\S+@\S+\.\S+$/.test(campo['email'])) {
-        formularioValido = false;
-        error['email'] = 'Por favor, ingresa un email válido.';
-      }
-    } else {
-      if (!campo['firstname']) {
-        formularioValido = false;
-        error['firstname'] = 'Por favor, ingresa el nombre.';
-      }
-
-      if (!campo['lastname']) {
-        formularioValido = false;
-        error['lastname'] = 'Por favor, ingresa el apellido.';
-      }
-
-      if (!campo['email']) {
-        formularioValido = false;
-        error['email'] = 'Por favor, ingresa el email.';
-      } else if (!/^\S+@\S+\.\S+$/.test(campo['email'])) {
-        formularioValido = false;
-        error['email'] = 'Por favor, ingresa un email válido.';
-      }
-
-      if (campo['password'] && campo['password'].length < 8) {
-        formularioValido = false;
-        error['password'] = 'La contraseña debe tener al menos 8 caracteres.';
-      }
-    }
-
-    setError(error);
-
-    return formularioValido;
   };
 
   // El backend devuelve envelope DRF paginado {count,next,previous,results}
@@ -141,8 +67,8 @@ const AdminUsuarios = () => {
     setShowNuevo(false);
     setShow(true);
     setIdUsuario(user.id);
-    setCampo({
-      buscador: '',
+    setUsernameEditado(user.username);
+    formEdit.reset({
       username: user.username,
       firstname: user.first_name,
       lastname: user.last_name,
@@ -150,7 +76,6 @@ const AdminUsuarios = () => {
       role: user.is_superuser === true || user.is_superuser === 'true' ? 'true' : 'false',
       isActive: user.is_active === true ? 'true' : 'false',
     });
-    setError('');
   };
 
   const eliminarUsuario = (usuario) => {
@@ -173,26 +98,25 @@ const AdminUsuarios = () => {
     showToast('danger', 'Cancelado', { message: 'No se eliminaron registros' });
   };
 
-  const guardar = () => {
+  const guardar = (data) => {
     if (!idUsuario) {
       showToast('danger', 'Error: Hubo un problema en la carga.');
       return;
     }
 
-    if (!validarFormulario()) return;
     setGuardando(true);
-    const data = {
-      user: campo.username,
-      first_name: campo.firstname,
-      last_name: campo.lastname,
-      email: campo.email,
-      is_active: campo.isActive === 'true' ? true : false,
-      ...(campo.password ? { password: campo.password } : {}),
-      ...(campo.role ? { is_superuser: campo.role === 'true' } : {}),
+    const payload = {
+      user: usernameEditado,
+      first_name: data.firstname,
+      last_name: data.lastname,
+      email: data.email,
+      is_active: data.isActive === 'true' ? true : false,
+      ...(data.password ? { password: data.password } : {}),
+      ...(data.role ? { is_superuser: data.role === 'true' } : {}),
     };
 
     userRepository
-      .updateUser(idUsuario, data)
+      .updateUser(idUsuario, payload)
       .then((response) => {
         if (response && response.success) {
           showToast('success', 'Se ha guardado con éxito');
@@ -203,21 +127,20 @@ const AdminUsuarios = () => {
       .finally(() => setGuardando(false));
   };
 
-  const guardarNuevo = () => {
-    if (!validarFormulario()) return;
+  const guardarNuevo = (data) => {
     setGuardando(true);
-    const data = {
-      user: campo.username,
-      email: campo.email,
-      first_name: campo.firstname,
-      last_name: campo.lastname,
-      password: campo.password,
-      is_superuser: campo.role === 'true',
-      is_active: campo.isActive === 'true' ? true : false,
+    const payload = {
+      user: data.username,
+      email: data.email,
+      first_name: data.firstname,
+      last_name: data.lastname,
+      password: data.password,
+      is_superuser: data.role === 'true',
+      is_active: data.isActive === 'true' ? true : false,
     };
 
     userRepository
-      .createUser(data)
+      .createUser(payload)
       .then((response) => {
         if (response && response.success) {
           showToast('success', 'Se ha guardado con éxito');
@@ -232,29 +155,20 @@ const AdminUsuarios = () => {
     setShowNuevo(false);
     setShow(false);
     setIdUsuario(null);
-    setCampo({
-      buscador: '',
-      password: '',
-      username: '',
-      firstname: '',
-      lastname: '',
-      email: '',
-      role: '',
-      isActive: '',
-    });
+    setUsernameEditado('');
+    formNuevo.reset();
+    formEdit.reset();
   };
 
   const agregar = () => {
     setShowNuevo(true);
     setShow(false);
-    setError('');
-    setCampo({
-      buscador: '',
-      password: '',
+    formNuevo.reset({
       username: '',
       firstname: '',
       lastname: '',
       email: '',
+      password: '',
       role: '',
       isActive: '',
     });
@@ -262,7 +176,7 @@ const AdminUsuarios = () => {
 
   // Filtra la lista de usuarios cargada en memoria; normaliza el término una
   // sola vez (case-insensitive) y busca sobre username, first_name y last_name.
-  const buscar = (valor = campo.buscador) => {
+  const buscar = (valor = buscador) => {
     const termino = (valor || '').trim().toLowerCase();
     if (!usuarios) return;
     if (termino === '') {
@@ -301,8 +215,8 @@ const AdminUsuarios = () => {
             placeholder="Buscar"
             id="buscador"
             aria-describedby="buscador"
-            onChange={(e) => detectarCambio('buscador', e)}
-            value={campo['buscador'] || ''}
+            onChange={detectarCambioBuscador}
+            value={buscador}
           />
         </div>
       </form>
@@ -323,10 +237,15 @@ const AdminUsuarios = () => {
                   className="form-control"
                   placeholder="Nombre..."
                   id="firstname"
-                  onChange={(e) => detectarCambio('firstname', e)}
-                  value={campo['firstname'] || ''}
+                  {...formNuevo.register('firstname', {
+                    required: 'Por favor, ingresa el nombre.',
+                  })}
                 />
-                <span className={styles.required}>{error['firstname']}</span>
+                {formNuevo.formState.errors.firstname && (
+                  <span className={styles.required} role="alert">
+                    {formNuevo.formState.errors.firstname.message}
+                  </span>
+                )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label className="col-form-label">
@@ -337,10 +256,15 @@ const AdminUsuarios = () => {
                   className="form-control"
                   placeholder="Apellido..."
                   id="lastname"
-                  onChange={(e) => detectarCambio('lastname', e)}
-                  value={campo['lastname'] || ''}
+                  {...formNuevo.register('lastname', {
+                    required: 'Por favor, ingresa el apellido.',
+                  })}
                 />
-                <span className={styles.required}>{error['lastname']}</span>
+                {formNuevo.formState.errors.lastname && (
+                  <span className={styles.required} role="alert">
+                    {formNuevo.formState.errors.lastname.message}
+                  </span>
+                )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label className="col-form-label">
@@ -351,10 +275,19 @@ const AdminUsuarios = () => {
                   className="form-control"
                   placeholder="Email..."
                   id="email"
-                  onChange={(e) => detectarCambio('email', e)}
-                  value={campo['email'] || ''}
+                  {...formNuevo.register('email', {
+                    required: 'Por favor, ingresa el email.',
+                    pattern: {
+                      value: /^\S+@\S+\.\S+$/,
+                      message: 'Por favor, ingresa un email válido.',
+                    },
+                  })}
                 />
-                <span className={styles.required}>{error['email']}</span>
+                {formNuevo.formState.errors.email && (
+                  <span className={styles.required} role="alert">
+                    {formNuevo.formState.errors.email.message}
+                  </span>
+                )}
               </div>
             </div>
             <div className="row justify-content-center">
@@ -367,10 +300,15 @@ const AdminUsuarios = () => {
                   className="form-control"
                   placeholder="Nombre de usuario..."
                   id="username"
-                  onChange={(e) => detectarCambio('username', e)}
-                  value={campo['username'] || ''}
+                  {...formNuevo.register('username', {
+                    required: 'Por favor, ingresa el nombre de usuario.',
+                  })}
                 />
-                <span className={styles.required}>{error['username']}</span>
+                {formNuevo.formState.errors.username && (
+                  <span className={styles.required} role="alert">
+                    {formNuevo.formState.errors.username.message}
+                  </span>
+                )}
               </div>
               <div className="mb-4 col-12 col-md-6">
                 <label className="col-form-label">
@@ -381,12 +319,19 @@ const AdminUsuarios = () => {
                   className="form-control"
                   placeholder="Contraseña..."
                   id="password"
-                  onChange={(e) => detectarCambio('password', e)}
-                  value={campo['password'] || ''}
+                  {...formNuevo.register('password', {
+                    required: 'Por favor, ingresa la contraseña.',
+                    minLength: {
+                      value: 8,
+                      message: 'La contraseña debe tener al menos 8 caracteres.',
+                    },
+                  })}
                 />
-                <span className={styles.required} role="alert">
-                  {error['password']}
-                </span>
+                {formNuevo.formState.errors.password && (
+                  <span className={styles.required} role="alert">
+                    {formNuevo.formState.errors.password.message}
+                  </span>
+                )}
               </div>
             </div>
             <div className="row justify-content-center">
@@ -398,14 +343,19 @@ const AdminUsuarios = () => {
                   className="form-select"
                   placeholder="Ingrese rol..."
                   id="role"
-                  onChange={(e) => detectarCambio('role', e)}
-                  value={campo['role'] || ''}
+                  {...formNuevo.register('role', {
+                    required: 'Por favor, ingresa el role de usuario.',
+                  })}
                 >
                   <option value="">Elegir</option>
                   <option value="false">Usuario</option>
                   <option value="true">Administrador</option>
                 </select>
-                <span className={styles.required}>{error['role']}</span>
+                {formNuevo.formState.errors.role && (
+                  <span className={styles.required} role="alert">
+                    {formNuevo.formState.errors.role.message}
+                  </span>
+                )}
               </div>
               <div className="mb-4 col-12 col-md-6">
                 <label htmlFor="isActive" className="col-form-label">
@@ -415,14 +365,19 @@ const AdminUsuarios = () => {
                   className="form-select"
                   placeholder="Ingrese estado..."
                   id="isActive"
-                  onChange={(e) => detectarCambio('isActive', e)}
-                  value={campo['isActive'] || ''}
+                  {...formNuevo.register('isActive', {
+                    required: 'Por favor, ingresa el estado.',
+                  })}
                 >
                   <option value="">Elegir</option>
                   <option value="false">Inactivo</option>
                   <option value="true">Activo</option>
                 </select>
-                <span className={styles.required}>{error['isActive']}</span>
+                {formNuevo.formState.errors.isActive && (
+                  <span className={styles.required} role="alert">
+                    {formNuevo.formState.errors.isActive.message}
+                  </span>
+                )}
               </div>
             </div>
           </Form>
@@ -439,7 +394,7 @@ const AdminUsuarios = () => {
           <button
             type="submit"
             className={'btn btn-verde ms-3 ' + styles.submitButton}
-            onClick={() => guardarNuevo()}
+            onClick={() => formNuevo.handleSubmit(guardarNuevo)()}
             disabled={guardando}
           >
             {guardando && (
@@ -466,10 +421,15 @@ const AdminUsuarios = () => {
                   className="form-control"
                   placeholder="Nombre..."
                   id="firstname"
-                  onChange={(e) => detectarCambio('firstname', e)}
-                  value={campo['firstname'] || ''}
+                  {...formEdit.register('firstname', {
+                    required: 'Por favor, ingresa el nombre.',
+                  })}
                 />
-                <span className={styles.required}>{error['firstname']}</span>
+                {formEdit.formState.errors.firstname && (
+                  <span className={styles.required} role="alert">
+                    {formEdit.formState.errors.firstname.message}
+                  </span>
+                )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label className="col-form-label">
@@ -480,10 +440,15 @@ const AdminUsuarios = () => {
                   className="form-control"
                   placeholder="Apellido..."
                   id="lastname"
-                  onChange={(e) => detectarCambio('lastname', e)}
-                  value={campo['lastname'] || ''}
+                  {...formEdit.register('lastname', {
+                    required: 'Por favor, ingresa el apellido.',
+                  })}
                 />
-                <span className={styles.required}>{error['lastname']}</span>
+                {formEdit.formState.errors.lastname && (
+                  <span className={styles.required} role="alert">
+                    {formEdit.formState.errors.lastname.message}
+                  </span>
+                )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label className="col-form-label">
@@ -494,10 +459,19 @@ const AdminUsuarios = () => {
                   className="form-control"
                   placeholder="Email..."
                   id="email"
-                  onChange={(e) => detectarCambio('email', e)}
-                  value={campo['email'] || ''}
+                  {...formEdit.register('email', {
+                    required: 'Por favor, ingresa el email.',
+                    pattern: {
+                      value: /^\S+@\S+\.\S+$/,
+                      message: 'Por favor, ingresa un email válido.',
+                    },
+                  })}
                 />
-                <span className={styles.required}>{error['email']}</span>
+                {formEdit.formState.errors.email && (
+                  <span className={styles.required} role="alert">
+                    {formEdit.formState.errors.email.message}
+                  </span>
+                )}
               </div>
             </div>
             <div className="row justify-content-center">
@@ -511,8 +485,7 @@ const AdminUsuarios = () => {
                   className="form-control"
                   placeholder="Nombre de usuario..."
                   id="username"
-                  onChange={(e) => detectarCambio('username', e)}
-                  value={campo['username'] || ''}
+                  value={usernameEditado}
                 />
               </div>
               <div className="mb-4 col-12 col-md-6">
@@ -522,12 +495,18 @@ const AdminUsuarios = () => {
                   className="form-control"
                   placeholder="Contraseña..."
                   id="password"
-                  onChange={(e) => detectarCambio('password', e)}
-                  value={campo['password'] || ''}
+                  {...formEdit.register('password', {
+                    minLength: {
+                      value: 8,
+                      message: 'La contraseña debe tener al menos 8 caracteres.',
+                    },
+                  })}
                 />
-                <span className={styles.required} role="alert">
-                  {error['password']}
-                </span>
+                {formEdit.formState.errors.password && (
+                  <span className={styles.required} role="alert">
+                    {formEdit.formState.errors.password.message}
+                  </span>
+                )}
               </div>
             </div>
             <div className="row justify-content-center">
@@ -539,8 +518,7 @@ const AdminUsuarios = () => {
                   className="form-select"
                   placeholder="Ingrese rol..."
                   id="role"
-                  onChange={(e) => detectarCambio('role', e)}
-                  value={campo['role'] || ''}
+                  {...formEdit.register('role')}
                 >
                   <option value="">Elegir</option>
                   <option value="false">Usuario</option>
@@ -555,8 +533,7 @@ const AdminUsuarios = () => {
                   className="form-select"
                   placeholder="Ingrese estado..."
                   id="isActive"
-                  onChange={(e) => detectarCambio('isActive', e)}
-                  value={campo['isActive'] || ''}
+                  {...formEdit.register('isActive')}
                 >
                   <option value="false">Inactivo</option>
                   <option value="true">Activo</option>
@@ -577,7 +554,7 @@ const AdminUsuarios = () => {
           <button
             type="submit"
             className={'btn btn-verde ms-3 ' + styles.submitButton}
-            onClick={() => guardar()}
+            onClick={() => formEdit.handleSubmit(guardar)()}
             disabled={guardando}
           >
             {guardando && (

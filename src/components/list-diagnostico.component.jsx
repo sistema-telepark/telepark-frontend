@@ -1,6 +1,8 @@
 import React, { memo, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
+import { useForm } from 'react-hook-form';
+import { Modal } from 'react-bootstrap';
 import { diagnosticoRepository } from '../services/diagnostico.service';
 import { enfermedadRepository } from '../services/enfermedad.service';
 import { showConfirm, showToast } from '../services/notification.service';
@@ -17,16 +19,15 @@ const ListaDiagnostico = () => {
 
   const [show, setShow] = useState(false);
   const [showNuevo, setShowNuevo] = useState(false);
-  const [campo, setCampo] = useState({
-    enfermedad: '',
-    fecha: '',
-  });
   const [idEditado, setIdEditado] = useState('');
   const [enfermedades, setEnfermedades] = useState();
   const [diagnosticos, setDiagnosticos] = useState();
   const [loading, setLoading] = useState(true);
 
   const [loadError, setLoadError] = useState(null);
+
+  const formNuevo = useForm();
+  const formEdit = useForm();
 
   useEffect(() => {
     setLoading(true);
@@ -61,8 +62,6 @@ const ListaDiagnostico = () => {
     }
   };
 
-  // No llamar al service con idEpElegido vacío (estado inicial '') — antes
-  // armaba `/personas-ep//diagnosticos` → 404. Normalizar listado paginado a .results.
   const getDiagnosticos = async () => {
     if (!idEpElegido) {
       setDiagnosticos([]);
@@ -80,69 +79,57 @@ const ListaDiagnostico = () => {
   };
 
   const editar = (enfermedad, fecha, iddiagnostico) => {
+    setIdEditado(iddiagnostico);
+    formEdit.reset({ enfermedad, fecha });
     setShow(true);
     setShowNuevo(false);
-    setIdEditado(iddiagnostico);
-    setCampo({ enfermedad: enfermedad, fecha: fecha });
   };
 
-  const guardar = () => {
-    let idEnfermedad = campo.enfermedad;
-    let fechaEnfermedad = campo.fecha;
-    let id = idEditado;
-    if (idEnfermedad !== '' && fechaEnfermedad !== '') {
-      var data = {
-        fecha: fechaEnfermedad,
-        idpersonaep: Number(idEpElegido),
-        idenfermedad: Number(idEnfermedad),
-        borrado: false,
-      };
-      diagnosticoRepository.update(id, data).then((response) => {
-        if (response?.success) {
-          getDiagnosticos();
-          showToast('success', 'Se ha guardado con éxito');
-        }
-      });
-      setCampo({ enfermedad: '', fecha: '' });
-      setShow(false);
-    }
+  const guardar = (data) => {
+    const payload = {
+      fecha: data.fecha,
+      idpersonaep: Number(idEpElegido),
+      idenfermedad: Number(data.enfermedad),
+      borrado: false,
+    };
+    diagnosticoRepository.update(idEditado, payload).then((response) => {
+      if (response?.success) {
+        getDiagnosticos();
+        showToast('success', 'Se ha guardado con éxito');
+        formEdit.reset();
+        setShow(false);
+      }
+    });
   };
 
   const cancelar = () => {
+    formNuevo.reset();
+    formEdit.reset();
     setShow(false);
     setShowNuevo(false);
-    setCampo({ enfermedad: '', fecha: '' });
-  };
-
-  const detectarCambio = (field, e) => {
-    setCampo({ ...campo, [field]: e.target.value });
   };
 
   const agregar = () => {
+    formNuevo.reset({ enfermedad: '', fecha: '' });
     setShowNuevo(true);
     setShow(false);
-    setCampo({ enfermedad: '', fecha: '' });
   };
 
-  const cargarNuevo = () => {
-    let idEnfermedad = campo.enfermedad;
-    let fechaEnfermedad = campo.fecha;
-    if (idEnfermedad !== '' && fechaEnfermedad !== '') {
-      let data = {
-        fecha: fechaEnfermedad,
-        idpersonaep: Number(idEpElegido),
-        idenfermedad: Number(idEnfermedad),
-        borrado: false,
-      };
-      diagnosticoRepository.create(data).then((reponse) => {
-        if (reponse?.success) {
-          getDiagnosticos();
-          showToast('success', 'Se ha guardado con éxito');
-        }
-      });
-      setCampo({ enfermedad: '', fecha: '' });
-      setShowNuevo(false);
-    }
+  const cargarNuevo = (data) => {
+    const payload = {
+      fecha: data.fecha,
+      idpersonaep: Number(idEpElegido),
+      idenfermedad: Number(data.enfermedad),
+      borrado: false,
+    };
+    diagnosticoRepository.create(payload).then((response) => {
+      if (response?.success) {
+        getDiagnosticos();
+        showToast('success', 'Se ha guardado con éxito');
+        formNuevo.reset();
+        setShowNuevo(false);
+      }
+    });
   };
 
   const eliminar = (idenfermedad, fecha, id) => {
@@ -200,18 +187,20 @@ const ListaDiagnostico = () => {
           </div>
         </div>
 
-        <span>
-          {showNuevo ? (
-            <div className="border-top-sm m-0 row panel-gris m-md-3 rounded shadow container-lg mx-md-auto">
-              <h4 className="mt-4">Nuevo Diagnóstico</h4>
+        <Modal show={showNuevo}>
+          <Modal.Header className="justify-content-center">
+            <h4 className="mb-0">Nuevo Diagnóstico</h4>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="row justify-content-center">
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label className="col-form-label">Nombre de Enfermedad</label>
                 <select
                   className="form-select"
-                  placeholder="Ingrese enfermedad..."
                   id="enfermedad"
-                  onChange={(e) => detectarCambio('enfermedad', e)}
-                  value={campo['enfermedad'] || ''}
+                  {...formNuevo.register('enfermedad', {
+                    required: 'Debe seleccionar una enfermedad.',
+                  })}
                 >
                   <option value="">Elegir</option>
                   {enfermedades &&
@@ -221,6 +210,11 @@ const ListaDiagnostico = () => {
                       </option>
                     ))}
                 </select>
+                {formNuevo.formState.errors.enfermedad && (
+                  <small className="text-danger" role="alert">
+                    {formNuevo.formState.errors.enfermedad.message}
+                  </small>
+                )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label className="col-form-label">Fecha de Diagnóstico</label>
@@ -228,42 +222,44 @@ const ListaDiagnostico = () => {
                   type="date"
                   className="form-control"
                   id="fecha"
-                  onChange={(e) => detectarCambio('fecha', e)}
+                  {...formNuevo.register('fecha', { required: 'Debe ingresar la fecha.' })}
                 />
-              </div>
-              <div className={'mb-4 col-12 col-md-6 col-lg-4 col-xl-4 ' + styles.formActions}>
-                <button
-                  type="submit"
-                  className={'btn btn-verde ' + styles.submitButton}
-                  onClick={() => cargarNuevo()}
-                >
-                  Guardar
-                </button>
-                <button
-                  type="submit"
-                  className={'btn btn-rojo ' + styles.cancelButton}
-                  onClick={() => cancelar()}
-                >
-                  Cancelar
-                </button>
+                {formNuevo.formState.errors.fecha && (
+                  <small className="text-danger" role="alert">
+                    {formNuevo.formState.errors.fecha.message}
+                  </small>
+                )}
               </div>
             </div>
-          ) : (
-            ''
-          )}
-        </span>
+          </Modal.Body>
+          <Modal.Footer className="justify-content-center">
+            <button type="button" className="btn btn-rojo" onClick={() => cancelar()}>
+              Cancelar
+            </button>
+            <button
+              type="button"
+              className="btn btn-verde ms-3"
+              onClick={() => formNuevo.handleSubmit(cargarNuevo)()}
+            >
+              Guardar
+            </button>
+          </Modal.Footer>
+        </Modal>
 
-        <span>
-          {show ? (
-            <div className="border-top-sm m-0 row justify-content-center panel-gris m-md-3 rounded shadow container-lg mx-md-auto">
+        <Modal show={show}>
+          <Modal.Header className="justify-content-center">
+            <h4 className="mb-0">Editar Diagnóstico</h4>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="row justify-content-center">
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label className="col-form-label">Nombre de Enfermedad</label>
                 <select
                   className="form-select"
-                  placeholder="Ingrese enfermedad..."
                   id="enfermedad"
-                  onChange={(e) => detectarCambio('enfermedad', e)}
-                  value={campo['enfermedad'] || ''}
+                  {...formEdit.register('enfermedad', {
+                    required: 'Debe seleccionar una enfermedad.',
+                  })}
                 >
                   <option value="">Elegir</option>
                   {enfermedades &&
@@ -273,6 +269,11 @@ const ListaDiagnostico = () => {
                       </option>
                     ))}
                 </select>
+                {formEdit.formState.errors.enfermedad && (
+                  <small className="text-danger" role="alert">
+                    {formEdit.formState.errors.enfermedad.message}
+                  </small>
+                )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label className="col-form-label">Fecha de Diagnóstico</label>
@@ -280,31 +281,29 @@ const ListaDiagnostico = () => {
                   type="date"
                   className="form-control"
                   id="fecha"
-                  onChange={(e) => detectarCambio('fecha', e)}
-                  value={campo['fecha'] || ''}
+                  {...formEdit.register('fecha', { required: 'Debe ingresar la fecha.' })}
                 />
-              </div>
-              <div className={'mb-4 col-12 col-md-6 col-lg-4 col-xl-4 ' + styles.formActions}>
-                <button
-                  type="submit"
-                  className={'btn btn-verde ' + styles.submitButton}
-                  onClick={() => guardar()}
-                >
-                  Guardar
-                </button>
-                <button
-                  type="submit"
-                  className={'btn btn-rojo ' + styles.cancelButton}
-                  onClick={() => cancelar()}
-                >
-                  Cancelar
-                </button>
+                {formEdit.formState.errors.fecha && (
+                  <small className="text-danger" role="alert">
+                    {formEdit.formState.errors.fecha.message}
+                  </small>
+                )}
               </div>
             </div>
-          ) : (
-            ''
-          )}
-        </span>
+          </Modal.Body>
+          <Modal.Footer className="justify-content-center">
+            <button type="button" className="btn btn-rojo" onClick={() => cancelar()}>
+              Cancelar
+            </button>
+            <button
+              type="button"
+              className="btn btn-verde ms-3"
+              onClick={() => formEdit.handleSubmit(guardar)()}
+            >
+              Guardar
+            </button>
+          </Modal.Footer>
+        </Modal>
 
         <div className="row">
           <div className="col-12">

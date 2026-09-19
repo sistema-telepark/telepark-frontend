@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
+import { useForm } from 'react-hook-form';
+import { Modal } from 'react-bootstrap';
 import { indicacionRepository } from '../services/indicacion.service';
 import { medicamentoRepository } from '../services/medicamento.service';
 import { showConfirm, showToast } from '../services/notification.service';
@@ -17,19 +19,15 @@ const ListaIndicacion = () => {
 
   const [show, setShow] = useState(false);
   const [showNuevo, setShowNuevo] = useState(false);
-  const [campo, setCampo] = useState({
-    medicamento: '',
-    dosis: '',
-    hora: '',
-    fecha: '',
-    estado: '',
-  });
   const [idEditado, setIdEditado] = useState('');
   const [indicaciones, setIndicaciones] = useState([]);
   const [medicamentos, setMedicamentos] = useState();
   const [loading, setLoading] = useState(true);
 
   const [loadError, setLoadError] = useState(null);
+
+  const formNuevo = useForm();
+  const formEdit = useForm();
 
   useEffect(() => {
     setLoading(true);
@@ -78,99 +76,69 @@ const ListaIndicacion = () => {
   };
 
   const editar = (dosis, estado, fecha, hora, medicamento, idindicacion) => {
+    setIdEditado(idindicacion);
+    formEdit.reset({
+      medicamento,
+      dosis,
+      hora,
+      fecha,
+      estado: estado === true ? 'true' : 'false',
+    });
     setShow(true);
     setShowNuevo(false);
-    setIdEditado(idindicacion);
-    setCampo({
-      medicamento: medicamento,
-      dosis: dosis,
-      hora: hora,
-      fecha: fecha,
-      estado: estado === true ? 'true' : 'false',
+  };
+
+  const guardar = (data) => {
+    const payload = {
+      cantidadmiligramos: Number(data.dosis),
+      estavigente: data.estado === 'true',
+      fechaprescripcion: data.fecha,
+      horadetoma: data.hora,
+      idpersonaep: Number(idEpElegido),
+      idmedicamento: Number(data.medicamento),
+      borrado: false,
+    };
+    indicacionRepository.update(idEditado, payload).then((response) => {
+      if (response?.success) {
+        getIndicaciones();
+        showToast('success', 'Se ha guardado con éxito');
+        formEdit.reset();
+        setShow(false);
+      }
     });
   };
 
-  const guardar = () => {
-    let idMedicamento = campo.medicamento;
-    let dosisMedicamento = campo.dosis;
-    let horaMedicamento = campo.hora;
-    let fechaMedicamento = campo.fecha;
-    let estadoMedicamento = campo.estado;
-    let id = idEditado;
-    if (
-      idMedicamento !== '' &&
-      dosisMedicamento !== '' &&
-      horaMedicamento !== '' &&
-      fechaMedicamento !== '' &&
-      estadoMedicamento !== ''
-    ) {
-      let data = {
-        cantidadmiligramos: Number(dosisMedicamento),
-        estavigente: estadoMedicamento === 'true',
-        fechaprescripcion: fechaMedicamento,
-        horadetoma: horaMedicamento,
-        idpersonaep: Number(idEpElegido),
-        idmedicamento: Number(idMedicamento),
-        borrado: false,
-      };
-      indicacionRepository.update(id, data).then((response) => {
-        if (response?.success) {
-          getIndicaciones();
-          showToast('success', 'Se ha guardado con éxito');
-        }
-      });
-      setCampo({ medicamento: '', dosis: '', hora: '', fecha: '', estado: '' });
-      setShow(false);
-    }
-  };
-
   const cancelar = () => {
+    formNuevo.reset();
+    formEdit.reset();
     setShow(false);
     setShowNuevo(false);
-    setCampo({ medicamento: '', dosis: '', hora: '', fecha: '', estado: '' });
-  };
-
-  const detectarCambio = (field, e) => {
-    setCampo({ ...campo, [field]: e.target.value });
   };
 
   const agregar = () => {
+    formNuevo.reset({ medicamento: '', dosis: '', hora: '', fecha: '', estado: '' });
     setShowNuevo(true);
     setShow(false);
-    setCampo({ medicamento: '', dosis: '', hora: '', fecha: '', estado: '' });
   };
 
-  const cargarNuevo = () => {
-    let idMedicamento = campo.medicamento;
-    let dosisMedicamento = campo.dosis;
-    let horaMedicamento = campo.hora;
-    let fechaMedicamento = campo.fecha;
-    let estadoMedicamento = campo.estado;
-    if (
-      idMedicamento !== '' &&
-      dosisMedicamento !== '' &&
-      horaMedicamento !== '' &&
-      fechaMedicamento !== '' &&
-      estadoMedicamento !== ''
-    ) {
-      let data = {
-        cantidadmiligramos: Number(dosisMedicamento),
-        estavigente: estadoMedicamento === 'true',
-        fechaprescripcion: fechaMedicamento,
-        horadetoma: horaMedicamento,
-        idpersonaep: Number(idEpElegido),
-        idmedicamento: Number(idMedicamento),
-        borrado: false,
-      };
-      indicacionRepository.create(data).then((response) => {
-        if (response?.success) {
-          getIndicaciones();
-          showToast('success', 'Se ha guardado con éxito');
-        }
-      });
-      setCampo({ medicamento: '', dosis: '', hora: '', fecha: '', estado: '' });
-      setShowNuevo(false);
-    }
+  const cargarNuevo = (data) => {
+    const payload = {
+      cantidadmiligramos: Number(data.dosis),
+      estavigente: data.estado === 'true',
+      fechaprescripcion: data.fecha,
+      horadetoma: data.hora,
+      idpersonaep: Number(idEpElegido),
+      idmedicamento: Number(data.medicamento),
+      borrado: false,
+    };
+    indicacionRepository.create(payload).then((response) => {
+      if (response?.success) {
+        getIndicaciones();
+        showToast('success', 'Se ha guardado con éxito');
+        formNuevo.reset();
+        setShowNuevo(false);
+      }
+    });
   };
 
   const eliminar = (
@@ -252,18 +220,20 @@ const ListaIndicacion = () => {
           </div>
         </div>
 
-        <span>
-          {showNuevo ? (
-            <div className="border-top-sm m-0 row panel-gris m-md-3 rounded shadow container-lg mx-md-auto">
-              <h4 className="mt-4">Nueva Indicación Médica</h4>
+        <Modal show={showNuevo}>
+          <Modal.Header className="justify-content-center">
+            <h4 className="mb-0">Nueva Indicación Médica</h4>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="row justify-content-center">
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label className="col-form-label">Nombre de Medicamento</label>
                 <select
                   className="form-select"
-                  placeholder="Ingrese medicamento..."
                   id="medicamento"
-                  onChange={(e) => detectarCambio('medicamento', e)}
-                  value={campo['medicamento'] || ''}
+                  {...formNuevo.register('medicamento', {
+                    required: 'Debe seleccionar un medicamento.',
+                  })}
                 >
                   <option value="">Elegir</option>
                   {medicamentos &&
@@ -273,6 +243,11 @@ const ListaIndicacion = () => {
                       </option>
                     ))}
                 </select>
+                {formNuevo.formState.errors.medicamento && (
+                  <small className="text-danger" role="alert">
+                    {formNuevo.formState.errors.medicamento.message}
+                  </small>
+                )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label className="col-form-label">Dosis</label>
@@ -280,8 +255,13 @@ const ListaIndicacion = () => {
                   type="number"
                   className="form-control"
                   id="dosis"
-                  onChange={(e) => detectarCambio('dosis', e)}
+                  {...formNuevo.register('dosis', { required: 'Debe ingresar la dosis.' })}
                 />
+                {formNuevo.formState.errors.dosis && (
+                  <small className="text-danger" role="alert">
+                    {formNuevo.formState.errors.dosis.message}
+                  </small>
+                )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label className="col-form-label">Hora de Toma</label>
@@ -289,8 +269,13 @@ const ListaIndicacion = () => {
                   type="time"
                   className="form-control"
                   id="hora"
-                  onChange={(e) => detectarCambio('hora', e)}
+                  {...formNuevo.register('hora', { required: 'Debe ingresar la hora de toma.' })}
                 />
+                {formNuevo.formState.errors.hora && (
+                  <small className="text-danger" role="alert">
+                    {formNuevo.formState.errors.hora.message}
+                  </small>
+                )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label className="col-form-label">Fecha de Prescripción</label>
@@ -298,56 +283,63 @@ const ListaIndicacion = () => {
                   type="date"
                   className="form-control"
                   id="fecha"
-                  onChange={(e) => detectarCambio('fecha', e)}
+                  {...formNuevo.register('fecha', {
+                    required: 'Debe ingresar la fecha de prescripción.',
+                  })}
                 />
+                {formNuevo.formState.errors.fecha && (
+                  <small className="text-danger" role="alert">
+                    {formNuevo.formState.errors.fecha.message}
+                  </small>
+                )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label className="col-form-label">Estado</label>
                 <select
                   className="form-select"
-                  placeholder="Ingrese estado..."
                   id="estado"
-                  onChange={(e) => detectarCambio('estado', e)}
-                  value={campo['estado'] || ''}
+                  {...formNuevo.register('estado', { required: 'Debe seleccionar un estado.' })}
                 >
                   <option value="">Elegir</option>
                   <option value="true">Vigente</option>
                   <option value="false">Caducado</option>
                 </select>
-              </div>
-              <div className={'mb-4 col-12 col-md-6 col-lg-4 col-xl-4 ' + styles.formActions}>
-                <button
-                  type="submit"
-                  className={'btn btn-verde ' + styles.submitButton}
-                  onClick={() => cargarNuevo()}
-                >
-                  Guardar
-                </button>
-                <button
-                  type="submit"
-                  className={'btn btn-rojo ' + styles.cancelButton}
-                  onClick={() => cancelar()}
-                >
-                  Cancelar
-                </button>
+                {formNuevo.formState.errors.estado && (
+                  <small className="text-danger" role="alert">
+                    {formNuevo.formState.errors.estado.message}
+                  </small>
+                )}
               </div>
             </div>
-          ) : (
-            ''
-          )}
-        </span>
+          </Modal.Body>
+          <Modal.Footer className="justify-content-center">
+            <button type="button" className="btn btn-rojo" onClick={() => cancelar()}>
+              Cancelar
+            </button>
+            <button
+              type="button"
+              className="btn btn-verde ms-3"
+              onClick={() => formNuevo.handleSubmit(cargarNuevo)()}
+            >
+              Guardar
+            </button>
+          </Modal.Footer>
+        </Modal>
 
-        <span>
-          {show ? (
-            <div className="border-top-sm m-0 row justify-content-center panel-gris m-md-3 rounded shadow container-lg mx-md-auto">
+        <Modal show={show}>
+          <Modal.Header className="justify-content-center">
+            <h4 className="mb-0">Editar Indicación Médica</h4>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="row justify-content-center">
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label className="col-form-label">Nombre de Medicamento</label>
                 <select
                   className="form-select"
-                  placeholder="Ingrese medicamento..."
                   id="medicamento"
-                  onChange={(e) => detectarCambio('medicamento', e)}
-                  value={campo['medicamento'] || ''}
+                  {...formEdit.register('medicamento', {
+                    required: 'Debe seleccionar un medicamento.',
+                  })}
                 >
                   <option value="">Elegir</option>
                   {medicamentos &&
@@ -357,6 +349,11 @@ const ListaIndicacion = () => {
                       </option>
                     ))}
                 </select>
+                {formEdit.formState.errors.medicamento && (
+                  <small className="text-danger" role="alert">
+                    {formEdit.formState.errors.medicamento.message}
+                  </small>
+                )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label className="col-form-label">Dosis</label>
@@ -364,9 +361,13 @@ const ListaIndicacion = () => {
                   type="number"
                   className="form-control"
                   id="dosis"
-                  onChange={(e) => detectarCambio('dosis', e)}
-                  value={campo['dosis'] || ''}
+                  {...formEdit.register('dosis', { required: 'Debe ingresar la dosis.' })}
                 />
+                {formEdit.formState.errors.dosis && (
+                  <small className="text-danger" role="alert">
+                    {formEdit.formState.errors.dosis.message}
+                  </small>
+                )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label className="col-form-label">Hora de Toma</label>
@@ -374,9 +375,13 @@ const ListaIndicacion = () => {
                   type="time"
                   className="form-control"
                   id="hora"
-                  onChange={(e) => detectarCambio('hora', e)}
-                  value={campo['hora'] || ''}
+                  {...formEdit.register('hora', { required: 'Debe ingresar la hora de toma.' })}
                 />
+                {formEdit.formState.errors.hora && (
+                  <small className="text-danger" role="alert">
+                    {formEdit.formState.errors.hora.message}
+                  </small>
+                )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label className="col-form-label">Fecha de Prescripción</label>
@@ -384,45 +389,48 @@ const ListaIndicacion = () => {
                   type="date"
                   className="form-control"
                   id="fecha"
-                  onChange={(e) => detectarCambio('fecha', e)}
-                  value={campo['fecha'] || ''}
+                  {...formEdit.register('fecha', {
+                    required: 'Debe ingresar la fecha de prescripción.',
+                  })}
                 />
+                {formEdit.formState.errors.fecha && (
+                  <small className="text-danger" role="alert">
+                    {formEdit.formState.errors.fecha.message}
+                  </small>
+                )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label className="col-form-label">Estado</label>
                 <select
                   className="form-select"
-                  placeholder="Ingrese estado..."
                   id="estado"
-                  onChange={(e) => detectarCambio('estado', e)}
-                  value={campo['estado']}
+                  {...formEdit.register('estado', { required: 'Debe seleccionar un estado.' })}
                 >
                   <option value="">Elegir</option>
                   <option value="true">Vigente</option>
                   <option value="false">Caducado</option>
                 </select>
-              </div>
-              <div className={'mb-4 col-12 col-md-6 col-lg-4 col-xl-4 ' + styles.formActions}>
-                <button
-                  type="submit"
-                  className={'btn btn-verde ' + styles.submitButton}
-                  onClick={() => guardar()}
-                >
-                  Guardar
-                </button>
-                <button
-                  type="submit"
-                  className={'btn btn-rojo ' + styles.cancelButton}
-                  onClick={() => cancelar()}
-                >
-                  Cancelar
-                </button>
+                {formEdit.formState.errors.estado && (
+                  <small className="text-danger" role="alert">
+                    {formEdit.formState.errors.estado.message}
+                  </small>
+                )}
               </div>
             </div>
-          ) : (
-            ''
-          )}
-        </span>
+          </Modal.Body>
+          <Modal.Footer className="justify-content-center">
+            <button type="button" className="btn btn-rojo" onClick={() => cancelar()}>
+              Cancelar
+            </button>
+            <button
+              type="button"
+              className="btn btn-verde ms-3"
+              onClick={() => formEdit.handleSubmit(guardar)()}
+            >
+              Guardar
+            </button>
+          </Modal.Footer>
+        </Modal>
 
         <div className="row">
           <div className="col-12">

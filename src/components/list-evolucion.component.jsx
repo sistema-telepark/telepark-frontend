@@ -1,6 +1,8 @@
 import React, { memo, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
+import { useForm } from 'react-hook-form';
+import { Modal } from 'react-bootstrap';
 import { evolucionRepository } from '../services/evolucion.service';
 import { showConfirm, showToast } from '../services/notification.service';
 import utils from '../utils/utils';
@@ -16,15 +18,14 @@ const ListaEvolucion = () => {
 
   const [show, setShow] = useState(false);
   const [showNuevo, setShowNuevo] = useState(false);
-  const [campo, setCampo] = useState({
-    nroEvolucion: '',
-    fecha: '',
-  });
   const [idEditado, setIdEditado] = useState('');
   const [evoluciones, setEvoluciones] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [loadError, setLoadError] = useState(null);
+
+  const formNuevo = useForm();
+  const formEdit = useForm();
 
   useEffect(() => {
     if (!idEpElegido) {
@@ -50,69 +51,57 @@ const ListaEvolucion = () => {
   };
 
   const editar = (nroEvolucion, fecha, idevolucion) => {
+    setIdEditado(idevolucion);
+    formEdit.reset({ nroEvolucion: String(nroEvolucion), fecha });
     setShow(true);
     setShowNuevo(false);
-    setIdEditado(idevolucion);
-    setCampo({ nroEvolucion: nroEvolucion, fecha: fecha });
   };
 
-  const guardar = () => {
-    let escala = campo.nroEvolucion;
-    let fechaEvolucion = campo.fecha;
-    let id = idEditado;
-    if (escala !== '' && fechaEvolucion !== '') {
-      let data = {
-        escalaevolucion: Number(escala),
-        fecha: fechaEvolucion,
-        idpersonaep: Number(idEpElegido),
-        borrado: false,
-      };
-      evolucionRepository.update(id, data).then((response) => {
-        if (response?.success) {
-          getEvoluciones();
-          showToast('success', 'Se ha guardado con éxito');
-        }
-      });
-      setCampo({ nroEvolucion: '', fecha: '' });
-      setShow(false);
-    }
+  const guardar = (data) => {
+    const payload = {
+      escalaevolucion: Number(data.nroEvolucion),
+      fecha: data.fecha,
+      idpersonaep: Number(idEpElegido),
+      borrado: false,
+    };
+    evolucionRepository.update(idEditado, payload).then((response) => {
+      if (response?.success) {
+        getEvoluciones();
+        showToast('success', 'Se ha guardado con éxito');
+        formEdit.reset();
+        setShow(false);
+      }
+    });
   };
 
   const cancelar = () => {
+    formNuevo.reset();
+    formEdit.reset();
     setShow(false);
     setShowNuevo(false);
-    setCampo({ nroEvolucion: '', fecha: '' });
-  };
-
-  const detectarCambio = (field, e) => {
-    setCampo({ ...campo, [field]: e.target.value });
   };
 
   const agregar = () => {
+    formNuevo.reset({ nroEvolucion: '', fecha: '' });
     setShowNuevo(true);
     setShow(false);
-    setCampo({ nroEvolucion: '', fecha: '' });
   };
 
-  const cargarNuevo = () => {
-    let escala = campo.nroEvolucion;
-    let fechaEvolucion = campo.fecha;
-    if (escala !== '' && fechaEvolucion !== '') {
-      let data = {
-        escalaevolucion: Number(escala),
-        fecha: fechaEvolucion,
-        idpersonaep: Number(idEpElegido),
-        borrado: false,
-      };
-      evolucionRepository.create(data).then((response) => {
-        if (response?.success) {
-          getEvoluciones();
-          showToast('success', 'Se ha guardado con éxito');
-        }
-      });
-      setCampo({ nroEvolucion: '', fecha: '' });
-      setShowNuevo(false);
-    }
+  const cargarNuevo = (data) => {
+    const payload = {
+      escalaevolucion: Number(data.nroEvolucion),
+      fecha: data.fecha,
+      idpersonaep: Number(idEpElegido),
+      borrado: false,
+    };
+    evolucionRepository.create(payload).then((response) => {
+      if (response?.success) {
+        getEvoluciones();
+        showToast('success', 'Se ha guardado con éxito');
+        formNuevo.reset();
+        setShowNuevo(false);
+      }
+    });
   };
 
   const eliminar = (escalaevolucion, fecha, id) => {
@@ -170,18 +159,20 @@ const ListaEvolucion = () => {
           </div>
         </div>
 
-        <span>
-          {showNuevo ? (
-            <div className="border-top-sm m-0 row panel-gris m-md-3 rounded shadow container-lg mx-md-auto">
-              <h4 className="mt-4">Nueva Observación</h4>
+        <Modal show={showNuevo}>
+          <Modal.Header className="justify-content-center">
+            <h4 className="mb-0">Nueva Observación</h4>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="row justify-content-center">
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label className="col-form-label">Estado Evolutivo</label>
                 <select
                   className="form-select"
-                  placeholder="Ingrese estado..."
                   id="nroEvolucion"
-                  onChange={(e) => detectarCambio('nroEvolucion', e)}
-                  value={campo['nroEvolucion'] || ''}
+                  {...formNuevo.register('nroEvolucion', {
+                    required: 'Debe seleccionar un estado evolutivo.',
+                  })}
                 >
                   <option value="">Elegir</option>
                   <option value="0">0</option>
@@ -191,6 +182,11 @@ const ListaEvolucion = () => {
                   <option value="4">4</option>
                   <option value="5">5</option>
                 </select>
+                {formNuevo.formState.errors.nroEvolucion && (
+                  <small className="text-danger" role="alert">
+                    {formNuevo.formState.errors.nroEvolucion.message}
+                  </small>
+                )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label className="col-form-label">Fecha de Observación</label>
@@ -198,42 +194,44 @@ const ListaEvolucion = () => {
                   type="date"
                   className="form-control"
                   id="fecha"
-                  onChange={(e) => detectarCambio('fecha', e)}
+                  {...formNuevo.register('fecha', { required: 'Debe ingresar la fecha.' })}
                 />
-              </div>
-              <div className={'mb-4 col-12 col-md-6 col-lg-4 col-xl-4 ' + styles.formActions}>
-                <button
-                  type="submit"
-                  className={'btn btn-verde ' + styles.submitButton}
-                  onClick={() => cargarNuevo()}
-                >
-                  Guardar
-                </button>
-                <button
-                  type="submit"
-                  className={'btn btn-rojo ' + styles.cancelButton}
-                  onClick={() => cancelar()}
-                >
-                  Cancelar
-                </button>
+                {formNuevo.formState.errors.fecha && (
+                  <small className="text-danger" role="alert">
+                    {formNuevo.formState.errors.fecha.message}
+                  </small>
+                )}
               </div>
             </div>
-          ) : (
-            ''
-          )}
-        </span>
+          </Modal.Body>
+          <Modal.Footer className="justify-content-center">
+            <button type="button" className="btn btn-rojo" onClick={() => cancelar()}>
+              Cancelar
+            </button>
+            <button
+              type="button"
+              className="btn btn-verde ms-3"
+              onClick={() => formNuevo.handleSubmit(cargarNuevo)()}
+            >
+              Guardar
+            </button>
+          </Modal.Footer>
+        </Modal>
 
-        <span>
-          {show ? (
-            <div className="border-top-sm m-0 row justify-content-center panel-gris m-md-3 rounded shadow container-lg mx-md-auto">
+        <Modal show={show}>
+          <Modal.Header className="justify-content-center">
+            <h4 className="mb-0">Editar Observación</h4>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="row justify-content-center">
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label className="col-form-label">Estado Evolutivo</label>
                 <select
                   className="form-select"
-                  placeholder="Ingrese estado..."
                   id="nroEvolucion"
-                  onChange={(e) => detectarCambio('nroEvolucion', e)}
-                  value={campo['nroEvolucion'] || ''}
+                  {...formEdit.register('nroEvolucion', {
+                    required: 'Debe seleccionar un estado evolutivo.',
+                  })}
                 >
                   <option value="">Elegir</option>
                   <option value="0">0</option>
@@ -243,6 +241,11 @@ const ListaEvolucion = () => {
                   <option value="4">4</option>
                   <option value="5">5</option>
                 </select>
+                {formEdit.formState.errors.nroEvolucion && (
+                  <small className="text-danger" role="alert">
+                    {formEdit.formState.errors.nroEvolucion.message}
+                  </small>
+                )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label className="col-form-label">Fecha de Observación</label>
@@ -250,31 +253,29 @@ const ListaEvolucion = () => {
                   type="date"
                   className="form-control"
                   id="fecha"
-                  onChange={(e) => detectarCambio('fecha', e)}
-                  value={campo['fecha'] || ''}
+                  {...formEdit.register('fecha', { required: 'Debe ingresar la fecha.' })}
                 />
-              </div>
-              <div className={'mb-4 col-12 col-md-6 col-lg-4 col-xl-4 ' + styles.formActions}>
-                <button
-                  type="submit"
-                  className={'btn btn-verde ' + styles.submitButton}
-                  onClick={() => guardar()}
-                >
-                  Guardar
-                </button>
-                <button
-                  type="submit"
-                  className={'btn btn-rojo ' + styles.cancelButton}
-                  onClick={() => cancelar()}
-                >
-                  Cancelar
-                </button>
+                {formEdit.formState.errors.fecha && (
+                  <small className="text-danger" role="alert">
+                    {formEdit.formState.errors.fecha.message}
+                  </small>
+                )}
               </div>
             </div>
-          ) : (
-            ''
-          )}
-        </span>
+          </Modal.Body>
+          <Modal.Footer className="justify-content-center">
+            <button type="button" className="btn btn-rojo" onClick={() => cancelar()}>
+              Cancelar
+            </button>
+            <button
+              type="button"
+              className="btn btn-verde ms-3"
+              onClick={() => formEdit.handleSubmit(guardar)()}
+            >
+              Guardar
+            </button>
+          </Modal.Footer>
+        </Modal>
 
         <div className="row">
           <div className="col-12">
