@@ -198,6 +198,20 @@ const Consulta = () => {
     setMensajeSinDatosFC(pacientesFiltrados.length === 0);
   };
 
+  const limpiarAsistencia = () => {
+    setAsistencia([]);
+    setMensajeSinDatos(false);
+    setErrores({});
+    setForm({ fechaEncuentro: '' });
+  };
+
+  const limpiarFaltasC = () => {
+    setFaltaC([]);
+    setMensajeSinDatosFC(false);
+    setErrores({});
+    setForm({ fechaEncuentro: '' });
+  };
+
   const obtenerNombre = (idpersonaep) => {
     const paciente = pacientes.find((p) => Number(p.idpersona) === Number(idpersonaep));
     return paciente ? `${paciente.nombre} ${paciente.apellido}` : 'Desconocido';
@@ -218,6 +232,7 @@ const Consulta = () => {
                 className="form-select"
                 name="fechaEncuentro"
                 id="fechaEncuentro"
+                value={form.fechaEncuentro}
                 onChange={handleChange}
               >
                 <option value="">Elija el encuentro</option>
@@ -234,13 +249,22 @@ const Consulta = () => {
           <div className={`mb-4 col-12 col-md-8 p-4 rounded shadow-sm ${styles.sectionCard}`}>
             <div className="d-flex justify-content-between align-items-center mb-3">
               <span>Listado de asistencia</span>
-              <button
-                type="button"
-                className={`btn btn-verde ${styles.actionButton}`}
-                onClick={() => consultarAsistencia()}
-              >
-                Consultar
-              </button>
+              <div className="d-flex">
+                <button
+                  type="button"
+                  className={`btn btn-verde ${styles.actionButton}`}
+                  onClick={() => consultarAsistencia()}
+                >
+                  Consultar
+                </button>
+                <button
+                  type="button"
+                  className={`btn btn-rojo ms-3 ${styles.actionButton}`}
+                  onClick={() => limpiarAsistencia()}
+                >
+                  Limpiar
+                </button>
+              </div>
             </div>
 
             <div className="col-12">
@@ -276,13 +300,22 @@ const Consulta = () => {
           <div className={`mb-4 col-12 col-md-8 p-4 rounded shadow-sm ${styles.sectionCard}`}>
             <div className="d-flex justify-content-between align-items-center mb-3">
               <span>Lista de pacientes con faltas consecutivas</span>
-              <button
-                type="button"
-                className={`btn btn-verde ${styles.actionButton}`}
-                onClick={() => consultarFaltasC()}
-              >
-                Consultar
-              </button>
+              <div className="d-flex">
+                <button
+                  type="button"
+                  className={`btn btn-verde ${styles.actionButton}`}
+                  onClick={() => consultarFaltasC()}
+                >
+                  Consultar
+                </button>
+                <button
+                  type="button"
+                  className={`btn btn-rojo ms-3 ${styles.actionButton}`}
+                  onClick={() => limpiarFaltasC()}
+                >
+                  Limpiar
+                </button>
+              </div>
             </div>
 
             <div className="col-12">
