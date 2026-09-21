@@ -259,7 +259,7 @@ const Consulta = () => {
                 </button>
                 <button
                   type="button"
-                  className={`btn btn-rojo ms-3 ${styles.actionButton}`}
+                  className={`btn btn-celeste ms-3 ${styles.actionButton}`}
                   onClick={() => limpiarAsistencia()}
                 >
                   Limpiar
@@ -310,7 +310,7 @@ const Consulta = () => {
                 </button>
                 <button
                   type="button"
-                  className={`btn btn-rojo ms-3 ${styles.actionButton}`}
+                  className={`btn btn-celeste ms-3 ${styles.actionButton}`}
                   onClick={() => limpiarFaltasC()}
                 >
                   Limpiar
