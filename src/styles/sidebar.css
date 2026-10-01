@@ -96,6 +96,41 @@
   height: calc(100% - 82px);
   margin-left: 5px;
   margin-right: 5px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.sidebar .nav-list::-webkit-scrollbar {
+  display: none;
+}
+
+.sidebar .scroll-hint {
+  display: block;
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  bottom: 24px;
+  left: 0;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: linear-gradient(to bottom, transparent, #11101d 75%);
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.sidebar .scroll-hint::after {
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  content: '';
+  transform: translateX(-50%) rotate(45deg);
 }
 
 .sidebar li a {
@@ -239,6 +274,19 @@
     max-height: calc(100vh - 60px);
     min-height: 0;
     overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .sidebar.open::-webkit-scrollbar {
+    display: none;
+  }
+
+  .sidebar.open .scroll-hint {
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    margin-top: -44px;
   }
 
   .sidebar li a .links_name {
