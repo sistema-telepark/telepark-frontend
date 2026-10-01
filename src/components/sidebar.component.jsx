@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router';
 
 import '../styles/sidebar.css';
@@ -9,7 +9,6 @@ import {
   MenuIcon,
   HomeIcon,
   AdminUsersIcon,
-  AddPersonIcon,
   SearchSidebarIcon,
   FamilyIcon,
   MedicalRecordIcon,
@@ -23,6 +22,9 @@ import { ClipboardDataIcon, ClipboardCheckIcon, EyeIcon } from './icons/icons-sh
 
 const Sidebar = () => {
   const [open, setOpen] = useState(false);
+  const [hasMoreBelow, setHasMoreBelow] = useState(false);
+  const sidebarRef = useRef(null);
+  const navListRef = useRef(null);
   const toggleSidebar = () => setOpen((prevOpen) => !prevOpen);
 
   const logout = (e) => {
@@ -34,8 +36,57 @@ const Sidebar = () => {
   const user_role = TokenService.getRole();
   const current_url = useLocation().pathname;
 
+  useEffect(() => {
+    const sidebar = sidebarRef.current;
+    const navList = navListRef.current;
+
+    const updateScrollHint = () => {
+      const isMobileOpen = window.matchMedia('(max-width: 576px)').matches && open;
+      const scrollContainer = isMobileOpen ? sidebar : navList;
+
+      if (!scrollContainer) return;
+
+      const hasOverflow = scrollContainer.scrollHeight > scrollContainer.clientHeight + 1;
+      const hasMore =
+        scrollContainer.scrollTop + scrollContainer.clientHeight < scrollContainer.scrollHeight - 1;
+
+      setHasMoreBelow(hasOverflow && hasMore);
+    };
+
+    updateScrollHint();
+    sidebar?.addEventListener('scroll', updateScrollHint);
+    navList?.addEventListener('scroll', updateScrollHint);
+    window.addEventListener('resize', updateScrollHint);
+
+    const resizeObserver =
+      typeof ResizeObserver !== 'undefined' ? new ResizeObserver(updateScrollHint) : null;
+    if (sidebar) resizeObserver?.observe(sidebar);
+    if (navList) resizeObserver?.observe(navList);
+
+    return () => {
+      sidebar?.removeEventListener('scroll', updateScrollHint);
+      navList?.removeEventListener('scroll', updateScrollHint);
+      window.removeEventListener('resize', updateScrollHint);
+      resizeObserver?.disconnect();
+    };
+  }, [open, user_role]);
+
+  const scrollDown = () => {
+    const isMobileOpen = window.matchMedia('(max-width: 576px)').matches && open;
+    const scrollContainer = isMobileOpen ? sidebarRef.current : navListRef.current;
+
+    scrollContainer?.scrollBy({
+      top: Math.max(120, scrollContainer.clientHeight * 0.75),
+      behavior: 'smooth',
+    });
+  };
+
   return (
-    <div className={'sidebar ' + (open ? 'open' : '')} id="sidebar">
+    <div
+      ref={sidebarRef}
+      className={'sidebar ' + (open ? 'open ' : '') + (hasMoreBelow ? 'has-more-below' : '')}
+      id="sidebar"
+    >
       <div className="logo-details" id="logo-details">
         <button
           type="button"
@@ -48,7 +99,7 @@ const Sidebar = () => {
           <img className="logo links_name" src={logoTelepark} alt="logo de telepark" />
         </button>
       </div>
-      <ul className="nav-list">
+      <ul className="nav-list" ref={navListRef}>
         <li className={current_url === '/home' ? 'active' : ''}>
           <a href="/home">
             <HomeIcon />
@@ -79,14 +130,6 @@ const Sidebar = () => {
             <span className="links_name">Buscar Personas</span>
           </a>
           <span className="tooltip">Buscar Personas</span>
-        </li>
-
-        <li className={current_url === '/nomenclador' ? 'active' : ''}>
-          <a href="./nomenclador">
-            <NomencladorIcon />
-            <span className="links_name">Nomencladores</span>
-          </a>
-          <span className="tooltip">Nomencladores</span>
         </li>
 
         <li className={current_url === '/type-events' ? 'active' : ''}>
@@ -150,6 +193,18 @@ const Sidebar = () => {
           ''
         )}
 
+        {user_role === true ? (
+          <li className={current_url === '/nomenclador' ? 'active' : ''}>
+            <a href="./nomenclador">
+              <NomencladorIcon />
+              <span className="links_name">Nomencladores</span>
+            </a>
+            <span className="tooltip">Nomencladores</span>
+          </li>
+        ) : (
+          ''
+        )}
+
         <li>
           <a href="/" onClick={logout}>
             <LogoutIcon />
@@ -158,6 +213,14 @@ const Sidebar = () => {
           <span className="tooltip">Cerrar Sesión</span>
         </li>
       </ul>
+      {hasMoreBelow && (
+        <button
+          type="button"
+          className="scroll-hint"
+          aria-label="Desplazar menú hacia abajo"
+          onClick={scrollDown}
+        />
+      )}
     </div>
   );
 };

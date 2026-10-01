@@ -314,23 +314,25 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                     </ErrorBoundary>
                   }
                 />
-                <Route
-                  path="/nomenclador"
-                  element={
-                    <ErrorBoundary
-                      FallbackComponent={(props) => (
-                        <ErrorFallbackRoute {...props} componentName="Nomenclador" />
-                      )}
-                      onError={logError}
-                      onReset={() => setRetryKey((k) => k + 1)}
-                      resetKeys={[token]}
-                    >
-                      <Suspense fallback={<LoadingSpinner />}>
-                        <Nomenclador key={retryKey} />
-                      </Suspense>
-                    </ErrorBoundary>
-                  }
-                />
+                {userRole === true && (
+                  <Route
+                    path="/nomenclador"
+                    element={
+                      <ErrorBoundary
+                        FallbackComponent={(props) => (
+                          <ErrorFallbackRoute {...props} componentName="Nomenclador" />
+                        )}
+                        onError={logError}
+                        onReset={() => setRetryKey((k) => k + 1)}
+                        resetKeys={[token]}
+                      >
+                        <Suspense fallback={<LoadingSpinner />}>
+                          <Nomenclador key={retryKey} />
+                        </Suspense>
+                      </ErrorBoundary>
+                    }
+                  />
+                )}
                 <Route
                   path="/events"
                   element={
@@ -467,6 +469,7 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                     </ErrorBoundary>
                   }
                 />
+                <Route path="*" element={<Navigate to="/home" replace />} />
               </Route>
             )}
             {!token && <Route path="*" element={<Navigate to="/" replace />} />}
