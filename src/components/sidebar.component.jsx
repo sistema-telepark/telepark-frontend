@@ -132,14 +132,6 @@ const Sidebar = () => {
           <span className="tooltip">Buscar Personas</span>
         </li>
 
-        <li className={current_url === '/nomenclador' ? 'active' : ''}>
-          <a href="./nomenclador">
-            <NomencladorIcon />
-            <span className="links_name">Nomencladores</span>
-          </a>
-          <span className="tooltip">Nomencladores</span>
-        </li>
-
         <li className={current_url === '/type-events' ? 'active' : ''}>
           <a href="./type-events">
             <TableIcon />
@@ -196,6 +188,18 @@ const Sidebar = () => {
               <span className="links_name">Administrar Usuarios</span>
             </a>
             <span className="tooltip">Administrar Usuarios</span>
+          </li>
+        ) : (
+          ''
+        )}
+
+        {user_role === true ? (
+          <li className={current_url === '/nomenclador' ? 'active' : ''}>
+            <a href="./nomenclador">
+              <NomencladorIcon />
+              <span className="links_name">Nomencladores</span>
+            </a>
+            <span className="tooltip">Nomencladores</span>
           </li>
         ) : (
           ''
