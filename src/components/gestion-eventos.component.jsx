@@ -217,9 +217,8 @@ const Events = () => {
           </div>
           <div className="row">
             <div className=" justify-content-center  d-flex mb-4">
-              <button type="submit" className="btn btn-azul mb-2 mt-2" disabled={validate}>
-                <PlusIcon className="signoMas" />
-                Agregar
+              <button type="submit" className="btn btn-verde mb-2 mt-2" disabled={validate}>
+                Guardar
               </button>
             </div>
           </div>
