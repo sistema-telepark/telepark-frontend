@@ -200,7 +200,6 @@ const Talleres = () => {
           <table className="table table-striped">
             <thead>
               <tr>
-                <th scope="col">ID</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Acción</th>
               </tr>
@@ -208,7 +207,6 @@ const Talleres = () => {
             <tbody>
               {taller.map((element) => (
                 <tr key={element.idtaller}>
-                  <td>{element.idtaller}</td>
                   <td>{element.tipotaller}</td>
                   <td>
                     <button

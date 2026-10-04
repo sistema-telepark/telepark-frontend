@@ -140,7 +140,6 @@ const TypeEvents = () => {
           <table className="table table-striped">
             <thead>
               <tr>
-                <th scope="col">ID</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Desactivar Taller</th>
                 <th scope="col">Acción</th>
@@ -151,7 +150,6 @@ const TypeEvents = () => {
                 .filter((element) => element.borrado === false)
                 .map((element) => (
                   <tr key={element.idtipoevento}>
-                    <td>{element.idtipoevento}</td>
                     <td>{element.nombre}</td>
                     <td>
                       <input

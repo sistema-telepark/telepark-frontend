@@ -166,7 +166,6 @@ const Actividad = () => {
               <thead>
                 <tr>
                   <th scope="col">nombre Actividad</th>
-                  <th scope="col">idtaller</th>
                   <th scope="col">Acción</th>
                 </tr>
               </thead>
@@ -175,7 +174,6 @@ const Actividad = () => {
                   actividades.map((actividad) => (
                     <tr key={actividad.idactividad}>
                       <td>{actividad.nombre}</td>
-                      <td>{actividad.idtaller}</td>
                       <td>
                         <button
                           type="button"
