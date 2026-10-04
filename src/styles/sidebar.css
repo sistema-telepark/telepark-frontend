@@ -86,7 +86,9 @@
   opacity: 1;
   width: 150px;
   height: auto;
-  transition: visibility 0.5s, opacity 0.5s;
+  transition:
+    visibility 0.5s,
+    opacity 0.5s;
   transition-delay: 0.2s;
 }
 

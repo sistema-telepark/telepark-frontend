@@ -145,7 +145,6 @@ const AdminPersonas = () => {
             >
               <thead>
                 <tr>
-                  <th scope="col">ID</th>
                   <th scope="col">Nombre</th>
                   <th scope="col">Apellido</th>
                   <th scope="col">Telefono</th>
@@ -155,7 +154,6 @@ const AdminPersonas = () => {
               <tbody>
                 {arrayPersonIspaciente.map((person) => (
                   <tr key={person.idpersona}>
-                    <th scope="row">{person.idpersona}</th>
                     <td>{person.nombre}</td>
                     <td>{person.apellido}</td>
                     <td>{person.telefono}</td>

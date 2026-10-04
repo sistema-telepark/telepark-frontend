@@ -182,7 +182,6 @@ const Asistencia = () => {
         <table className="table table-striped">
           <thead>
             <tr>
-              <th scope="col">ID</th>
               <th scope="col">Persona con EP</th>
               <th scope="col">Asistencia</th>
               <th scope="col">Justificado</th>
@@ -191,7 +190,6 @@ const Asistencia = () => {
           <tbody>
             {pacientes.map((element) => (
               <tr key={element.idpersona}>
-                <td>{element.idpersona}</td>
                 <td>{`${element.nombre} ${element.apellido}`}</td>
                 <td>
                   <input
