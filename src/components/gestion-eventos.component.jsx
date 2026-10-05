@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { eventRespository } from '../services/event.service';
 import { showToast } from '../services/notification.service';
-import { PlusIcon } from './icons/icons-shared';
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
 import LoadingSpinner from './shared/loading-spinner';
 import styles from '../styles/gestion-eventos.module.css';
@@ -171,6 +170,7 @@ const Events = () => {
               <select
                 className="form-select"
                 name="idpersonaep"
+                id="idpersonaep"
                 onChange={handleChange}
                 defaultValue=""
                 required
@@ -200,6 +200,7 @@ const Events = () => {
               <select
                 className="form-select"
                 name="idtipoevento"
+                id="idtipoevento"
                 onChange={handleChange}
                 defaultValue=""
                 required
@@ -208,7 +209,7 @@ const Events = () => {
                   Seleccione un tipo de evento
                 </option>
                 {typeEvent.map((element) => (
-                  <option id="idtipoevento" key={element.idtipoevento} value={element.idtipoevento}>
+                  <option key={element.idtipoevento} value={element.idtipoevento}>
                     {element.nombre}
                   </option>
                 ))}

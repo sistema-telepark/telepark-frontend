@@ -91,10 +91,13 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
 
       <div className="row">
         <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-4">
-          <label className="col-form-label">Provincia</label>
+          <label htmlFor={`provincia${tipo}`} className="col-form-label">
+            Provincia
+          </label>
           <select
             type="text"
             className="form-select"
+            id={`provincia${tipo}`}
             {...register('provincia' + tipo, {
               required: {
                 value: true,
@@ -115,11 +118,14 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
           )}
         </div>
         <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-4">
-          <label className="col-form-label">Departamento</label>
+          <label htmlFor={`departamento${tipo}`} className="col-form-label">
+            Departamento
+          </label>
           <select
             type="text"
             className="form-select"
             disabled={!provinciaSeleccionada || cargandoDepartamentos}
+            id={`departamento${tipo}`}
             {...register('departamento' + tipo, {
               required: {
                 value: true,
@@ -140,10 +146,13 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
           )}
         </div>
         <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-4">
-          <label className="col-form-label">Localidad</label>
+          <label htmlFor={`localidad${tipo}`} className="col-form-label">
+            Localidad
+          </label>
           <select
             className="form-select"
             disabled={!departamentoSeleccionado || cargandoLocalidades}
+            id={`localidad${tipo}`}
             {...register('localidad' + tipo, {
               required: {
                 value: true,
@@ -165,11 +174,14 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
       </div>
       <div className="row justify-content-center">
         <div className="mt-2 col-12 col-md-6">
-          <label className="col-form-label">Calle</label>
+          <label htmlFor={`calle${tipo}`} className="col-form-label">
+            Calle
+          </label>
           <input
             type="text"
             className="form-control"
             placeholder="Calle"
+            id={`calle${tipo}`}
             {...register('calle' + tipo, {
               required: {
                 value: true,
@@ -182,11 +194,14 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
           )}
         </div>
         <div className="mt-2 col-12 col-md-6">
-          <label className="col-form-label">Número</label>
+          <label htmlFor={`numero${tipo}`} className="col-form-label">
+            Número
+          </label>
           <input
             type="tel"
             className="form-control"
             placeholder="Número"
+            id={`numero${tipo}`}
             {...register('numero' + tipo, {
               required: {
                 value: true,
@@ -205,11 +220,14 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
       </div>
       <div className="row justify-content-center">
         <div className="mt-2 col-12 col-md-6">
-          <label className="col-form-label">Piso</label>
+          <label htmlFor={`piso${tipo}`} className="col-form-label">
+            Piso
+          </label>
           <input
             type="tel"
             className="form-control"
             placeholder="Piso"
+            id={`piso${tipo}`}
             {...register('piso' + tipo, {
               pattern: {
                 value: /^-?[0-9]\d*\.?\d*$/g,
@@ -222,11 +240,14 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
           )}
         </div>
         <div className="mt-2 col-12 col-md-6">
-          <label className="col-form-label">Depto</label>
+          <label htmlFor={`deptoEdificio${tipo}`} className="col-form-label">
+            Depto
+          </label>
           <input
             type="text"
             className="form-control"
             placeholder="Departamento"
+            id={`deptoEdificio${tipo}`}
             {...register('deptoEdificio' + tipo, {
               pattern: {
                 value: /^[a-zA-Z0-9]+$/g,

@@ -112,7 +112,9 @@ const Login = () => {
               <div className="row">
                 <div className="w-100"></div>
                 <div className={'col-12 col-md-12 col-lg-12 col-xl-12 ' + styles.formCenter}>
-                  <label className={'col-form-label ' + styles.labelLeft}>Usuario</label>
+                  <label htmlFor="user" className={'col-form-label ' + styles.labelLeft}>
+                    Usuario
+                  </label>
                   <input
                     name="user"
                     type="text"
@@ -123,7 +125,9 @@ const Login = () => {
                     onChange={(e) => detectarCambio('user', e)}
                     value={campo['user'] || ''}
                   />
-                  <label className={'col-form-label ' + styles.labelPassword}>Contraseña</label>
+                  <label htmlFor="pass" className={'col-form-label ' + styles.labelPassword}>
+                    Contraseña
+                  </label>
                   <input
                     name="password"
                     type="password"

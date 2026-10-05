@@ -293,10 +293,13 @@ const ListaPaciente = (props) => {
             </div>
             <div className="row justify-content-center">
               <div className="mt-2 col-12 col-md-6">
-                <label className="col-form-label">Maxima Escolaridad</label>
+                <label htmlFor="escolaridadEP" className="col-form-label">
+                  Maxima Escolaridad
+                </label>
                 <select
                   type="text"
                   className="form-select"
+                  id="escolaridadEP"
                   {...register('escolaridadEP', {
                     required: {
                       value: true,
@@ -316,10 +319,13 @@ const ListaPaciente = (props) => {
                 )}
               </div>
               <div className="mt-2 col-12 col-md-6">
-                <label className="col-form-label">Nivel Completado</label>
+                <label htmlFor="nivelCompletoEP" className="col-form-label">
+                  Nivel Completado
+                </label>
                 <select
                   type="text"
                   className="form-select"
+                  id="nivelCompletoEP"
                   {...register('nivelCompletoEP', {
                     required: {
                       value: true,
@@ -336,10 +342,13 @@ const ListaPaciente = (props) => {
                 )}
               </div>
               <div className="mt-2 col-12 col-md-6">
-                <label className="col-form-label">Ocupacion Previa</label>
+                <label htmlFor="ocupacionPEP" className="col-form-label">
+                  Ocupacion Previa
+                </label>
                 <select
                   type="text"
                   className="form-select"
+                  id="ocupacionPEP"
                   {...register('ocupacionPEP', {
                     required: {
                       value: true,
@@ -357,10 +366,13 @@ const ListaPaciente = (props) => {
                 )}
               </div>
               <div className="mt-2 col-12 col-md-6">
-                <label className="col-form-label">Ocupacion Actual</label>
+                <label htmlFor="ocupacionAEP" className="col-form-label">
+                  Ocupacion Actual
+                </label>
                 <select
                   type="text"
                   className="form-select"
+                  id="ocupacionAEP"
                   {...register('ocupacionAEP', {
                     required: {
                       value: true,

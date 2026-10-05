@@ -266,6 +266,7 @@ const Talleres = () => {
                   <select
                     className="form-select"
                     placeholder="Ingrese el tipo de taller"
+                    id="tipotaller"
                     {...formInsert.register('tipotaller', {
                       required: 'Debe seleccionar un tipo de taller.',
                     })}
@@ -324,12 +325,13 @@ const Talleres = () => {
             <div className="col-md-12">
               <Form.Group className="mb-0">
                 <div className="form-group mb-2">
-                  <label htmlFor="tipotaller" className="control-label">
+                  <label htmlFor="tipotallerEdit" className="control-label">
                     Tipo de taller
                   </label>
                   <select
                     className="form-select"
                     placeholder="Ingrese el tipo de taller"
+                    id="tipotallerEdit"
                     {...formEdit.register('tipotaller', {
                       required: 'Debe seleccionar un tipo de taller.',
                     })}
@@ -369,22 +371,25 @@ const Talleres = () => {
         <Modal.Header>
           <div>
             <h5>Actividades del taller:</h5>
-            <label className="control-label">
+            <div className="control-label">
               {tallerSeleccionado ? tallerSeleccionado.tipotaller : ''}{' '}
               <h6>Código: {tallerSeleccionado ? tallerSeleccionado.idtaller : ''} </h6>
-            </label>
+            </div>
           </div>
         </Modal.Header>
         <Modal.Body>
           <div className="row">
             <Form.Group className="mb-0">
-              <label className="control-label">Ingrese nueva actividad:</label>
+              <label htmlFor="nombreActividad" className="control-label">
+                Ingrese nueva actividad:
+              </label>
               <div className="mb-2 col-12 col-md-12 col-lg-12 col-xl-12 input-group">
                 <div className="input-group">
                   <input
                     type="text"
                     className="form-control"
                     placeholder="Nombre de la actividad"
+                    id="nombreActividad"
                     {...formAct.register('nombre', {
                       required: 'El nombre de la actividad no puede estar vacío.',
                     })}

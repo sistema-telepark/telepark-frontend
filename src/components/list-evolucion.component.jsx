@@ -166,7 +166,9 @@ const ListaEvolucion = () => {
           <Modal.Body>
             <div className="row justify-content-center">
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-                <label className="col-form-label">Estado Evolutivo</label>
+                <label htmlFor="nroEvolucion" className="col-form-label">
+                  Estado Evolutivo
+                </label>
                 <select
                   className="form-select"
                   id="nroEvolucion"
@@ -189,7 +191,9 @@ const ListaEvolucion = () => {
                 )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-                <label className="col-form-label">Fecha de Observación</label>
+                <label htmlFor="fecha" className="col-form-label">
+                  Fecha de Observación
+                </label>
                 <input
                   type="date"
                   className="form-control"
@@ -225,10 +229,12 @@ const ListaEvolucion = () => {
           <Modal.Body>
             <div className="row justify-content-center">
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-                <label className="col-form-label">Estado Evolutivo</label>
+                <label htmlFor="nroEvolucionEdit" className="col-form-label">
+                  Estado Evolutivo
+                </label>
                 <select
                   className="form-select"
-                  id="nroEvolucion"
+                  id="nroEvolucionEdit"
                   {...formEdit.register('nroEvolucion', {
                     required: 'Debe seleccionar un estado evolutivo.',
                   })}
@@ -248,11 +254,13 @@ const ListaEvolucion = () => {
                 )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-                <label className="col-form-label">Fecha de Observación</label>
+                <label htmlFor="fechaEdit" className="col-form-label">
+                  Fecha de Observación
+                </label>
                 <input
                   type="date"
                   className="form-control"
-                  id="fecha"
+                  id="fechaEdit"
                   {...formEdit.register('fecha', { required: 'Debe ingresar la fecha.' })}
                 />
                 {formEdit.formState.errors.fecha && (
