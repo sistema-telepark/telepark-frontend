@@ -14,11 +14,14 @@ const DatosPersonales = ({ register, errors, tipo }) => {
 
       <div className="row">
         <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-4">
-          <label className="col-form-label">Nombre</label>
+          <label htmlFor={`nombre${tipo}`} className="col-form-label">
+            Nombre
+          </label>
           <input
             type="text"
             className="form-control"
             placeholder="Nombre"
+            id={`nombre${tipo}`}
             {...register('nombre' + tipo, {
               required: {
                 value: true,
@@ -35,11 +38,14 @@ const DatosPersonales = ({ register, errors, tipo }) => {
           )}
         </div>
         <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-4">
-          <label className="col-form-label">Apellido</label>
+          <label htmlFor={`apellido${tipo}`} className="col-form-label">
+            Apellido
+          </label>
           <input
             type="text"
             className="form-control"
             placeholder="Apellido"
+            id={`apellido${tipo}`}
             {...register('apellido' + tipo, {
               required: {
                 value: true,
@@ -56,10 +62,13 @@ const DatosPersonales = ({ register, errors, tipo }) => {
           )}
         </div>
         <div className="mt-2 col-12 col-md-6 col-lg-4 col-xl-4">
-          <label className="col-form-label">Sexo</label>
+          <label htmlFor={`sexo${tipo}`} className="col-form-label">
+            Sexo
+          </label>
           <select
             type="text"
             className="form-select"
+            id={`sexo${tipo}`}
             {...register('sexo' + tipo, {
               required: {
                 value: true,
@@ -79,11 +88,14 @@ const DatosPersonales = ({ register, errors, tipo }) => {
       </div>
       <div className="row justify-content-center">
         <div className="mt-2 col-12 col-md-6">
-          <label className="col-form-label">F. de Nacimiento</label>
+          <label htmlFor={`nacimiento${tipo}`} className="col-form-label">
+            F. de Nacimiento
+          </label>
           <input
             type="date"
             className="form-control"
             max={utils.fechaActual()}
+            id={`nacimiento${tipo}`}
             {...register('nacimiento' + tipo, {
               required: {
                 value: true,
@@ -96,11 +108,14 @@ const DatosPersonales = ({ register, errors, tipo }) => {
           )}
         </div>
         <div className="mt-2 col-12 col-md-6">
-          <label className="col-form-label">Teléfono</label>
+          <label htmlFor={`telefono${tipo}`} className="col-form-label">
+            Teléfono
+          </label>
           <input
             type="tel"
             className="form-control"
             placeholder="Teléfono"
+            id={`telefono${tipo}`}
             {...register('telefono' + tipo, {
               required: {
                 value: true,

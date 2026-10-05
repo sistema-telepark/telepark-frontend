@@ -229,8 +229,8 @@ const AdminUsuarios = () => {
           <Form onSubmit={(e) => e.preventDefault()}>
             <div className="row justify-content-center">
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-                <label className="col-form-label">
-                  Nombre <label className={styles.required}>*</label>
+                <label htmlFor="firstname" className="col-form-label">
+                  Nombre <span className={styles.required}>*</span>
                 </label>
                 <input
                   type="text"
@@ -248,8 +248,8 @@ const AdminUsuarios = () => {
                 )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-                <label className="col-form-label">
-                  Apellido <label className={styles.required}>*</label>
+                <label htmlFor="lastname" className="col-form-label">
+                  Apellido <span className={styles.required}>*</span>
                 </label>
                 <input
                   type="text"
@@ -267,8 +267,8 @@ const AdminUsuarios = () => {
                 )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-                <label className="col-form-label">
-                  Email <label className={styles.required}>*</label>
+                <label htmlFor="email" className="col-form-label">
+                  Email <span className={styles.required}>*</span>
                 </label>
                 <input
                   type="email"
@@ -292,8 +292,8 @@ const AdminUsuarios = () => {
             </div>
             <div className="row justify-content-center">
               <div className="mb-4 col-12 col-md-6">
-                <label className="col-form-label">
-                  Nombre de Usuario <label className={styles.required}>*</label>
+                <label htmlFor="username" className="col-form-label">
+                  Nombre de Usuario <span className={styles.required}>*</span>
                 </label>
                 <input
                   type="text"
@@ -311,8 +311,8 @@ const AdminUsuarios = () => {
                 )}
               </div>
               <div className="mb-4 col-12 col-md-6">
-                <label className="col-form-label">
-                  Contraseña <label className={styles.required}>*</label>
+                <label htmlFor="password" className="col-form-label">
+                  Contraseña <span className={styles.required}>*</span>
                 </label>
                 <input
                   type="password"
@@ -337,7 +337,7 @@ const AdminUsuarios = () => {
             <div className="row justify-content-center">
               <div className="mb-4 col-12 col-md-6">
                 <label htmlFor="role" className="col-form-label">
-                  Rol <label className={styles.required}>*</label>
+                  Rol <span className={styles.required}>*</span>
                 </label>
                 <select
                   className="form-select"
@@ -359,7 +359,7 @@ const AdminUsuarios = () => {
               </div>
               <div className="mb-4 col-12 col-md-6">
                 <label htmlFor="isActive" className="col-form-label">
-                  Estado <label className={styles.required}>*</label>
+                  Estado <span className={styles.required}>*</span>
                 </label>
                 <select
                   className="form-select"
@@ -413,14 +413,14 @@ const AdminUsuarios = () => {
           <Form onSubmit={(e) => e.preventDefault()}>
             <div className="row justify-content-center">
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-                <label className="col-form-label">
-                  Nombre <label className={styles.required}>*</label>
+                <label htmlFor="firstnameEdit" className="col-form-label">
+                  Nombre <span className={styles.required}>*</span>
                 </label>
                 <input
                   type="text"
                   className="form-control"
                   placeholder="Nombre..."
-                  id="firstname"
+                  id="firstnameEdit"
                   {...formEdit.register('firstname', {
                     required: 'Por favor, ingresa el nombre.',
                   })}
@@ -432,14 +432,14 @@ const AdminUsuarios = () => {
                 )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-                <label className="col-form-label">
-                  Apellido <label className={styles.required}>*</label>
+                <label htmlFor="lastnameEdit" className="col-form-label">
+                  Apellido <span className={styles.required}>*</span>
                 </label>
                 <input
                   type="text"
                   className="form-control"
                   placeholder="Apellido..."
-                  id="lastname"
+                  id="lastnameEdit"
                   {...formEdit.register('lastname', {
                     required: 'Por favor, ingresa el apellido.',
                   })}
@@ -451,14 +451,14 @@ const AdminUsuarios = () => {
                 )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-                <label className="col-form-label">
-                  Email <label className={styles.required}>*</label>
+                <label htmlFor="emailEdit" className="col-form-label">
+                  Email <span className={styles.required}>*</span>
                 </label>
                 <input
                   type="email"
                   className="form-control"
                   placeholder="Email..."
-                  id="email"
+                  id="emailEdit"
                   {...formEdit.register('email', {
                     required: 'Por favor, ingresa el email.',
                     pattern: {
@@ -476,25 +476,27 @@ const AdminUsuarios = () => {
             </div>
             <div className="row justify-content-center">
               <div className="mb-4 col-12 col-md-6">
-                <label className="col-form-label">
-                  Nombre de Usuario <label className={styles.required}>*</label>
+                <label htmlFor="usernameEdit" className="col-form-label">
+                  Nombre de Usuario <span className={styles.required}>*</span>
                 </label>
                 <input
                   type="text"
                   disabled
                   className="form-control"
                   placeholder="Nombre de usuario..."
-                  id="username"
+                  id="usernameEdit"
                   value={usernameEditado}
                 />
               </div>
               <div className="mb-4 col-12 col-md-6">
-                <label className="col-form-label">Nueva Contraseña</label>
+                <label htmlFor="passwordEdit" className="col-form-label">
+                  Nueva Contraseña
+                </label>
                 <input
                   type="password"
                   className="form-control"
                   placeholder="Contraseña..."
-                  id="password"
+                  id="passwordEdit"
                   {...formEdit.register('password', {
                     minLength: {
                       value: 8,
@@ -511,13 +513,13 @@ const AdminUsuarios = () => {
             </div>
             <div className="row justify-content-center">
               <div className="mb-4 col-12 col-md-6">
-                <label htmlFor="role" className="col-form-label">
-                  Rol <label className={styles.required}>*</label>
+                <label htmlFor="roleEdit" className="col-form-label">
+                  Rol <span className={styles.required}>*</span>
                 </label>
                 <select
                   className="form-select"
                   placeholder="Ingrese rol..."
-                  id="role"
+                  id="roleEdit"
                   {...formEdit.register('role')}
                 >
                   <option value="">Elegir</option>
@@ -526,13 +528,13 @@ const AdminUsuarios = () => {
                 </select>
               </div>
               <div className="mb-4 col-12 col-md-6">
-                <label htmlFor="isActive" className="col-form-label">
-                  Estado <label className={styles.required}>*</label>
+                <label htmlFor="isActiveEdit" className="col-form-label">
+                  Estado <span className={styles.required}>*</span>
                 </label>
                 <select
                   className="form-select"
                   placeholder="Ingrese estado..."
-                  id="isActive"
+                  id="isActiveEdit"
                   {...formEdit.register('isActive')}
                 >
                   <option value="false">Inactivo</option>

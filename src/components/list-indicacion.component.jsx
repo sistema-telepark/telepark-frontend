@@ -227,7 +227,9 @@ const ListaIndicacion = () => {
           <Modal.Body>
             <div className="row justify-content-center">
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-                <label className="col-form-label">Nombre de Medicamento</label>
+                <label htmlFor="medicamento" className="col-form-label">
+                  Nombre de Medicamento
+                </label>
                 <select
                   className="form-select"
                   id="medicamento"
@@ -250,7 +252,9 @@ const ListaIndicacion = () => {
                 )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-                <label className="col-form-label">Dosis</label>
+                <label htmlFor="dosis" className="col-form-label">
+                  Dosis
+                </label>
                 <input
                   type="number"
                   className="form-control"
@@ -264,7 +268,9 @@ const ListaIndicacion = () => {
                 )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-                <label className="col-form-label">Hora de Toma</label>
+                <label htmlFor="hora" className="col-form-label">
+                  Hora de Toma
+                </label>
                 <input
                   type="time"
                   className="form-control"
@@ -278,7 +284,9 @@ const ListaIndicacion = () => {
                 )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-                <label className="col-form-label">Fecha de Prescripción</label>
+                <label htmlFor="fecha" className="col-form-label">
+                  Fecha de Prescripción
+                </label>
                 <input
                   type="date"
                   className="form-control"
@@ -294,7 +302,9 @@ const ListaIndicacion = () => {
                 )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-                <label className="col-form-label">Estado</label>
+                <label htmlFor="estado" className="col-form-label">
+                  Estado
+                </label>
                 <select
                   className="form-select"
                   id="estado"
@@ -333,10 +343,12 @@ const ListaIndicacion = () => {
           <Modal.Body>
             <div className="row justify-content-center">
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-                <label className="col-form-label">Nombre de Medicamento</label>
+                <label htmlFor="medicamentoEdit" className="col-form-label">
+                  Nombre de Medicamento
+                </label>
                 <select
                   className="form-select"
-                  id="medicamento"
+                  id="medicamentoEdit"
                   {...formEdit.register('medicamento', {
                     required: 'Debe seleccionar un medicamento.',
                   })}
@@ -356,11 +368,13 @@ const ListaIndicacion = () => {
                 )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-                <label className="col-form-label">Dosis</label>
+                <label htmlFor="dosisEdit" className="col-form-label">
+                  Dosis
+                </label>
                 <input
                   type="number"
                   className="form-control"
-                  id="dosis"
+                  id="dosisEdit"
                   {...formEdit.register('dosis', { required: 'Debe ingresar la dosis.' })}
                 />
                 {formEdit.formState.errors.dosis && (
@@ -370,11 +384,13 @@ const ListaIndicacion = () => {
                 )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-                <label className="col-form-label">Hora de Toma</label>
+                <label htmlFor="horaEdit" className="col-form-label">
+                  Hora de Toma
+                </label>
                 <input
                   type="time"
                   className="form-control"
-                  id="hora"
+                  id="horaEdit"
                   {...formEdit.register('hora', { required: 'Debe ingresar la hora de toma.' })}
                 />
                 {formEdit.formState.errors.hora && (
@@ -384,11 +400,13 @@ const ListaIndicacion = () => {
                 )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-                <label className="col-form-label">Fecha de Prescripción</label>
+                <label htmlFor="fechaEdit" className="col-form-label">
+                  Fecha de Prescripción
+                </label>
                 <input
                   type="date"
                   className="form-control"
-                  id="fecha"
+                  id="fechaEdit"
                   {...formEdit.register('fecha', {
                     required: 'Debe ingresar la fecha de prescripción.',
                   })}
@@ -400,10 +418,12 @@ const ListaIndicacion = () => {
                 )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-                <label className="col-form-label">Estado</label>
+                <label htmlFor="estadoEdit" className="col-form-label">
+                  Estado
+                </label>
                 <select
                   className="form-select"
-                  id="estado"
+                  id="estadoEdit"
                   {...formEdit.register('estado', { required: 'Debe seleccionar un estado.' })}
                 >
                   <option value="">Elegir</option>

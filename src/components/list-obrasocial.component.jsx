@@ -165,7 +165,9 @@ const ListaObraSocial = (props) => {
         <Modal.Body>
           <div className="row justify-content-center">
             <div className="col-12 col-md-6 col-lg-6 col-xl-6">
-              <label className="col-form-label">Obra Social</label>
+              <label htmlFor="obrasocial" className="col-form-label">
+                Obra Social
+              </label>
               <select
                 className="form-select"
                 id="obrasocial"
@@ -210,10 +212,12 @@ const ListaObraSocial = (props) => {
         <Modal.Body>
           <div className="row justify-content-center">
             <div className="col-12 col-md-6 col-lg-6 col-xl-6">
-              <label className="col-form-label">Obra Social</label>
+              <label htmlFor="obrasocialEdit" className="col-form-label">
+                Obra Social
+              </label>
               <select
                 className="form-select"
-                id="obrasocial"
+                id="obrasocialEdit"
                 {...formEdit.register('obrasocial', {
                   required: 'Debe seleccionar una obra social.',
                 })}

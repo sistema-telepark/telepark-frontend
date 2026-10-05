@@ -194,7 +194,9 @@ const ListaDiagnostico = () => {
           <Modal.Body>
             <div className="row justify-content-center">
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-                <label className="col-form-label">Nombre de Enfermedad</label>
+                <label htmlFor="enfermedad" className="col-form-label">
+                  Nombre de Enfermedad
+                </label>
                 <select
                   className="form-select"
                   id="enfermedad"
@@ -217,7 +219,9 @@ const ListaDiagnostico = () => {
                 )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-                <label className="col-form-label">Fecha de Diagnóstico</label>
+                <label htmlFor="fecha" className="col-form-label">
+                  Fecha de Diagnóstico
+                </label>
                 <input
                   type="date"
                   className="form-control"
@@ -253,10 +257,12 @@ const ListaDiagnostico = () => {
           <Modal.Body>
             <div className="row justify-content-center">
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-                <label className="col-form-label">Nombre de Enfermedad</label>
+                <label htmlFor="enfermedadEdit" className="col-form-label">
+                  Nombre de Enfermedad
+                </label>
                 <select
                   className="form-select"
-                  id="enfermedad"
+                  id="enfermedadEdit"
                   {...formEdit.register('enfermedad', {
                     required: 'Debe seleccionar una enfermedad.',
                   })}
@@ -276,11 +282,13 @@ const ListaDiagnostico = () => {
                 )}
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
-                <label className="col-form-label">Fecha de Diagnóstico</label>
+                <label htmlFor="fechaEdit" className="col-form-label">
+                  Fecha de Diagnóstico
+                </label>
                 <input
                   type="date"
                   className="form-control"
-                  id="fecha"
+                  id="fechaEdit"
                   {...formEdit.register('fecha', { required: 'Debe ingresar la fecha.' })}
                 />
                 {formEdit.formState.errors.fecha && (

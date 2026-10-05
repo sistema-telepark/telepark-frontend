@@ -330,7 +330,9 @@ const Encuentro = () => {
             <div className="col-md-6">
               <Form.Group className="mb-0">
                 <div className="form-group mb-2">
-                  <label className="control-label">Fecha del encuentro</label>
+                  <label htmlFor="fecha" className="control-label">
+                    Fecha del encuentro
+                  </label>
                   <input
                     type="date"
                     className="form-control"
@@ -367,9 +369,12 @@ const Encuentro = () => {
             <div className="col-md-12">
               <Form.Group className="mb-0">
                 <div className="form-group mb-2">
-                  <label className="control-label">Taller</label>
+                  <label htmlFor="idtaller" className="control-label">
+                    Taller
+                  </label>
                   <select
                     className="form-select"
+                    id="idtaller"
                     {...formInsert.register('idtaller', {
                       required: 'Debe seleccionar un taller.',
                     })}
@@ -429,10 +434,13 @@ const Encuentro = () => {
 
             <div className="col-md-6">
               <Form.Group className="mb-0">
-                <label className="control-label">Fecha de encuentro</label>
+                <label htmlFor="fechaEdit" className="control-label">
+                  Fecha de encuentro
+                </label>
                 <input
                   type="date"
                   className="form-control"
+                  id="fechaEdit"
                   {...formEdit.register('fecha', { required: 'La fecha no puede estar vacío.' })}
                 />
                 {formEdit.formState.errors.fecha && (
@@ -444,13 +452,13 @@ const Encuentro = () => {
             <div className="col-md-6">
               <Form.Group className="mb-0">
                 <div className="form-check">
-                  <label htmlFor="virtual" className="form-check-label">
+                  <label htmlFor="virtualEdit" className="form-check-label">
                     Virtual
                   </label>
                   <input
                     type="checkbox"
                     className="form-check-input"
-                    id="virtual"
+                    id="virtualEdit"
                     {...formEdit.register('virtual')}
                   />
                 </div>
@@ -462,9 +470,12 @@ const Encuentro = () => {
             <div className="col-md-12">
               <Form.Group className="mb-0">
                 <div className="form-group mb-2">
-                  <label className="control-label">Taller</label>
+                  <label htmlFor="idtallerEdit" className="control-label">
+                    Taller
+                  </label>
                   <select
                     className="form-select"
+                    id="idtallerEdit"
                     {...formEdit.register('idtaller', {
                       required: 'Debe seleccionar un taller.',
                     })}
@@ -504,14 +515,14 @@ const Encuentro = () => {
         <Modal.Header>
           <div>
             <h5>Actividades del encuentro:</h5>
-            <label className="control-label">
+            <div className="control-label">
               <div>
                 {encuentroSeleccionado
                   ? utils.convertirFormatoFecha(encuentroSeleccionado.fecha)
                   : ''}
               </div>
               <h6>Código: {encuentroSeleccionado ? encuentroSeleccionado.idencuentro : ''}</h6>
-            </label>
+            </div>
           </div>
         </Modal.Header>
         <Modal.Body>
