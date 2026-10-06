@@ -237,6 +237,7 @@ const AdminUsuarios = () => {
                   className="form-control"
                   placeholder="Nombre..."
                   id="firstname"
+                  autoComplete="given-name"
                   {...formNuevo.register('firstname', {
                     required: 'Por favor, ingresa el nombre.',
                   })}
@@ -256,6 +257,7 @@ const AdminUsuarios = () => {
                   className="form-control"
                   placeholder="Apellido..."
                   id="lastname"
+                  autoComplete="family-name"
                   {...formNuevo.register('lastname', {
                     required: 'Por favor, ingresa el apellido.',
                   })}
@@ -275,6 +277,7 @@ const AdminUsuarios = () => {
                   className="form-control"
                   placeholder="Email..."
                   id="email"
+                  autoComplete="email"
                   {...formNuevo.register('email', {
                     required: 'Por favor, ingresa el email.',
                     pattern: {
@@ -300,6 +303,7 @@ const AdminUsuarios = () => {
                   className="form-control"
                   placeholder="Nombre de usuario..."
                   id="username"
+                  autoComplete="username"
                   {...formNuevo.register('username', {
                     required: 'Por favor, ingresa el nombre de usuario.',
                   })}
@@ -319,6 +323,7 @@ const AdminUsuarios = () => {
                   className="form-control"
                   placeholder="Contraseña..."
                   id="password"
+                  autoComplete="new-password"
                   {...formNuevo.register('password', {
                     required: 'Por favor, ingresa la contraseña.',
                     minLength: {
@@ -421,6 +426,7 @@ const AdminUsuarios = () => {
                   className="form-control"
                   placeholder="Nombre..."
                   id="firstnameEdit"
+                  autoComplete="given-name"
                   {...formEdit.register('firstname', {
                     required: 'Por favor, ingresa el nombre.',
                   })}
@@ -440,6 +446,7 @@ const AdminUsuarios = () => {
                   className="form-control"
                   placeholder="Apellido..."
                   id="lastnameEdit"
+                  autoComplete="family-name"
                   {...formEdit.register('lastname', {
                     required: 'Por favor, ingresa el apellido.',
                   })}
@@ -459,6 +466,7 @@ const AdminUsuarios = () => {
                   className="form-control"
                   placeholder="Email..."
                   id="emailEdit"
+                  autoComplete="email"
                   {...formEdit.register('email', {
                     required: 'Por favor, ingresa el email.',
                     pattern: {
@@ -485,6 +493,7 @@ const AdminUsuarios = () => {
                   className="form-control"
                   placeholder="Nombre de usuario..."
                   id="usernameEdit"
+                  autoComplete="username"
                   value={usernameEditado}
                 />
               </div>
@@ -497,6 +506,7 @@ const AdminUsuarios = () => {
                   className="form-control"
                   placeholder="Contraseña..."
                   id="passwordEdit"
+                  autoComplete="new-password"
                   {...formEdit.register('password', {
                     minLength: {
                       value: 8,
