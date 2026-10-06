@@ -89,7 +89,7 @@ const DatosPersonales = ({ register, errors, tipo }) => {
       <div className="row justify-content-center">
         <div className="mt-2 col-12 col-md-6">
           <label htmlFor={`nacimiento${tipo}`} className="col-form-label">
-            F. de Nacimiento
+            Nacimiento
           </label>
           <input
             type="date"
