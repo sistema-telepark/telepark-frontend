@@ -2,12 +2,12 @@ import http from '../http-common';
 import { withServiceHandler } from './error-handler';
 
 const actividadesRealizadas = {
-  // El backend no expone /actividadrealizada/{id}/actividades; se recorre la
-  // paginación de /actividades-realizadas (envelope DRF {count,next,results})
+  // El backend no expone /encuentroactividad/{id}/actividades; se recorre la
+  // paginación de /encuentros-actividades (envelope DRF {count,next,results})
   // y se filtra client-side por idencuentro.
   async getActividadesRealizadasByClase(idEncuentro) {
     const resultados = [];
-    let nextUrl = `/actividades-realizadas`;
+    let nextUrl = `/encuentros-actividades`;
     while (nextUrl) {
       const response = await http.get(nextUrl);
       const { count, next, results } = response.data;
@@ -18,21 +18,20 @@ const actividadesRealizadas = {
     return resultados.filter((item) => Number(item.idencuentro) === Number(idEncuentro));
   },
   async getAll() {
-    const response = await http.get(`/actividades-realizadas`);
+    const response = await http.get(`/encuentros-actividades`);
     return response.data;
   },
   async create(data) {
-    const response = await http.post(`/actividades-realizadas`, data);
+    const response = await http.post(`/encuentros-actividades`, data);
     return response.data;
   },
-  // El path param se llama idactividad pero identifica el registro de
-  // actividad realizada (M2M).
+  // El path param identifica el registro de encuentro-actividad (M2M).
   async updateActividadRealizada(id, data) {
-    const response = await http.put(`/actividades-realizadas/${id}`, data);
+    const response = await http.put(`/encuentros-actividades/${id}`, data);
     return response.data;
   },
   async delete(id) {
-    const response = await http.delete(`/actividades-realizadas/${id}`);
+    const response = await http.delete(`/encuentros-actividades/${id}`);
     return response.data;
   },
 };
