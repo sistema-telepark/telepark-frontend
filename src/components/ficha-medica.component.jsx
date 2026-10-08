@@ -221,7 +221,7 @@ const FichaMedica = () => {
                   osociales
                     .filter((osocial) => osocial.borrado === false)
                     .map((osocial, index) => (
-                      <tr key={osocial.idos}>
+                      <tr key={osocial.idcobertura}>
                         <td>{osocial.idobrasocial.nombre}</td>
                         <td>{utils.convertirTipo(osocial.idobrasocial.esestatal)}</td>
                       </tr>

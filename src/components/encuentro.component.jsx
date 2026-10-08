@@ -119,7 +119,7 @@ const Encuentro = () => {
         )
     );
     const idsActividadesADeseleccionar = actividadesADeseleccionar.map(
-      (realizada) => realizada.idactividadrealizada
+      (realizada) => realizada.idencuentroactividad
     );
 
     const createResults = await Promise.all(

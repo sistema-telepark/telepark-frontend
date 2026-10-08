@@ -77,8 +77,8 @@ const ListaObraSocial = (props) => {
     setShowNuevo(true);
   };
 
-  const editar = (obrasocial, idos) => {
-    setIdEditado(idos);
+  const editar = (obrasocial, idcobertura) => {
+    setIdEditado(idcobertura);
     formEdit.reset({ obrasocial });
     setShow(true);
     setShowNuevo(false);
@@ -267,14 +267,16 @@ const ListaObraSocial = (props) => {
                 osociales
                   .filter((osocial) => osocial.borrado === false)
                   .map((osocial) => (
-                    <tr key={osocial.idos}>
+                    <tr key={osocial.idcobertura}>
                       <td>{osocial.idobrasocial.nombre}</td>
                       <td>{utils.convertirTipo(osocial.idobrasocial.esestatal)}</td>
                       <td>
                         <button
                           type="button"
                           className={'btn btn-verde ' + styles.rowActionButton}
-                          onClick={() => editar(osocial.idobrasocial.idobrasocial, osocial.idos)}
+                          onClick={() =>
+                            editar(osocial.idobrasocial.idobrasocial, osocial.idcobertura)
+                          }
                         >
                           <PencilIcon />
                         </button>
@@ -285,7 +287,7 @@ const ListaObraSocial = (props) => {
                           onClick={() =>
                             utils.notificacionEliminar(
                               { idobrasocial: osocial.idobrasocial.idobrasocial },
-                              osocial.idos,
+                              osocial.idcobertura,
                               eliminar
                             )
                           }
