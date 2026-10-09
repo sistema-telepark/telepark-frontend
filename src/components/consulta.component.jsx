@@ -166,32 +166,32 @@ const Consulta = () => {
     const encuentrosOrdenados = [...encuentros].sort(
       (a, b) => new Date(b.fecha) - new Date(a.fecha)
     );
-    const ultimosDosEncuentros = encuentrosOrdenados.slice(0, 2).map((enc) => enc.idencuentro);
+    const ultimosDosEncuentros = encuentrosOrdenados.slice(0, 2).map((enc) => enc.id_encuentro);
 
     // Filtrar asistencias de los últimos dos encuentros con estado Ausente
     const asistenciasFiltradas = asistencias.filter(
       (asistenciaItem) =>
-        ultimosDosEncuentros.includes(asistenciaItem.idencuentro) &&
+        ultimosDosEncuentros.includes(asistenciaItem.encuentro) &&
         asistenciaItem.estado === ESTADO_AUSENTE
     );
 
     // Agrupar asistencias por paciente
     const faltasPorPaciente = asistenciasFiltradas.reduce((acc, asistenciaItem) => {
-      const { idpersonaep } = asistenciaItem;
-      if (!acc[idpersonaep]) {
-        acc[idpersonaep] = 0;
+      const { persona_ep } = asistenciaItem;
+      if (!acc[persona_ep]) {
+        acc[persona_ep] = 0;
       }
-      acc[idpersonaep]++;
+      acc[persona_ep]++;
       return acc;
     }, {});
 
     // Filtrar pacientes con faltas en ambos encuentros
     const pacientesConFaltasConsecutivas = Object.entries(faltasPorPaciente)
       .filter(([, count]) => count === 2)
-      .map(([idpersonaep]) => idpersonaep);
+      .map(([persona_ep]) => persona_ep);
 
     const pacientesFiltrados = pacientes.filter((paciente) =>
-      pacientesConFaltasConsecutivas.includes(String(paciente.idpersona))
+      pacientesConFaltasConsecutivas.includes(String(paciente.id_persona))
     );
 
     setFaltaC(pacientesFiltrados);
@@ -212,8 +212,8 @@ const Consulta = () => {
     setForm({ fechaEncuentro: '' });
   };
 
-  const obtenerNombre = (idpersonaep) => {
-    const paciente = pacientes.find((p) => Number(p.idpersona) === Number(idpersonaep));
+  const obtenerNombre = (persona_ep) => {
+    const paciente = pacientes.find((p) => Number(p.id_persona) === Number(persona_ep));
     return paciente ? `${paciente.nombre} ${paciente.apellido}` : 'Desconocido';
   };
 
@@ -237,7 +237,7 @@ const Consulta = () => {
               >
                 <option value="">Elija el encuentro</option>
                 {encuentro.map((element) => (
-                  <option key={element.idencuentro} value={element.idencuentro}>
+                  <option key={element.id_encuentro} value={element.id_encuentro}>
                     {utils.convertirFormatoFecha(element.fecha)}
                   </option>
                 ))}
@@ -278,8 +278,8 @@ const Consulta = () => {
                   </thead>
                   <tbody>
                     {asistencia.map((item) => (
-                      <tr key={item.idasistenciataller}>
-                        <td>{obtenerNombre(item.idpersonaep)}</td>
+                      <tr key={item.id_asistencia_taller}>
+                        <td>{obtenerNombre(item.persona_ep)}</td>
                         <td>{item.estado}</td>
                       </tr>
                     ))}
@@ -328,7 +328,7 @@ const Consulta = () => {
                   </thead>
                   <tbody>
                     {faltaC.map((paciente) => (
-                      <tr key={paciente.idpersona}>
+                      <tr key={paciente.id_persona}>
                         <td>
                           {paciente.nombre} {paciente.apellido}
                         </td>

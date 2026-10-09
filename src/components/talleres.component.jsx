@@ -71,7 +71,7 @@ const Talleres = () => {
   };
 
   const showModalInsert = () => {
-    formInsert.reset({ tipotaller: '' });
+    formInsert.reset({ tipo_taller: '' });
     setModalInsert(true);
   };
 
@@ -82,7 +82,7 @@ const Talleres = () => {
 
   const showModalEdit = (data) => {
     setTallerEditando(data);
-    formEdit.reset({ tipotaller: data.tipotaller });
+    formEdit.reset({ tipo_taller: data.tipo_taller });
     setModalEdit(true);
   };
 
@@ -106,7 +106,7 @@ const Talleres = () => {
   };
 
   const guardarNuevo = async (data) => {
-    const resp = await tallerRepository.createTaller({ tipotaller: data.tipotaller });
+    const resp = await tallerRepository.createTaller({ tipo_taller: data.tipo_taller });
     if (resp.success) {
       showToast('success', 'Se ha guardado con éxito');
       setModalInsert(false);
@@ -116,8 +116,8 @@ const Talleres = () => {
   };
 
   const editar = async (data) => {
-    const resp = await tallerRepository.updateTaller(tallerEditando.idtaller, {
-      tipotaller: data.tipotaller,
+    const resp = await tallerRepository.updateTaller(tallerEditando.id_taller, {
+      tipo_taller: data.tipo_taller,
     });
     if (resp.success) {
       showToast('success', 'Se ha guardado con éxito');
@@ -129,15 +129,15 @@ const Talleres = () => {
   };
 
   const deleteT = async (data) => {
-    const ok = await showConfirm(`¿Seguro que desea eliminar el taller: ${data.tipotaller}?`);
+    const ok = await showConfirm(`¿Seguro que desea eliminar el taller: ${data.tipo_taller}?`);
     if (!ok) {
       showToast('danger', 'Cancelado', { message: 'No se eliminaron registros' });
       return;
     }
-    const resp = await tallerRepository.deleteTaller(data.idtaller);
+    const resp = await tallerRepository.deleteTaller(data.id_taller);
     if (resp.success) {
       showToast('success', 'Eliminado con éxito');
-      setTaller(taller.filter((item) => item.idtaller !== data.idtaller));
+      setTaller(taller.filter((item) => item.id_taller !== data.id_taller));
     }
   };
 
@@ -158,7 +158,7 @@ const Talleres = () => {
       showToast('danger', 'Cancelado', { message: 'No se eliminaron registros' });
       return;
     }
-    const resp = await actividadRepository.delete(data.idactividad);
+    const resp = await actividadRepository.delete(data.id_actividad);
     if (resp.success) {
       showToast('success', 'Eliminado con éxito');
       getActividades();
@@ -170,7 +170,7 @@ const Talleres = () => {
       actividades.map((actividad) =>
         actividadRepository.create({
           nombre: actividad.nombre,
-          idtaller: tallerSeleccionado.idtaller,
+          taller: tallerSeleccionado.id_taller,
         })
       )
     );
@@ -184,7 +184,7 @@ const Talleres = () => {
   };
 
   const actividadesPersistidas = tallerSeleccionado
-    ? act.filter((actividad) => actividad.idtaller === tallerSeleccionado.idtaller).reverse()
+    ? act.filter((actividad) => actividad.taller === tallerSeleccionado.id_taller).reverse()
     : [];
 
   return (
@@ -206,8 +206,8 @@ const Talleres = () => {
             </thead>
             <tbody>
               {taller.map((element) => (
-                <tr key={element.idtaller}>
-                  <td>{element.tipotaller}</td>
+                <tr key={element.id_taller}>
+                  <td>{element.tipo_taller}</td>
                   <td>
                     <button
                       type="button"
@@ -260,14 +260,14 @@ const Talleres = () => {
             <div className="col-md-12">
               <Form.Group className="mb-0">
                 <div className="form-group mb-2">
-                  <label htmlFor="tipotaller" className="control-label">
+                  <label htmlFor="tipo_taller" className="control-label">
                     Tipo de taller
                   </label>
                   <select
                     className="form-select"
                     placeholder="Ingrese el tipo de taller"
-                    id="tipotaller"
-                    {...formInsert.register('tipotaller', {
+                    id="tipo_taller"
+                    {...formInsert.register('tipo_taller', {
                       required: 'Debe seleccionar un tipo de taller.',
                     })}
                   >
@@ -278,9 +278,9 @@ const Talleres = () => {
                       </option>
                     ))}
                   </select>
-                  {formInsert.formState.errors.tipotaller && (
+                  {formInsert.formState.errors.tipo_taller && (
                     <small className="text-danger">
-                      {formInsert.formState.errors.tipotaller.message}
+                      {formInsert.formState.errors.tipo_taller.message}
                     </small>
                   )}
                 </div>
@@ -309,30 +309,30 @@ const Talleres = () => {
         <Modal.Body>
           <div className="row">
             <Form.Group className="mb-0">
-              <label htmlFor="idtaller" className="control-label">
+              <label htmlFor="id_taller" className="control-label">
                 Código:
               </label>
               <input
                 type="text"
-                name="idtaller"
-                id="idtaller"
+                name="id_taller"
+                id="id_taller"
                 className="form-control"
                 readOnly
-                value={tallerEditando ? tallerEditando.idtaller : ''}
+                value={tallerEditando ? tallerEditando.id_taller : ''}
               />
             </Form.Group>
 
             <div className="col-md-12">
               <Form.Group className="mb-0">
                 <div className="form-group mb-2">
-                  <label htmlFor="tipotallerEdit" className="control-label">
+                  <label htmlFor="tipo_tallerEdit" className="control-label">
                     Tipo de taller
                   </label>
                   <select
                     className="form-select"
                     placeholder="Ingrese el tipo de taller"
-                    id="tipotallerEdit"
-                    {...formEdit.register('tipotaller', {
+                    id="tipo_tallerEdit"
+                    {...formEdit.register('tipo_taller', {
                       required: 'Debe seleccionar un tipo de taller.',
                     })}
                   >
@@ -343,9 +343,9 @@ const Talleres = () => {
                       </option>
                     ))}
                   </select>
-                  {formEdit.formState.errors.tipotaller && (
+                  {formEdit.formState.errors.tipo_taller && (
                     <small className="text-danger">
-                      {formEdit.formState.errors.tipotaller.message}
+                      {formEdit.formState.errors.tipo_taller.message}
                     </small>
                   )}
                 </div>
@@ -372,8 +372,8 @@ const Talleres = () => {
           <div>
             <h5>Actividades del taller:</h5>
             <div className="control-label">
-              {tallerSeleccionado ? tallerSeleccionado.tipotaller : ''}{' '}
-              <h6>Código: {tallerSeleccionado ? tallerSeleccionado.idtaller : ''} </h6>
+              {tallerSeleccionado ? tallerSeleccionado.tipo_taller : ''}{' '}
+              <h6>Código: {tallerSeleccionado ? tallerSeleccionado.id_taller : ''} </h6>
             </div>
           </div>
         </Modal.Header>
@@ -433,7 +433,7 @@ const Talleres = () => {
                   ))}
 
                   {actividadesPersistidas.map((actividad) => (
-                    <tr key={actividad.idactividad}>
+                    <tr key={actividad.id_actividad}>
                       <td>{actividad.nombre}</td>
                       <td>
                         <button

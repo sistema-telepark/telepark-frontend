@@ -77,8 +77,8 @@ const ListaObraSocial = (props) => {
     setShowNuevo(true);
   };
 
-  const editar = (obrasocial, idcobertura) => {
-    setIdEditado(idcobertura);
+  const editar = (obrasocial, id_cobertura) => {
+    setIdEditado(id_cobertura);
     formEdit.reset({ obrasocial });
     setShow(true);
     setShowNuevo(false);
@@ -93,8 +93,8 @@ const ListaObraSocial = (props) => {
 
   const cargarNuevo = async (data) => {
     const payload = {
-      idpersonaep: Number(idEpElegido),
-      idobrasocial: Number(data.obrasocial),
+      persona_ep: Number(idEpElegido),
+      obra_social: Number(data.obrasocial),
       borrado: false,
     };
     const response = await osRepository.create(payload);
@@ -108,8 +108,8 @@ const ListaObraSocial = (props) => {
 
   const guardar = async (data) => {
     const payload = {
-      idpersonaep: Number(idEpElegido),
-      idobrasocial: Number(data.obrasocial),
+      persona_ep: Number(idEpElegido),
+      obra_social: Number(data.obrasocial),
       borrado: false,
     };
     const response = await osRepository.update(idEditado, payload);
@@ -123,8 +123,8 @@ const ListaObraSocial = (props) => {
 
   const eliminar = async (info, id) => {
     const data = {
-      idpersonaep: Number(idEpElegido),
-      idobrasocial: Number(info.idobrasocial),
+      persona_ep: Number(idEpElegido),
+      obra_social: Number(info.obra_social),
       borrado: true,
     };
     const response = await osRepository.update(id, data);
@@ -178,7 +178,7 @@ const ListaObraSocial = (props) => {
                 <option value="">Elegir</option>
                 {obrasociales &&
                   obrasociales.map((obrasocial) => (
-                    <option value={obrasocial.idobrasocial} key={obrasocial.idobrasocial}>
+                    <option value={obrasocial.id_obra_social} key={obrasocial.id_obra_social}>
                       {obrasocial.nombre}
                     </option>
                   ))}
@@ -225,7 +225,7 @@ const ListaObraSocial = (props) => {
                 <option value="">Elegir</option>
                 {obrasociales &&
                   obrasociales.map((obrasocial) => (
-                    <option value={obrasocial.idobrasocial} key={obrasocial.idobrasocial}>
+                    <option value={obrasocial.id_obra_social} key={obrasocial.id_obra_social}>
                       {obrasocial.nombre}
                     </option>
                   ))}
@@ -267,15 +267,15 @@ const ListaObraSocial = (props) => {
                 osociales
                   .filter((osocial) => osocial.borrado === false)
                   .map((osocial) => (
-                    <tr key={osocial.idcobertura}>
-                      <td>{osocial.idobrasocial.nombre}</td>
-                      <td>{utils.convertirTipo(osocial.idobrasocial.esestatal)}</td>
+                    <tr key={osocial.id_cobertura}>
+                      <td>{osocial.obra_social.nombre}</td>
+                      <td>{utils.convertirTipo(osocial.obra_social.es_estatal)}</td>
                       <td>
                         <button
                           type="button"
                           className={'btn btn-verde ' + styles.rowActionButton}
                           onClick={() =>
-                            editar(osocial.idobrasocial.idobrasocial, osocial.idcobertura)
+                            editar(osocial.obra_social.id_obra_social, osocial.id_cobertura)
                           }
                         >
                           <PencilIcon />
@@ -286,8 +286,8 @@ const ListaObraSocial = (props) => {
                           className="btn btn-rojo"
                           onClick={() =>
                             utils.notificacionEliminar(
-                              { idobrasocial: osocial.idobrasocial.idobrasocial },
-                              osocial.idcobertura,
+                              { obra_social: osocial.obra_social.id_obra_social },
+                              osocial.id_cobertura,
                               eliminar
                             )
                           }

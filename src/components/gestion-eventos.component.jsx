@@ -70,11 +70,11 @@ const Events = () => {
   const guardarNuevo = () => {
     let data = {};
     data = {
-      fechadesde: events.fechaDesde || null,
-      fechahasta: events.fechaHasta || null,
+      fecha_desde: events.fechaDesde || null,
+      fecha_hasta: events.fechaHasta || null,
       motivo: events.motivo,
-      idpersonaep: events.idpersonaep,
-      idtipoevento: events.idtipoevento,
+      persona_ep: events.idpersonaep,
+      tipo_evento: events.idtipoevento,
       borrado: false,
     };
 
@@ -181,9 +181,9 @@ const Events = () => {
                 {namePersonEP.map((element) => {
                   return (
                     <option
-                      id={`persona-${element.idpersona}`}
-                      key={`persona-${element.idpersona}`}
-                      value={element.idpersona}
+                      id={`persona-${element.id_persona}`}
+                      key={`persona-${element.id_persona}`}
+                      value={element.id_persona}
                     >
                       {element.nombre} {element.apellido}
                     </option>
@@ -209,7 +209,7 @@ const Events = () => {
                   Seleccione un tipo de evento
                 </option>
                 {typeEvent.map((element) => (
-                  <option key={element.idtipoevento} value={element.idtipoevento}>
+                  <option key={element.id_tipo_evento} value={element.id_tipo_evento}>
                     {element.nombre}
                   </option>
                 ))}

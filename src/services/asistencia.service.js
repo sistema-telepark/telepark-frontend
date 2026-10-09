@@ -28,7 +28,7 @@ const asistencias = {
   },
   // El backend no expone /asistenciataller/encuentro/{id}; se recorre la
   // paginación de /asistencias-taller (envelope DRF) y se filtra client-side
-  // por idencuentro.
+  // por encuentro.
   async getAsistenciaByEncuentro(idEncuentro) {
     const resultados = [];
     let nextUrl = ASISTENCIA_PATH;
@@ -39,7 +39,7 @@ const asistencias = {
       if (resultados.length >= count) break; // guard: cortar al cubrir count
       nextUrl = next; // URL absoluta del envelope; axios la usa tal cual
     }
-    return resultados.filter((item) => Number(item.idencuentro) === Number(idEncuentro));
+    return resultados.filter((item) => Number(item.encuentro) === Number(idEncuentro));
   },
 };
 

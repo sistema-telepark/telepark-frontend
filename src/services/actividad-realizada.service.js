@@ -4,7 +4,7 @@ import { withServiceHandler } from './error-handler';
 const actividadesRealizadas = {
   // El backend no expone /encuentroactividad/{id}/actividades; se recorre la
   // paginación de /encuentros-actividades (envelope DRF {count,next,results})
-  // y se filtra client-side por idencuentro.
+  // y se filtra client-side por encuentro.
   async getActividadesRealizadasByClase(idEncuentro) {
     const resultados = [];
     let nextUrl = `/encuentros-actividades`;
@@ -15,7 +15,7 @@ const actividadesRealizadas = {
       if (resultados.length >= count) break; // guard: cortar al cubrir count
       nextUrl = next; // URL absoluta del envelope; axios la usa tal cual
     }
-    return resultados.filter((item) => Number(item.idencuentro) === Number(idEncuentro));
+    return resultados.filter((item) => Number(item.encuentro) === Number(idEncuentro));
   },
   async getAll() {
     const response = await http.get(`/encuentros-actividades`);

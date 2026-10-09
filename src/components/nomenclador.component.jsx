@@ -102,7 +102,7 @@ const Nomenclador = () => {
 
   const guardar = async (tipo) => {
     let nombre = campo[tipo];
-    let esestatal = tipo === 'obrasocial' ? campo.isChecked : undefined;
+    let es_estatal = tipo === 'obrasocial' ? campo.isChecked : undefined;
     let id = campo.idEditado;
     if (nombre !== '') {
       switch (tipo) {
@@ -126,7 +126,7 @@ const Nomenclador = () => {
           break;
         case 'obrasocial':
           {
-            const response = await obrasocialRepository.update(id, { nombre, esestatal });
+            const response = await obrasocialRepository.update(id, { nombre, es_estatal });
             if (response?.success) {
               getObrasocial();
               utils.notificacionGuardar();
@@ -177,7 +177,7 @@ const Nomenclador = () => {
 
   const cargarNuevo = async (tipo) => {
     let nombre = campo[tipo];
-    let esestatal = tipo === 'obrasocial' ? campo.isChecked : false;
+    let es_estatal = tipo === 'obrasocial' ? campo.isChecked : false;
     if (nombre !== '') {
       switch (tipo) {
         case 'enfermedad':
@@ -200,7 +200,7 @@ const Nomenclador = () => {
           break;
         case 'obrasocial':
           {
-            const response = await obrasocialRepository.create({ nombre, esestatal });
+            const response = await obrasocialRepository.create({ nombre, es_estatal });
             if (response?.success) {
               getObrasocial();
               utils.notificacionGuardar();
@@ -284,7 +284,7 @@ const Nomenclador = () => {
                 <tbody className={styles.tableBodyMiddle}>
                   {enfermedades &&
                     enfermedades.map((enfermedad, index) => (
-                      <tr key={enfermedad.idenfermedad}>
+                      <tr key={enfermedad.id_enfermedad}>
                         <td>{enfermedad.nombre}</td>
                         <td>
                           <button
@@ -294,7 +294,7 @@ const Nomenclador = () => {
                               editar(
                                 'enfermedad',
                                 { nombre: enfermedad.nombre },
-                                enfermedad.idenfermedad
+                                enfermedad.id_enfermedad
                               )
                             }
                             aria-label={`Editar enfermedad: ${enfermedad.nombre}`}
@@ -307,7 +307,7 @@ const Nomenclador = () => {
                             onClick={() =>
                               utils.notificacionEliminar(
                                 'enfermedad',
-                                enfermedad.idenfermedad,
+                                enfermedad.id_enfermedad,
                                 eliminar
                               )
                             }
@@ -384,7 +384,7 @@ const Nomenclador = () => {
                 <tbody className={styles.tableBodyMiddle}>
                   {medicamentos &&
                     medicamentos.map((medicamento, index) => (
-                      <tr key={medicamento.idmedicamento}>
+                      <tr key={medicamento.id_medicamento}>
                         <td>{medicamento.nombre}</td>
                         <td>
                           <button
@@ -394,7 +394,7 @@ const Nomenclador = () => {
                               editar(
                                 'medicamento',
                                 { nombre: medicamento.nombre },
-                                medicamento.idmedicamento
+                                medicamento.id_medicamento
                               )
                             }
                             aria-label={`Editar medicamento: ${medicamento.nombre}`}
@@ -407,7 +407,7 @@ const Nomenclador = () => {
                             onClick={() =>
                               utils.notificacionEliminar(
                                 'medicamento',
-                                medicamento.idmedicamento,
+                                medicamento.id_medicamento,
                                 eliminar
                               )
                             }
@@ -495,7 +495,7 @@ const Nomenclador = () => {
                 <tbody className={styles.tableBodyMiddle}>
                   {obrasociales &&
                     obrasociales.map((obrasocial, index) => (
-                      <tr key={obrasocial.idobrasocial}>
+                      <tr key={obrasocial.id_obra_social}>
                         <td>{obrasocial.nombre}</td>
                         <td>
                           <button
@@ -504,8 +504,8 @@ const Nomenclador = () => {
                             onClick={() =>
                               editar(
                                 'obrasocial',
-                                { nombre: obrasocial.nombre, isChecked: obrasocial.esestatal },
-                                obrasocial.idobrasocial
+                                { nombre: obrasocial.nombre, isChecked: obrasocial.es_estatal },
+                                obrasocial.id_obra_social
                               )
                             }
                             aria-label={`Editar obra social: ${obrasocial.nombre}`}
@@ -518,7 +518,7 @@ const Nomenclador = () => {
                             onClick={() =>
                               utils.notificacionEliminar(
                                 'obrasocial',
-                                obrasocial.idobrasocial,
+                                obrasocial.id_obra_social,
                                 eliminar
                               )
                             }

@@ -139,8 +139,8 @@ const FichaMedica = () => {
                   diagnosticos
                     .filter((diagnostico) => diagnostico.borrado === false)
                     .map((diagnostico, index) => (
-                      <tr key={diagnostico.iddiagnostico}>
-                        <td>{diagnostico.idenfermedad.nombre}</td>
+                      <tr key={diagnostico.id_diagnostico}>
+                        <td>{diagnostico.enfermedad.nombre}</td>
                         <td>{utils.convertirFormatoFecha(diagnostico.fecha)}</td>
                       </tr>
                     ))}
@@ -180,9 +180,9 @@ const FichaMedica = () => {
                   evoluciones
                     .filter((evolucion) => evolucion.borrado === false)
                     .map((evolucion, index) => (
-                      <tr key={evolucion.idevolucion}>
-                        <td>Estado: {evolucion.escalaevolucion}</td>
-                        <td>{utils.describirEstado(evolucion.escalaevolucion)}</td>
+                      <tr key={evolucion.id_evolucion}>
+                        <td>Estado: {evolucion.escala_evolucion}</td>
+                        <td>{utils.describirEstado(evolucion.escala_evolucion)}</td>
                         <td>{utils.convertirFormatoFecha(evolucion.fecha)}</td>
                       </tr>
                     ))}
@@ -221,9 +221,9 @@ const FichaMedica = () => {
                   osociales
                     .filter((osocial) => osocial.borrado === false)
                     .map((osocial, index) => (
-                      <tr key={osocial.idcobertura}>
-                        <td>{osocial.idobrasocial.nombre}</td>
-                        <td>{utils.convertirTipo(osocial.idobrasocial.esestatal)}</td>
+                      <tr key={osocial.id_cobertura}>
+                        <td>{osocial.obra_social.nombre}</td>
+                        <td>{utils.convertirTipo(osocial.obra_social.es_estatal)}</td>
                       </tr>
                     ))}
               </tbody>
@@ -264,12 +264,12 @@ const FichaMedica = () => {
                   indicaciones
                     .filter((indicacion) => indicacion.borrado === false)
                     .map((indicacion, index) => (
-                      <tr key={indicacion.idindicacion}>
-                        <td>{indicacion.idmedicamento.nombre}</td>
-                        <td>{indicacion.cantidadmiligramos} mg</td>
-                        <td>Cada {utils.convertirFormatoHora(indicacion.horadetoma)} hs</td>
-                        <td>{utils.convertirFormatoFecha(indicacion.fechaprescripcion)}</td>
-                        <td>{utils.convertirEstado(indicacion.estavigente)}</td>
+                      <tr key={indicacion.id_indicacion}>
+                        <td>{indicacion.medicamento.nombre}</td>
+                        <td>{indicacion.cantidad_miligramos} mg</td>
+                        <td>Cada {utils.convertirFormatoHora(indicacion.hora_de_toma)} hs</td>
+                        <td>{utils.convertirFormatoFecha(indicacion.fecha_prescripcion)}</td>
+                        <td>{utils.convertirEstado(indicacion.esta_vigente)}</td>
                       </tr>
                     ))}
               </tbody>

@@ -7,7 +7,7 @@ const departamentos = {
     return response.data.results ?? response.data;
   },
   async getByProvincia(idprovincia) {
-    const response = await http.get(`/departamentos`, { params: { idprovincia } });
+    const response = await http.get(`/departamentos`, { params: { provincia: idprovincia } });
     return response.data.results ?? response.data;
   },
 };

@@ -75,8 +75,8 @@ const ListaIndicacion = () => {
     }
   };
 
-  const editar = (dosis, estado, fecha, hora, medicamento, idindicacion) => {
-    setIdEditado(idindicacion);
+  const editar = (dosis, estado, fecha, hora, medicamento, id_indicacion) => {
+    setIdEditado(id_indicacion);
     formEdit.reset({
       medicamento,
       dosis,
@@ -90,12 +90,12 @@ const ListaIndicacion = () => {
 
   const guardar = (data) => {
     const payload = {
-      cantidadmiligramos: Number(data.dosis),
-      estavigente: data.estado === 'true',
-      fechaprescripcion: data.fecha,
-      horadetoma: data.hora,
-      idpersonaep: Number(idEpElegido),
-      idmedicamento: Number(data.medicamento),
+      cantidad_miligramos: Number(data.dosis),
+      esta_vigente: data.estado === 'true',
+      fecha_prescripcion: data.fecha,
+      hora_de_toma: data.hora,
+      persona_ep: Number(idEpElegido),
+      medicamento: Number(data.medicamento),
       borrado: false,
     };
     indicacionRepository.update(idEditado, payload).then((response) => {
@@ -123,12 +123,12 @@ const ListaIndicacion = () => {
 
   const cargarNuevo = (data) => {
     const payload = {
-      cantidadmiligramos: Number(data.dosis),
-      estavigente: data.estado === 'true',
-      fechaprescripcion: data.fecha,
-      horadetoma: data.hora,
-      idpersonaep: Number(idEpElegido),
-      idmedicamento: Number(data.medicamento),
+      cantidad_miligramos: Number(data.dosis),
+      esta_vigente: data.estado === 'true',
+      fecha_prescripcion: data.fecha,
+      hora_de_toma: data.hora,
+      persona_ep: Number(idEpElegido),
+      medicamento: Number(data.medicamento),
       borrado: false,
     };
     indicacionRepository.create(payload).then((response) => {
@@ -142,20 +142,20 @@ const ListaIndicacion = () => {
   };
 
   const eliminar = (
-    cantidadmiligramos,
-    estavigente,
-    fechaprescripcion,
-    horadetoma,
-    idmedicamento,
+    cantidad_miligramos,
+    esta_vigente,
+    fecha_prescripcion,
+    hora_de_toma,
+    medicamento,
     id
   ) => {
     var data = {
-      cantidadmiligramos: Number(cantidadmiligramos),
-      estavigente: estavigente === true,
-      fechaprescripcion: fechaprescripcion,
-      horadetoma: horadetoma,
-      idpersonaep: Number(idEpElegido),
-      idmedicamento: Number(idmedicamento),
+      cantidad_miligramos: Number(cantidad_miligramos),
+      esta_vigente: esta_vigente === true,
+      fecha_prescripcion: fecha_prescripcion,
+      hora_de_toma: hora_de_toma,
+      persona_ep: Number(idEpElegido),
+      medicamento: Number(medicamento),
       borrado: true,
     };
     indicacionRepository.update(id, data).then((response) => {
@@ -168,11 +168,11 @@ const ListaIndicacion = () => {
   };
 
   const notificacionEliminar = async (
-    cantidadmiligramos,
-    estavigente,
-    fechaprescripcion,
-    horadetoma,
-    idmedicamento,
+    cantidad_miligramos,
+    esta_vigente,
+    fecha_prescripcion,
+    hora_de_toma,
+    medicamento,
     idIndicacion
   ) => {
     const confirmado = await showConfirm({
@@ -184,11 +184,11 @@ const ListaIndicacion = () => {
     });
     if (confirmado) {
       eliminar(
-        cantidadmiligramos,
-        estavigente,
-        fechaprescripcion,
-        horadetoma,
-        idmedicamento,
+        cantidad_miligramos,
+        esta_vigente,
+        fecha_prescripcion,
+        hora_de_toma,
+        medicamento,
         idIndicacion
       );
     } else {
@@ -228,7 +228,7 @@ const ListaIndicacion = () => {
             <div className="row justify-content-center">
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label htmlFor="medicamento" className="col-form-label">
-                  Nombre de Medicamento
+                  Medicamento
                 </label>
                 <select
                   className="form-select"
@@ -240,7 +240,7 @@ const ListaIndicacion = () => {
                   <option value="">Elegir</option>
                   {medicamentos &&
                     medicamentos.map((medicamento) => (
-                      <option value={medicamento.idmedicamento} key={medicamento.idmedicamento}>
+                      <option value={medicamento.id_medicamento} key={medicamento.id_medicamento}>
                         {medicamento.nombre}
                       </option>
                     ))}
@@ -285,7 +285,7 @@ const ListaIndicacion = () => {
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label htmlFor="fecha" className="col-form-label">
-                  Fecha de Prescripción
+                  Fecha
                 </label>
                 <input
                   type="date"
@@ -344,7 +344,7 @@ const ListaIndicacion = () => {
             <div className="row justify-content-center">
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label htmlFor="medicamentoEdit" className="col-form-label">
-                  Nombre de Medicamento
+                  Medicamento
                 </label>
                 <select
                   className="form-select"
@@ -356,7 +356,7 @@ const ListaIndicacion = () => {
                   <option value="">Elegir</option>
                   {medicamentos &&
                     medicamentos.map((medicamento) => (
-                      <option value={medicamento.idmedicamento} key={medicamento.idmedicamento}>
+                      <option value={medicamento.id_medicamento} key={medicamento.id_medicamento}>
                         {medicamento.nombre}
                       </option>
                     ))}
@@ -401,7 +401,7 @@ const ListaIndicacion = () => {
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label htmlFor="fechaEdit" className="col-form-label">
-                  Fecha de Prescripción
+                  Fecha
                 </label>
                 <input
                   type="date"
@@ -474,24 +474,24 @@ const ListaIndicacion = () => {
                   indicaciones
                     .filter((indicacion) => indicacion.borrado === false)
                     .map((indicacion) => (
-                      <tr key={indicacion.idindicacion}>
-                        <td>{indicacion.idmedicamento.nombre}</td>
-                        <td>{indicacion.cantidadmiligramos} mg</td>
-                        <td>Cada {utils.convertirFormatoHora(indicacion.horadetoma)} hs</td>
-                        <td>{utils.convertirFormatoFecha(indicacion.fechaprescripcion)}</td>
-                        <td>{utils.convertirEstado(indicacion.estavigente)}</td>
+                      <tr key={indicacion.id_indicacion}>
+                        <td>{indicacion.medicamento.nombre}</td>
+                        <td>{indicacion.cantidad_miligramos} mg</td>
+                        <td>Cada {utils.convertirFormatoHora(indicacion.hora_de_toma)} hs</td>
+                        <td>{utils.convertirFormatoFecha(indicacion.fecha_prescripcion)}</td>
+                        <td>{utils.convertirEstado(indicacion.esta_vigente)}</td>
                         <td>
                           <button
                             type="button"
                             className={'btn btn-verde ' + styles.rowActionButton}
                             onClick={() =>
                               editar(
-                                indicacion.cantidadmiligramos,
-                                indicacion.estavigente,
-                                indicacion.fechaprescripcion,
-                                indicacion.horadetoma,
-                                indicacion.idmedicamento.idmedicamento,
-                                indicacion.idindicacion
+                                indicacion.cantidad_miligramos,
+                                indicacion.esta_vigente,
+                                indicacion.fecha_prescripcion,
+                                indicacion.hora_de_toma,
+                                indicacion.medicamento.id_medicamento,
+                                indicacion.id_indicacion
                               )
                             }
                           >
@@ -502,12 +502,12 @@ const ListaIndicacion = () => {
                             className="btn btn-rojo"
                             onClick={() =>
                               notificacionEliminar(
-                                indicacion.cantidadmiligramos,
-                                indicacion.estavigente,
-                                indicacion.fechaprescripcion,
-                                indicacion.horadetoma,
-                                indicacion.idmedicamento.idmedicamento,
-                                indicacion.idindicacion
+                                indicacion.cantidad_miligramos,
+                                indicacion.esta_vigente,
+                                indicacion.fecha_prescripcion,
+                                indicacion.hora_de_toma,
+                                indicacion.medicamento.id_medicamento,
+                                indicacion.id_indicacion
                               )
                             }
                           >

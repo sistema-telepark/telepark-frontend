@@ -27,12 +27,12 @@ const AdminPersonas = () => {
 
   const edit = (data) => {
     let list = [...arrayPerson];
-    let modifidedPerson = list.find((listdata) => Number(data.idpersona) === listdata.idpersona);
+    let modifidedPerson = list.find((listdata) => Number(data.idpersona) === listdata.id_persona);
     if (!modifidedPerson) {
       return;
     }
     modifidedPerson = {
-      id: Number(data.idpersona),
+      id_persona: Number(data.idpersona),
       nombre: data.nombre,
       apellido: data.apellido,
       telefono: data.telefono,
@@ -51,7 +51,7 @@ const AdminPersonas = () => {
   const showModalEdit = (data) => {
     setModalEdit(true);
     formEdit.reset({
-      idpersona: data.idpersona,
+      idpersona: data.id_persona,
       nombre: data.nombre,
       apellido: data.apellido,
       telefono: data.telefono,
@@ -92,9 +92,9 @@ const AdminPersonas = () => {
       showToast('danger', 'Cancelado', { message: 'No se eliminaron registros' });
       return;
     }
-    const arrayPersonas = arrayPerson.filter((e) => e.idpersona !== persona.idpersona);
+    const arrayPersonas = arrayPerson.filter((e) => e.id_persona !== persona.id_persona);
     persona.borrado = true;
-    eventRespository.updatePerson(persona.idpersona, persona).then((response) => {
+    eventRespository.updatePerson(persona.id_persona, persona).then((response) => {
       if (response?.success) {
         showToast('success', 'Eliminado con éxito');
         getPersonAll();
@@ -108,7 +108,7 @@ const AdminPersonas = () => {
     if (person.borrado === true) return false;
     if (!terminoBusqueda) return true;
 
-    return [person.idpersona, person.nombre, person.apellido, person.telefono]
+    return [person.id_persona, person.nombre, person.apellido, person.telefono]
       .filter((value) => value !== null && value !== undefined)
       .some((value) => String(value).toLowerCase().includes(terminoBusqueda));
   });
@@ -153,7 +153,7 @@ const AdminPersonas = () => {
               </thead>
               <tbody>
                 {arrayPersonIspaciente.map((person) => (
-                  <tr key={person.idpersona}>
+                  <tr key={person.id_persona}>
                     <td>{person.nombre}</td>
                     <td>{person.apellido}</td>
                     <td>{person.telefono}</td>

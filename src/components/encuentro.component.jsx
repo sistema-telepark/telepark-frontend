@@ -74,8 +74,8 @@ const Encuentro = () => {
   };
 
   // Las actividades realizadas de una clase llegan como array plano
-  const getActividadesRealizadas = async (idencuentro) => {
-    const resp = await actividadRealizadaRepository.getActividadesRealizadasByClase(idencuentro);
+  const getActividadesRealizadas = async (id_encuentro) => {
+    const resp = await actividadRealizadaRepository.getActividadesRealizadasByClase(id_encuentro);
     if (resp.success) {
       setActividadRealizada(resp.data);
       setLoadError(null);
@@ -87,13 +87,13 @@ const Encuentro = () => {
   const handleActividadCheck = (idactividad) => {
     setActividad((prevActividades) =>
       prevActividades.map((act) =>
-        act.idactividad === idactividad ? { ...act, checked: !act.checked } : act
+        act.id_actividad === idactividad ? { ...act, checked: !act.checked } : act
       )
     );
   };
 
   const actividadesDelTaller = encuentroSeleccionado
-    ? actividad.filter((act) => Number(act.idtaller) === Number(encuentroSeleccionado.idtaller))
+    ? actividad.filter((act) => Number(act.taller) === Number(encuentroSeleccionado.taller))
     : [];
 
   // Guardar o eliminar las actividades realizadas del encuentro según su estado
@@ -104,22 +104,22 @@ const Encuentro = () => {
       .filter(
         (seleccionada) =>
           !actividadRealizada.some(
-            (realizada) => realizada.idactividad === seleccionada.idactividad
+            (realizada) => realizada.actividad === seleccionada.id_actividad
           )
       )
       .map((actividadItem) => ({
-        idactividad: actividadItem.idactividad,
-        idencuentro: encuentroSeleccionado.idencuentro,
+        actividad: actividadItem.id_actividad,
+        encuentro: encuentroSeleccionado.id_encuentro,
       }));
 
     const actividadesADeseleccionar = actividadRealizada.filter(
       (realizada) =>
         !actividadesSeleccionadas.some(
-          (seleccionada) => seleccionada.idactividad === realizada.idactividad
+          (seleccionada) => seleccionada.id_actividad === realizada.actividad
         )
     );
     const idsActividadesADeseleccionar = actividadesADeseleccionar.map(
-      (realizada) => realizada.idencuentroactividad
+      (realizada) => realizada.id_encuentro_actividad
     );
 
     const createResults = await Promise.all(
@@ -133,7 +133,7 @@ const Encuentro = () => {
     if (resultados.every((resp) => resp.success)) {
       showToast('success', 'Se ha guardado con éxito');
       setModalInsertAct(false);
-      getActividadesRealizadas(encuentroSeleccionado.idencuentro);
+      getActividadesRealizadas(encuentroSeleccionado.id_encuentro);
     }
   };
 
@@ -141,7 +141,7 @@ const Encuentro = () => {
     const resp = await encuentroRepository.createEncuentro({
       fecha: data.fecha,
       virtual: data.virtual,
-      idtaller: data.idtaller,
+      taller: data.idtaller,
     });
     if (resp.success) {
       showToast('success', 'Se ha guardado con éxito');
@@ -152,10 +152,10 @@ const Encuentro = () => {
   };
 
   const guardarEdicion = async (data) => {
-    const resp = await encuentroRepository.updateEncuentro(encuentroEditando.idencuentro, {
+    const resp = await encuentroRepository.updateEncuentro(encuentroEditando.id_encuentro, {
       fecha: data.fecha,
       virtual: data.virtual,
-      idtaller: data.idtaller,
+      taller: data.idtaller,
     });
     if (resp.success) {
       showToast('success', 'Se ha guardado con éxito');
@@ -181,7 +181,7 @@ const Encuentro = () => {
     formEdit.reset({
       fecha: data.fecha,
       virtual: data.virtual,
-      idtaller: data.idtaller,
+      idtaller: data.taller,
     });
     setModalEdit(true);
   };
@@ -195,16 +195,16 @@ const Encuentro = () => {
   const eliminarEncuentro = async (data) => {
     const ok = await showConfirm(
       `¿Seguro que desea eliminar el encuentro con fecha: ${utils.convertirFormatoFecha(data.fecha)}?`,
-      `Código: ${data.idencuentro}`
+      `Código: ${data.id_encuentro}`
     );
     if (!ok) {
       showToast('danger', 'Cancelado', { message: 'No se eliminaron registros' });
       return;
     }
-    const resp = await encuentroRepository.deleteEncuentro(data.idencuentro);
+    const resp = await encuentroRepository.deleteEncuentro(data.id_encuentro);
     if (resp.success) {
       showToast('success', 'Eliminado con éxito');
-      setEncuentro(encuentro.filter((item) => item.idencuentro !== data.idencuentro));
+      setEncuentro(encuentro.filter((item) => item.id_encuentro !== data.id_encuentro));
     }
   };
 
@@ -214,15 +214,15 @@ const Encuentro = () => {
     setModalInsertAct(true);
 
     const resp = await actividadRealizadaRepository.getActividadesRealizadasByClase(
-      data.idencuentro
+      data.id_encuentro
     );
     if (resp.success) {
       setActividadRealizada(resp.data);
       const actividadesConEstado = actividad.map((act) => ({
         ...act,
         checked:
-          Number(act.idtaller) === Number(data.idtaller) &&
-          resp.data.some((realizada) => realizada.idactividad === act.idactividad),
+          Number(act.taller) === Number(data.taller) &&
+          resp.data.some((realizada) => realizada.actividad === act.id_actividad),
       }));
       setActividad(actividadesConEstado);
     } else {
@@ -237,8 +237,10 @@ const Encuentro = () => {
 
   // Agrupa las actividades por taller; el nombre del taller será la clave
   const actividadesPorTaller = actividadesDelTaller.reduce((acc, actividadItem) => {
-    const tallerObj = taller.find((tallerItem) => tallerItem.idtaller === actividadItem.idtaller);
-    const tallerNombre = tallerObj?.tipotaller || 'Taller sin nombre';
+    const tallerObj = taller.find(
+      (tallerItem) => tallerItem.id_taller === actividadItem.taller
+    );
+    const tallerNombre = tallerObj?.tipo_taller || 'Taller sin nombre';
 
     if (!acc[tallerNombre]) {
       acc[tallerNombre] = [];
@@ -270,12 +272,12 @@ const Encuentro = () => {
             </thead>
             <tbody>
               {encuentro.map((element) => (
-                <tr key={element.idencuentro}>
+                <tr key={element.id_encuentro}>
                   <td>{utils.convertirFormatoFecha(element.fecha)}</td>
                   <td>{element.virtual ? 'Sí' : ''}</td>
                   <td>
-                    {taller.find((t) => Number(t.idtaller) === Number(element.idtaller))
-                      ?.tipotaller ?? 'Sin taller'}
+                    {taller.find((t) => Number(t.id_taller) === Number(element.taller))
+                      ?.tipo_taller ?? 'Sin taller'}
                   </td>
                   <td>
                     <button
@@ -381,8 +383,8 @@ const Encuentro = () => {
                   >
                     <option value="">Elija el taller</option>
                     {taller.map((element) => (
-                      <option key={element.idtaller} value={element.idtaller}>
-                        {element.tipotaller}
+                      <option key={element.id_taller} value={element.id_taller}>
+                        {element.tipo_taller}
                       </option>
                     ))}
                   </select>
@@ -418,16 +420,16 @@ const Encuentro = () => {
           <div className="row">
             <div className="col-md-12">
               <Form.Group className="mb-0">
-                <label htmlFor="idencuentro" className="control-label">
+                <label htmlFor="id_encuentro" className="control-label">
                   Código:
                 </label>
                 <input
                   type="text"
-                  name="idencuentro"
-                  id="idencuentro"
+                  name="id_encuentro"
+                  id="id_encuentro"
                   className="form-control"
                   readOnly
-                  value={encuentroEditando ? encuentroEditando.idencuentro : ''}
+                  value={encuentroEditando ? encuentroEditando.id_encuentro : ''}
                 />
               </Form.Group>
             </div>
@@ -482,8 +484,8 @@ const Encuentro = () => {
                   >
                     <option value="">Elija el taller</option>
                     {taller.map((element) => (
-                      <option key={element.idtaller} value={element.idtaller}>
-                        {element.tipotaller}
+                      <option key={element.id_taller} value={element.id_taller}>
+                        {element.tipo_taller}
                       </option>
                     ))}
                   </select>
@@ -521,7 +523,7 @@ const Encuentro = () => {
                   ? utils.convertirFormatoFecha(encuentroSeleccionado.fecha)
                   : ''}
               </div>
-              <h6>Código: {encuentroSeleccionado ? encuentroSeleccionado.idencuentro : ''}</h6>
+              <h6>Código: {encuentroSeleccionado ? encuentroSeleccionado.id_encuentro : ''}</h6>
             </div>
           </div>
         </Modal.Header>
@@ -539,16 +541,16 @@ const Encuentro = () => {
                       </tr>
 
                       {actividadesPorTaller[tallerNombre].map((act) => (
-                        <tr key={act.idactividad}>
+                        <tr key={act.id_actividad}>
                           <td>{act.nombre}</td>
                           <td>
                             <input
                               type="checkbox"
                               className="form-check-input"
-                              id={`actividad-${act.idactividad}`}
-                              value={act.idactividad}
+                              id={`actividad-${act.id_actividad}`}
+                              value={act.id_actividad}
                               checked={act.checked || false}
-                              onChange={() => handleActividadCheck(act.idactividad)}
+                              onChange={() => handleActividadCheck(act.id_actividad)}
                             />
                           </td>
                         </tr>
