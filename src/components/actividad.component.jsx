@@ -53,8 +53,8 @@ const Actividad = () => {
   };
 
   const editar = (actividad) => {
-    setEditId(actividad.idactividad);
-    formActividad.reset({ nombre: actividad.nombre, idtaller: actividad.idtaller });
+    setEditId(actividad.id_actividad);
+    formActividad.reset({ nombre: actividad.nombre, idtaller: actividad.taller });
   };
 
   const cancelar = () => {
@@ -66,7 +66,7 @@ const Actividad = () => {
     if (editId) {
       const resp = await actividadRepository.update(editId, {
         nombre: data.nombre,
-        idtaller: data.idtaller,
+        taller: data.idtaller,
       });
       if (resp.success) {
         showToast('success', 'Se ha guardado con éxito');
@@ -79,7 +79,7 @@ const Actividad = () => {
 
     const resp = await actividadRepository.create({
       nombre: data.nombre,
-      idtaller: data.idtaller,
+      taller: data.idtaller,
     });
     if (resp.success) {
       showToast('success', 'Se ha guardado con éxito');
@@ -94,7 +94,7 @@ const Actividad = () => {
       showToast('danger', 'Cancelado', { message: 'No se eliminaron registros' });
       return;
     }
-    const resp = await actividadRepository.delete(actividad.idactividad);
+    const resp = await actividadRepository.delete(actividad.id_actividad);
     if (resp.success) {
       showToast('success', 'Eliminado con éxito');
       getActividades();
@@ -123,8 +123,8 @@ const Actividad = () => {
             >
               <option value="">Elija el taller</option>
               {talleres.map((taller) => (
-                <option key={taller.idtaller} value={taller.idtaller}>
-                  {taller.tipotaller}
+                <option key={taller.id_taller} value={taller.id_taller}>
+                  {taller.tipo_taller}
                 </option>
               ))}
             </select>
@@ -172,7 +172,7 @@ const Actividad = () => {
               <tbody className={styles.tableBodyMiddle}>
                 {actividades &&
                   actividades.map((actividad) => (
-                    <tr key={actividad.idactividad}>
+                    <tr key={actividad.id_actividad}>
                       <td>{actividad.nombre}</td>
                       <td>
                         <button

@@ -33,7 +33,7 @@ const TypeEvents = () => {
   };
 
   const showModalInsert = () => {
-    formInsert.reset({ nombre: '', desactivataller: false });
+    formInsert.reset({ nombre: '', desactiva_taller: false });
     setModalInsert(true);
   };
 
@@ -44,9 +44,9 @@ const TypeEvents = () => {
 
   const showModalEdit = (data) => {
     formEdit.reset({
-      idtipoevento: data.idtipoevento,
+      id_tipo_evento: data.id_tipo_evento,
       nombre: data.nombre,
-      desactivataller: data.desactivataller,
+      desactiva_taller: data.desactiva_taller,
     });
     setModalEdit(true);
   };
@@ -60,7 +60,7 @@ const TypeEvents = () => {
     let modifidedEvent = {
       borrado: true,
     };
-    return eventRespository.updateTypeEvent(data.idtipoevento, modifidedEvent);
+    return eventRespository.updateTypeEvent(data.id_tipo_evento, modifidedEvent);
   };
 
   const handleDelete = async (data) => {
@@ -77,18 +77,18 @@ const TypeEvents = () => {
     if (response?.success) {
       showToast('success', 'Eliminado con éxito');
     }
-    setTypeEvent((prev) => prev.filter((item) => item.idtipoevento !== data.idtipoevento));
+    setTypeEvent((prev) => prev.filter((item) => item.id_tipo_evento !== data.id_tipo_evento));
   };
 
   const edit = (data) => {
     const payload = {
-      id: data.idtipoevento,
+      id_tipo_evento: data.id_tipo_evento,
       nombre: data.nombre,
-      desactivataller: data.desactivataller,
+      desactiva_taller: data.desactiva_taller,
       borrado: false,
     };
 
-    eventRespository.updateTypeEvent(data.idtipoevento, payload).then((response) => {
+    eventRespository.updateTypeEvent(data.id_tipo_evento, payload).then((response) => {
       if (response?.success) {
         showToast('success', 'Se ha guardado con éxito');
         clear();
@@ -101,7 +101,7 @@ const TypeEvents = () => {
   const guardarNuevo = (data) => {
     const payload = {
       nombre: data.nombre,
-      desactivataller: data.desactivataller,
+      desactiva_taller: data.desactiva_taller,
       borrado: false,
     };
     eventRespository.createTypeEvent(payload).then((response) => {
@@ -149,13 +149,13 @@ const TypeEvents = () => {
               {typeEvent
                 .filter((element) => element.borrado === false)
                 .map((element) => (
-                  <tr key={element.idtipoevento}>
+                  <tr key={element.id_tipo_evento}>
                     <td>{element.nombre}</td>
                     <td>
                       <input
                         disabled={true}
                         type="checkbox"
-                        checked={element.desactivataller}
+                        checked={element.desactiva_taller}
                         className="form-check-input"
                       />
                     </td>
@@ -214,15 +214,15 @@ const TypeEvents = () => {
             )}
           </Form.Group>
           <Form.Group className="mb-0">
-            <label htmlFor="desactivataller" className="control-label">
+            <label htmlFor="desactiva_taller" className="control-label">
               Desactivar taller:
             </label>
             <input
               type="checkbox"
-              name="desactivataller"
-              id="desactivataller"
+              name="desactiva_taller"
+              id="desactiva_taller"
               className="form-check-input"
-              {...formInsert.register('desactivataller')}
+              {...formInsert.register('desactiva_taller')}
             />
           </Form.Group>
         </Modal.Body>
@@ -247,16 +247,16 @@ const TypeEvents = () => {
         <Modal.Body>
           <Form>
             <Form.Group className="mb-0">
-              <label htmlFor="idtipoevento" className="control-label">
+              <label htmlFor="id_tipo_evento" className="control-label">
                 ID:
               </label>
               <input
                 type="text"
-                name="idtipoevento"
-                id="idtipoevento"
+                name="id_tipo_evento"
+                id="id_tipo_evento"
                 className="form-control"
                 readOnly
-                {...formEdit.register('idtipoevento')}
+                {...formEdit.register('id_tipo_evento')}
               />
             </Form.Group>
             <Form.Group className="mb-0">
@@ -277,15 +277,15 @@ const TypeEvents = () => {
               )}
             </Form.Group>
             <Form.Group className="mb-0">
-              <label htmlFor="desactivataller" className="control-label">
+              <label htmlFor="desactiva_taller" className="control-label">
                 Desactivar taller:
               </label>
               <input
                 type="checkbox"
-                name="desactivataller"
-                id="desactivataller"
+                name="desactiva_taller"
+                id="desactiva_taller"
                 className="form-check-input"
-                {...formEdit.register('desactivataller')}
+                {...formEdit.register('desactiva_taller')}
               />
             </Form.Group>
           </Form>

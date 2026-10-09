@@ -68,8 +68,8 @@ const ListaPaciente = (props) => {
       if (response?.success && response?.data) {
         setArrayProvincias(
           response.data.map((provincia) => ({
-            idprovincia: provincia.idprovincia,
-            provincia: provincia.nombre,
+            id_provincia: provincia.id_provincia,
+            nombre: provincia.nombre,
           }))
         );
         setLoadError(null);
@@ -169,7 +169,7 @@ const ListaPaciente = (props) => {
                           paciente.apellido.toUpperCase().includes(buscar))
                     )
                     .map((paciente) => (
-                      <tr key={paciente.idpersona ?? paciente.id}>
+                      <tr key={paciente.id_persona ?? paciente.id}>
                         <td>
                           {paciente.nombre} {paciente.apellido}
                         </td>
@@ -177,7 +177,7 @@ const ListaPaciente = (props) => {
                           <Link
                             to="/ficha"
                             onClick={() =>
-                              verSeccion(paciente.idpersona, paciente.nombre, paciente.apellido)
+                              verSeccion(paciente.id_persona, paciente.nombre, paciente.apellido)
                             }
                           >
                             <button
@@ -192,7 +192,7 @@ const ListaPaciente = (props) => {
                           <Link
                             to="/list-diagnostico"
                             onClick={() =>
-                              verSeccion(paciente.idpersona, paciente.nombre, paciente.apellido)
+                              verSeccion(paciente.id_persona, paciente.nombre, paciente.apellido)
                             }
                           >
                             <button
@@ -207,7 +207,7 @@ const ListaPaciente = (props) => {
                           <Link
                             to="/list-evolucion"
                             onClick={() =>
-                              verSeccion(paciente.idpersona, paciente.nombre, paciente.apellido)
+                              verSeccion(paciente.id_persona, paciente.nombre, paciente.apellido)
                             }
                           >
                             <button
@@ -222,7 +222,7 @@ const ListaPaciente = (props) => {
                           <Link
                             to="/list-obrasocial"
                             onClick={() =>
-                              verSeccion(paciente.idpersona, paciente.nombre, paciente.apellido)
+                              verSeccion(paciente.id_persona, paciente.nombre, paciente.apellido)
                             }
                           >
                             <button
@@ -237,7 +237,7 @@ const ListaPaciente = (props) => {
                           <Link
                             to="/list-indicacion"
                             onClick={() =>
-                              verSeccion(paciente.idpersona, paciente.nombre, paciente.apellido)
+                              verSeccion(paciente.id_persona, paciente.nombre, paciente.apellido)
                             }
                           >
                             <button

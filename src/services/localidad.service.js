@@ -7,7 +7,7 @@ const localidades = {
     return response.data.results ?? response.data;
   },
   async getByDepartamento(iddepartamento) {
-    const response = await http.get(`/localidades`, { params: { iddepartamento } });
+    const response = await http.get(`/localidades`, { params: { departamento: iddepartamento } });
     return response.data.results ?? response.data;
   },
 };

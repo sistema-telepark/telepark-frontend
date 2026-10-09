@@ -50,8 +50,8 @@ const ListaEvolucion = () => {
     setLoading(false);
   };
 
-  const editar = (nroEvolucion, fecha, idevolucion) => {
-    setIdEditado(idevolucion);
+  const editar = (nroEvolucion, fecha, id_evolucion) => {
+    setIdEditado(id_evolucion);
     formEdit.reset({ nroEvolucion: String(nroEvolucion), fecha });
     setShow(true);
     setShowNuevo(false);
@@ -59,9 +59,9 @@ const ListaEvolucion = () => {
 
   const guardar = (data) => {
     const payload = {
-      escalaevolucion: Number(data.nroEvolucion),
+      escala_evolucion: Number(data.nroEvolucion),
       fecha: data.fecha,
-      idpersonaep: Number(idEpElegido),
+      persona_ep: Number(idEpElegido),
       borrado: false,
     };
     evolucionRepository.update(idEditado, payload).then((response) => {
@@ -89,9 +89,9 @@ const ListaEvolucion = () => {
 
   const cargarNuevo = (data) => {
     const payload = {
-      escalaevolucion: Number(data.nroEvolucion),
+      escala_evolucion: Number(data.nroEvolucion),
       fecha: data.fecha,
-      idpersonaep: Number(idEpElegido),
+      persona_ep: Number(idEpElegido),
       borrado: false,
     };
     evolucionRepository.create(payload).then((response) => {
@@ -104,11 +104,11 @@ const ListaEvolucion = () => {
     });
   };
 
-  const eliminar = (escalaevolucion, fecha, id) => {
+  const eliminar = (escala_evolucion, fecha, id) => {
     var data = {
-      escalaevolucion: Number(escalaevolucion),
+      escala_evolucion: Number(escala_evolucion),
       fecha: fecha,
-      idpersonaep: Number(idEpElegido),
+      persona_ep: Number(idEpElegido),
       borrado: true,
     };
     evolucionRepository.update(id, data).then((response) => {
@@ -120,7 +120,7 @@ const ListaEvolucion = () => {
     setShow(false);
   };
 
-  const notificacionEliminar = async (escalaevolucion, fecha, idEvolucion) => {
+  const notificacionEliminar = async (escala_evolucion, fecha, idEvolucion) => {
     const confirmado = await showConfirm({
       title: 'Estas seguro?',
       message: 'No podrás revertir esto!',
@@ -129,7 +129,7 @@ const ListaEvolucion = () => {
       variant: 'warning',
     });
     if (confirmado) {
-      eliminar(escalaevolucion, fecha, idEvolucion);
+      eliminar(escala_evolucion, fecha, idEvolucion);
     } else {
       showToast('danger', 'Cancelado', { message: 'No se eliminaron registros' });
     }
@@ -192,7 +192,7 @@ const ListaEvolucion = () => {
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label htmlFor="fecha" className="col-form-label">
-                  Fecha de Observación
+                  Fecha
                 </label>
                 <input
                   type="date"
@@ -255,7 +255,7 @@ const ListaEvolucion = () => {
               </div>
               <div className="mb-4 col-12 col-md-6 col-lg-4 col-xl-4">
                 <label htmlFor="fechaEdit" className="col-form-label">
-                  Fecha de Observación
+                  Fecha
                 </label>
                 <input
                   type="date"
@@ -309,10 +309,10 @@ const ListaEvolucion = () => {
                   evoluciones
                     .filter((evolucion) => evolucion.borrado === false)
                     .map((evolucion) => (
-                      <tr key={evolucion.idevolucion}>
-                        <td>Estado: {evolucion.escalaevolucion}</td>
+                      <tr key={evolucion.id_evolucion}>
+                        <td>Estado: {evolucion.escala_evolucion}</td>
                         <td className={styles.descriptionColumn}>
-                          {utils.describirEstado(evolucion.escalaevolucion)}
+                          {utils.describirEstado(evolucion.escala_evolucion)}
                         </td>
                         <td>{utils.convertirFormatoFecha(evolucion.fecha)}</td>
                         <td className={styles.actionColumn}>
@@ -321,9 +321,9 @@ const ListaEvolucion = () => {
                             className={'btn btn-verde ' + styles.rowActionButton}
                             onClick={() =>
                               editar(
-                                evolucion.escalaevolucion,
+                                evolucion.escala_evolucion,
                                 evolucion.fecha,
-                                evolucion.idevolucion
+                                evolucion.id_evolucion
                               )
                             }
                           >
@@ -334,9 +334,9 @@ const ListaEvolucion = () => {
                             className="btn btn-rojo"
                             onClick={() =>
                               notificacionEliminar(
-                                evolucion.escalaevolucion,
+                                evolucion.escala_evolucion,
                                 evolucion.fecha,
-                                evolucion.idevolucion
+                                evolucion.id_evolucion
                               )
                             }
                           >

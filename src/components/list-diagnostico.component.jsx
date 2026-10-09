@@ -88,8 +88,8 @@ const ListaDiagnostico = () => {
   const guardar = (data) => {
     const payload = {
       fecha: data.fecha,
-      idpersonaep: Number(idEpElegido),
-      idenfermedad: Number(data.enfermedad),
+      persona_ep: Number(idEpElegido),
+      enfermedad: Number(data.enfermedad),
       borrado: false,
     };
     diagnosticoRepository.update(idEditado, payload).then((response) => {
@@ -118,8 +118,8 @@ const ListaDiagnostico = () => {
   const cargarNuevo = (data) => {
     const payload = {
       fecha: data.fecha,
-      idpersonaep: Number(idEpElegido),
-      idenfermedad: Number(data.enfermedad),
+      persona_ep: Number(idEpElegido),
+      enfermedad: Number(data.enfermedad),
       borrado: false,
     };
     diagnosticoRepository.create(payload).then((response) => {
@@ -135,8 +135,8 @@ const ListaDiagnostico = () => {
   const eliminar = (idenfermedad, fecha, id) => {
     var data = {
       fecha: fecha,
-      idpersonaep: Number(idEpElegido),
-      idenfermedad: Number(idenfermedad),
+      persona_ep: Number(idEpElegido),
+      enfermedad: Number(idenfermedad),
       borrado: true,
     };
     diagnosticoRepository.update(id, data).then((response) => {
@@ -207,7 +207,7 @@ const ListaDiagnostico = () => {
                   <option value="">Elegir</option>
                   {enfermedades &&
                     enfermedades.map((enfermedad) => (
-                      <option value={enfermedad.idenfermedad} key={enfermedad.idenfermedad}>
+                      <option value={enfermedad.id_enfermedad} key={enfermedad.id_enfermedad}>
                         {enfermedad.nombre}
                       </option>
                     ))}
@@ -270,7 +270,7 @@ const ListaDiagnostico = () => {
                   <option value="">Elegir</option>
                   {enfermedades &&
                     enfermedades.map((enfermedad) => (
-                      <option value={enfermedad.idenfermedad} key={enfermedad.idenfermedad}>
+                      <option value={enfermedad.id_enfermedad} key={enfermedad.id_enfermedad}>
                         {enfermedad.nombre}
                       </option>
                     ))}
@@ -332,8 +332,8 @@ const ListaDiagnostico = () => {
                   diagnosticos
                     .filter((diagnostico) => diagnostico.borrado === false)
                     .map((diagnostico) => (
-                      <tr key={diagnostico.iddiagnostico}>
-                        <td>{diagnostico.idenfermedad.nombre}</td>
+                      <tr key={diagnostico.id_diagnostico}>
+                        <td>{diagnostico.enfermedad.nombre}</td>
                         <td>{utils.convertirFormatoFecha(diagnostico.fecha)}</td>
                         <td>
                           <button
@@ -341,9 +341,9 @@ const ListaDiagnostico = () => {
                             className={'btn btn-verde ' + styles.rowActionButton}
                             onClick={() =>
                               editar(
-                                diagnostico.idenfermedad.idenfermedad,
+                                diagnostico.enfermedad.id_enfermedad,
                                 diagnostico.fecha,
-                                diagnostico.iddiagnostico
+                                diagnostico.id_diagnostico
                               )
                             }
                           >
@@ -354,9 +354,9 @@ const ListaDiagnostico = () => {
                             className="btn btn-rojo"
                             onClick={() =>
                               notificacionEliminar(
-                                diagnostico.idenfermedad.idenfermedad,
+                                diagnostico.enfermedad.id_enfermedad,
                                 diagnostico.fecha,
-                                diagnostico.iddiagnostico
+                                diagnostico.id_diagnostico
                               )
                             }
                           >

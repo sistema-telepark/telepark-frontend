@@ -83,8 +83,8 @@ const Asistencia = () => {
   // Guarda la asistencia del día (lote bulk)
   const guardarAsistencia = async (data) => {
     const asistenciaData = pacientes.map((paciente) => ({
-      idpersonaep: paciente.idpersona,
-      idencuentro: Number(data.fechaEncuentro),
+      persona_ep: paciente.id_persona,
+      encuentro: Number(data.fechaEncuentro),
       estado: paciente.checked ? ESTADO_PRESENTE : ESTADO_AUSENTE,
     }));
 
@@ -106,7 +106,7 @@ const Asistencia = () => {
   const handleEncuentroChange = (e) => {
     const selectedEncuentroId = Number(e.target.value);
     const encuentroSeleccionado = encuentro.find(
-      (enc) => Number(enc.idencuentro) === selectedEncuentroId
+      (enc) => Number(enc.id_encuentro) === selectedEncuentroId
     );
 
     if (encuentroSeleccionado) {
@@ -114,12 +114,12 @@ const Asistencia = () => {
 
       const updatedPacientes = pacientes.map((persona) => {
         const eventosPersona = evento.filter(
-          (ev) => Number(ev.idpersonaep) === Number(persona.idpersona)
+          (ev) => Number(ev.persona_ep) === Number(persona.id_persona)
         );
 
         const isDateInRange = eventosPersona.some((eventoItem) => {
-          const fechaDesde = new Date(eventoItem.fechadesde);
-          const fechaHasta = new Date(eventoItem.fechahasta);
+          const fechaDesde = new Date(eventoItem.fecha_desde);
+          const fechaHasta = new Date(eventoItem.fecha_hasta);
           return fechaEncuentro >= fechaDesde && fechaEncuentro <= fechaHasta;
         });
 
@@ -136,7 +136,7 @@ const Asistencia = () => {
   const handleAsistenciaCheck = (idpersona) => {
     setPacientes(
       pacientes.map((persona) =>
-        persona.idpersona === idpersona ? { ...persona, checked: !persona.checked } : persona
+        persona.id_persona === idpersona ? { ...persona, checked: !persona.checked } : persona
       )
     );
   };
@@ -166,7 +166,7 @@ const Asistencia = () => {
           >
             <option value="">Elija el encuentro</option>
             {encuentro.map((element) => (
-              <option key={element.idencuentro} value={element.idencuentro}>
+              <option key={element.id_encuentro} value={element.id_encuentro}>
                 {utils.convertirFormatoFecha(element.fecha)}
               </option>
             ))}
@@ -189,25 +189,25 @@ const Asistencia = () => {
           </thead>
           <tbody>
             {pacientes.map((element) => (
-              <tr key={element.idpersona}>
+              <tr key={element.id_persona}>
                 <td>{`${element.nombre} ${element.apellido}`}</td>
                 <td>
                   <input
                     type="checkbox"
                     className="form-check-input"
                     name="asistencia"
-                    id={`asistencia-${element.idpersona}`}
-                    value={element.idpersona}
+                    id={`asistencia-${element.id_persona}`}
+                    value={element.id_persona}
                     checked={element.checked || false}
-                    onChange={() => handleAsistenciaCheck(element.idpersona)}
+                    onChange={() => handleAsistenciaCheck(element.id_persona)}
                   />
                 </td>
                 <td>
                   <input
                     type="checkbox"
                     className="form-check-input"
-                    id={`justificado-${element.idpersona}`}
-                    value={element.idpersona}
+                    id={`justificado-${element.id_persona}`}
+                    value={element.id_persona}
                     checked={element.justificado || false}
                     readOnly
                   />

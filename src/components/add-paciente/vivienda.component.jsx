@@ -108,8 +108,8 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
             <option value="">Provincia</option>
             {arrayProvincias &&
               arrayProvincias.map((provincia) => (
-                <option value={provincia.idprovincia} key={provincia.idprovincia}>
-                  {provincia.provincia}
+                <option value={provincia.id_provincia} key={provincia.id_provincia}>
+                  {provincia.nombre}
                 </option>
               ))}
           </select>
@@ -136,7 +136,7 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
             <option value="">Departamento</option>
             {departamentos &&
               departamentos.map((departamento) => (
-                <option value={departamento.iddepartamento} key={departamento.iddepartamento}>
+                <option value={departamento.id_departamento} key={departamento.id_departamento}>
                   {departamento.nombre}
                 </option>
               ))}
@@ -162,7 +162,7 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
           >
             <option value="">Localidad</option>
             {localidades.map((localidad) => (
-              <option value={localidad.idlocalidad} key={localidad.idlocalidad}>
+              <option value={localidad.id_localidad} key={localidad.id_localidad}>
                 {localidad.nombre}
               </option>
             ))}
@@ -276,8 +276,8 @@ Vivienda.propTypes = {
   setValue: PropTypes.func.isRequired,
   arrayProvincias: PropTypes.arrayOf(
     PropTypes.shape({
-      idprovincia: PropTypes.number.isRequired,
-      provincia: PropTypes.string.isRequired,
+      id_provincia: PropTypes.number.isRequired,
+      nombre: PropTypes.string.isRequired,
     })
   ).isRequired,
 };
