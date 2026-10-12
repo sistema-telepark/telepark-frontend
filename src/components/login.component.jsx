@@ -94,7 +94,7 @@ const Login = () => {
   if (TokenService.getLocalAccessToken()) return <Navigate to="/home" replace />;
 
   return (
-    <div className="col-12 col-md-6 col-lg-5 col-xl-5">
+    <div className={'col-12 col-md-6 col-lg-5 col-xl-5 ' + styles.centerWrapper}>
       <form onSubmit={(e) => enviarFormulario(e)}>
         <main
           className={
