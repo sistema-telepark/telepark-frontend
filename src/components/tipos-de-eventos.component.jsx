@@ -137,29 +137,30 @@ const TypeEvents = () => {
           <PlusIcon className="signoMas" /> Agregar
         </button>
         <div className="row m-md-3 shadow mx-md-auto border-top-sm m-0">
-          <table className="table table-striped">
-            <thead>
-              <tr>
-                <th scope="col">Nombre</th>
-                <th scope="col">Desactivar Taller</th>
-                <th scope="col">Acción</th>
-              </tr>
-            </thead>
-            <tbody>
-              {typeEvent
-                .filter((element) => element.borrado === false)
-                .map((element) => (
-                  <tr key={element.id_tipo_evento}>
-                    <td>{element.nombre}</td>
-                    <td>
-                      <input
-                        disabled={true}
-                        type="checkbox"
-                        checked={element.desactiva_taller}
-                        className="form-check-input"
-                      />
-                    </td>
-                    <td>
+          <div className="table-responsive">
+            <table className="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">Nombre</th>
+                  <th scope="col">Desactivar Taller</th>
+                  <th scope="col">Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                {typeEvent
+                  .filter((element) => element.borrado === false)
+                  .map((element) => (
+                    <tr key={element.id_tipo_evento}>
+                      <td data-th="Nombre">{element.nombre}</td>
+                      <td data-th="Desactivar Taller">
+                        <input
+                          disabled={true}
+                          type="checkbox"
+                          checked={element.desactiva_taller}
+                          className="form-check-input"
+                        />
+                      </td>
+                      <td data-th="Acción">
                       <button
                         type="button"
                         className="btn btn-verde me-2"
@@ -178,7 +179,8 @@ const TypeEvents = () => {
                   </tr>
                 ))}
             </tbody>
-          </table>
+            </table>
+          </div>
         </div>
       </Container>
 
@@ -191,7 +193,7 @@ const TypeEvents = () => {
         />
       )}
 
-      <Modal show={modalInsert}>
+      <Modal show={modalInsert} scrollable>
         <Modal.Header className="justify-content-center">
           <h4 className="mb-0">Nuevo tipo de evento</h4>
         </Modal.Header>
@@ -240,7 +242,7 @@ const TypeEvents = () => {
         </Modal.Footer>
       </Modal>
 
-      <Modal show={modalEdit}>
+      <Modal show={modalEdit} scrollable>
         <Modal.Header className="justify-content-center">
           <h4 className="mb-0">Editar tipo de evento</h4>
         </Modal.Header>

@@ -162,19 +162,20 @@ const Actividad = () => {
 
         <div className="row">
           <div className={`col-12 col-md-12 col-lg-12 col-xl-12 ${styles.scrollContainer}`}>
-            <table className="table table-bordered table-hover shadow table-striped">
-              <thead>
-                <tr>
-                  <th scope="col">nombre Actividad</th>
-                  <th scope="col">Acción</th>
-                </tr>
-              </thead>
-              <tbody className={styles.tableBodyMiddle}>
-                {actividades &&
-                  actividades.map((actividad) => (
-                    <tr key={actividad.id_actividad}>
-                      <td>{actividad.nombre}</td>
-                      <td>
+            <div className="table-responsive">
+              <table className="table table-bordered table-hover shadow table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">nombre Actividad</th>
+                    <th scope="col">Acción</th>
+                  </tr>
+                </thead>
+                <tbody className={styles.tableBodyMiddle}>
+                  {actividades &&
+                    actividades.map((actividad) => (
+                      <tr key={actividad.id_actividad}>
+                        <td data-th="nombre Actividad">{actividad.nombre}</td>
+                        <td data-th="Acción">
                         <button
                           type="button"
                           className={`btn btn-verde ${styles.rowActionButton}`}
@@ -193,7 +194,8 @@ const Actividad = () => {
                     </tr>
                   ))}
               </tbody>
-            </table>
+              </table>
+            </div>
           </div>
         </div>
         {loading && <LoadingSpinner />}

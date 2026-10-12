@@ -15,6 +15,7 @@
 
 .logo {
   width: 180px;
+  max-width: 100%;
 }
 
 .formCenter {

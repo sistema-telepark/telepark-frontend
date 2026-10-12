@@ -197,18 +197,19 @@ const Talleres = () => {
           Agregar
         </button>
         <div className="row m-md-3 shadow mx-md-auto border-top-sm m-0">
-          <table className="table table-striped">
-            <thead>
-              <tr>
-                <th scope="col">Nombre</th>
-                <th scope="col">Acción</th>
-              </tr>
-            </thead>
-            <tbody>
-              {taller.map((element) => (
-                <tr key={element.id_taller}>
-                  <td>{element.tipo_taller}</td>
-                  <td>
+          <div className="table-responsive">
+            <table className="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">Nombre</th>
+                  <th scope="col">Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                {taller.map((element) => (
+                  <tr key={element.id_taller}>
+                    <td data-th="Nombre">{element.tipo_taller}</td>
+                    <td data-th="Acción">
                     <button
                       type="button"
                       className={`btn ${styles.editButton}`}
@@ -238,8 +239,9 @@ const Talleres = () => {
                   </td>
                 </tr>
               ))}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
         </div>
         {loading && <LoadingSpinner />}
         {loadError && (
@@ -251,13 +253,13 @@ const Talleres = () => {
         )}
       </Container>
 
-      <Modal show={modalInsert}>
+      <Modal show={modalInsert} scrollable>
         <Modal.Header className="justify-content-center">
           <h4 className="mb-0">Ingresar nuevo taller</h4>
         </Modal.Header>
         <Modal.Body>
           <div className="row">
-            <div className="col-md-12">
+            <div className="col-12 col-md-12">
               <Form.Group className="mb-0">
                 <div className="form-group mb-2">
                   <label htmlFor="tipo_taller" className="control-label">
@@ -302,7 +304,7 @@ const Talleres = () => {
         </Modal.Footer>
       </Modal>
 
-      <Modal show={modalEdit}>
+      <Modal show={modalEdit} scrollable>
         <Modal.Header className="justify-content-center">
           <h4 className="mb-0">Editar taller</h4>
         </Modal.Header>
@@ -322,7 +324,7 @@ const Talleres = () => {
               />
             </Form.Group>
 
-            <div className="col-md-12">
+            <div className="col-12 col-md-12">
               <Form.Group className="mb-0">
                 <div className="form-group mb-2">
                   <label htmlFor="tipo_tallerEdit" className="control-label">
@@ -367,7 +369,7 @@ const Talleres = () => {
         </Modal.Footer>
       </Modal>
 
-      <Modal show={modalInsertAct}>
+      <Modal show={modalInsertAct} scrollable>
         <Modal.Header>
           <div>
             <h5>Actividades del taller:</h5>
@@ -409,45 +411,47 @@ const Talleres = () => {
             </Form.Group>
 
             <div className={`col-12 col-md-12 col-lg-12 col-xl-12 ${styles.scrollContainer}`}>
-              <table className="table table-bordered table-hover shadow table-striped">
-                <thead>
-                  <tr>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Acción</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {actividades.map((actividad) => (
-                    <tr key={actividad.idLocal}>
-                      <td>{actividad.nombre}</td>
-                      <td>
-                        <button
-                          type="button"
-                          className="btn btn-rojo"
-                          onClick={() => eliminar(actividad.idLocal)}
-                        >
-                          <TrashIcon />
-                        </button>
-                      </td>
+              <div className="table-responsive">
+                <table className="table table-bordered table-hover shadow table-striped">
+                  <thead>
+                    <tr>
+                      <th scope="col">Nombre</th>
+                      <th scope="col">Acción</th>
                     </tr>
-                  ))}
+                  </thead>
+                  <tbody>
+                    {actividades.map((actividad) => (
+                      <tr key={actividad.idLocal}>
+                        <td data-th="Nombre">{actividad.nombre}</td>
+                        <td data-th="Acción">
+                          <button
+                            type="button"
+                            className="btn btn-rojo"
+                            onClick={() => eliminar(actividad.idLocal)}
+                          >
+                            <TrashIcon />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
 
-                  {actividadesPersistidas.map((actividad) => (
-                    <tr key={actividad.id_actividad}>
-                      <td>{actividad.nombre}</td>
-                      <td>
-                        <button
-                          type="button"
-                          className="btn btn-rojo"
-                          onClick={() => deleteA(actividad)}
-                        >
-                          <TrashIcon />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                    {actividadesPersistidas.map((actividad) => (
+                      <tr key={actividad.id_actividad}>
+                        <td data-th="Nombre">{actividad.nombre}</td>
+                        <td data-th="Acción">
+                          <button
+                            type="button"
+                            className="btn btn-rojo"
+                            onClick={() => deleteA(actividad)}
+                          >
+                            <TrashIcon />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </Modal.Body>

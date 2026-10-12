@@ -226,7 +226,7 @@ const Consulta = () => {
         <div
           className={`row m-md-3 mx-auto justify-content-center rounded container-lg ${styles.whiteCard}`}
         >
-          <div className="col-md-6">
+          <div className="col-12 col-md-6">
             <Form.Group className="mb-0">
               <select
                 className="form-select"
@@ -269,22 +269,24 @@ const Consulta = () => {
 
             <div className="col-12">
               {asistencia.length > 0 ? (
-                <table className="table table-hover table-striped text-center">
-                  <thead className="table-dark">
-                    <tr>
-                      <th>Nombre</th>
-                      <th>Estado</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {asistencia.map((item) => (
-                      <tr key={item.id_asistencia_taller}>
-                        <td>{obtenerNombre(item.persona_ep)}</td>
-                        <td>{item.estado}</td>
+                <div className="table-responsive">
+                  <table className="table table-hover table-striped text-center">
+                    <thead className="table-dark">
+                      <tr>
+                        <th>Nombre</th>
+                        <th>Estado</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {asistencia.map((item) => (
+                        <tr key={item.id_asistencia_taller}>
+                          <td data-th="Nombre">{obtenerNombre(item.persona_ep)}</td>
+                          <td data-th="Estado">{item.estado}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               ) : (
                 mensajeSinDatos && (
                   <p className="text-center text-muted">No hay datos de asistencia disponibles.</p>
@@ -320,22 +322,24 @@ const Consulta = () => {
 
             <div className="col-12">
               {faltaC.length > 0 ? (
-                <table className="table table-hover table-striped text-center">
-                  <thead className="table-dark">
-                    <tr>
-                      <th>Nombre</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {faltaC.map((paciente) => (
-                      <tr key={paciente.id_persona}>
-                        <td>
-                          {paciente.nombre} {paciente.apellido}
-                        </td>
+                <div className="table-responsive">
+                  <table className="table table-hover table-striped text-center">
+                    <thead className="table-dark">
+                      <tr>
+                        <th>Nombre</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {faltaC.map((paciente) => (
+                        <tr key={paciente.id_persona}>
+                          <td data-th="Nombre">
+                            {paciente.nombre} {paciente.apellido}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               ) : (
                 mensajeSinDatosFC && (
                   <p className="text-center text-muted">

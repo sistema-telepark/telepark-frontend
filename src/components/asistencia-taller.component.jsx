@@ -149,7 +149,7 @@ const Asistencia = () => {
     <Container className="container panel-gris">
       <h2 className="mt-4 text-center">Asistencia</h2>
       <hr />
-      <div className="col-md-3">
+      <div className="col-12 col-md-3">
         <Form.Group className="mb-0">
           <label htmlFor="fechaEncuentro" className="control-label">
             Encuentro:
@@ -179,43 +179,45 @@ const Asistencia = () => {
         </Form.Group>
       </div>
       <div className="row m-md-3 shadow mx-md-auto border-top-sm m-0 justify-content-center rounded container-lg ">
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th scope="col">Persona con EP</th>
-              <th scope="col">Asistencia</th>
-              <th scope="col">Justificado</th>
-            </tr>
-          </thead>
-          <tbody>
-            {pacientes.map((element) => (
-              <tr key={element.id_persona}>
-                <td>{`${element.nombre} ${element.apellido}`}</td>
-                <td>
-                  <input
-                    type="checkbox"
-                    className="form-check-input"
-                    name="asistencia"
-                    id={`asistencia-${element.id_persona}`}
-                    value={element.id_persona}
-                    checked={element.checked || false}
-                    onChange={() => handleAsistenciaCheck(element.id_persona)}
-                  />
-                </td>
-                <td>
-                  <input
-                    type="checkbox"
-                    className="form-check-input"
-                    id={`justificado-${element.id_persona}`}
-                    value={element.id_persona}
-                    checked={element.justificado || false}
-                    readOnly
-                  />
-                </td>
+        <div className="table-responsive">
+          <table className="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Persona con EP</th>
+                <th scope="col">Asistencia</th>
+                <th scope="col">Justificado</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {pacientes.map((element) => (
+                <tr key={element.id_persona}>
+                  <td data-th="Persona con EP">{`${element.nombre} ${element.apellido}`}</td>
+                  <td data-th="Asistencia">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      name="asistencia"
+                      id={`asistencia-${element.id_persona}`}
+                      value={element.id_persona}
+                      checked={element.checked || false}
+                      onChange={() => handleAsistenciaCheck(element.id_persona)}
+                    />
+                  </td>
+                  <td data-th="Justificado">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id={`justificado-${element.id_persona}`}
+                      value={element.id_persona}
+                      checked={element.justificado || false}
+                      readOnly
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         <div className={`mb-4 col-12 col-md-6 col-lg-4 col-xl-4 ${styles.buttonContainer}`}>
           <button
             type="button"

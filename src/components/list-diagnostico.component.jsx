@@ -187,7 +187,7 @@ const ListaDiagnostico = () => {
           </div>
         </div>
 
-        <Modal show={showNuevo}>
+        <Modal show={showNuevo} scrollable>
           <Modal.Header className="justify-content-center">
             <h4 className="mb-0">Nuevo Diagnóstico</h4>
           </Modal.Header>
@@ -250,7 +250,7 @@ const ListaDiagnostico = () => {
           </Modal.Footer>
         </Modal>
 
-        <Modal show={show}>
+        <Modal show={show} scrollable>
           <Modal.Header className="justify-content-center">
             <h4 className="mb-0">Editar Diagnóstico</h4>
           </Modal.Header>
@@ -315,11 +315,12 @@ const ListaDiagnostico = () => {
 
         <div className="row">
           <div className="col-12">
-            <table
-              className={
-                'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
-              }
-            >
+            <div className="table-responsive">
+              <table
+                className={
+                  'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
+                }
+              >
               <thead>
                 <tr>
                   <th scope="col">Nombre de Enfermedad</th>
@@ -333,9 +334,11 @@ const ListaDiagnostico = () => {
                     .filter((diagnostico) => diagnostico.borrado === false)
                     .map((diagnostico) => (
                       <tr key={diagnostico.id_diagnostico}>
-                        <td>{diagnostico.enfermedad.nombre}</td>
-                        <td>{utils.convertirFormatoFecha(diagnostico.fecha)}</td>
-                        <td>
+                        <td data-th="Nombre de Enfermedad">{diagnostico.enfermedad.nombre}</td>
+                        <td data-th="Fecha de Diagnóstico">
+                          {utils.convertirFormatoFecha(diagnostico.fecha)}
+                        </td>
+                        <td data-th="Acción">
                           <button
                             type="button"
                             className={'btn btn-verde ' + styles.rowActionButton}
@@ -366,7 +369,8 @@ const ListaDiagnostico = () => {
                       </tr>
                     ))}
               </tbody>
-            </table>
+              </table>
+            </div>
             {loading && <LoadingSpinner />}
             {loadError && (
               <ErrorFallbackInline

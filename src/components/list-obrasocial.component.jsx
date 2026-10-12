@@ -158,7 +158,7 @@ const ListaObraSocial = (props) => {
         </div>
       </div>
 
-      <Modal show={showNuevo}>
+      <Modal show={showNuevo} scrollable>
         <Modal.Header className="justify-content-center">
           <h4 className="mb-0">Cargar Obra Social</h4>
         </Modal.Header>
@@ -205,7 +205,7 @@ const ListaObraSocial = (props) => {
         </Modal.Footer>
       </Modal>
 
-      <Modal show={show}>
+      <Modal show={show} scrollable>
         <Modal.Header className="justify-content-center">
           <h4 className="mb-0">Editar Obra Social</h4>
         </Modal.Header>
@@ -254,23 +254,26 @@ const ListaObraSocial = (props) => {
 
       <div className="row">
         <div className="col-12 col-md-12 col-lg-12 col-xl-12">
-          <table className="table table-bordered table-hover shadow table-striped">
-            <thead>
-              <tr>
-                <th scope="col">Obra Social</th>
-                <th scope="col">Tipo</th>
-                <th scope="col">Acción</th>
-              </tr>
-            </thead>
-            <tbody className={styles.tableBodyMiddle}>
-              {osociales &&
-                osociales
-                  .filter((osocial) => osocial.borrado === false)
-                  .map((osocial) => (
-                    <tr key={osocial.id_cobertura}>
-                      <td>{osocial.obra_social.nombre}</td>
-                      <td>{utils.convertirTipo(osocial.obra_social.es_estatal)}</td>
-                      <td>
+          <div className="table-responsive">
+            <table className="table table-bordered table-hover shadow table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">Obra Social</th>
+                  <th scope="col">Tipo</th>
+                  <th scope="col">Acción</th>
+                </tr>
+              </thead>
+              <tbody className={styles.tableBodyMiddle}>
+                {osociales &&
+                  osociales
+                    .filter((osocial) => osocial.borrado === false)
+                    .map((osocial) => (
+                      <tr key={osocial.id_cobertura}>
+                        <td data-th="Obra Social">{osocial.obra_social.nombre}</td>
+                        <td data-th="Tipo">
+                          {utils.convertirTipo(osocial.obra_social.es_estatal)}
+                        </td>
+                        <td data-th="Acción">
                         <button
                           type="button"
                           className={'btn btn-verde ' + styles.rowActionButton}
@@ -299,6 +302,7 @@ const ListaObraSocial = (props) => {
                   ))}
             </tbody>
           </table>
+          </div>
           {loading && <LoadingSpinner />}
           {loadError && (
             <ErrorFallbackInline

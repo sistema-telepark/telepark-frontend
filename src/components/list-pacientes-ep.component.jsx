@@ -150,30 +150,31 @@ const ListaPaciente = (props) => {
 
         <div className="row">
           <div className="col-12 col-md-12 col-lg-12 col-xl-12 text-center">
-            <table className="table table-bordered table-hover shadow table-striped">
-              <thead>
-                <tr>
-                  <th scope="col">Nombre completo</th>
-                  <th scope="col">Acción</th>
-                </tr>
-              </thead>
-              <tbody className={styles.tableBodyMiddle}>
-                {pacientes &&
-                  pacientes
-                    .filter(
-                      (paciente) =>
-                        paciente.borrado !== true &&
-                        (paciente.nombre.toLowerCase().includes(buscar) ||
-                          paciente.apellido.toLowerCase().includes(buscar) ||
-                          paciente.nombre.toUpperCase().includes(buscar) ||
-                          paciente.apellido.toUpperCase().includes(buscar))
-                    )
-                    .map((paciente) => (
-                      <tr key={paciente.id_persona ?? paciente.id}>
-                        <td>
-                          {paciente.nombre} {paciente.apellido}
-                        </td>
-                        <td>
+            <div className="table-responsive">
+              <table className="table table-bordered table-hover shadow table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">Nombre completo</th>
+                    <th scope="col">Acción</th>
+                  </tr>
+                </thead>
+                <tbody className={styles.tableBodyMiddle}>
+                  {pacientes &&
+                    pacientes
+                      .filter(
+                        (paciente) =>
+                          paciente.borrado !== true &&
+                          (paciente.nombre.toLowerCase().includes(buscar) ||
+                            paciente.apellido.toLowerCase().includes(buscar) ||
+                            paciente.nombre.toUpperCase().includes(buscar) ||
+                            paciente.apellido.toUpperCase().includes(buscar))
+                      )
+                      .map((paciente) => (
+                        <tr key={paciente.id_persona ?? paciente.id}>
+                          <td data-th="Nombre completo">
+                            {paciente.nombre} {paciente.apellido}
+                          </td>
+                          <td data-th="Acción">
                           <Link
                             to="/ficha"
                             onClick={() =>
@@ -252,7 +253,8 @@ const ListaPaciente = (props) => {
                       </tr>
                     ))}
               </tbody>
-            </table>
+              </table>
+            </div>
             {loading && <LoadingSpinner />}
             {loadError && (
               <div className="text-start">

@@ -146,7 +146,28 @@ table td {
   margin-bottom: 1.5rem;
 }
 
-@media screen and (max-width: 600px) {
+.navbar-username {
+  min-width: 0;
+  max-width: 100%;
+}
+
+:focus-visible {
+  outline: 2px solid #0b0286;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media screen and (max-width: 576px) {
   table {
     width: 100%;
   }
