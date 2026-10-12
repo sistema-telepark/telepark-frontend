@@ -270,23 +270,24 @@ const Nomenclador = () => {
           <br />
           <div className="row">
             <div className={'col-12 col-md-12 col-lg-12 col-xl-12 ' + styles.scrollableTable}>
-              <table
-                className={
-                  'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
-                }
-              >
-                <thead>
-                  <tr>
-                    <th scope="col">Enfermedad</th>
-                    <th scope="col">Acción</th>
-                  </tr>
-                </thead>
-                <tbody className={styles.tableBodyMiddle}>
-                  {enfermedades &&
-                    enfermedades.map((enfermedad, index) => (
-                      <tr key={enfermedad.id_enfermedad}>
-                        <td>{enfermedad.nombre}</td>
-                        <td>
+              <div className="table-responsive">
+                <table
+                  className={
+                    'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
+                  }
+                >
+                  <thead>
+                    <tr>
+                      <th scope="col">Enfermedad</th>
+                      <th scope="col">Acción</th>
+                    </tr>
+                  </thead>
+                  <tbody className={styles.tableBodyMiddle}>
+                    {enfermedades &&
+                      enfermedades.map((enfermedad, index) => (
+                        <tr key={enfermedad.id_enfermedad}>
+                          <td data-th="Enfermedad">{enfermedad.nombre}</td>
+                          <td data-th="Acción">
                           <button
                             type="button"
                             className={'btn btn-verde ' + styles.rowActionButton}
@@ -320,6 +321,7 @@ const Nomenclador = () => {
                     ))}
                 </tbody>
               </table>
+              </div>
             </div>
           </div>
         </div>
@@ -370,23 +372,24 @@ const Nomenclador = () => {
           <br />
           <div className="row">
             <div className={'mb-4 col-12 col-md-12 col-lg-12 col-xl-12 ' + styles.scrollableTable}>
-              <table
-                className={
-                  'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
-                }
-              >
-                <thead>
-                  <tr>
-                    <th scope="col">Medicamento</th>
-                    <th scope="col">Acción</th>
-                  </tr>
-                </thead>
-                <tbody className={styles.tableBodyMiddle}>
-                  {medicamentos &&
-                    medicamentos.map((medicamento, index) => (
-                      <tr key={medicamento.id_medicamento}>
-                        <td>{medicamento.nombre}</td>
-                        <td>
+              <div className="table-responsive">
+                <table
+                  className={
+                    'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
+                  }
+                >
+                  <thead>
+                    <tr>
+                      <th scope="col">Medicamento</th>
+                      <th scope="col">Acción</th>
+                    </tr>
+                  </thead>
+                  <tbody className={styles.tableBodyMiddle}>
+                    {medicamentos &&
+                      medicamentos.map((medicamento, index) => (
+                        <tr key={medicamento.id_medicamento}>
+                          <td data-th="Medicamento">{medicamento.nombre}</td>
+                          <td data-th="Acción">
                           <button
                             type="button"
                             className={'btn btn-verde ' + styles.rowActionButton}
@@ -419,7 +422,8 @@ const Nomenclador = () => {
                       </tr>
                     ))}
                 </tbody>
-              </table>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -481,23 +485,24 @@ const Nomenclador = () => {
           </div>
           <div className="row">
             <div className={'mb-2 col-12 col-md-12 col-lg-12 col-xl-12 ' + styles.scrollableTable}>
-              <table
-                className={
-                  'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
-                }
-              >
-                <thead>
-                  <tr>
-                    <th scope="col">Obra Social</th>
-                    <th scope="col">Acción</th>
-                  </tr>
-                </thead>
-                <tbody className={styles.tableBodyMiddle}>
-                  {obrasociales &&
-                    obrasociales.map((obrasocial, index) => (
-                      <tr key={obrasocial.id_obra_social}>
-                        <td>{obrasocial.nombre}</td>
-                        <td>
+              <div className="table-responsive">
+                <table
+                  className={
+                    'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
+                  }
+                >
+                  <thead>
+                    <tr>
+                      <th scope="col">Obra Social</th>
+                      <th scope="col">Acción</th>
+                    </tr>
+                  </thead>
+                  <tbody className={styles.tableBodyMiddle}>
+                    {obrasociales &&
+                      obrasociales.map((obrasocial, index) => (
+                        <tr key={obrasocial.id_obra_social}>
+                          <td data-th="Obra Social">{obrasocial.nombre}</td>
+                          <td data-th="Acción">
                           <button
                             type="button"
                             className={'btn btn-verde ' + styles.rowActionButton}
@@ -530,7 +535,8 @@ const Nomenclador = () => {
                       </tr>
                     ))}
                 </tbody>
-              </table>
+                </table>
+              </div>
             </div>
           </div>
         </div>

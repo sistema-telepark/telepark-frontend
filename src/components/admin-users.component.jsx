@@ -221,7 +221,7 @@ const AdminUsuarios = () => {
         </div>
       </form>
 
-      <Modal show={showNuevo}>
+      <Modal show={showNuevo} scrollable>
         <Modal.Header className="justify-content-center">
           <h4 className="mb-0">Agregar Usuario</h4>
         </Modal.Header>
@@ -410,7 +410,7 @@ const AdminUsuarios = () => {
         </Modal.Footer>
       </Modal>
 
-      <Modal show={show}>
+      <Modal show={show} scrollable>
         <Modal.Header className="justify-content-center">
           <h4 className="mb-0">Editar Usuario</h4>
         </Modal.Header>
@@ -577,7 +577,7 @@ const AdminUsuarios = () => {
         </Modal.Footer>
       </Modal>
 
-      <Modal show={!!usuarioAEliminar} onHide={cancelarEliminacion}>
+      <Modal show={!!usuarioAEliminar} onHide={cancelarEliminacion} scrollable>
         <Modal.Header className="justify-content-center">
           <h4 className="mb-0">Eliminar Usuario</h4>
         </Modal.Header>
@@ -607,32 +607,33 @@ const AdminUsuarios = () => {
 
       <div className="row">
         <div className={'col-12 col-md-12 col-lg-12 col-xl-12 ' + styles.tableWrapper}>
-          <table
-            className={
-              'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
-            }
-          >
-            <thead>
-              <tr>
-                <th scope="col">Usuario</th>
-                <th scope="col">Nombre completo</th>
-                <th scope="col">Rol</th>
-                <th scope="col">Estado</th>
-                <th scope="col">Acción</th>
-              </tr>
-            </thead>
-            <tbody className={styles.tableBodyMiddle}>
-              {listaVisible &&
-                listaVisible.map((usuario, _index) => (
-                  <tr key={usuario.id ?? usuario.username}>
-                    <td>{usuario.username}</td>
-                    <td>
-                      {usuario.first_name} {usuario.last_name}
-                    </td>
-                    <td>{utils.convertRole(usuario.is_superuser)}</td>
-                    <td>{utils.convertStateUser(usuario.is_active)}</td>
+          <div className="table-responsive">
+            <table
+              className={
+                'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
+              }
+            >
+              <thead>
+                <tr>
+                  <th scope="col">Usuario</th>
+                  <th scope="col">Nombre completo</th>
+                  <th scope="col">Rol</th>
+                  <th scope="col">Estado</th>
+                  <th scope="col">Acción</th>
+                </tr>
+              </thead>
+              <tbody className={styles.tableBodyMiddle}>
+                {listaVisible &&
+                  listaVisible.map((usuario, _index) => (
+                    <tr key={usuario.id ?? usuario.username}>
+                      <td data-th="Usuario">{usuario.username}</td>
+                      <td data-th="Nombre completo">
+                        {usuario.first_name} {usuario.last_name}
+                      </td>
+                      <td data-th="Rol">{utils.convertRole(usuario.is_superuser)}</td>
+                      <td data-th="Estado">{utils.convertStateUser(usuario.is_active)}</td>
 
-                    <td>
+                      <td data-th="Acción">
                       <button
                         type="button"
                         className={'btn btn-verde ' + styles.rowActionButton}
@@ -652,7 +653,8 @@ const AdminUsuarios = () => {
                   </tr>
                 ))}
             </tbody>
-          </table>
+            </table>
+          </div>
         </div>
         {loading && <LoadingSpinner />}
         {loadError && (

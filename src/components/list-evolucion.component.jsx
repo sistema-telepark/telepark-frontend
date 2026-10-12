@@ -159,7 +159,7 @@ const ListaEvolucion = () => {
           </div>
         </div>
 
-        <Modal show={showNuevo}>
+        <Modal show={showNuevo} scrollable>
           <Modal.Header className="justify-content-center">
             <h4 className="mb-0">Nueva Observación</h4>
           </Modal.Header>
@@ -222,7 +222,7 @@ const ListaEvolucion = () => {
           </Modal.Footer>
         </Modal>
 
-        <Modal show={show}>
+        <Modal show={show} scrollable>
           <Modal.Header className="justify-content-center">
             <h4 className="mb-0">Editar Observación</h4>
           </Modal.Header>
@@ -287,11 +287,12 @@ const ListaEvolucion = () => {
 
         <div className="row">
           <div className="col-12">
-            <table
-              className={
-                'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
-              }
-            >
+            <div className="table-responsive">
+              <table
+                className={
+                  'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
+                }
+              >
               <thead>
                 <tr>
                   <th scope="col">Estado Evolutivo</th>
@@ -310,12 +311,14 @@ const ListaEvolucion = () => {
                     .filter((evolucion) => evolucion.borrado === false)
                     .map((evolucion) => (
                       <tr key={evolucion.id_evolucion}>
-                        <td>Estado: {evolucion.escala_evolucion}</td>
-                        <td className={styles.descriptionColumn}>
+                        <td data-th="Estado Evolutivo">Estado: {evolucion.escala_evolucion}</td>
+                        <td className={styles.descriptionColumn} data-th="Descripción">
                           {utils.describirEstado(evolucion.escala_evolucion)}
                         </td>
-                        <td>{utils.convertirFormatoFecha(evolucion.fecha)}</td>
-                        <td className={styles.actionColumn}>
+                        <td data-th="Fecha de Observación">
+                          {utils.convertirFormatoFecha(evolucion.fecha)}
+                        </td>
+                        <td className={styles.actionColumn} data-th="Acción">
                           <button
                             type="button"
                             className={'btn btn-verde ' + styles.rowActionButton}
@@ -346,7 +349,8 @@ const ListaEvolucion = () => {
                       </tr>
                     ))}
               </tbody>
-            </table>
+              </table>
+            </div>
             {loading && <LoadingSpinner />}
             {loadError && (
               <ErrorFallbackInline

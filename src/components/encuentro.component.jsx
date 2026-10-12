@@ -261,25 +261,26 @@ const Encuentro = () => {
           Agregar
         </button>
         <div className="row m-md-3 shadow mx-md-auto border-top-sm m-0">
-          <table className="table table-striped">
-            <thead>
-              <tr>
-                <th scope="col">Fecha</th>
-                <th scope="col">Virtual</th>
-                <th scope="col">Taller</th>
-                <th scope="col">Acción</th>
-              </tr>
-            </thead>
-            <tbody>
-              {encuentro.map((element) => (
-                <tr key={element.id_encuentro}>
-                  <td>{utils.convertirFormatoFecha(element.fecha)}</td>
-                  <td>{element.virtual ? 'Sí' : ''}</td>
-                  <td>
-                    {taller.find((t) => Number(t.id_taller) === Number(element.taller))
-                      ?.tipo_taller ?? 'Sin taller'}
-                  </td>
-                  <td>
+          <div className="table-responsive">
+            <table className="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">Fecha</th>
+                  <th scope="col">Virtual</th>
+                  <th scope="col">Taller</th>
+                  <th scope="col">Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                {encuentro.map((element) => (
+                  <tr key={element.id_encuentro}>
+                    <td data-th="Fecha">{utils.convertirFormatoFecha(element.fecha)}</td>
+                    <td data-th="Virtual">{element.virtual ? 'Sí' : ''}</td>
+                    <td data-th="Taller">
+                      {taller.find((t) => Number(t.id_taller) === Number(element.taller))
+                        ?.tipo_taller ?? 'Sin taller'}
+                    </td>
+                    <td data-th="Acción">
                     <button
                       type="button"
                       className={`btn ${styles.editButton}`}
@@ -309,8 +310,9 @@ const Encuentro = () => {
                   </td>
                 </tr>
               ))}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
         </div>
       </Container>
 
@@ -323,13 +325,13 @@ const Encuentro = () => {
         />
       )}
 
-      <Modal show={modalInsert}>
+      <Modal show={modalInsert} scrollable>
         <Modal.Header className="justify-content-center">
           <h4 className="mb-0">Nuevo Encuentro</h4>
         </Modal.Header>
         <Modal.Body>
           <div className="row">
-            <div className="col-md-6">
+            <div className="col-12 col-md-6">
               <Form.Group className="mb-0">
                 <div className="form-group mb-2">
                   <label htmlFor="fecha" className="control-label">
@@ -350,7 +352,7 @@ const Encuentro = () => {
               </Form.Group>
             </div>
 
-            <div className="col-md-6">
+            <div className="col-12 col-md-6">
               <Form.Group className="mb-0">
                 <div className="form-check">
                   <label htmlFor="virtual" className="form-check-label">
@@ -368,7 +370,7 @@ const Encuentro = () => {
           </div>
 
           <div className="row">
-            <div className="col-md-12">
+            <div className="col-12 col-md-12">
               <Form.Group className="mb-0">
                 <div className="form-group mb-2">
                   <label htmlFor="idtaller" className="control-label">
@@ -412,13 +414,13 @@ const Encuentro = () => {
         </Modal.Footer>
       </Modal>
 
-      <Modal show={modalEdit}>
+      <Modal show={modalEdit} scrollable>
         <Modal.Header className="justify-content-center">
           <h4 className="mb-0">Editar encuentro</h4>
         </Modal.Header>
         <Modal.Body>
           <div className="row">
-            <div className="col-md-12">
+            <div className="col-12 col-md-12">
               <Form.Group className="mb-0">
                 <label htmlFor="id_encuentro" className="control-label">
                   Código:
@@ -434,7 +436,7 @@ const Encuentro = () => {
               </Form.Group>
             </div>
 
-            <div className="col-md-6">
+            <div className="col-12 col-md-6">
               <Form.Group className="mb-0">
                 <label htmlFor="fechaEdit" className="control-label">
                   Fecha de encuentro
@@ -451,7 +453,7 @@ const Encuentro = () => {
               </Form.Group>
             </div>
 
-            <div className="col-md-6">
+            <div className="col-12 col-md-6">
               <Form.Group className="mb-0">
                 <div className="form-check">
                   <label htmlFor="virtualEdit" className="form-check-label">
@@ -469,7 +471,7 @@ const Encuentro = () => {
           </div>
 
           <div className="row">
-            <div className="col-md-12">
+            <div className="col-12 col-md-12">
               <Form.Group className="mb-0">
                 <div className="form-group mb-2">
                   <label htmlFor="idtallerEdit" className="control-label">
@@ -513,7 +515,7 @@ const Encuentro = () => {
         </Modal.Footer>
       </Modal>
 
-      <Modal show={modalInsertAct}>
+      <Modal show={modalInsertAct} scrollable>
         <Modal.Header>
           <div>
             <h5>Actividades del encuentro:</h5>
@@ -530,20 +532,21 @@ const Encuentro = () => {
         <Modal.Body>
           <div className="row">
             <div className={`col-12 col-md-12 col-lg-12 col-xl-12 ${styles.scrollContainer}`}>
-              <table className="table table-bordered table-hover shadow table-striped">
-                <tbody>
+              <div className="table-responsive">
+                <table className="table table-bordered table-hover shadow table-striped">
+                  <tbody>
                   {nombresTalleres.map((tallerNombre) => (
                     <React.Fragment key={tallerNombre}>
                       <tr>
-                        <td colSpan="1" className={styles.groupHeader}>
+                        <td colSpan="1" className={styles.groupHeader} data-th="Taller">
                           {tallerNombre}
                         </td>
                       </tr>
 
                       {actividadesPorTaller[tallerNombre].map((act) => (
                         <tr key={act.id_actividad}>
-                          <td>{act.nombre}</td>
-                          <td>
+                          <td data-th="Actividad">{act.nombre}</td>
+                          <td data-th="Seleccionada">
                             <input
                               type="checkbox"
                               className="form-check-input"
@@ -558,7 +561,8 @@ const Encuentro = () => {
                     </React.Fragment>
                   ))}
                 </tbody>
-              </table>
+                </table>
+              </div>
             </div>
           </div>
         </Modal.Body>

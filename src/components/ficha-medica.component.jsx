@@ -123,29 +123,33 @@ const FichaMedica = () => {
         </div>
         <div className="row">
           <div className="col-12">
-            <table
-              className={
-                'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
-              }
-            >
-              <thead>
-                <tr>
-                  <th scope="col">Nombre de Enfermedad</th>
-                  <th scope="col">Fecha de Diagnóstico</th>
-                </tr>
-              </thead>
-              <tbody className={styles.tableBodyMiddle}>
-                {diagnosticos &&
-                  diagnosticos
-                    .filter((diagnostico) => diagnostico.borrado === false)
-                    .map((diagnostico, index) => (
-                      <tr key={diagnostico.id_diagnostico}>
-                        <td>{diagnostico.enfermedad.nombre}</td>
-                        <td>{utils.convertirFormatoFecha(diagnostico.fecha)}</td>
-                      </tr>
-                    ))}
-              </tbody>
-            </table>
+            <div className="table-responsive">
+              <table
+                className={
+                  'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
+                }
+              >
+                <thead>
+                  <tr>
+                    <th scope="col">Nombre de Enfermedad</th>
+                    <th scope="col">Fecha de Diagnóstico</th>
+                  </tr>
+                </thead>
+                <tbody className={styles.tableBodyMiddle}>
+                  {diagnosticos &&
+                    diagnosticos
+                      .filter((diagnostico) => diagnostico.borrado === false)
+                      .map((diagnostico, index) => (
+                        <tr key={diagnostico.id_diagnostico}>
+                          <td data-th="Nombre de Enfermedad">{diagnostico.enfermedad.nombre}</td>
+                          <td data-th="Fecha de Diagnóstico">
+                            {utils.convertirFormatoFecha(diagnostico.fecha)}
+                          </td>
+                        </tr>
+                      ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
@@ -163,31 +167,39 @@ const FichaMedica = () => {
         </div>
         <div className="row">
           <div className="col-12">
-            <table
-              className={
-                'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
-              }
-            >
-              <thead>
-                <tr>
-                  <th scope="col">Estado Evolutivo</th>
-                  <th scope="col">Descripción</th>
-                  <th scope="col">Fecha de Observación</th>
-                </tr>
-              </thead>
-              <tbody className={styles.tableBodyMiddle}>
-                {evoluciones &&
-                  evoluciones
-                    .filter((evolucion) => evolucion.borrado === false)
-                    .map((evolucion, index) => (
-                      <tr key={evolucion.id_evolucion}>
-                        <td>Estado: {evolucion.escala_evolucion}</td>
-                        <td>{utils.describirEstado(evolucion.escala_evolucion)}</td>
-                        <td>{utils.convertirFormatoFecha(evolucion.fecha)}</td>
-                      </tr>
-                    ))}
-              </tbody>
-            </table>
+            <div className="table-responsive">
+              <table
+                className={
+                  'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
+                }
+              >
+                <thead>
+                  <tr>
+                    <th scope="col">Estado Evolutivo</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Fecha de Observación</th>
+                  </tr>
+                </thead>
+                <tbody className={styles.tableBodyMiddle}>
+                  {evoluciones &&
+                    evoluciones
+                      .filter((evolucion) => evolucion.borrado === false)
+                      .map((evolucion, index) => (
+                        <tr key={evolucion.id_evolucion}>
+                          <td data-th="Estado Evolutivo">
+                            Estado: {evolucion.escala_evolucion}
+                          </td>
+                          <td data-th="Descripción">
+                            {utils.describirEstado(evolucion.escala_evolucion)}
+                          </td>
+                          <td data-th="Fecha de Observación">
+                            {utils.convertirFormatoFecha(evolucion.fecha)}
+                          </td>
+                        </tr>
+                      ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
@@ -205,29 +217,33 @@ const FichaMedica = () => {
         </div>
         <div className="row">
           <div className="col-12">
-            <table
-              className={
-                'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
-              }
-            >
-              <thead>
-                <tr>
-                  <th scope="col">Obra Social</th>
-                  <th scope="col">Tipo</th>
-                </tr>
-              </thead>
-              <tbody className={styles.tableBodyMiddle}>
-                {osociales &&
-                  osociales
-                    .filter((osocial) => osocial.borrado === false)
-                    .map((osocial, index) => (
-                      <tr key={osocial.id_cobertura}>
-                        <td>{osocial.obra_social.nombre}</td>
-                        <td>{utils.convertirTipo(osocial.obra_social.es_estatal)}</td>
-                      </tr>
-                    ))}
-              </tbody>
-            </table>
+            <div className="table-responsive">
+              <table
+                className={
+                  'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
+                }
+              >
+                <thead>
+                  <tr>
+                    <th scope="col">Obra Social</th>
+                    <th scope="col">Tipo</th>
+                  </tr>
+                </thead>
+                <tbody className={styles.tableBodyMiddle}>
+                  {osociales &&
+                    osociales
+                      .filter((osocial) => osocial.borrado === false)
+                      .map((osocial, index) => (
+                        <tr key={osocial.id_cobertura}>
+                          <td data-th="Obra Social">{osocial.obra_social.nombre}</td>
+                          <td data-th="Tipo">
+                            {utils.convertirTipo(osocial.obra_social.es_estatal)}
+                          </td>
+                        </tr>
+                      ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
@@ -245,35 +261,43 @@ const FichaMedica = () => {
         </div>
         <div className="row">
           <div className="col-12">
-            <table
-              className={
-                'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
-              }
-            >
-              <thead>
-                <tr>
-                  <th scope="col">Nombre de Medicamento</th>
-                  <th scope="col">Dosis en mg</th>
-                  <th scope="col">Hora de Toma</th>
-                  <th scope="col">Fecha de Prescripción</th>
-                  <th scope="col">Estado</th>
-                </tr>
-              </thead>
-              <tbody className={styles.tableBodyMiddle}>
-                {indicaciones &&
-                  indicaciones
-                    .filter((indicacion) => indicacion.borrado === false)
-                    .map((indicacion, index) => (
-                      <tr key={indicacion.id_indicacion}>
-                        <td>{indicacion.medicamento.nombre}</td>
-                        <td>{indicacion.cantidad_miligramos} mg</td>
-                        <td>Cada {utils.convertirFormatoHora(indicacion.hora_de_toma)} hs</td>
-                        <td>{utils.convertirFormatoFecha(indicacion.fecha_prescripcion)}</td>
-                        <td>{utils.convertirEstado(indicacion.esta_vigente)}</td>
-                      </tr>
-                    ))}
-              </tbody>
-            </table>
+            <div className="table-responsive">
+              <table
+                className={
+                  'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
+                }
+              >
+                <thead>
+                  <tr>
+                    <th scope="col">Nombre de Medicamento</th>
+                    <th scope="col">Dosis en mg</th>
+                    <th scope="col">Hora de Toma</th>
+                    <th scope="col">Fecha de Prescripción</th>
+                    <th scope="col">Estado</th>
+                  </tr>
+                </thead>
+                <tbody className={styles.tableBodyMiddle}>
+                  {indicaciones &&
+                    indicaciones
+                      .filter((indicacion) => indicacion.borrado === false)
+                      .map((indicacion, index) => (
+                        <tr key={indicacion.id_indicacion}>
+                          <td data-th="Nombre de Medicamento">{indicacion.medicamento.nombre}</td>
+                          <td data-th="Dosis en mg">{indicacion.cantidad_miligramos} mg</td>
+                          <td data-th="Hora de Toma">
+                            Cada {utils.convertirFormatoHora(indicacion.hora_de_toma)} hs
+                          </td>
+                          <td data-th="Fecha de Prescripción">
+                            {utils.convertirFormatoFecha(indicacion.fecha_prescripcion)}
+                          </td>
+                          <td data-th="Estado">
+                            {utils.convertirEstado(indicacion.esta_vigente)}
+                          </td>
+                        </tr>
+                      ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
         {loading && <LoadingSpinner />}

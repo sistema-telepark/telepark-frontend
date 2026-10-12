@@ -138,26 +138,27 @@ const AdminPersonas = () => {
         </form>
         <div className="row">
           <div className={'col-12 col-md-12 col-lg-12 col-xl-12 ' + styles.tableWrapper}>
-            <table
-              className={
-                'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
-              }
-            >
-              <thead>
-                <tr>
-                  <th scope="col">Nombre</th>
-                  <th scope="col">Apellido</th>
-                  <th scope="col">Telefono</th>
-                  <th scope="col">Accion</th>
-                </tr>
-              </thead>
-              <tbody>
-                {arrayPersonIspaciente.map((person) => (
-                  <tr key={person.id_persona}>
-                    <td>{person.nombre}</td>
-                    <td>{person.apellido}</td>
-                    <td>{person.telefono}</td>
-                    <td>
+            <div className="table-responsive">
+              <table
+                className={
+                  'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
+                }
+              >
+                <thead>
+                  <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Apellido</th>
+                    <th scope="col">Telefono</th>
+                    <th scope="col">Accion</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {arrayPersonIspaciente.map((person) => (
+                    <tr key={person.id_persona}>
+                      <td data-th="Nombre">{person.nombre}</td>
+                      <td data-th="Apellido">{person.apellido}</td>
+                      <td data-th="Telefono">{person.telefono}</td>
+                      <td data-th="Accion">
                       <button
                         type="button"
                         className="btn btn-verde me-2"
@@ -176,7 +177,8 @@ const AdminPersonas = () => {
                   </tr>
                 ))}
               </tbody>
-            </table>
+              </table>
+            </div>
           </div>
         </div>
         {loading && <LoadingSpinner />}
@@ -189,7 +191,7 @@ const AdminPersonas = () => {
         )}
       </main>
 
-      <Modal show={modalEdit}>
+      <Modal show={modalEdit} scrollable>
         <Modal.Header className="justify-content-center">
           <h4 className="mb-0">Editar Persona</h4>
         </Modal.Header>

@@ -350,3 +350,17 @@
     padding: 12px;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar,
+  .sidebar li a,
+  .sidebar .links_name,
+  .sidebar.open .logo-details .menu-toggle img,
+  .sidebar li.active a .links_name,
+  .sidebar li.active a svg,
+  .sidebar li a:hover .links_name,
+  .sidebar li a:hover svg,
+  .sidebar li:hover .tooltip {
+    transition: none;
+  }
+}

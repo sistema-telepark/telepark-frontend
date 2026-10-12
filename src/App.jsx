@@ -102,7 +102,7 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
         <span>
           <nav className="navbar navbar-expand navbar-light bg-light">
             <div className="container-fluid">
-              <span className="navbar-text ms-auto">
+              <span className="navbar-text ms-auto text-truncate navbar-username">
                 <b>Bienvenido: </b>
                 {userName}
               </span>
