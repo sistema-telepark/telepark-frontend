@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect } from 'react';
+import React, { memo, useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
@@ -27,16 +27,7 @@ const ListaEvolucion = () => {
   const formNuevo = useForm();
   const formEdit = useForm();
 
-  useEffect(() => {
-    if (!idEpElegido) {
-      setEvoluciones([]);
-      navigate('/list-pacientes', { replace: true });
-      return;
-    }
-    getEvoluciones();
-  }, [idEpElegido, navigate]);
-
-  const getEvoluciones = async () => {
+  const getEvoluciones = useCallback(async () => {
     setLoading(true);
     setLoadError(null);
     let response = await evolucionRepository.get(idEpElegido);
@@ -48,7 +39,16 @@ const ListaEvolucion = () => {
       setLoadError(response?.error || 'No se pudieron cargar las evoluciones.');
     }
     setLoading(false);
-  };
+  }, [idEpElegido]);
+
+  useEffect(() => {
+    if (!idEpElegido) {
+      setEvoluciones([]);
+      navigate('/list-pacientes', { replace: true });
+      return;
+    }
+    getEvoluciones();
+  }, [idEpElegido, navigate, getEvoluciones]);
 
   const editar = (nroEvolucion, fecha, id_evolucion) => {
     setIdEditado(id_evolucion);

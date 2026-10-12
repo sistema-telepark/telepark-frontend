@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
@@ -27,6 +28,28 @@ const ListaObraSocial = (props) => {
   const formNuevo = useForm();
   const formEdit = useForm();
 
+  const getOs = useCallback(async () => {
+    if (!idEpElegido) return;
+
+    const response = await osRepository.get(idEpElegido);
+    if (response?.success) {
+      setOsociales(response.data.results ?? response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response?.error || 'No se pudieron cargar las obras sociales.');
+    }
+  }, [idEpElegido]);
+
+  const getObrasocial = async () => {
+    const response = await obrasocialRepository.getAll();
+    if (response?.success) {
+      setObraSociales(response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response?.error || 'No se pudieron cargar las obras sociales.');
+    }
+  };
+
   useEffect(() => {
     setLoading(true);
     setLoadError(null);
@@ -42,33 +65,11 @@ const ListaObraSocial = (props) => {
       setOsociales([]);
       navigate('/list-pacientes', { replace: true });
     }
-  }, [idEpElegido, navigate]);
+  }, [idEpElegido, navigate, getOs]);
 
   const recargar = () => {
     setLoadError(null);
     Promise.all([getObrasocial(), getOs()]).catch(() => {});
-  };
-
-  const getObrasocial = async () => {
-    const response = await obrasocialRepository.getAll();
-    if (response?.success) {
-      setObraSociales(response.data);
-      setLoadError(null);
-    } else {
-      setLoadError(response?.error || 'No se pudieron cargar las obras sociales.');
-    }
-  };
-
-  const getOs = async () => {
-    if (!idEpElegido) return;
-
-    const response = await osRepository.get(idEpElegido);
-    if (response?.success) {
-      setOsociales(response.data.results ?? response.data);
-      setLoadError(null);
-    } else {
-      setLoadError(response?.error || 'No se pudieron cargar las obras sociales.');
-    }
   };
 
   const agregar = () => {
@@ -315,6 +316,11 @@ const ListaObraSocial = (props) => {
       </div>
     </main>
   );
+};
+
+ListaObraSocial.propTypes = {
+  idEpElegido: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  nombreEpElegido: PropTypes.string,
 };
 
 const mapStateToProps = (state) => {

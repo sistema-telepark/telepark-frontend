@@ -284,7 +284,7 @@ const Nomenclador = () => {
                   </thead>
                   <tbody className={styles.tableBodyMiddle}>
                     {enfermedades &&
-                      enfermedades.map((enfermedad, index) => (
+                      enfermedades.map((enfermedad) => (
                         <tr key={enfermedad.id_enfermedad}>
                           <td data-th="Enfermedad">{enfermedad.nombre}</td>
                           <td data-th="Acción">
@@ -386,7 +386,7 @@ const Nomenclador = () => {
                   </thead>
                   <tbody className={styles.tableBodyMiddle}>
                     {medicamentos &&
-                      medicamentos.map((medicamento, index) => (
+                      medicamentos.map((medicamento) => (
                         <tr key={medicamento.id_medicamento}>
                           <td data-th="Medicamento">{medicamento.nombre}</td>
                           <td data-th="Acción">
@@ -499,7 +499,7 @@ const Nomenclador = () => {
                   </thead>
                   <tbody className={styles.tableBodyMiddle}>
                     {obrasociales &&
-                      obrasociales.map((obrasocial, index) => (
+                      obrasociales.map((obrasocial) => (
                         <tr key={obrasocial.id_obra_social}>
                           <td data-th="Obra Social">{obrasocial.nombre}</td>
                           <td data-th="Acción">

@@ -13,6 +13,7 @@ export const logError = (error, info) => {
     error: error.message,
     ...(import.meta.env.DEV && { stack: error.stack, componentStack: info?.componentStack }),
   };
+  // eslint-disable-next-line no-console
   console.error(`[ErrorBoundary] ${new Date().toISOString()} | ${window.location.pathname}`, entry);
 };
 
@@ -22,5 +23,6 @@ export const logAsyncError = (error, context = {}) => {
     error: error.message,
     ...(import.meta.env.DEV && { stack: error.stack }),
   };
+  // eslint-disable-next-line no-console
   console.error(`[AsyncError] ${new Date().toISOString()} | ${window.location.pathname}`, entry);
 };

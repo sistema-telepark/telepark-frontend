@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router';
 import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
@@ -23,6 +23,50 @@ const FichaMedica = () => {
   const [loadError, setLoadError] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const getDiagnosticos = useCallback(async () => {
+    let response = await diagnosticoRepository.get(idEpElegido);
+
+    if (response?.success) {
+      setDiagnosticos(response.data.results ?? response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response.error);
+    }
+  }, [idEpElegido]);
+
+  const getEvoluciones = useCallback(async () => {
+    let response = await evolucionRepository.get(idEpElegido);
+
+    if (response?.success) {
+      setEvoluciones(response.data.results ?? response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response.error);
+    }
+  }, [idEpElegido]);
+
+  const getOs = useCallback(async () => {
+    let response = await osRepository.get(idEpElegido);
+
+    if (response?.success) {
+      setOsociales(response.data.results ?? response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response.error);
+    }
+  }, [idEpElegido]);
+
+  const getIndicaciones = useCallback(async () => {
+    let response = await indicacionRepository.get(idEpElegido);
+
+    if (response?.success) {
+      setIndicaciones(response.data.results ?? response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response.error);
+    }
+  }, [idEpElegido]);
+
   useEffect(() => {
     if (!idEpElegido) {
       setDiagnosticos([]);
@@ -38,55 +82,11 @@ const FichaMedica = () => {
     Promise.all([getDiagnosticos(), getEvoluciones(), getOs(), getIndicaciones()])
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, [idEpElegido, navigate]);
+  }, [idEpElegido, navigate, getDiagnosticos, getEvoluciones, getOs, getIndicaciones]);
 
   const recargar = () => {
     setLoadError(null);
     Promise.all([getDiagnosticos(), getEvoluciones(), getOs(), getIndicaciones()]).catch(() => {});
-  };
-
-  const getDiagnosticos = async () => {
-    let response = await diagnosticoRepository.get(idEpElegido);
-
-    if (response?.success) {
-      setDiagnosticos(response.data.results ?? response.data);
-      setLoadError(null);
-    } else {
-      setLoadError(response.error);
-    }
-  };
-
-  const getEvoluciones = async () => {
-    let response = await evolucionRepository.get(idEpElegido);
-
-    if (response?.success) {
-      setEvoluciones(response.data.results ?? response.data);
-      setLoadError(null);
-    } else {
-      setLoadError(response.error);
-    }
-  };
-
-  const getOs = async () => {
-    let response = await osRepository.get(idEpElegido);
-
-    if (response?.success) {
-      setOsociales(response.data.results ?? response.data);
-      setLoadError(null);
-    } else {
-      setLoadError(response.error);
-    }
-  };
-
-  const getIndicaciones = async () => {
-    let response = await indicacionRepository.get(idEpElegido);
-
-    if (response?.success) {
-      setIndicaciones(response.data.results ?? response.data);
-      setLoadError(null);
-    } else {
-      setLoadError(response.error);
-    }
   };
 
   return (
@@ -139,7 +139,7 @@ const FichaMedica = () => {
                   {diagnosticos &&
                     diagnosticos
                       .filter((diagnostico) => diagnostico.borrado === false)
-                      .map((diagnostico, index) => (
+                      .map((diagnostico) => (
                         <tr key={diagnostico.id_diagnostico}>
                           <td data-th="Nombre de Enfermedad">{diagnostico.enfermedad.nombre}</td>
                           <td data-th="Fecha de Diagnóstico">
@@ -184,7 +184,7 @@ const FichaMedica = () => {
                   {evoluciones &&
                     evoluciones
                       .filter((evolucion) => evolucion.borrado === false)
-                      .map((evolucion, index) => (
+                      .map((evolucion) => (
                         <tr key={evolucion.id_evolucion}>
                           <td data-th="Estado Evolutivo">
                             Estado: {evolucion.escala_evolucion}
@@ -233,7 +233,7 @@ const FichaMedica = () => {
                   {osociales &&
                     osociales
                       .filter((osocial) => osocial.borrado === false)
-                      .map((osocial, index) => (
+                      .map((osocial) => (
                         <tr key={osocial.id_cobertura}>
                           <td data-th="Obra Social">{osocial.obra_social.nombre}</td>
                           <td data-th="Tipo">
@@ -280,7 +280,7 @@ const FichaMedica = () => {
                   {indicaciones &&
                     indicaciones
                       .filter((indicacion) => indicacion.borrado === false)
-                      .map((indicacion, index) => (
+                      .map((indicacion) => (
                         <tr key={indicacion.id_indicacion}>
                           <td data-th="Nombre de Medicamento">{indicacion.medicamento.nombre}</td>
                           <td data-th="Dosis en mg">{indicacion.cantidad_miligramos} mg</td>

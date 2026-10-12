@@ -14,9 +14,9 @@ import styles from '../styles/consulta.module.css';
 const ESTADO_AUSENTE = 'Ausente';
 
 const Consulta = () => {
-  const [taller, setTaller] = useState([]);
+  const [, setTaller] = useState([]);
   const [encuentro, setEncuentro] = useState([]);
-  const [act, setAct] = useState([]);
+  const [, setAct] = useState([]);
   const [pacientes, setPacientes] = useState([]);
   const [asistencia, setAsistencia] = useState([]);
   const [faltaC, setFaltaC] = useState([]);
@@ -25,7 +25,7 @@ const Consulta = () => {
   const [mensajeSinDatosFC, setMensajeSinDatosFC] = useState(false);
   const [errores, setErrores] = useState({});
 
-  const [evento, setEvento] = useState([]);
+  const [, setEvento] = useState([]);
 
   const [loadError, setLoadError] = useState(null);
   const [loading, setLoading] = useState(true);

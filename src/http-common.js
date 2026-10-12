@@ -38,6 +38,7 @@ const getRetryDelayMs = (attempt) => {
 const instance = axios.create({
   baseURL:
     import.meta.env.REACT_APP_API_URL ||
+    // eslint-disable-next-line no-console
     (console.warn('[TELEPARK] WARN: REACT_APP_API_URL no definida, usando fallback localhost'),
     'http://localhost:8080/api/v1'),
   headers: {
