@@ -1,3 +1,11 @@
+.centerWrapper {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .formContainer {
   margin-top: 3vh;
   margin-bottom: 3vh;
