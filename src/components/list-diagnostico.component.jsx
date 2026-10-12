@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect } from 'react';
+import React, { memo, useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
@@ -29,6 +29,33 @@ const ListaDiagnostico = () => {
   const formNuevo = useForm();
   const formEdit = useForm();
 
+  const getDiagnosticos = useCallback(async () => {
+    if (!idEpElegido) {
+      setDiagnosticos([]);
+      return;
+    }
+
+    let response = await diagnosticoRepository.get(idEpElegido);
+
+    if (response?.success && response?.data) {
+      setDiagnosticos(response.data.results ?? response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response?.error || 'No se pudieron cargar los datos.');
+    }
+  }, [idEpElegido]);
+
+  const getEnfermedad = async () => {
+    let response = await enfermedadRepository.getAll();
+
+    if (response?.success && response?.data) {
+      setEnfermedades(response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response?.error || 'No se pudieron cargar los datos.');
+    }
+  };
+
   useEffect(() => {
     setLoading(true);
     setLoadError(null);
@@ -44,38 +71,11 @@ const ListaDiagnostico = () => {
       setDiagnosticos([]);
       navigate('/list-pacientes', { replace: true });
     }
-  }, [idEpElegido, navigate]);
+  }, [idEpElegido, navigate, getDiagnosticos]);
 
   const recargar = () => {
     setLoadError(null);
     Promise.all([getEnfermedad(), getDiagnosticos()]).catch(() => {});
-  };
-
-  const getEnfermedad = async () => {
-    let response = await enfermedadRepository.getAll();
-
-    if (response?.success && response?.data) {
-      setEnfermedades(response.data);
-      setLoadError(null);
-    } else {
-      setLoadError(response?.error || 'No se pudieron cargar los datos.');
-    }
-  };
-
-  const getDiagnosticos = async () => {
-    if (!idEpElegido) {
-      setDiagnosticos([]);
-      return;
-    }
-
-    let response = await diagnosticoRepository.get(idEpElegido);
-
-    if (response?.success && response?.data) {
-      setDiagnosticos(response.data.results ?? response.data);
-      setLoadError(null);
-    } else {
-      setLoadError(response?.error || 'No se pudieron cargar los datos.');
-    }
   };
 
   const editar = (enfermedad, fecha, iddiagnostico) => {

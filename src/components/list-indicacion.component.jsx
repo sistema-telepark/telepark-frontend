@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
@@ -29,6 +29,30 @@ const ListaIndicacion = () => {
   const formNuevo = useForm();
   const formEdit = useForm();
 
+  const getIndicaciones = useCallback(async () => {
+    if (!idEpElegido) return;
+
+    let response = await indicacionRepository.get(idEpElegido);
+
+    if (response?.success && response?.data) {
+      setIndicaciones(response.data.results ?? response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response?.error || 'No se pudieron cargar las indicaciones.');
+    }
+  }, [idEpElegido]);
+
+  const getMedicamento = async () => {
+    let response = await medicamentoRepository.getAll();
+
+    if (response?.success && response?.data) {
+      setMedicamentos(response.data);
+      setLoadError(null);
+    } else {
+      setLoadError(response?.error || 'No se pudieron cargar los medicamentos.');
+    }
+  };
+
   useEffect(() => {
     setLoading(true);
     setLoadError(null);
@@ -44,35 +68,11 @@ const ListaIndicacion = () => {
       setIndicaciones([]);
       navigate('/list-pacientes', { replace: true });
     }
-  }, [idEpElegido, navigate]);
+  }, [idEpElegido, navigate, getIndicaciones]);
 
   const recargar = () => {
     setLoadError(null);
     Promise.all([getIndicaciones(), getMedicamento()]).catch(() => {});
-  };
-
-  const getIndicaciones = async () => {
-    if (!idEpElegido) return;
-
-    let response = await indicacionRepository.get(idEpElegido);
-
-    if (response?.success && response?.data) {
-      setIndicaciones(response.data.results ?? response.data);
-      setLoadError(null);
-    } else {
-      setLoadError(response?.error || 'No se pudieron cargar las indicaciones.');
-    }
-  };
-
-  const getMedicamento = async () => {
-    let response = await medicamentoRepository.getAll();
-
-    if (response?.success && response?.data) {
-      setMedicamentos(response.data);
-      setLoadError(null);
-    } else {
-      setLoadError(response?.error || 'No se pudieron cargar los medicamentos.');
-    }
   };
 
   const editar = (dosis, estado, fecha, hora, medicamento, id_indicacion) => {
