@@ -42,7 +42,7 @@ const Events = () => {
     let response = await eventRespository.getPersonEp();
     if (response?.success && response?.data) {
       setNamePersonEP(
-        (response.data.results ?? response.data).filter((persona) => persona.borrado !== true)
+        (response.data.results ?? response.data).filter((persona) => persona.activo !== false)
       );
       setLoadError(null);
     } else {
@@ -75,7 +75,6 @@ const Events = () => {
       motivo: events.motivo,
       persona_ep: events.idpersonaep,
       tipo_evento: events.idtipoevento,
-      borrado: false,
     };
 
     eventRespository.createEvent(data).then((response) => {

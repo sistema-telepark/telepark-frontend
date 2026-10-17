@@ -137,9 +137,7 @@ const FichaMedica = () => {
                 </thead>
                 <tbody className={styles.tableBodyMiddle}>
                   {diagnosticos &&
-                    diagnosticos
-                      .filter((diagnostico) => diagnostico.borrado === false)
-                      .map((diagnostico) => (
+                    diagnosticos.map((diagnostico) => (
                         <tr key={diagnostico.id_diagnostico}>
                           <td data-th="Nombre de Enfermedad">{diagnostico.enfermedad.nombre}</td>
                           <td data-th="Fecha de Diagnóstico">
@@ -182,9 +180,7 @@ const FichaMedica = () => {
                 </thead>
                 <tbody className={styles.tableBodyMiddle}>
                   {evoluciones &&
-                    evoluciones
-                      .filter((evolucion) => evolucion.borrado === false)
-                      .map((evolucion) => (
+                    evoluciones.map((evolucion) => (
                         <tr key={evolucion.id_evolucion}>
                           <td data-th="Estado Evolutivo">
                             Estado: {evolucion.escala_evolucion}
@@ -231,9 +227,7 @@ const FichaMedica = () => {
                 </thead>
                 <tbody className={styles.tableBodyMiddle}>
                   {osociales &&
-                    osociales
-                      .filter((osocial) => osocial.borrado === false)
-                      .map((osocial) => (
+                    osociales.map((osocial) => (
                         <tr key={osocial.id_cobertura}>
                           <td data-th="Obra Social">{osocial.obra_social.nombre}</td>
                           <td data-th="Tipo">
@@ -278,9 +272,7 @@ const FichaMedica = () => {
                 </thead>
                 <tbody className={styles.tableBodyMiddle}>
                   {indicaciones &&
-                    indicaciones
-                      .filter((indicacion) => indicacion.borrado === false)
-                      .map((indicacion) => (
+                    indicaciones.map((indicacion) => (
                         <tr key={indicacion.id_indicacion}>
                           <td data-th="Nombre de Medicamento">{indicacion.medicamento.nombre}</td>
                           <td data-th="Dosis en mg">{indicacion.cantidad_miligramos} mg</td>

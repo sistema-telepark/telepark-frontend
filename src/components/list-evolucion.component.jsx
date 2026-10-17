@@ -62,7 +62,6 @@ const ListaEvolucion = () => {
       escala_evolucion: Number(data.nroEvolucion),
       fecha: data.fecha,
       persona_ep: Number(idEpElegido),
-      borrado: false,
     };
     evolucionRepository.update(idEditado, payload).then((response) => {
       if (response?.success) {
@@ -92,7 +91,6 @@ const ListaEvolucion = () => {
       escala_evolucion: Number(data.nroEvolucion),
       fecha: data.fecha,
       persona_ep: Number(idEpElegido),
-      borrado: false,
     };
     evolucionRepository.create(payload).then((response) => {
       if (response?.success) {
@@ -105,13 +103,7 @@ const ListaEvolucion = () => {
   };
 
   const eliminar = (escala_evolucion, fecha, id) => {
-    var data = {
-      escala_evolucion: Number(escala_evolucion),
-      fecha: fecha,
-      persona_ep: Number(idEpElegido),
-      borrado: true,
-    };
-    evolucionRepository.update(id, data).then((response) => {
+    evolucionRepository.delete(id).then((response) => {
       if (response?.success) {
         getEvoluciones();
         showToast('success', 'Eliminado con éxito');
@@ -307,9 +299,7 @@ const ListaEvolucion = () => {
               </thead>
               <tbody className={styles.tableBodyMiddle}>
                 {evoluciones &&
-                  evoluciones
-                    .filter((evolucion) => evolucion.borrado === false)
-                    .map((evolucion) => (
+                  evoluciones.map((evolucion) => (
                       <tr key={evolucion.id_evolucion}>
                         <td data-th="Estado Evolutivo">Estado: {evolucion.escala_evolucion}</td>
                         <td className={styles.descriptionColumn} data-th="Descripción">

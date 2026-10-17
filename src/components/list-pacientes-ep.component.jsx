@@ -163,7 +163,7 @@ const ListaPaciente = (props) => {
                     pacientes
                       .filter(
                         (paciente) =>
-                          paciente.borrado !== true &&
+                          paciente.activo !== false &&
                           (paciente.nombre.toLowerCase().includes(buscar) ||
                             paciente.apellido.toLowerCase().includes(buscar) ||
                             paciente.nombre.toUpperCase().includes(buscar) ||

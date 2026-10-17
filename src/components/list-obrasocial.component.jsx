@@ -96,7 +96,6 @@ const ListaObraSocial = (props) => {
     const payload = {
       persona_ep: Number(idEpElegido),
       obra_social: Number(data.obrasocial),
-      borrado: false,
     };
     const response = await osRepository.create(payload);
     if (response?.success) {
@@ -111,7 +110,6 @@ const ListaObraSocial = (props) => {
     const payload = {
       persona_ep: Number(idEpElegido),
       obra_social: Number(data.obrasocial),
-      borrado: false,
     };
     const response = await osRepository.update(idEditado, payload);
     if (response?.success) {
@@ -123,12 +121,7 @@ const ListaObraSocial = (props) => {
   };
 
   const eliminar = async (info, id) => {
-    const data = {
-      persona_ep: Number(idEpElegido),
-      obra_social: Number(info.obra_social),
-      borrado: true,
-    };
-    const response = await osRepository.update(id, data);
+    const response = await osRepository.delete(id);
     if (response?.success) {
       getOs();
       showToast('success', 'Eliminado con éxito');
@@ -266,9 +259,7 @@ const ListaObraSocial = (props) => {
               </thead>
               <tbody className={styles.tableBodyMiddle}>
                 {osociales &&
-                  osociales
-                    .filter((osocial) => osocial.borrado === false)
-                    .map((osocial) => (
+                  osociales.map((osocial) => (
                       <tr key={osocial.id_cobertura}>
                         <td data-th="Obra Social">{osocial.obra_social.nombre}</td>
                         <td data-th="Tipo">
