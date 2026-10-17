@@ -90,7 +90,6 @@ const ListaDiagnostico = () => {
       fecha: data.fecha,
       persona_ep: Number(idEpElegido),
       enfermedad: Number(data.enfermedad),
-      borrado: false,
     };
     diagnosticoRepository.update(idEditado, payload).then((response) => {
       if (response?.success) {
@@ -120,7 +119,6 @@ const ListaDiagnostico = () => {
       fecha: data.fecha,
       persona_ep: Number(idEpElegido),
       enfermedad: Number(data.enfermedad),
-      borrado: false,
     };
     diagnosticoRepository.create(payload).then((response) => {
       if (response?.success) {
@@ -133,13 +131,7 @@ const ListaDiagnostico = () => {
   };
 
   const eliminar = (idenfermedad, fecha, id) => {
-    var data = {
-      fecha: fecha,
-      persona_ep: Number(idEpElegido),
-      enfermedad: Number(idenfermedad),
-      borrado: true,
-    };
-    diagnosticoRepository.update(id, data).then((response) => {
+    diagnosticoRepository.delete(id).then((response) => {
       if (response?.success) {
         getDiagnosticos();
         showToast('success', 'Eliminado con éxito');
@@ -330,9 +322,7 @@ const ListaDiagnostico = () => {
               </thead>
               <tbody className={styles.tableBodyMiddle}>
                 {diagnosticos &&
-                  diagnosticos
-                    .filter((diagnostico) => diagnostico.borrado === false)
-                    .map((diagnostico) => (
+                  diagnosticos.map((diagnostico) => (
                       <tr key={diagnostico.id_diagnostico}>
                         <td data-th="Nombre de Enfermedad">{diagnostico.enfermedad.nombre}</td>
                         <td data-th="Fecha de Diagnóstico">

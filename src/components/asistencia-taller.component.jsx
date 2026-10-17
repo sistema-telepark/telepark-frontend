@@ -51,7 +51,7 @@ const Asistencia = () => {
     const resp = await pacienteRepository.getPacientesEp();
     if (resp.success) {
       setPacientes(
-        (resp.data.results ?? resp.data).filter((paciente) => paciente.borrado !== true)
+        (resp.data.results ?? resp.data).filter((paciente) => paciente.activo !== false)
       );
       setLoadError(null);
     } else {

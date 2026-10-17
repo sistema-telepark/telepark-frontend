@@ -57,10 +57,7 @@ const TypeEvents = () => {
   };
 
   const deleteTypeEvent = async (data) => {
-    let modifidedEvent = {
-      borrado: true,
-    };
-    return eventRespository.updateTypeEvent(data.id_tipo_evento, modifidedEvent);
+    return eventRespository.deleteTypeEvent(data.id_tipo_evento);
   };
 
   const handleDelete = async (data) => {
@@ -85,7 +82,6 @@ const TypeEvents = () => {
       id_tipo_evento: data.id_tipo_evento,
       nombre: data.nombre,
       desactiva_taller: data.desactiva_taller,
-      borrado: false,
     };
 
     eventRespository.updateTypeEvent(data.id_tipo_evento, payload).then((response) => {
@@ -102,7 +98,6 @@ const TypeEvents = () => {
     const payload = {
       nombre: data.nombre,
       desactiva_taller: data.desactiva_taller,
-      borrado: false,
     };
     eventRespository.createTypeEvent(payload).then((response) => {
       if (response?.success) {
@@ -148,7 +143,6 @@ const TypeEvents = () => {
               </thead>
               <tbody>
                 {typeEvent
-                  .filter((element) => element.borrado === false)
                   .map((element) => (
                     <tr key={element.id_tipo_evento}>
                       <td data-th="Nombre">{element.nombre}</td>

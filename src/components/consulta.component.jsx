@@ -93,7 +93,7 @@ const Consulta = () => {
     const resp = await pacienteRepository.getPacientesEp();
     if (resp.success) {
       setPacientes(
-        (resp.data.results ?? resp.data).filter((paciente) => paciente.borrado !== true)
+        (resp.data.results ?? resp.data).filter((paciente) => paciente.activo !== false)
       );
       setLoadError(null);
     } else {
@@ -159,7 +159,7 @@ const Consulta = () => {
     setLoadError(null);
 
     const asistencias = respAsistencias.data.results;
-    const pacientes = respPacientes.data.results.filter((paciente) => paciente.borrado !== true);
+    const pacientes = respPacientes.data.results.filter((paciente) => paciente.activo !== false);
     const encuentros = respEncuentros.data.results;
 
     // Ordenar encuentros por fecha (del más reciente al más antiguo)

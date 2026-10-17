@@ -36,7 +36,7 @@ const AdminPersonas = () => {
       nombre: data.nombre,
       apellido: data.apellido,
       telefono: data.telefono,
-      borrado: modifidedPerson.borrado,
+      activo: modifidedPerson.activo,
     };
     eventRespository.updatePerson(Number(data.idpersona), modifidedPerson).then((response) => {
       if (response?.success) {
@@ -93,7 +93,7 @@ const AdminPersonas = () => {
       return;
     }
     const arrayPersonas = arrayPerson.filter((e) => e.id_persona !== persona.id_persona);
-    persona.borrado = true;
+    persona.activo = false;
     eventRespository.updatePerson(persona.id_persona, persona).then((response) => {
       if (response?.success) {
         showToast('success', 'Eliminado con éxito');
@@ -105,7 +105,7 @@ const AdminPersonas = () => {
 
   const terminoBusqueda = buscar.trim().toLowerCase();
   const arrayPersonIspaciente = arrayPerson.filter((person) => {
-    if (person.borrado === true) return false;
+    if (person.activo === false) return false;
     if (!terminoBusqueda) return true;
 
     return [person.id_persona, person.nombre, person.apellido, person.telefono]

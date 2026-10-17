@@ -96,7 +96,6 @@ const ListaIndicacion = () => {
       hora_de_toma: data.hora,
       persona_ep: Number(idEpElegido),
       medicamento: Number(data.medicamento),
-      borrado: false,
     };
     indicacionRepository.update(idEditado, payload).then((response) => {
       if (response?.success) {
@@ -129,7 +128,6 @@ const ListaIndicacion = () => {
       hora_de_toma: data.hora,
       persona_ep: Number(idEpElegido),
       medicamento: Number(data.medicamento),
-      borrado: false,
     };
     indicacionRepository.create(payload).then((response) => {
       if (response?.success) {
@@ -149,16 +147,7 @@ const ListaIndicacion = () => {
     medicamento,
     id
   ) => {
-    var data = {
-      cantidad_miligramos: Number(cantidad_miligramos),
-      esta_vigente: esta_vigente === true,
-      fecha_prescripcion: fecha_prescripcion,
-      hora_de_toma: hora_de_toma,
-      persona_ep: Number(idEpElegido),
-      medicamento: Number(medicamento),
-      borrado: true,
-    };
-    indicacionRepository.update(id, data).then((response) => {
+    indicacionRepository.delete(id).then((response) => {
       if (response?.success) {
         getIndicaciones();
         showToast('success', 'Eliminado con éxito');
@@ -472,9 +461,7 @@ const ListaIndicacion = () => {
               </thead>
               <tbody className={styles.tableBodyMiddle}>
                 {indicaciones &&
-                  indicaciones
-                    .filter((indicacion) => indicacion.borrado === false)
-                    .map((indicacion) => (
+                  indicaciones.map((indicacion) => (
                       <tr key={indicacion.id_indicacion}>
                         <td data-th="Nombre de Medicamento">{indicacion.medicamento.nombre}</td>
                         <td data-th="Dosis en mg">{indicacion.cantidad_miligramos} mg</td>
