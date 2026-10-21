@@ -615,7 +615,6 @@ const AdminUsuarios = () => {
             >
               <thead>
                 <tr>
-                  <th scope="col">ID</th>
                   <th scope="col">Usuario</th>
                   <th scope="col">Email</th>
                   <th scope="col">Nombre completo</th>
@@ -628,7 +627,6 @@ const AdminUsuarios = () => {
                 {listaVisible &&
                   listaVisible.map((usuario, _index) => (
                     <tr key={usuario.id ?? usuario.username}>
-                      <td data-th="ID">{usuario.id}</td>
                       <td data-th="Usuario">{usuario.username}</td>
                       <td data-th="Email">{usuario.email}</td>
                       <td data-th="Nombre completo">
