@@ -28,19 +28,33 @@ const formatValidationErrors = (data) => {
   return '';
 };
 
+const CONFLICT_FALLBACK = 'El registro está en uso por otros vínculos.';
+
 export const normalizeError = (error) => {
   if (error.response) {
     const { status, data } = error.response;
-    const rawMessage = data?.message || data?.detail;
-    // Si detail/message es objeto {campo:[msgs]} (400 por campo), aplanarlo con
-    // formatValidationErrors — evita renderizar "[object Object]".
-    const message =
-      rawMessage && typeof rawMessage === 'object'
-        ? formatValidationErrors(rawMessage)
-        : rawMessage || formatValidationErrors(data) || `Error ${status}`;
+    let message;
+
+    if (status === 409) {
+      const detail = data?.detail;
+      message =
+        (typeof detail === 'string' && detail.trim()) ||
+        formatValidationErrors(detail) ||
+        CONFLICT_FALLBACK;
+    } else {
+      const rawMessage = data?.message || data?.detail;
+      // Si detail/message es objeto {campo:[msgs]} (400 por campo), aplanarlo con
+      // formatValidationErrors — evita renderizar "[object Object]".
+      message =
+        rawMessage && typeof rawMessage === 'object'
+          ? formatValidationErrors(rawMessage)
+          : rawMessage || formatValidationErrors(data) || `Error ${status}`;
+    }
+
     return {
       message,
       status,
+      code: data?.code,
       severity: status >= 500 ? 'modal' : 'toast',
     };
   }
@@ -48,6 +62,7 @@ export const normalizeError = (error) => {
     return {
       message: 'Error de conexión. Verifique su red.',
       status: 0,
+      code: error.code,
       severity: 'modal',
     };
   }
@@ -55,6 +70,7 @@ export const normalizeError = (error) => {
   return {
     message: error.message || 'Error inesperado',
     status: 0,
+    code: error.code,
     severity: 'modal',
   };
 };

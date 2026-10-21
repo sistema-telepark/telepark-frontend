@@ -20,6 +20,7 @@ const pacientes = {
       vive_solo: data.viveSoloEP ? true : false,
       ocupacion_previa: data.ocupacionPEP,
       ocupacion_actual: data.ocupacionAEP,
+      activo: true,
       direccion: {
         calle: data.calleEP,
         departamento: data.deptoEdificioEP || null,
@@ -48,7 +49,7 @@ const pacientes = {
   },
 
   async getPacientesEp() {
-    const response = await http.get(`/personas-ep`);
+    const response = await http.get(`/personas-ep`, { params: { activo: true } });
     return response.data;
   },
 };

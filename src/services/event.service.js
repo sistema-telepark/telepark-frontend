@@ -27,11 +27,11 @@ const events = {
     return response.data;
   },
   async getAll() {
-    const response = await http.get(`/personas`);
+    const response = await http.get(`/personas`, { params: { activo: true } });
     return response.data;
   },
   async getPersonEp() {
-    const response = await http.get(`/personas-ep`);
+    const response = await http.get(`/personas-ep`, { params: { activo: true } });
     return response.data;
   },
   async updatePerson(id, data) {

@@ -7,6 +7,7 @@ import { Modal } from 'react-bootstrap';
 import { obrasocialRepository } from '../services/obrasocial.service';
 import { osRepository } from '../services/os.service';
 import { showToast } from '../services/notification.service';
+import { TokenService } from '../services/token.service';
 import utils from '../utils/utils';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
@@ -22,6 +23,7 @@ const ListaObraSocial = (props) => {
   const [loading, setLoading] = useState(true);
   const { idEpElegido, nombreEpElegido } = props;
   const navigate = useNavigate();
+  const isSuperuser = TokenService.getRole() === true;
 
   const [loadError, setLoadError] = useState(null);
 
@@ -145,10 +147,12 @@ const ListaObraSocial = (props) => {
           </h5>
         </div>
         <div className={'col-12 col-md-6 col-lg-6 col-xl-6 ' + styles.textRight}>
-          <button type="button" className="btn btn-azul" onClick={() => agregar()}>
-            <PlusIcon />
-            Agregar
-          </button>
+          {isSuperuser && (
+            <button type="button" className="btn btn-azul" onClick={() => agregar()}>
+              <PlusIcon />
+              Agregar
+            </button>
+          )}
         </div>
       </div>
 
@@ -266,29 +270,33 @@ const ListaObraSocial = (props) => {
                           {utils.convertirTipo(osocial.obra_social.es_estatal)}
                         </td>
                         <td data-th="Acción">
-                        <button
-                          type="button"
-                          className={'btn btn-verde ' + styles.rowActionButton}
-                          onClick={() =>
-                            editar(osocial.obra_social.id_obra_social, osocial.id_cobertura)
-                          }
-                        >
-                          <PencilIcon />
-                        </button>
+                        {isSuperuser && (
+                          <>
+                            <button
+                              type="button"
+                              className={'btn btn-verde ' + styles.rowActionButton}
+                              onClick={() =>
+                                editar(osocial.obra_social.id_obra_social, osocial.id_cobertura)
+                              }
+                            >
+                              <PencilIcon />
+                            </button>
 
-                        <button
-                          type="button"
-                          className="btn btn-rojo"
-                          onClick={() =>
-                            utils.notificacionEliminar(
-                              { obra_social: osocial.obra_social.id_obra_social },
-                              osocial.id_cobertura,
-                              eliminar
-                            )
-                          }
-                        >
-                          <TrashIcon />
-                        </button>
+                            <button
+                              type="button"
+                              className="btn btn-rojo"
+                              onClick={() =>
+                                utils.notificacionEliminar(
+                                  { obra_social: osocial.obra_social.id_obra_social },
+                                  osocial.id_cobertura,
+                                  eliminar
+                                )
+                              }
+                            >
+                              <TrashIcon />
+                            </button>
+                          </>
+                        )}
                       </td>
                     </tr>
                   ))}

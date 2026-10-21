@@ -79,7 +79,6 @@ const TypeEvents = () => {
 
   const edit = (data) => {
     const payload = {
-      id_tipo_evento: data.id_tipo_evento,
       nombre: data.nombre,
       desactiva_taller: data.desactiva_taller,
     };

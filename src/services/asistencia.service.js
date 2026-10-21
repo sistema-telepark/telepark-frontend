@@ -6,7 +6,7 @@ const ASISTENCIA_PATH = '/asistencias-taller';
 const asistencias = {
   async getAsistenciaAll() {
     const response = await http.get(ASISTENCIA_PATH);
-    return response.data;
+    return response.data.results ?? response.data;
   },
   // El componente envía un array; se hace 1 POST por item (el body es UNO
   // AsistenciaTaller). Sin rollback.
@@ -34,10 +34,11 @@ const asistencias = {
     let nextUrl = ASISTENCIA_PATH;
     while (nextUrl) {
       const response = await http.get(nextUrl);
-      const { count, next, results } = response.data;
-      resultados.push(...results);
-      if (resultados.length >= count) break; // guard: cortar al cubrir count
-      nextUrl = next; // URL absoluta del envelope; axios la usa tal cual
+      const data = response.data;
+      const items = Array.isArray(data) ? data : (data.results ?? []);
+      resultados.push(...items);
+      if (Array.isArray(data) || resultados.length >= data.count) break;
+      nextUrl = data.next;
     }
     return resultados.filter((item) => Number(item.encuentro) === Number(idEncuentro));
   },
