@@ -187,6 +187,9 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
                 value: true,
                 message: 'El campo no puede estar vacío',
               },
+              validate: (value) =>
+                (typeof value === 'string' && value.trim() !== '') ||
+                'El campo no puede estar vacío',
             })}
           />
           {errors['calle' + tipo] && (
@@ -207,6 +210,9 @@ const Vivienda = ({ register, errors, watch, tipo, setValue, arrayProvincias }) 
                 value: true,
                 message: 'El campo no puede estar vacío',
               },
+              validate: (value) =>
+                (typeof value === 'string' && value.trim() !== '') ||
+                'El campo no puede estar vacío',
               pattern: {
                 value: /^-?[0-9]\d*\.?\d*$/g,
                 message: 'El campo debe contener solo números',

@@ -66,7 +66,7 @@ const AdminUsuarios = () => {
   const editUser = (user) => {
     setShowNuevo(false);
     setShow(true);
-    setIdUsuario(user.id);
+    setIdUsuario(Number(user.id));
     setUsernameEditado(user.username);
     formEdit.reset({
       username: user.username,
@@ -86,7 +86,7 @@ const AdminUsuarios = () => {
     const usuario = usuarioAEliminar;
     if (!usuario) return;
     setUsuarioAEliminar(null);
-    const resp = await userRepository.deleteUser(usuario.id);
+    const resp = await userRepository.deleteUser(Number(usuario.id));
     if (resp.success) {
       showToast('success', 'Eliminado con éxito');
       setUsuarios((prev) => prev.filter((u) => u.id !== usuario.id));
@@ -106,7 +106,6 @@ const AdminUsuarios = () => {
 
     setGuardando(true);
     const payload = {
-      user: usernameEditado,
       first_name: data.firstname,
       last_name: data.lastname,
       email: data.email,
@@ -186,6 +185,7 @@ const AdminUsuarios = () => {
     const filtrados = usuarios.filter(
       (u) =>
         (u.username || '').toLowerCase().includes(termino) ||
+        (u.email || '').toLowerCase().includes(termino) ||
         (u.first_name || '').toLowerCase().includes(termino) ||
         (u.last_name || '').toLowerCase().includes(termino)
     );
@@ -615,7 +615,9 @@ const AdminUsuarios = () => {
             >
               <thead>
                 <tr>
+                  <th scope="col">ID</th>
                   <th scope="col">Usuario</th>
+                  <th scope="col">Email</th>
                   <th scope="col">Nombre completo</th>
                   <th scope="col">Rol</th>
                   <th scope="col">Estado</th>
@@ -626,7 +628,9 @@ const AdminUsuarios = () => {
                 {listaVisible &&
                   listaVisible.map((usuario, _index) => (
                     <tr key={usuario.id ?? usuario.username}>
+                      <td data-th="ID">{usuario.id}</td>
                       <td data-th="Usuario">{usuario.username}</td>
+                      <td data-th="Email">{usuario.email}</td>
                       <td data-th="Nombre completo">
                         {usuario.first_name} {usuario.last_name}
                       </td>

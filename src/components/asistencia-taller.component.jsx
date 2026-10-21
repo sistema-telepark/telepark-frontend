@@ -82,11 +82,13 @@ const Asistencia = () => {
 
   // Guarda la asistencia del día (lote bulk)
   const guardarAsistencia = async (data) => {
-    const asistenciaData = pacientes.map((paciente) => ({
-      persona_ep: paciente.id_persona,
-      encuentro: Number(data.fechaEncuentro),
-      estado: paciente.checked ? ESTADO_PRESENTE : ESTADO_AUSENTE,
-    }));
+    const asistenciaData = pacientes
+      .map((paciente) => ({
+        persona_ep: paciente.id_persona,
+        encuentro: Number(data.fechaEncuentro),
+        estado: paciente.checked ? ESTADO_PRESENTE : ESTADO_AUSENTE,
+      }))
+      .filter((item) => item.persona_ep != null && Number.isFinite(item.encuentro));
 
     const resp = await asistenciaRepository.createAsistencia(asistenciaData);
     if (resp.success) {
