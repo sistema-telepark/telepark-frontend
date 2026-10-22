@@ -14,6 +14,10 @@ code {
   outline: 2px solid #0b0286;
   outline-offset: 2px;
 }
+
+[data-bs-theme='dark'] :focus-visible {
+  outline-color: #8bb9fe;
+}
 /* 
 background: #00F260;
 background: -webkit-linear-gradient(to right, #0575E6, #00F260);

@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useState, useEffect } from 'react';
+import React, { Suspense, lazy, useState, useEffect, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -12,6 +12,7 @@ import ErrorFallbackRoute from './components/error-boundary/error-fallback-route
 import { logError } from './components/error-boundary/logError';
 import { TokenService } from './services/token.service';
 import { NotificationProvider } from './services/notification.provider';
+import { MoonIcon, SunIcon } from './components/icons/icons-shared';
 
 // Lazy imports con webpackChunkName — se cargan bajo demanda
 const Login = lazy(() => import(/* webpackChunkName: "login" */ './components/login.component'));
@@ -70,10 +71,39 @@ const Familiar = lazy(
   () => import(/* webpackChunkName: "familiar" */ './components/familiar.component')
 );
 
+const THEME_STORAGE_KEY = 'telepark-theme';
+
+const getInitialTheme = () => {
+  try {
+    return localStorage.getItem(THEME_STORAGE_KEY) === 'dark' ? 'dark' : 'light';
+  } catch {
+    return 'light';
+  }
+};
+
+const saveTheme = (theme) => {
+  try {
+    localStorage.setItem(THEME_STORAGE_KEY, theme);
+  } catch {
+    // localStorage puede estar bloqueado; el tema sigue aplicado en memoria.
+  }
+};
+
 function AppContent({ token, userName, userRole, setToken, setUserName, setUserRole }) {
   const location = useLocation();
   const [retryKey, setRetryKey] = useState(0);
+  const [theme, setTheme] = useState(getInitialTheme);
   const mostrarFooter = token && location.pathname !== '/home';
+
+  useLayoutEffect(() => {
+    document.documentElement.dataset.bsTheme = theme;
+  }, [theme]);
+
+  const toggleTheme = () => {
+    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(nextTheme);
+    saveTheme(nextTheme);
+  };
 
   useEffect(() => {
     const handleAuthChange = () => {
@@ -100,12 +130,20 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
     <>
       {token ? (
         <span>
-          <nav className="navbar navbar-expand navbar-light bg-light">
+          <nav className="navbar navbar-expand bg-body-tertiary">
             <div className="container-fluid">
               <span className="navbar-text ms-auto text-truncate navbar-username">
                 <b>Bienvenido: </b>
                 {userName}
               </span>
+              <button
+                type="button"
+                className="theme-toggle ms-2 flex-shrink-0"
+                aria-label={theme === 'dark' ? 'Activar modo claro' : 'Activar modo oscuro'}
+                onClick={toggleTheme}
+              >
+                {theme === 'dark' ? <SunIcon size={18} /> : <MoonIcon size={18} />}
+              </button>
             </div>
           </nav>
 
