@@ -1,5 +1,6 @@
 .editButton {
   margin-right: 10px;
+  color: #11101d;
   box-shadow: 3px 3px #13e000;
   background-image: linear-gradient(
     to right,
@@ -20,6 +21,7 @@
 
 .deleteButton {
   margin-right: 10px;
+  color: #11101d;
   box-shadow: 3px 3px #d80000;
   background-image: linear-gradient(
     to right,
@@ -40,6 +42,7 @@
 
 .manageButton {
   margin-right: 10px;
+  color: #11101d;
   box-shadow: 3px 3px #0059cd;
   background-image: linear-gradient(
     to right,
@@ -58,6 +61,15 @@
   );
 }
 
+.editButton,
+.deleteButton,
+.manageButton {
+  --bs-btn-color: #11101d;
+  --bs-btn-hover-color: #11101d;
+  --bs-btn-active-color: #11101d;
+  --bs-btn-disabled-color: #11101d;
+}
+
 .scrollContainer {
   position: relative;
   max-height: 350px;
@@ -67,5 +79,5 @@
 
 .groupHeader {
   font-weight: bold;
-  background-color: #f2f2f2;
+  background-color: var(--bs-tertiary-bg);
 }

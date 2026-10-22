@@ -13,6 +13,25 @@
   flex-direction: column;
 }
 
+[data-bs-theme='dark'] {
+  color-scheme: dark;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  color: var(--bs-body-color);
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -25,35 +44,59 @@
 .btn-verde {
   box-shadow: 3px 3px #0d8602;
   background-image: linear-gradient(to right, #44f334, #12c70c, #28c209);
-  color: white;
+  --bs-btn-color: #000;
+  --bs-btn-hover-color: #000;
+  --bs-btn-active-color: #000;
+  --bs-btn-disabled-color: #000;
+  color: #000;
 }
 
 .btn-rojo {
   box-shadow: 3px 3px #860202;
   background-image: linear-gradient(to right, #f73838, #c70c0c, #c20909);
-  color: white;
+  --bs-btn-color: #fff;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-active-color: #fff;
+  --bs-btn-disabled-color: #fff;
+  color: #fff;
 }
 
 .btn-rojo-simple {
   background-image: linear-gradient(to right, #f73838, #c70c0c, #c20909);
-  color: white;
+  --bs-btn-color: #fff;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-active-color: #fff;
+  --bs-btn-disabled-color: #fff;
+  color: #fff;
 }
 
 .btn-azul {
   box-shadow: 3px 3px #0b0286;
   background-image: linear-gradient(to right, #383bf7, #1f0cc7, #2509c2);
-  color: white;
+  --bs-btn-color: #fff;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-active-color: #fff;
+  --bs-btn-disabled-color: #fff;
+  color: #fff;
 }
 
 .btn-azul-simple {
   background-image: linear-gradient(to right, #383bf7, #1f0cc7, #2509c2);
-  color: white;
+  --bs-btn-color: #fff;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-active-color: #fff;
+  --bs-btn-disabled-color: #fff;
+  color: #fff;
 }
 
 .btn-celeste {
   box-shadow: 3px 3px #024686;
   background-image: linear-gradient(to right, #387bf7, #0c6dc7, #096fc2);
-  color: white;
+  --bs-btn-color: #000;
+  --bs-btn-hover-color: #000;
+  --bs-btn-active-color: #000;
+  --bs-btn-disabled-color: #000;
+  color: #000;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -104,6 +147,10 @@
   padding: 2.5rem 2rem;
 }
 
+[data-bs-theme='dark'] .panel-gris {
+  background: var(--bs-secondary-bg);
+}
+
 .logo {
   width: 150px;
   height: auto;
@@ -117,17 +164,12 @@ footer {
   font-style: italic;
   align-items: center;
   justify-content: center;
-  background: #c9d6ff; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to left, #e1e1e3, #ffffff); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to left,
-    #e1e1e3,
-    #ffffff
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  color: var(--bs-body-color);
+  background-color: var(--bs-tertiary-bg);
 }
 
 table {
-  background-color: white;
+  background-color: var(--bs-body-bg);
   border-radius: 12px;
   border: rgba(255, 255, 255, 0) !important;
 }
@@ -156,6 +198,42 @@ table td {
   outline-offset: 2px;
 }
 
+[data-bs-theme='dark'] :focus-visible {
+  outline-color: #8bb9fe;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  color: var(--bs-body-color);
+  background-color: transparent;
+  border: 1px solid var(--bs-secondary-color);
+  border-radius: 50%;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.theme-toggle:hover {
+  background-color: var(--bs-secondary-bg);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.theme-toggle-floating {
+  position: fixed;
+  top: max(1rem, env(safe-area-inset-top));
+  right: max(1rem, env(safe-area-inset-right));
+  z-index: 1030;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -175,7 +253,7 @@ table td {
     display: none;
   }
   tr td:first-child {
-    background: #f0f0f0;
+    background: var(--bs-secondary-bg);
     font-weight: bold;
     font-size: 1.3em;
   }
@@ -192,14 +270,14 @@ table td {
 
 .form-control,
 .form-select {
-  border-color: white;
+  border-color: var(--bs-border-color);
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
 
 .field-error {
   font-size: 12px;
   margin-bottom: 0;
-  color: red;
+  color: var(--bs-danger-text-emphasis);
   font-weight: bold;
 }
 

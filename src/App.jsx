@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useState, useEffect } from 'react';
+import React, { Suspense, lazy, useState, useEffect, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -12,6 +12,8 @@ import ErrorFallbackRoute from './components/error-boundary/error-fallback-route
 import { logError } from './components/error-boundary/logError';
 import { TokenService } from './services/token.service';
 import { NotificationProvider } from './services/notification.provider';
+import ThemeToggle from './components/shared/theme-toggle';
+import { getInitialTheme, saveTheme } from './utils/theme';
 
 // Lazy imports con webpackChunkName — se cargan bajo demanda
 const Login = lazy(() => import(/* webpackChunkName: "login" */ './components/login.component'));
@@ -73,7 +75,18 @@ const Familiar = lazy(
 function AppContent({ token, userName, userRole, setToken, setUserName, setUserRole }) {
   const location = useLocation();
   const [retryKey, setRetryKey] = useState(0);
+  const [theme, setTheme] = useState(getInitialTheme);
   const mostrarFooter = token && location.pathname !== '/home';
+
+  useLayoutEffect(() => {
+    document.documentElement.dataset.bsTheme = theme;
+  }, [theme]);
+
+  const toggleTheme = () => {
+    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(nextTheme);
+    saveTheme(nextTheme);
+  };
 
   useEffect(() => {
     const handleAuthChange = () => {
@@ -100,19 +113,22 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
     <>
       {token ? (
         <span>
-          <nav className="navbar navbar-expand navbar-light bg-light">
+          <nav className="navbar navbar-expand bg-body-tertiary">
             <div className="container-fluid">
               <span className="navbar-text ms-auto text-truncate navbar-username">
                 <b>Bienvenido: </b>
                 {userName}
               </span>
+              <ThemeToggle theme={theme} onToggle={toggleTheme} className="ms-2 flex-shrink-0" />
             </div>
           </nav>
 
           <Sidebar />
         </span>
       ) : (
-        ''
+        <div className="theme-toggle-floating">
+          <ThemeToggle theme={theme} onToggle={toggleTheme} />
+        </div>
       )}
       <div className="container">
         <div className="row justify-content-center">

@@ -153,12 +153,9 @@ const Asistencia = () => {
       <hr />
       <div className="col-12 col-md-3">
         <Form.Group className="mb-0">
-          <label htmlFor="fechaEncuentro" className="control-label">
-            Encuentro:
-          </label>
           <select
             className="form-select"
-            placeholder="Elija el encuentro"
+            placeholder="Seleccione el encuentro"
             id="fechaEncuentro"
             {...fechaRegister}
             onChange={(e) => {
@@ -166,7 +163,7 @@ const Asistencia = () => {
               handleEncuentroChange(e);
             }}
           >
-            <option value="">Elija el encuentro</option>
+            <option value="">Seleccione el encuentro</option>
             {encuentro.map((element) => (
               <option key={element.id_encuentro} value={element.id_encuentro}>
                 {utils.convertirFormatoFecha(element.fecha)}

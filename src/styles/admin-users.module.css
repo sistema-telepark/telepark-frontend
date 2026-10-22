@@ -21,7 +21,7 @@
 }
 
 .required {
-  color: red;
+  color: var(--bs-danger-text-emphasis);
 }
 
 .submitButton {
