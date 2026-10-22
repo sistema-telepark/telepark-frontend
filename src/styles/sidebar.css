@@ -6,16 +6,24 @@
 }
 
 .sidebar {
+  --sidebar-bg: #11101d;
+  --sidebar-active-fg: #11101d;
   position: fixed;
   left: 1vh;
   top: 1vh;
   bottom: 1vh;
   width: 50px;
   border-radius: 12px;
-  background: #11101d;
+  background: var(--sidebar-bg);
   z-index: 99;
   transition: all 0.5s ease;
   text-align: center;
+}
+
+[data-bs-theme='dark'] .sidebar {
+  --sidebar-bg: #17171a;
+  --sidebar-active-fg: #17171a;
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .open {
@@ -118,7 +126,7 @@
   height: 44px;
   padding: 0;
   border: 0;
-  background: linear-gradient(to bottom, transparent, #11101d 75%);
+  background: linear-gradient(to bottom, transparent, var(--sidebar-bg) 75%);
   cursor: pointer;
   pointer-events: auto;
 }
@@ -158,7 +166,7 @@
 .sidebar li.active a .links_name,
 .sidebar li.active a svg {
   transition: all 0.5s ease;
-  color: #11101d;
+  color: var(--sidebar-active-fg);
 }
 
 .sidebar li .tooltip {
@@ -219,7 +227,7 @@
 .sidebar li a:hover .links_name,
 .sidebar li a:hover svg {
   transition: all 0.5s ease;
-  color: #11101d;
+  color: var(--sidebar-active-fg);
 }
 
 .sidebar li .submenu {

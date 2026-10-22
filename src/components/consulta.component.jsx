@@ -222,20 +222,18 @@ const Consulta = () => {
       <Container className="container panel-gris">
         <h2 className="mt-4 text-center">Consultas</h2>
         <hr />
-
-        <div
-          className={`row m-md-3 mx-auto justify-content-center rounded container-lg ${styles.whiteCard}`}
-        >
-          <div className="col-12 col-md-6">
+        
+        <div className="col-12 col-md-3">
             <Form.Group className="mb-0">
               <select
                 className="form-select"
+                placeholder="Seleccione el encuentro"
                 name="fechaEncuentro"
                 id="fechaEncuentro"
                 value={form.fechaEncuentro}
                 onChange={handleChange}
               >
-                <option value="">Elija el encuentro</option>
+                <option value="">Seleccione el encuentro</option>
                 {encuentro.map((element) => (
                   <option key={element.id_encuentro} value={element.id_encuentro}>
                     {utils.convertirFormatoFecha(element.fecha)}
@@ -245,6 +243,10 @@ const Consulta = () => {
               {errores.fecha && <small className="text-danger">{errores.fecha}</small>}
             </Form.Group>
           </div>
+
+        <div
+          className={`d-flex m-md-3 justify-content-center rounded ${styles.whiteCard}`}
+        >
 
           <div className={`mb-4 col-12 col-md-8 p-4 rounded shadow-sm ${styles.sectionCard}`}>
             <div className="d-flex justify-content-between align-items-center mb-3">
@@ -297,7 +299,7 @@ const Consulta = () => {
         </div>
 
         <div
-          className={`row m-md-3 mx-auto justify-content-center rounded container-lg ${styles.whiteCard}`}
+          className={`d-flex m-md-3 justify-content-center rounded ${styles.whiteCard}`}
         >
           <div className={`mb-4 col-12 col-md-8 p-4 rounded shadow-sm ${styles.sectionCard}`}>
             <div className="d-flex justify-content-between align-items-center mb-3">
