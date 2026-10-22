@@ -6,6 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta name="description" content="Telepark — Sistema de gestión de salud y talleres" />
+    <script>
+      (function () {
+        var theme;
+        try {
+          theme = localStorage.getItem('telepark-theme');
+        } catch (e) {
+          theme = null;
+        }
+        if (theme !== 'dark' && theme !== 'light') {
+          theme =
+            window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light';
+        }
+        document.documentElement.setAttribute('data-bs-theme', theme);
+      })();
+    </script>
     <link rel="apple-touch-icon" href="/logo192.png" />
     <link rel="manifest" href="/manifest.json" />
     <title>Telepark</title>

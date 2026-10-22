@@ -227,6 +227,13 @@ table td {
   outline-offset: 2px;
 }
 
+.theme-toggle-floating {
+  position: fixed;
+  top: max(1rem, env(safe-area-inset-top));
+  right: max(1rem, env(safe-area-inset-right));
+  z-index: 1030;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

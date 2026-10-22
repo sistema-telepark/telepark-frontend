@@ -12,7 +12,8 @@ import ErrorFallbackRoute from './components/error-boundary/error-fallback-route
 import { logError } from './components/error-boundary/logError';
 import { TokenService } from './services/token.service';
 import { NotificationProvider } from './services/notification.provider';
-import { MoonIcon, SunIcon } from './components/icons/icons-shared';
+import ThemeToggle from './components/shared/theme-toggle';
+import { getInitialTheme, saveTheme } from './utils/theme';
 
 // Lazy imports con webpackChunkName — se cargan bajo demanda
 const Login = lazy(() => import(/* webpackChunkName: "login" */ './components/login.component'));
@@ -71,24 +72,6 @@ const Familiar = lazy(
   () => import(/* webpackChunkName: "familiar" */ './components/familiar.component')
 );
 
-const THEME_STORAGE_KEY = 'telepark-theme';
-
-const getInitialTheme = () => {
-  try {
-    return localStorage.getItem(THEME_STORAGE_KEY) === 'dark' ? 'dark' : 'light';
-  } catch {
-    return 'light';
-  }
-};
-
-const saveTheme = (theme) => {
-  try {
-    localStorage.setItem(THEME_STORAGE_KEY, theme);
-  } catch {
-    // localStorage puede estar bloqueado; el tema sigue aplicado en memoria.
-  }
-};
-
 function AppContent({ token, userName, userRole, setToken, setUserName, setUserRole }) {
   const location = useLocation();
   const [retryKey, setRetryKey] = useState(0);
@@ -136,21 +119,16 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                 <b>Bienvenido: </b>
                 {userName}
               </span>
-              <button
-                type="button"
-                className="theme-toggle ms-2 flex-shrink-0"
-                aria-label={theme === 'dark' ? 'Activar modo claro' : 'Activar modo oscuro'}
-                onClick={toggleTheme}
-              >
-                {theme === 'dark' ? <SunIcon size={18} /> : <MoonIcon size={18} />}
-              </button>
+              <ThemeToggle theme={theme} onToggle={toggleTheme} className="ms-2 flex-shrink-0" />
             </div>
           </nav>
 
           <Sidebar />
         </span>
       ) : (
-        ''
+        <div className="theme-toggle-floating">
+          <ThemeToggle theme={theme} onToggle={toggleTheme} />
+        </div>
       )}
       <div className="container">
         <div className="row justify-content-center">
