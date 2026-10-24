@@ -33,7 +33,7 @@ const ErrorFallbackGlobal = ({ error }) => {
           </div>
         )}
 
-        <button className="btn btn-primary btn-lg" onClick={() => window.location.reload()}>
+        <button className="btn btn-azul btn-lg" onClick={() => window.location.reload()}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"

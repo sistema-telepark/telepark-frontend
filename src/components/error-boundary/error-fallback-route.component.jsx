@@ -34,7 +34,7 @@ const ErrorFallbackRoute = ({ error, resetErrorBoundary, componentName }) => {
             </div>
           )}
 
-          <button className="btn btn-outline-warning" onClick={resetErrorBoundary}>
+          <button className="btn btn-naranja" onClick={resetErrorBoundary}>
             <ReloadIcon className="me-1" />
             Reintentar
           </button>

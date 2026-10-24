@@ -212,7 +212,7 @@ const Talleres = () => {
                     <td data-th="Acción">
                     <button
                       type="button"
-                      className={`btn ${styles.editButton}`}
+                      className="btn btn-verde me-2"
                       title="Editar"
                       onClick={() => showModalEdit(element)}
                     >
@@ -221,7 +221,7 @@ const Talleres = () => {
 
                     <button
                       type="button"
-                      className={`btn ${styles.deleteButton}`}
+                      className="btn btn-rojo me-2"
                       title="Borrar"
                       onClick={() => deleteT(element)}
                     >
@@ -230,7 +230,7 @@ const Talleres = () => {
 
                     <button
                       type="button"
-                      className={`btn ${styles.manageButton}`}
+                      className="btn btn-azul me-2"
                       title="Gestionar actividades"
                       onClick={() => showModalInsertAct(element)}
                     >

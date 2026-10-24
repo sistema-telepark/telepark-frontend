@@ -283,7 +283,7 @@ const Encuentro = () => {
                     <td data-th="Acción">
                     <button
                       type="button"
-                      className={`btn ${styles.editButton}`}
+                      className="btn btn-verde me-2"
                       title="Editar"
                       onClick={() => showModalEdit(element)}
                     >
@@ -292,7 +292,7 @@ const Encuentro = () => {
 
                     <button
                       type="button"
-                      className={`btn ${styles.deleteButton}`}
+                      className="btn btn-rojo me-2"
                       title="Borrar"
                       onClick={() => eliminarEncuentro(element)}
                     >
@@ -301,7 +301,7 @@ const Encuentro = () => {
 
                     <button
                       type="button"
-                      className={`btn ${styles.manageButton}`}
+                      className="btn btn-azul me-2"
                       title="Agregar actividades"
                       onClick={() => showModalInsertAct(element)}
                     >

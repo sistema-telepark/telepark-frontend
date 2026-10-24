@@ -242,7 +242,7 @@ const Nomenclador = () => {
                 <span>
                   <button
                     type="button"
-                    className="btn btn-azul-simple"
+                    className="btn btn-azul"
                     onClick={() => guardar('enfermedad')}
                     aria-label="Guardar enfermedad"
                   >
@@ -250,7 +250,7 @@ const Nomenclador = () => {
                   </button>
                   <button
                     type="button"
-                    className="btn btn-rojo-simple"
+                    className="btn btn-rojo"
                     onClick={() => cancelar()}
                     aria-label="Cancelar"
                   >
@@ -350,7 +350,7 @@ const Nomenclador = () => {
                 <span>
                   <button
                     type="button"
-                    className="btn btn-azul-simple"
+                    className="btn btn-azul"
                     onClick={() => guardar('medicamento')}
                     aria-label="Guardar medicamento"
                   >
@@ -358,7 +358,7 @@ const Nomenclador = () => {
                   </button>
                   <button
                     type="button"
-                    className="btn btn-rojo-simple"
+                    className="btn btn-rojo"
                     onClick={() => cancelar()}
                     aria-label="Cancelar"
                   >
@@ -458,7 +458,7 @@ const Nomenclador = () => {
                 <span>
                   <button
                     type="button"
-                    className="btn btn-azul-simple"
+                    className="btn btn-azul"
                     onClick={() => guardar('obrasocial')}
                     aria-label="Guardar obra social"
                   >
@@ -466,7 +466,7 @@ const Nomenclador = () => {
                   </button>
                   <button
                     type="button"
-                    className="btn btn-rojo-simple"
+                    className="btn btn-rojo"
                     onClick={() => cancelar()}
                     aria-label="Cancelar"
                   >

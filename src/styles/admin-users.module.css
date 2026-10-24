@@ -24,12 +24,6 @@
   color: var(--bs-danger-text-emphasis);
 }
 
-.submitButton {
-  width: auto;
-  min-width: 120px;
-  padding: 8px 20px;
-}
-
 .cancelButton {
   width: auto;
   min-width: 120px;

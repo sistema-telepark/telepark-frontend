@@ -141,7 +141,8 @@ const Login = () => {
 
                   <button
                     type="submit"
-                    className={'btn btn-azul ' + styles.submitButton}
+                    className="btn btn-azul"
+                    style={{ marginTop: '5vh' }}
                     disabled={loading}
                   >
                     {loading ? 'Ingresando...' : 'Iniciar Sesión'}
