@@ -18,6 +18,8 @@ const Asistencia = () => {
   const [encuentro, setEncuentro] = useState([]);
   const [pacientes, setPacientes] = useState([]);
   const [evento, setEvento] = useState([]);
+  const [asistencias, setAsistencias] = useState([]);
+  const [selectedEncuentroId, setSelectedEncuentroId] = useState(null);
 
   const [loadError, setLoadError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -70,7 +72,9 @@ const Asistencia = () => {
   };
 
   const clear = () => {
-    formAsistencia.reset();
+    formAsistencia.reset({ fechaEncuentro: '' });
+    setSelectedEncuentroId(null);
+    setAsistencias([]);
     setPacientes(
       pacientes.map((persona) => ({
         ...persona,
@@ -80,38 +84,71 @@ const Asistencia = () => {
     );
   };
 
-  // Guarda la asistencia del día (lote bulk)
+  // Guarda la asistencia del día: actualiza los registros existentes y crea los faltantes
   const guardarAsistencia = async (data) => {
-    const asistenciaData = pacientes
-      .map((paciente) => ({
-        persona_ep: paciente.id_persona,
-        encuentro: Number(data.fechaEncuentro),
-        estado: paciente.checked ? ESTADO_PRESENTE : ESTADO_AUSENTE,
-      }))
+    const encuentroId = Number(data.fechaEncuentro);
+
+    const items = pacientes
+      .map((paciente) => {
+        const asistenciaPersistida = asistencias.find(
+          (item) => Number(item.persona_ep) === Number(paciente.id_persona)
+        );
+
+        return {
+          id_asistencia_taller: asistenciaPersistida?.id_asistencia_taller,
+          persona_ep: paciente.id_persona,
+          encuentro: encuentroId,
+          estado: paciente.checked ? ESTADO_PRESENTE : ESTADO_AUSENTE,
+        };
+      })
       .filter((item) => item.persona_ep != null && Number.isFinite(item.encuentro));
 
-    const resp = await asistenciaRepository.createAsistencia(asistenciaData);
-    if (resp.success) {
-      showToast('success', 'Se ha guardado con éxito');
-      formAsistencia.reset();
-      setPacientes(
-        pacientes.map((persona) => ({
-          ...persona,
-          checked: false,
-          justificado: false,
-        }))
-      );
+    if (items.length === 0) return;
+
+    const guardadas = [];
+    for (const { id_asistencia_taller, ...item } of items) {
+      const resp = id_asistencia_taller
+        ? await asistenciaRepository.updateAsistencia(id_asistencia_taller, item)
+        : await asistenciaRepository.createAsistencia(item);
+      if (!resp.success) return;
+      guardadas.push(resp.data);
     }
+
+    showToast('success', 'Se ha guardado con éxito');
+    setAsistencias((previas) => {
+      const conciliadas = [...previas];
+      guardadas.forEach((guardada) => {
+        const index = conciliadas.findIndex(
+          (item) => Number(item.persona_ep) === Number(guardada.persona_ep)
+        );
+        if (index >= 0) conciliadas[index] = guardada;
+        else conciliadas.push(guardada);
+      });
+      return conciliadas;
+    });
   };
 
-  // Al seleccionar un encuentro, marca los pacientes cuyo evento cae en el rango de fechas
-  const handleEncuentroChange = (e) => {
-    const selectedEncuentroId = Number(e.target.value);
+  // Al seleccionar un encuentro, carga sus asistencias y marca los pacientes cuyo evento cae en el rango de fechas
+  const handleEncuentroChange = async (e) => {
+    if (e.target.value === '') {
+      setSelectedEncuentroId(null);
+      setAsistencias([]);
+      return;
+    }
+
+    const encuentroId = Number(e.target.value);
     const encuentroSeleccionado = encuentro.find(
-      (enc) => Number(enc.id_encuentro) === selectedEncuentroId
+      (enc) => Number(enc.id_encuentro) === encuentroId
     );
 
     if (encuentroSeleccionado) {
+      const resp = await asistenciaRepository.getAsistenciaByEncuentro(encuentroId);
+      if (!resp.success) return;
+
+      const asistenciasPersistidas = resp.data;
+      setAsistencias(asistenciasPersistidas);
+      setSelectedEncuentroId(encuentroId);
+
       const fechaEncuentro = new Date(encuentroSeleccionado.fecha);
 
       const updatedPacientes = pacientes.map((persona) => {
@@ -125,8 +162,13 @@ const Asistencia = () => {
           return fechaEncuentro >= fechaDesde && fechaEncuentro <= fechaHasta;
         });
 
+        const asistenciaPersistida = asistenciasPersistidas.find(
+          (item) => Number(item.persona_ep) === Number(persona.id_persona)
+        );
+
         return {
           ...persona,
+          checked: asistenciaPersistida ? asistenciaPersistida.estado === ESTADO_PRESENTE : false,
           justificado: isDateInRange,
         };
       });
@@ -146,6 +188,8 @@ const Asistencia = () => {
   const fechaRegister = formAsistencia.register('fechaEncuentro', {
     required: 'Debe elegir un encuentro.',
   });
+
+  const pacientesVisibles = selectedEncuentroId === null ? [] : pacientes;
 
   return (
     <Container className="container panel-gris">
@@ -188,7 +232,7 @@ const Asistencia = () => {
               </tr>
             </thead>
             <tbody>
-              {pacientes.map((element) => (
+              {pacientesVisibles.map((element) => (
                 <tr key={element.id_persona}>
                   <td data-th="Persona con EP">{`${element.nombre} ${element.apellido}`}</td>
                   <td data-th="Asistencia">
