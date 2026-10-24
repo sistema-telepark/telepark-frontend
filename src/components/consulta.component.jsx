@@ -254,14 +254,14 @@ const Consulta = () => {
               <div className="d-flex">
                 <button
                   type="button"
-                  className={`btn btn-verde ${styles.actionButton}`}
+                  className="btn btn-verde"
                   onClick={() => consultarAsistencia()}
                 >
                   Consultar
                 </button>
                 <button
                   type="button"
-                  className={`btn btn-celeste ms-3 ${styles.actionButton}`}
+                  className="btn btn-celeste ms-3"
                   onClick={() => limpiarAsistencia()}
                 >
                   Limpiar
@@ -309,14 +309,14 @@ const Consulta = () => {
               <div className="d-flex">
                 <button
                   type="button"
-                  className={`btn btn-verde ${styles.actionButton}`}
+                  className="btn btn-verde"
                   onClick={() => consultarFaltasC()}
                 >
                   Consultar
                 </button>
                 <button
                   type="button"
-                  className={`btn btn-celeste ms-3 ${styles.actionButton}`}
+                  className="btn btn-celeste ms-3"
                   onClick={() => limpiarFaltasC()}
                 >
                   Limpiar

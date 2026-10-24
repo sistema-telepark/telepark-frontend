@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import '../styles/list-pacientes-ep.css';
 import { userRepository } from '../services/users.service';
 import { TokenService } from '../services/token.service';
 import utils from '../utils/utils';
@@ -398,7 +397,8 @@ const AdminUsuarios = () => {
           </button>
           <button
             type="submit"
-            className={'btn btn-verde ms-3 ' + styles.submitButton}
+            className="btn btn-verde ms-3"
+            style={{ minWidth: 120, padding: '8px 20px' }}
             onClick={() => formNuevo.handleSubmit(guardarNuevo)()}
             disabled={guardando}
           >
@@ -565,7 +565,8 @@ const AdminUsuarios = () => {
           </button>
           <button
             type="submit"
-            className={'btn btn-verde ms-3 ' + styles.submitButton}
+            className="btn btn-verde ms-3"
+            style={{ minWidth: 120, padding: '8px 20px' }}
             onClick={() => formEdit.handleSubmit(guardar)()}
             disabled={guardando}
           >
@@ -597,7 +598,8 @@ const AdminUsuarios = () => {
           </button>
           <button
             type="button"
-            className={'btn btn-verde ms-3 ' + styles.submitButton}
+            className="btn btn-verde ms-3"
+            style={{ minWidth: 120, padding: '8px 20px' }}
             onClick={confirmarEliminacion}
           >
             Sí

@@ -3,7 +3,6 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { cambiarID } from '../actions/global';
 import { pacienteRepository } from '../services/paciente.service';
-import '../styles/list-pacientes-ep.css';
 import { Form, Modal } from 'react-bootstrap';
 import utils from '../utils/utils';
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
@@ -184,7 +183,7 @@ const ListaPaciente = (props) => {
                             <button
                               type="button"
                               title="Ver Ficha Médica"
-                              className={'btn ' + styles.actionButtonVerde}
+                              className="btn btn-verde me-2"
                             >
                               <EyeIcon />
                             </button>
@@ -199,7 +198,7 @@ const ListaPaciente = (props) => {
                             <button
                               type="button"
                               title="Ver Diagnósticos"
-                              className={'btn ' + styles.actionButtonNaranja}
+                              className="btn btn-naranja me-2"
                             >
                               <ClipboardCheckIcon />
                             </button>
@@ -214,7 +213,7 @@ const ListaPaciente = (props) => {
                             <button
                               type="button"
                               title="Ver Evolución"
-                              className={'btn ' + styles.actionButtonRojo}
+                              className="btn btn-rojo me-2"
                             >
                               <ClipboardDataIcon />
                             </button>
@@ -229,7 +228,7 @@ const ListaPaciente = (props) => {
                             <button
                               type="button"
                               title="Ver Obra Social"
-                              className={'btn ' + styles.actionButtonVioleta}
+                              className="btn btn-violeta me-2"
                             >
                               <JournalPlusIcon />
                             </button>
@@ -244,7 +243,7 @@ const ListaPaciente = (props) => {
                             <button
                               type="button"
                               title="Ver Indicaciones Médicas"
-                              className={'btn ' + styles.actionButtonAzul}
+                              className="btn btn-azul me-2"
                             >
                               <JournalTextIcon />
                             </button>

@@ -133,19 +133,19 @@ const Actividad = () => {
               <span>
                 <button
                   type="button"
-                  className="btn btn-azul-simple"
+                  className="btn btn-azul"
                   onClick={() => formActividad.handleSubmit(onSubmit)()}
                 >
                   <CheckIcon />
                 </button>
-                <button type="button" className="btn btn-rojo-simple" onClick={() => cancelar()}>
+                <button type="button" className="btn btn-rojo" onClick={() => cancelar()}>
                   <CloseIcon />
                 </button>
               </span>
             ) : (
               <button
                 type="button"
-                className="btn btn-azul-simple"
+                className="btn btn-azul"
                 onClick={() => formActividad.handleSubmit(onSubmit)()}
               >
                 <PlusIcon />

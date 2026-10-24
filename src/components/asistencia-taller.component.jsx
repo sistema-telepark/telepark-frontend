@@ -220,7 +220,8 @@ const Asistencia = () => {
         <div className={`mb-4 col-12 col-md-6 col-lg-4 col-xl-4 ${styles.buttonContainer}`}>
           <button
             type="button"
-            className={`btn btn-rojo ${styles.actionButton}`}
+            className="btn btn-rojo"
+            style={{ width: '40%' }}
             onClick={() => clear()}
           >
             Cancelar

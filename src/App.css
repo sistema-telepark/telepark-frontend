@@ -41,6 +41,10 @@ h6,
   margin-left: 15px;
 }
 
+.btn:hover {
+  opacity: 0.7;
+}
+
 .btn-verde {
   box-shadow: 3px 3px #0d8602;
   background-image: linear-gradient(to right, #44f334, #12c70c, #28c209);
@@ -61,26 +65,8 @@ h6,
   color: #fff;
 }
 
-.btn-rojo-simple {
-  background-image: linear-gradient(to right, #f73838, #c70c0c, #c20909);
-  --bs-btn-color: #fff;
-  --bs-btn-hover-color: #fff;
-  --bs-btn-active-color: #fff;
-  --bs-btn-disabled-color: #fff;
-  color: #fff;
-}
-
 .btn-azul {
   box-shadow: 3px 3px #0b0286;
-  background-image: linear-gradient(to right, #383bf7, #1f0cc7, #2509c2);
-  --bs-btn-color: #fff;
-  --bs-btn-hover-color: #fff;
-  --bs-btn-active-color: #fff;
-  --bs-btn-disabled-color: #fff;
-  color: #fff;
-}
-
-.btn-azul-simple {
   background-image: linear-gradient(to right, #383bf7, #1f0cc7, #2509c2);
   --bs-btn-color: #fff;
   --bs-btn-hover-color: #fff;
@@ -97,6 +83,36 @@ h6,
   --bs-btn-active-color: #000;
   --bs-btn-disabled-color: #000;
   color: #000;
+}
+
+.btn-naranja {
+  box-shadow: 3px 3px #ff9b00;
+  background-image: linear-gradient(to right, #ffcf46, #ffa600);
+  --bs-btn-color: #11101d;
+  --bs-btn-hover-color: #11101d;
+  --bs-btn-active-color: #11101d;
+  --bs-btn-disabled-color: #11101d;
+  color: #11101d;
+}
+
+.btn-violeta {
+  box-shadow: 3px 3px #a02ccc;
+  background-image: linear-gradient(to right, #e290ff, #c837ff);
+  --bs-btn-color: #11101d;
+  --bs-btn-hover-color: #11101d;
+  --bs-btn-active-color: #11101d;
+  --bs-btn-disabled-color: #11101d;
+  color: #11101d;
+}
+
+.btn-verde:active,
+.btn-rojo:active,
+.btn-azul:active,
+.btn-celeste:active,
+.btn-naranja:active,
+.btn-violeta:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.25);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -243,6 +259,15 @@ table td {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  .btn-verde:active,
+  .btn-rojo:active,
+  .btn-azul:active,
+  .btn-celeste:active,
+  .btn-naranja:active,
+  .btn-violeta:active {
+    transform: none;
   }
 }
 

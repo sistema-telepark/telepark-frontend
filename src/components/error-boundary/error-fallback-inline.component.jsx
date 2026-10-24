@@ -27,7 +27,7 @@ const ErrorFallbackInline = ({ error, resetErrorBoundary, message }) => {
         </svg>
         <span>{message || 'Error al cargar esta sección'}</span>
       </div>
-      <button className="btn btn-sm btn-outline-warning" onClick={resetErrorBoundary}>
+      <button className="btn btn-naranja btn-sm" onClick={resetErrorBoundary}>
         Reintentar
       </button>
 

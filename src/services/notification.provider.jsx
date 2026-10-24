@@ -9,7 +9,6 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Toast, ToastContainer } from 'react-bootstrap';
-import styles from '../styles/notification-provider.module.css';
 
 const NotificationContext = createContext(null);
 
@@ -34,6 +33,8 @@ const VARIANT_MAP = {
 const normalizeVariant = (variant) => VARIANT_MAP[variant] || 'info';
 
 const DEFAULT_TOAST_MS = 3000;
+
+const actionStyle = { minWidth: 120, padding: '8px 20px' };
 
 export const NotificationProvider = ({ children }) => {
   const [toasts, setToasts] = useState([]);
@@ -150,14 +151,16 @@ export const NotificationProvider = ({ children }) => {
             <Modal.Footer className="justify-content-center">
               <button
                 type="button"
-                className={`btn btn-rojo ${styles.actionButton}`}
+                className="btn btn-rojo"
+                style={actionStyle}
                 onClick={() => resolveConfirm(false)}
               >
                 {confirmState.cancelLabel || 'Cancelar'}
               </button>
               <button
                 type="button"
-                className={`btn btn-verde ms-3 ${styles.actionButton}`}
+                className="btn btn-verde ms-3"
+                style={actionStyle}
                 onClick={() => resolveConfirm(true)}
               >
                 {confirmState.confirmLabel || 'Sí'}
@@ -180,7 +183,8 @@ export const NotificationProvider = ({ children }) => {
               <Modal.Footer className="justify-content-center">
                 <button
                   type="button"
-                  className={`btn btn-verde ${styles.actionButton}`}
+                  className="btn btn-verde"
+                  style={actionStyle}
                   onClick={closeAlert}
                 >
                   Aceptar
