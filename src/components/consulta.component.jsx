@@ -297,7 +297,9 @@ const Consulta = () => {
             </div>
           </div>
         </div>
-
+        <br />
+        <hr />
+        <br />
         <div
           className={`d-flex m-md-3 justify-content-center rounded ${styles.whiteCard}`}
         >
