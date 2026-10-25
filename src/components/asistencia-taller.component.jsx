@@ -105,27 +105,15 @@ const Asistencia = () => {
 
     if (items.length === 0) return;
 
-    const guardadas = [];
     for (const { id_asistencia_taller, ...item } of items) {
       const resp = id_asistencia_taller
         ? await asistenciaRepository.updateAsistencia(id_asistencia_taller, item)
         : await asistenciaRepository.createAsistencia(item);
       if (!resp.success) return;
-      guardadas.push(resp.data);
     }
 
     showToast('success', 'Se ha guardado con éxito');
-    setAsistencias((previas) => {
-      const conciliadas = [...previas];
-      guardadas.forEach((guardada) => {
-        const index = conciliadas.findIndex(
-          (item) => Number(item.persona_ep) === Number(guardada.persona_ep)
-        );
-        if (index >= 0) conciliadas[index] = guardada;
-        else conciliadas.push(guardada);
-      });
-      return conciliadas;
-    });
+    clear();
   };
 
   // Al seleccionar un encuentro, carga sus asistencias y marca los pacientes cuyo evento cae en el rango de fechas
@@ -261,21 +249,21 @@ const Asistencia = () => {
             </tbody>
           </table>
         </div>
-        <div className={`mb-4 col-12 col-md-6 col-lg-4 col-xl-4 ${styles.buttonContainer}`}>
-          <button
-            type="button"
-            className="btn btn-rojo"
-            style={{ width: '40%' }}
-            onClick={() => clear()}
-          >
-            Cancelar
-          </button>
+        <div className={`mb-4 col-12 col-md-6 col-lg-4 col-xl-4 ${styles.buttonContainer}`}>          
           <button
             type="button"
             className={`btn btn-verde ${styles.saveButton}`}
             onClick={() => formAsistencia.handleSubmit(guardarAsistencia)()}
           >
             Guardar
+          </button>
+          <button
+            type="button"
+            className="btn btn-celeste ms-3"
+            style={{ width: '40%' }}
+            onClick={() => clear()}
+          >
+            Limpiar
           </button>
         </div>
       </div>

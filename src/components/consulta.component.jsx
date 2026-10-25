@@ -219,7 +219,7 @@ const Consulta = () => {
 
   return (
     <>
-      <Container className="container panel-gris">
+      <Container className={`container panel-gris ${styles.flexMinWidth}`}>
         <h2 className="mt-4 text-center">Consultas</h2>
         <hr />
         
@@ -248,7 +248,9 @@ const Consulta = () => {
           className={`d-flex m-md-3 justify-content-center rounded ${styles.whiteCard}`}
         >
 
-          <div className={`mb-4 col-12 col-md-8 p-4 rounded shadow-sm ${styles.sectionCard}`}>
+          <div
+            className={`mb-4 col-12 col-md-8 p-4 rounded shadow-sm ${styles.sectionCard} ${styles.flexMinWidth}`}
+          >
             <div className="d-flex justify-content-between align-items-center mb-3">
               <span>Listado de asistencia</span>
               <div className="d-flex">
@@ -303,7 +305,9 @@ const Consulta = () => {
         <div
           className={`d-flex m-md-3 justify-content-center rounded ${styles.whiteCard}`}
         >
-          <div className={`mb-4 col-12 col-md-8 p-4 rounded shadow-sm ${styles.sectionCard}`}>
+          <div
+            className={`mb-4 col-12 col-md-8 p-4 rounded shadow-sm ${styles.sectionCard} ${styles.flexMinWidth}`}
+          >
             <div className="d-flex justify-content-between align-items-center mb-3">
               <span>Lista de pacientes con faltas consecutivas</span>
               <div className="d-flex">
