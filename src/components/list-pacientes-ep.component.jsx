@@ -133,7 +133,7 @@ const ListaPaciente = (props) => {
         <div className="row mb-4">
           <div className="col-12 col-md-12 col-lg-12 col-xl-12">
             <button type="button" className="btn btn-azul mb-3" onClick={() => showModalInsert()}>
-              <PlusIcon />
+              <PlusIcon className="signoMas" />
               Agregar
             </button>
             <input

@@ -257,7 +257,7 @@ const Encuentro = () => {
         <h2 className="mt-4 text-center">Encuentros</h2>
         <hr />
         <button type="button" className="btn btn-azul mb-2 mt-2" onClick={() => showModalInsert()}>
-          <PlusIcon />
+          <PlusIcon className="signoMas" />
           Agregar
         </button>
         <div className="row m-md-3 shadow mx-md-auto border-top-sm m-0">
