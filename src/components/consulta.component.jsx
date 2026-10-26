@@ -13,6 +13,8 @@ import styles from '../styles/consulta.module.css';
 
 const ESTADO_AUSENTE = 'Ausente';
 
+const toArray = (data) => (Array.isArray(data) ? data : (data?.results ?? []));
+
 const Consulta = () => {
   const [, setTaller] = useState([]);
   const [encuentro, setEncuentro] = useState([]);
@@ -158,9 +160,9 @@ const Consulta = () => {
 
     setLoadError(null);
 
-    const asistencias = respAsistencias.data.results;
-    const pacientes = respPacientes.data.results.filter((paciente) => paciente.activo !== false);
-    const encuentros = respEncuentros.data.results;
+    const asistencias = toArray(respAsistencias.data);
+    const pacientes = toArray(respPacientes.data).filter((paciente) => paciente.activo !== false);
+    const encuentros = toArray(respEncuentros.data);
 
     // Ordenar encuentros por fecha (del más reciente al más antiguo)
     const encuentrosOrdenados = [...encuentros].sort(
@@ -208,8 +210,6 @@ const Consulta = () => {
   const limpiarFaltasC = () => {
     setFaltaC([]);
     setMensajeSinDatosFC(false);
-    setErrores({});
-    setForm({ fechaEncuentro: '' });
   };
 
   const obtenerNombre = (persona_ep) => {
