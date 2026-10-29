@@ -11,6 +11,7 @@ import LoadingSpinner from './shared/loading-spinner';
 import utils from '../utils/utils';
 import styles from '../styles/consulta.module.css';
 
+const ESTADO_PRESENTE = 'Presente';
 const ESTADO_AUSENTE = 'Ausente';
 
 const toArray = (data) => (Array.isArray(data) ? data : (data?.results ?? []));
@@ -19,7 +20,6 @@ const Consulta = () => {
   const [, setTaller] = useState([]);
   const [encuentro, setEncuentro] = useState([]);
   const [, setAct] = useState([]);
-  const [pacientes, setPacientes] = useState([]);
   const [asistencia, setAsistencia] = useState([]);
   const [faltaC, setFaltaC] = useState([]);
 
@@ -43,7 +43,6 @@ const Consulta = () => {
       getTallerAll(),
       getActividades(),
       getEncuentroAll(),
-      getPacientes(),
       getEventoAll(),
     ])
       .catch(() => {})
@@ -56,7 +55,6 @@ const Consulta = () => {
       getTallerAll(),
       getActividades(),
       getEncuentroAll(),
-      getPacientes(),
       getEventoAll(),
     ]).catch(() => {});
   };
@@ -91,18 +89,6 @@ const Consulta = () => {
     }
   };
 
-  const getPacientes = async () => {
-    const resp = await pacienteRepository.getPacientesEp();
-    if (resp.success) {
-      setPacientes(
-        (resp.data.results ?? resp.data).filter((paciente) => paciente.activo !== false)
-      );
-      setLoadError(null);
-    } else {
-      setLoadError(resp.error);
-    }
-  };
-
   const getEventoAll = async () => {
     const resp = await eventRespository.getEventGestionAll();
     if (resp.success) {
@@ -128,16 +114,37 @@ const Consulta = () => {
     }
     setErrores({});
 
-    const resp = await asistenciaRepository.getAsistenciaByEncuentro(form.fechaEncuentro);
-    if (resp.success) {
-      setAsistencia(resp.data);
-      setMensajeSinDatos(resp.data.length === 0);
-      setLoadError(null);
-    } else {
+    const [respRoster, respPacientes] = await Promise.all([
+      asistenciaRepository.getRosterEncuentro(form.fechaEncuentro),
+      pacienteRepository.getPacientesEp(),
+    ]);
+
+    if (!respRoster.success || !respPacientes.success) {
       setAsistencia([]);
       setMensajeSinDatos(false);
-      setLoadError(resp.error);
+      setLoadError(
+        !respRoster.success && respRoster.error ? respRoster.error : respPacientes.error
+      );
+      return;
     }
+
+    const roster = toArray(respRoster.data);
+    const nombresPorPersona = new Map(
+      respPacientes.data.map((paciente) => [
+        Number(paciente.id_persona),
+        `${paciente.nombre} ${paciente.apellido}`,
+      ])
+    );
+
+    setAsistencia(
+      roster.map((item) => ({
+        id_persona: item.persona_ep,
+        nombre: nombresPorPersona.get(Number(item.persona_ep)) ?? `Persona EP ${item.persona_ep}`,
+        estado: item.estado === ESTADO_PRESENTE ? ESTADO_PRESENTE : ESTADO_AUSENTE,
+      }))
+    );
+    setMensajeSinDatos(roster.length === 0);
+    setLoadError(null);
   };
 
   const consultarFaltasC = async () => {
@@ -161,7 +168,7 @@ const Consulta = () => {
     setLoadError(null);
 
     const asistencias = toArray(respAsistencias.data);
-    const pacientes = toArray(respPacientes.data).filter((paciente) => paciente.activo !== false);
+    const pacientes = respPacientes.data.filter((paciente) => paciente.activo !== false);
     const encuentros = toArray(respEncuentros.data);
 
     // Ordenar encuentros por fecha (del más reciente al más antiguo)
@@ -170,11 +177,11 @@ const Consulta = () => {
     );
     const ultimosDosEncuentros = encuentrosOrdenados.slice(0, 2).map((enc) => enc.id_encuentro);
 
-    // Filtrar asistencias de los últimos dos encuentros con estado Ausente
+    // Filtrar asistencias de los últimos dos encuentros sin estado Presente
     const asistenciasFiltradas = asistencias.filter(
       (asistenciaItem) =>
         ultimosDosEncuentros.includes(asistenciaItem.encuentro) &&
-        asistenciaItem.estado === ESTADO_AUSENTE
+        asistenciaItem.estado !== ESTADO_PRESENTE
     );
 
     // Agrupar asistencias por paciente
@@ -210,11 +217,6 @@ const Consulta = () => {
   const limpiarFaltasC = () => {
     setFaltaC([]);
     setMensajeSinDatosFC(false);
-  };
-
-  const obtenerNombre = (persona_ep) => {
-    const paciente = pacientes.find((p) => Number(p.id_persona) === Number(persona_ep));
-    return paciente ? `${paciente.nombre} ${paciente.apellido}` : 'Desconocido';
   };
 
   return (
@@ -283,8 +285,8 @@ const Consulta = () => {
                     </thead>
                     <tbody>
                       {asistencia.map((item) => (
-                        <tr key={item.id_asistencia_taller}>
-                          <td data-th="Nombre">{obtenerNombre(item.persona_ep)}</td>
+                        <tr key={item.id_persona}>
+                          <td data-th="Nombre">{item.nombre}</td>
                           <td data-th="Estado">{item.estado}</td>
                         </tr>
                       ))}
@@ -293,7 +295,7 @@ const Consulta = () => {
                 </div>
               ) : (
                 mensajeSinDatos && (
-                  <p className="text-center text-muted">No hay datos de asistencia disponibles.</p>
+                  <p className="text-center text-muted">No hay PersonaEP activas para consultar.</p>
                 )
               )}
             </div>

@@ -44,7 +44,7 @@ const ListaPaciente = (props) => {
     setLoadError(null);
     const response = await pacienteRepository.getPacientesEp();
     if (response?.success && response?.data) {
-      setPacientes(response.data.results ?? response.data);
+      setPacientes(response.data);
       setLoadError(null);
     } else {
       setLoadError(response.error || 'No se pudieron cargar los pacientes.');

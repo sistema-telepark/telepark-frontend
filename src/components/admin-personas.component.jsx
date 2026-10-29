@@ -67,14 +67,12 @@ const AdminPersonas = () => {
     formEdit.reset();
   };
 
-  // El backend responde envelope DRF paginado {count,next,previous,results}
-  // → normalizar a .results.
   const getPersonAll = async () => {
     setLoading(true);
     setLoadError(null);
     let response = await eventRespository.getAll();
     if (response?.success && response?.data) {
-      setArrayPerson(response.data.results ?? response.data);
+      setArrayPerson(response.data);
       setLoadError(null);
     } else {
       setLoadError(response?.error || 'No se pudieron cargar las personas.');
