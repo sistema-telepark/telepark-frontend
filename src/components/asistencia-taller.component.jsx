@@ -18,7 +18,6 @@ const Asistencia = () => {
   const [encuentro, setEncuentro] = useState([]);
   const [pacientes, setPacientes] = useState([]);
   const [evento, setEvento] = useState([]);
-  const [asistencias, setAsistencias] = useState([]);
   const [selectedEncuentroId, setSelectedEncuentroId] = useState(null);
 
   const [loadError, setLoadError] = useState(null);
@@ -52,9 +51,7 @@ const Asistencia = () => {
   const getPacientes = async () => {
     const resp = await pacienteRepository.getPacientesEp();
     if (resp.success) {
-      setPacientes(
-        (resp.data.results ?? resp.data).filter((paciente) => paciente.activo !== false)
-      );
+      setPacientes(resp.data.filter((paciente) => paciente.activo !== false));
       setLoadError(null);
     } else {
       setLoadError(resp.error);
@@ -74,7 +71,6 @@ const Asistencia = () => {
   const clear = () => {
     formAsistencia.reset({ fechaEncuentro: '' });
     setSelectedEncuentroId(null);
-    setAsistencias([]);
     setPacientes(
       pacientes.map((persona) => ({
         ...persona,
@@ -84,31 +80,21 @@ const Asistencia = () => {
     );
   };
 
-  // Guarda la asistencia del día: actualiza los registros existentes y crea los faltantes
   const guardarAsistencia = async (data) => {
     const encuentroId = Number(data.fechaEncuentro);
 
     const items = pacientes
-      .map((paciente) => {
-        const asistenciaPersistida = asistencias.find(
-          (item) => Number(item.persona_ep) === Number(paciente.id_persona)
-        );
-
-        return {
-          id_asistencia_taller: asistenciaPersistida?.id_asistencia_taller,
-          persona_ep: paciente.id_persona,
-          encuentro: encuentroId,
-          estado: paciente.checked ? ESTADO_PRESENTE : ESTADO_AUSENTE,
-        };
-      })
+      .map((paciente) => ({
+        persona_ep: paciente.id_persona,
+        encuentro: encuentroId,
+        estado: paciente.checked ? ESTADO_PRESENTE : ESTADO_AUSENTE,
+      }))
       .filter((item) => item.persona_ep != null && Number.isFinite(item.encuentro));
 
     if (items.length === 0) return;
 
-    for (const { id_asistencia_taller, ...item } of items) {
-      const resp = id_asistencia_taller
-        ? await asistenciaRepository.updateAsistencia(id_asistencia_taller, item)
-        : await asistenciaRepository.createAsistencia(item);
+    for (const item of items) {
+      const resp = await asistenciaRepository.createAsistencia(item);
       if (!resp.success) return;
     }
 
@@ -120,7 +106,6 @@ const Asistencia = () => {
   const handleEncuentroChange = async (e) => {
     if (e.target.value === '') {
       setSelectedEncuentroId(null);
-      setAsistencias([]);
       return;
     }
 
@@ -134,7 +119,6 @@ const Asistencia = () => {
       if (!resp.success) return;
 
       const asistenciasPersistidas = resp.data;
-      setAsistencias(asistenciasPersistidas);
       setSelectedEncuentroId(encuentroId);
 
       const fechaEncuentro = new Date(encuentroSeleccionado.fecha);

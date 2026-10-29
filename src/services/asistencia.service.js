@@ -8,8 +8,6 @@ const asistencias = {
     const response = await http.get(ASISTENCIA_PATH);
     return response.data.results ?? response.data;
   },
-  // El componente envía un array; se hace 1 POST por item (el body es UNO
-  // AsistenciaTaller). Sin rollback.
   async createAsistencia(data) {
     if (Array.isArray(data)) {
       const responses = await Promise.all(data.map((item) => http.post(ASISTENCIA_PATH, item)));
@@ -26,21 +24,15 @@ const asistencias = {
     const response = await http.delete(`${ASISTENCIA_PATH}/${id}`);
     return response.data;
   },
-  // El backend no expone /asistenciataller/encuentro/{id}; se recorre la
-  // paginación de /asistencias-taller (envelope DRF) y se filtra client-side
-  // por encuentro.
   async getAsistenciaByEncuentro(idEncuentro) {
-    const resultados = [];
-    let nextUrl = ASISTENCIA_PATH;
-    while (nextUrl) {
-      const response = await http.get(nextUrl);
-      const data = response.data;
-      const items = Array.isArray(data) ? data : (data.results ?? []);
-      resultados.push(...items);
-      if (Array.isArray(data) || resultados.length >= data.count) break;
-      nextUrl = data.next;
-    }
-    return resultados.filter((item) => Number(item.encuentro) === Number(idEncuentro));
+    const response = await http.get(ASISTENCIA_PATH, {
+      params: { encuentro: Number(idEncuentro) },
+    });
+    return response.data.results ?? response.data;
+  },
+  async getRosterEncuentro(idEncuentro) {
+    const response = await http.get(`/encuentros/${Number(idEncuentro)}/asistencias`);
+    return response.data.results ?? response.data;
   },
 };
 
@@ -59,5 +51,8 @@ export const asistenciaRepository = {
   }),
   getAsistenciaByEncuentro: withServiceHandler(asistencias.getAsistenciaByEncuentro, {
     context: 'obtener asistencia por encuentro',
+  }),
+  getRosterEncuentro: withServiceHandler(asistencias.getRosterEncuentro, {
+    context: 'obtener roster del encuentro',
   }),
 };

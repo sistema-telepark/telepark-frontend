@@ -36,14 +36,10 @@ const Events = () => {
     Promise.all([getPersonEpAll(), getTipeEvent()]).catch(() => {});
   };
 
-  // El backend devuelve envelope DRF paginado {count,next,previous,results}
-  // → normalizar a .results.
   const getPersonEpAll = async () => {
     let response = await eventRespository.getPersonEp();
     if (response?.success && response?.data) {
-      setNamePersonEP(
-        (response.data.results ?? response.data).filter((persona) => persona.activo !== false)
-      );
+      setNamePersonEP(response.data.filter((persona) => persona.activo !== false));
       setLoadError(null);
     } else {
       setLoadError(response.error);

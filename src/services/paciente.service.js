@@ -49,7 +49,7 @@ const pacientes = {
   },
 
   async getPacientesEp() {
-    const response = await http.get(`/personas-ep`, { params: { activo: true } });
+    const response = await http.get('/personas-ep', { params: { activo: true } });
     return response.data;
   },
 };
