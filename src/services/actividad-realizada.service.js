@@ -2,21 +2,11 @@ import http from '../http-common';
 import { withServiceHandler } from './error-handler';
 
 const actividadesRealizadas = {
-  // El backend no expone /encuentroactividad/{id}/actividades; se recorre la
-  // paginación de /encuentros-actividades (envelope DRF {count,next,results})
-  // y se filtra client-side por encuentro.
   async getActividadesRealizadasByClase(idEncuentro) {
-    const resultados = [];
-    let nextUrl = `/encuentros-actividades`;
-    while (nextUrl) {
-      const response = await http.get(nextUrl);
-      const data = response.data;
-      const items = Array.isArray(data) ? data : (data.results ?? []);
-      resultados.push(...items);
-      if (Array.isArray(data) || resultados.length >= data.count) break;
-      nextUrl = data.next;
-    }
-    return resultados.filter((item) => Number(item.encuentro) === Number(idEncuentro));
+    const response = await http.get(`/encuentros-actividades`, {
+      params: { encuentro: idEncuentro },
+    });
+    return response.data.results ?? response.data;
   },
   async getAll() {
     const response = await http.get(`/encuentros-actividades`);
