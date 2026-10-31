@@ -389,7 +389,7 @@ const Encuentro = () => {
         <ErrorFallbackInline
           error={{ message: loadError }}
           resetErrorBoundary={recargar}
-          message="Error al cargar los datos. Intente nuevamente."
+          message={loadError || 'Error al cargar los datos. Intente nuevamente.'}
         />
       )}
 

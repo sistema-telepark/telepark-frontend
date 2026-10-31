@@ -297,7 +297,7 @@ const FichaMedica = () => {
           <ErrorFallbackInline
             error={{ message: loadError }}
             resetErrorBoundary={recargar}
-            message="Error al cargar la ficha médica. Intente nuevamente."
+            message={loadError || 'Error al cargar la ficha médica. Intente nuevamente.'}
           />
         )}
       </div>

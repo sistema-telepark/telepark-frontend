@@ -116,7 +116,11 @@ const Asistencia = () => {
 
     if (encuentroSeleccionado) {
       const resp = await asistenciaRepository.getAsistenciaByEncuentro(encuentroId);
-      if (!resp.success) return;
+      if (!resp.success) {
+        setLoadError(resp.error);
+        return;
+      }
+      setLoadError(null);
 
       const asistenciasPersistidas = resp.data;
       setSelectedEncuentroId(encuentroId);
@@ -256,7 +260,7 @@ const Asistencia = () => {
         <ErrorFallbackInline
           error={{ message: loadError }}
           resetErrorBoundary={recargar}
-          message="Error al cargar los datos. Intente nuevamente."
+          message={loadError || 'Error al cargar los datos. Intente nuevamente.'}
         />
       )}
     </Container>
