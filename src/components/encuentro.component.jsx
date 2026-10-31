@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Container, Form, Modal } from 'react-bootstrap';
 import { encuentroRepository } from '../services/encuentro.service';
+import { encuentroTallerRepository } from '../services/encuentro-taller.service';
 import { tallerRepository } from '../services/taller.service';
 import { actividadRepository } from '../services/actividad.service';
 import { actividadRealizadaRepository } from '../services/actividad-realizada.service';
@@ -11,6 +12,14 @@ import ErrorFallbackInline from './error-boundary/error-fallback-inline.componen
 import LoadingSpinner from './shared/loading-spinner';
 import utils from '../utils/utils';
 import styles from '../styles/encuentro.module.css';
+
+const normalizarSeleccion = (seleccion) => {
+  if (Array.isArray(seleccion)) return seleccion.map(Number);
+  if (seleccion === undefined || seleccion === null || seleccion === false || seleccion === '') {
+    return [];
+  }
+  return [Number(seleccion)];
+};
 
 const Encuentro = () => {
   const [taller, setTaller] = useState([]);
@@ -92,8 +101,12 @@ const Encuentro = () => {
     );
   };
 
+  const talleresDelEncuentro = (encuentroSeleccionado?.talleres ?? []).map((t) =>
+    Number(t.taller)
+  );
+
   const actividadesDelTaller = encuentroSeleccionado
-    ? actividad.filter((act) => Number(act.taller) === Number(encuentroSeleccionado.taller))
+    ? actividad.filter((act) => talleresDelEncuentro.includes(Number(act.taller)))
     : [];
 
   // Guardar o eliminar las actividades realizadas del encuentro según su estado
@@ -141,9 +154,20 @@ const Encuentro = () => {
     const resp = await encuentroRepository.createEncuentro({
       fecha: data.fecha,
       virtual: data.virtual,
-      taller: data.idtaller,
     });
-    if (resp.success) {
+    if (!resp.success) return;
+
+    const seleccionados = normalizarSeleccion(data.idtalleres);
+    const asociaciones = await Promise.all(
+      seleccionados.map((idTaller) =>
+        encuentroTallerRepository.create({
+          encuentro: resp.data.id_encuentro,
+          taller: idTaller,
+        })
+      )
+    );
+
+    if (asociaciones.every((asociacion) => asociacion.success)) {
       showToast('success', 'Se ha guardado con éxito');
       setModalInsert(false);
       formInsert.reset();
@@ -155,19 +179,52 @@ const Encuentro = () => {
     const resp = await encuentroRepository.updateEncuentro(encuentroEditando.id_encuentro, {
       fecha: data.fecha,
       virtual: data.virtual,
-      taller: data.idtaller,
     });
-    if (resp.success) {
+    if (!resp.success) return;
+
+    const asociacionesActuales = encuentroEditando.talleres ?? [];
+    const idsActuales = asociacionesActuales.map((asociacion) => Number(asociacion.taller));
+    const seleccionados = normalizarSeleccion(data.idtalleres);
+
+    const aCrear = seleccionados.filter((idTaller) => !idsActuales.includes(idTaller));
+    const aEliminar = asociacionesActuales.filter(
+      (asociacion) => !seleccionados.includes(Number(asociacion.taller))
+    );
+
+    const creaciones = await Promise.all(
+      aCrear.map((idTaller) =>
+        encuentroTallerRepository.create({
+          encuentro: encuentroEditando.id_encuentro,
+          taller: idTaller,
+        })
+      )
+    );
+    const eliminaciones = await Promise.all(
+      aEliminar.map((asociacion) => encuentroTallerRepository.delete(asociacion.id_encuentro_taller))
+    );
+
+    if ([...creaciones, ...eliminaciones].every((asociacion) => asociacion.success)) {
       showToast('success', 'Se ha guardado con éxito');
-      setModalEdit(false);
-      formEdit.reset();
-      setEncuentroEditando(null);
-      getEncuentroAll();
     }
+
+    const idEncuentro = encuentroEditando.id_encuentro;
+    setModalEdit(false);
+    formEdit.reset();
+    setEncuentroEditando(null);
+
+    const refresco = await encuentroTallerRepository.getByEncuentro(idEncuentro);
+    if (refresco.success) {
+      setEncuentro((prevEncuentros) =>
+        prevEncuentros.map((item) =>
+          item.id_encuentro === idEncuentro ? { ...item, talleres: refresco.data } : item
+        )
+      );
+    }
+    getEncuentroAll();
   };
 
   const showModalInsert = () => {
-    formInsert.reset({ fecha: '', virtual: true, idtaller: '' });
+    formInsert.reset({ fecha: '', virtual: true, idtalleres: [] });
     setModalInsert(true);
   };
 
@@ -181,7 +238,7 @@ const Encuentro = () => {
     formEdit.reset({
       fecha: data.fecha,
       virtual: data.virtual,
-      idtaller: data.taller,
+      idtalleres: (data.talleres ?? []).map((asociacion) => String(asociacion.taller)),
     });
     setModalEdit(true);
   };
@@ -218,10 +275,13 @@ const Encuentro = () => {
     );
     if (resp.success) {
       setActividadRealizada(resp.data);
+      const talleresAsociados = (data.talleres ?? []).map((asociacion) =>
+        Number(asociacion.taller)
+      );
       const actividadesConEstado = actividad.map((act) => ({
         ...act,
         checked:
-          Number(act.taller) === Number(data.taller) &&
+          talleresAsociados.includes(Number(act.taller)) &&
           resp.data.some((realizada) => realizada.actividad === act.id_actividad),
       }));
       setActividad(actividadesConEstado);
@@ -277,8 +337,16 @@ const Encuentro = () => {
                     <td data-th="Fecha">{utils.convertirFormatoFecha(element.fecha)}</td>
                     <td data-th="Virtual">{element.virtual ? 'Sí' : ''}</td>
                     <td data-th="Taller">
-                      {taller.find((t) => Number(t.id_taller) === Number(element.taller))
-                        ?.tipo_taller ?? 'Sin taller'}
+                      {(element.talleres ?? [])
+                        .map(
+                          (asociacion) =>
+                            taller.find(
+                              (tallerItem) =>
+                                Number(tallerItem.id_taller) === Number(asociacion.taller)
+                            )?.tipo_taller
+                        )
+                        .filter(Boolean)
+                        .join(', ') || 'Sin taller'}
                     </td>
                     <td data-th="Acción">
                     <button
@@ -373,28 +441,24 @@ const Encuentro = () => {
             <div className="col-12 col-md-12">
               <Form.Group className="mb-0">
                 <div className="form-group mb-2">
-                  <label htmlFor="idtaller" className="control-label">
-                    Taller
-                  </label>
-                  <select
-                    className="form-select"
-                    id="idtaller"
-                    {...formInsert.register('idtaller', {
-                      required: 'Debe seleccionar un taller.',
-                    })}
-                  >
-                    <option value="">Elija el taller</option>
-                    {taller.map((element) => (
-                      <option key={element.id_taller} value={element.id_taller}>
+                  <span className="control-label d-block">Talleres</span>
+                  {taller.map((element) => (
+                    <div className="form-check" key={element.id_taller}>
+                      <input
+                        type="checkbox"
+                        className="form-check-input"
+                        id={`idtaller-${element.id_taller}`}
+                        value={String(element.id_taller)}
+                        {...formInsert.register('idtalleres')}
+                      />
+                      <label
+                        htmlFor={`idtaller-${element.id_taller}`}
+                        className="form-check-label"
+                      >
                         {element.tipo_taller}
-                      </option>
-                    ))}
-                  </select>
-                  {formInsert.formState.errors.idtaller && (
-                    <small className="text-danger">
-                      {formInsert.formState.errors.idtaller.message}
-                    </small>
-                  )}
+                      </label>
+                    </div>
+                  ))}
                 </div>
               </Form.Group>
             </div>
@@ -474,28 +538,24 @@ const Encuentro = () => {
             <div className="col-12 col-md-12">
               <Form.Group className="mb-0">
                 <div className="form-group mb-2">
-                  <label htmlFor="idtallerEdit" className="control-label">
-                    Taller
-                  </label>
-                  <select
-                    className="form-select"
-                    id="idtallerEdit"
-                    {...formEdit.register('idtaller', {
-                      required: 'Debe seleccionar un taller.',
-                    })}
-                  >
-                    <option value="">Elija el taller</option>
-                    {taller.map((element) => (
-                      <option key={element.id_taller} value={element.id_taller}>
+                  <span className="control-label d-block">Talleres</span>
+                  {taller.map((element) => (
+                    <div className="form-check" key={element.id_taller}>
+                      <input
+                        type="checkbox"
+                        className="form-check-input"
+                        id={`idtallerEdit-${element.id_taller}`}
+                        value={String(element.id_taller)}
+                        {...formEdit.register('idtalleres')}
+                      />
+                      <label
+                        htmlFor={`idtallerEdit-${element.id_taller}`}
+                        className="form-check-label"
+                      >
                         {element.tipo_taller}
-                      </option>
-                    ))}
-                  </select>
-                  {formEdit.formState.errors.idtaller && (
-                    <small className="text-danger">
-                      {formEdit.formState.errors.idtaller.message}
-                    </small>
-                  )}
+                      </label>
+                    </div>
+                  ))}
                 </div>
               </Form.Group>
             </div>
