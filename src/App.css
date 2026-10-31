@@ -65,6 +65,16 @@ h6,
   color: #fff;
 }
 
+.btn-secondary {
+  box-shadow: 3px 3px #3d4247;
+  background-image: linear-gradient(to right, #8f979e, #6c757d, #565e64);
+  --bs-btn-color: #fff;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-active-color: #fff;
+  --bs-btn-disabled-color: #fff;
+  color: #fff;
+}
+
 .btn-azul {
   box-shadow: 3px 3px #0b0286;
   background-image: linear-gradient(to right, #383bf7, #1f0cc7, #2509c2);
@@ -107,6 +117,7 @@ h6,
 
 .btn-verde:active,
 .btn-rojo:active,
+.btn-secondary:active,
 .btn-azul:active,
 .btn-celeste:active,
 .btn-naranja:active,
@@ -263,6 +274,7 @@ table td {
 
   .btn-verde:active,
   .btn-rojo:active,
+  .btn-secondary:active,
   .btn-azul:active,
   .btn-celeste:active,
   .btn-naranja:active,

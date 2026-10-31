@@ -311,6 +311,11 @@ const Encuentro = () => {
 
   const nombresTalleres = Object.keys(actividadesPorTaller).sort();
 
+  // Ordena los encuentros por fecha (del más reciente al más antiguo)
+  const encuentrosOrdenados = [...encuentro].sort((a, b) =>
+    String(b.fecha ?? '').localeCompare(String(a.fecha ?? ''))
+  );
+
   return (
     <>
       <Container className="container panel-gris">
@@ -332,7 +337,7 @@ const Encuentro = () => {
                 </tr>
               </thead>
               <tbody>
-                {encuentro.map((element) => (
+                {encuentrosOrdenados.map((element) => (
                   <tr key={element.id_encuentro}>
                     <td data-th="Fecha">{utils.convertirFormatoFecha(element.fecha)}</td>
                     <td data-th="Virtual">{element.virtual ? 'Sí' : ''}</td>
@@ -627,8 +632,8 @@ const Encuentro = () => {
           </div>
         </Modal.Body>
         <Modal.Footer className="justify-content-center">
-          <button type="button" className="btn btn-rojo" onClick={() => handleModalInsertAct()}>
-            Cancelar
+          <button type="button" className="btn btn-secondary" onClick={() => handleModalInsertAct()}>
+            Salir
           </button>
           <button
             type="button"

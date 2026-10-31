@@ -456,8 +456,8 @@ const Talleres = () => {
           </div>
         </Modal.Body>
         <Modal.Footer className="justify-content-center">
-          <button type="button" className="btn btn-rojo" onClick={() => handleModalInsertAct()}>
-            Cancelar
+          <button type="button" className="btn btn-secondary" onClick={() => handleModalInsertAct()}>
+            Salir
           </button>
           <button type="button" className="btn btn-verde ms-3" onClick={() => guardarAct()}>
             Guardar
