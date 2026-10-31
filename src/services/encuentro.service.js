@@ -1,6 +1,8 @@
 import http from '../http-common';
 import { withServiceHandler } from './error-handler';
 
+const buildEncuentroPayload = ({ fecha, virtual }) => ({ fecha, virtual });
+
 const encuentros = {
   async getEncuentroAll() {
     const response = await http.get(`/encuentros`);
@@ -11,11 +13,11 @@ const encuentros = {
     return response.data;
   },
   async createEncuentro(data) {
-    const response = await http.post(`/encuentros`, data);
+    const response = await http.post(`/encuentros`, buildEncuentroPayload(data));
     return response.data;
   },
   async updateEncuentro(id, data) {
-    const response = await http.put(`/encuentros/${id}`, data);
+    const response = await http.put(`/encuentros/${id}`, buildEncuentroPayload(data));
     return response.data;
   },
   async deleteEncuentro(id) {
