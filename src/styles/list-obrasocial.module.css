@@ -1,5 +1,13 @@
+.pageHeader {
+  padding-top: 20px;
+}
+
 .textRight {
   text-align: right;
+}
+
+.tableFullWidth {
+  width: 100%;
 }
 
 .tableBodyMiddle {

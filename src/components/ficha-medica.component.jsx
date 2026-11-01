@@ -300,6 +300,13 @@ const FichaMedica = () => {
             message={loadError || 'Error al cargar la ficha médica. Intente nuevamente.'}
           />
         )}
+        <div className="row justify-content-center mt-4">
+          <div className="col-auto">
+            <button type="button" className="btn btn-azul" onClick={() => navigate('/list-pacientes')}>
+              Volver
+            </button>
+          </div>
+        </div>
       </div>
     </main>
   );
