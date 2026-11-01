@@ -374,7 +374,7 @@ const ListaDiagnostico = () => {
 
         <div className="row justify-content-center mt-4">
           <div className="col-auto">
-            <button type="button" className="btn btn-azul" onClick={() => navigate('/ficha')}>
+            <button type="button" className="btn btn-secondary" onClick={() => navigate('/ficha')}>
               Volver
             </button>
           </div>
