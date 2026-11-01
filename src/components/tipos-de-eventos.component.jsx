@@ -16,6 +16,7 @@ const TypeEvents = () => {
 
   const [modalInsert, setModalInsert] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
+  const [tipoEventoEditando, setTipoEventoEditando] = useState(null);
 
   const formInsert = useForm();
   const formEdit = useForm();
@@ -44,8 +45,8 @@ const TypeEvents = () => {
   };
 
   const showModalEdit = (data) => {
+    setTipoEventoEditando(data);
     formEdit.reset({
-      id_tipo_evento: data.id_tipo_evento,
       nombre: data.nombre,
       desactiva_taller: data.desactiva_taller,
     });
@@ -54,6 +55,7 @@ const TypeEvents = () => {
 
   const handleModalEdit = () => {
     formEdit.reset();
+    setTipoEventoEditando(null);
     setModalEdit(false);
   };
 
@@ -79,18 +81,23 @@ const TypeEvents = () => {
   };
 
   const edit = (data) => {
+    if (!tipoEventoEditando) {
+      return;
+    }
     const payload = {
       nombre: data.nombre,
       desactiva_taller: data.desactiva_taller,
     };
 
-    eventRespository.updateTypeEvent(data.id_tipo_evento, payload).then((response) => {
-      if (response?.success) {
-        showToast('success', 'Se ha guardado con éxito');
-        clear();
-        getEventAll();
-      }
-    });
+    eventRespository
+      .updateTypeEvent(tipoEventoEditando.id_tipo_evento, payload)
+      .then((response) => {
+        if (response?.success) {
+          showToast('success', 'Se ha guardado con éxito');
+          clear();
+          getEventAll();
+        }
+      });
     setModalEdit(false);
   };
 
@@ -121,6 +128,7 @@ const TypeEvents = () => {
   const clear = () => {
     formInsert.reset();
     formEdit.reset();
+    setTipoEventoEditando(null);
   };
 
   return (
@@ -243,19 +251,6 @@ const TypeEvents = () => {
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Form.Group className="mb-0">
-              <label htmlFor="id_tipo_evento" className="control-label">
-                ID:
-              </label>
-              <input
-                type="text"
-                name="id_tipo_evento"
-                id="id_tipo_evento"
-                className="form-control"
-                readOnly
-                {...formEdit.register('id_tipo_evento')}
-              />
-            </Form.Group>
             <Form.Group className="mb-0">
               <label htmlFor="nombre" className="control-label">
                 Nombre de tipo de evento:

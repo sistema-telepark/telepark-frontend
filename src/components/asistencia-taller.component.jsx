@@ -110,9 +110,7 @@ const Asistencia = () => {
     }
 
     const encuentroId = Number(e.target.value);
-    const encuentroSeleccionado = encuentro.find(
-      (enc) => Number(enc.id_encuentro) === encuentroId
-    );
+    const encuentroSeleccionado = encuentro.find((enc) => Number(enc.id_encuentro) === encuentroId);
 
     if (encuentroSeleccionado) {
       const resp = await asistenciaRepository.getAsistenciaByEncuentro(encuentroId);
@@ -237,7 +235,7 @@ const Asistencia = () => {
             </tbody>
           </table>
         </div>
-        <div className={`mb-4 col-12 col-md-6 col-lg-4 col-xl-4 ${styles.buttonContainer}`}>          
+        <div className={`mb-4 col-12 col-md-6 col-lg-4 col-xl-4 ${styles.buttonContainer}`}>
           <button
             type="button"
             className={`btn btn-verde ${styles.saveButton}`}
@@ -260,7 +258,7 @@ const Asistencia = () => {
         <ErrorFallbackInline
           error={{ message: loadError }}
           resetErrorBoundary={recargar}
-          message={loadError || 'Error al cargar los datos. Intente nuevamente.'}
+          message="Error al cargar los datos. Intente nuevamente."
         />
       )}
     </Container>

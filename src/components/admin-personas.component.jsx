@@ -13,6 +13,7 @@ const AdminPersonas = () => {
   const [arrayPerson, setArrayPerson] = useState([]);
   const [buscar, setBuscar] = useState('');
   const [modalEdit, setModalEdit] = useState(false);
+  const [personaEditando, setPersonaEditando] = useState(null);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(null);
 
@@ -27,19 +28,24 @@ const AdminPersonas = () => {
   };
 
   const edit = (data) => {
+    if (!personaEditando) {
+      return;
+    }
     let list = [...arrayPerson];
-    let modifidedPerson = list.find((listdata) => Number(data.idpersona) === listdata.id_persona);
+    let modifidedPerson = list.find(
+      (listdata) => listdata.id_persona === personaEditando.id_persona
+    );
     if (!modifidedPerson) {
       return;
     }
     modifidedPerson = {
-      id_persona: Number(data.idpersona),
+      id_persona: personaEditando.id_persona,
       nombre: data.nombre,
       apellido: data.apellido,
       telefono: data.telefono,
       activo: modifidedPerson.activo,
     };
-    eventRespository.updatePerson(Number(data.idpersona), modifidedPerson).then((response) => {
+    eventRespository.updatePerson(personaEditando.id_persona, modifidedPerson).then((response) => {
       if (response?.success) {
         showToast('success', 'Se ha guardado con éxito');
         clear();
@@ -50,9 +56,9 @@ const AdminPersonas = () => {
   };
 
   const showModalEdit = (data) => {
+    setPersonaEditando(data);
     setModalEdit(true);
     formEdit.reset({
-      idpersona: data.id_persona,
       nombre: data.nombre,
       apellido: data.apellido,
       telefono: data.telefono,
@@ -61,11 +67,13 @@ const AdminPersonas = () => {
 
   const handleModalEdit = () => {
     formEdit.reset();
+    setPersonaEditando(null);
     setModalEdit(false);
   };
 
   const clear = () => {
     formEdit.reset();
+    setPersonaEditando(null);
   };
 
   const getPersonAll = async () => {
@@ -198,19 +206,6 @@ const AdminPersonas = () => {
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Form.Group className="mb-0">
-              <label htmlFor="idpersona" className="control-label">
-                ID de la persona
-              </label>
-              <input
-                type="text"
-                name="idpersona"
-                id="idpersona"
-                className="form-control"
-                readOnly
-                {...formEdit.register('idpersona')}
-              />
-            </Form.Group>
             <Form.Group className="mb-0">
               <label htmlFor="nombre" className="control-label">
                 Nombre

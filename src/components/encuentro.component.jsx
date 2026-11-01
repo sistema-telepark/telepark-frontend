@@ -250,8 +250,7 @@ const Encuentro = () => {
 
   const eliminarEncuentro = async (data) => {
     const ok = await showConfirm(
-      `¿Seguro que desea eliminar el encuentro con fecha: ${utils.convertirFormatoFecha(data.fecha)}?`,
-      `Código: ${data.id_encuentro}`
+      `¿Seguro que desea eliminar el encuentro con fecha: ${utils.convertirFormatoFecha(data.fecha)}?`
     );
     if (!ok) {
       showToast('danger', 'Cancelado', { message: 'No se eliminaron registros' });
@@ -393,7 +392,7 @@ const Encuentro = () => {
         <ErrorFallbackInline
           error={{ message: loadError }}
           resetErrorBoundary={recargar}
-          message={loadError || 'Error al cargar los datos. Intente nuevamente.'}
+          message="Error al cargar los datos. Intente nuevamente."
         />
       )}
 
@@ -485,22 +484,6 @@ const Encuentro = () => {
         </Modal.Header>
         <Modal.Body>
           <div className="row">
-            <div className="col-12 col-md-12">
-              <Form.Group className="mb-0">
-                <label htmlFor="id_encuentro" className="control-label">
-                  Código:
-                </label>
-                <input
-                  type="text"
-                  name="id_encuentro"
-                  id="id_encuentro"
-                  className="form-control"
-                  readOnly
-                  value={encuentroEditando ? encuentroEditando.id_encuentro : ''}
-                />
-              </Form.Group>
-            </div>
-
             <div className="col-12 col-md-6">
               <Form.Group className="mb-0">
                 <label htmlFor="fechaEdit" className="control-label">
@@ -586,7 +569,6 @@ const Encuentro = () => {
                   ? utils.convertirFormatoFecha(encuentroSeleccionado.fecha)
                   : ''}
               </div>
-              <h6>Código: {encuentroSeleccionado ? encuentroSeleccionado.id_encuentro : ''}</h6>
             </div>
           </div>
         </Modal.Header>

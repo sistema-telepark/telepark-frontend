@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
  * @param {Function} resetErrorBoundary - Función para reintentar
  * @param {string} message            - Mensaje personalizado (opcional)
  */
-const ErrorFallbackInline = ({ error, resetErrorBoundary, message }) => {
+const ErrorFallbackInline = ({ resetErrorBoundary, message }) => {
   return (
     <div className="alert alert-warning d-flex align-items-center justify-content-between flex-wrap gap-2 m-2">
       <div>
@@ -30,12 +30,6 @@ const ErrorFallbackInline = ({ error, resetErrorBoundary, message }) => {
       <button className="btn btn-naranja btn-sm" onClick={resetErrorBoundary}>
         Reintentar
       </button>
-
-      {import.meta.env.DEV && (
-        <div className="w-100 small text-muted mt-1">
-          <code>{error.message}</code>
-        </div>
-      )}
     </div>
   );
 };
