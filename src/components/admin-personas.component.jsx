@@ -144,8 +144,8 @@ const AdminPersonas = () => {
               >
                 <thead>
                   <tr>
-                    <th scope="col">Nombre</th>
                     <th scope="col">Apellido</th>
+                    <th scope="col">Nombre</th>
                     <th scope="col">Telefono</th>
                     <th scope="col">Accion</th>
                   </tr>
@@ -153,8 +153,8 @@ const AdminPersonas = () => {
                 <tbody>
                   {arrayPersonIspaciente.map((person) => (
                     <tr key={person.id_persona}>
-                      <td data-th="Nombre">{person.nombre}</td>
                       <td data-th="Apellido">{person.apellido}</td>
+                      <td data-th="Nombre">{person.nombre}</td>
                       <td data-th="Telefono">{person.telefono}</td>
                       <td data-th="Accion">
                       <button
