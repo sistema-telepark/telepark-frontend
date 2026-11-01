@@ -20,6 +20,14 @@ html {
   }
 }
 
+body.modal-open {
+  padding-right: 0 !important;
+}
+
+.modal {
+  padding-right: 0 !important;
+}
+
 :focus-visible {
   outline: 2px solid #0b0286;
   outline-offset: 2px;

@@ -108,6 +108,16 @@ const ListaPaciente = (props) => {
     setBuscar(e.target.value);
   };
 
+  const terminoBusqueda = buscar.trim().toLowerCase();
+  const pacientesFiltrados = pacientes.filter((paciente) => {
+    if (paciente.activo === false) return false;
+    if (!terminoBusqueda) return true;
+
+    return [paciente.nombre, paciente.apellido]
+      .filter((value) => value !== null && value !== undefined)
+      .some((value) => String(value).toLowerCase().includes(terminoBusqueda));
+  });
+
   const verSeccion = (id, nombre, apellido) => {
     const idpersona = id;
     const nombrepersona = nombre + ' ' + apellido;
@@ -153,35 +163,25 @@ const ListaPaciente = (props) => {
                   </tr>
                 </thead>
                 <tbody className={styles.tableBodyMiddle}>
-                  {pacientes &&
-                    pacientes
-                      .filter(
-                        (paciente) =>
-                          paciente.activo !== false &&
-                          (paciente.nombre.toLowerCase().includes(buscar) ||
-                            paciente.apellido.toLowerCase().includes(buscar) ||
-                            paciente.nombre.toUpperCase().includes(buscar) ||
-                            paciente.apellido.toUpperCase().includes(buscar))
-                      )
-                      .map((paciente) => (
-                        <tr
-                          key={paciente.id_persona ?? paciente.id}
-                          className={styles.filaClickeable}
-                          onClick={() => {
-                            verSeccion(paciente.id_persona, paciente.nombre, paciente.apellido);
-                            navigate('/ficha');
-                          }}
-                        >
-                          <td data-th="Apellido">{paciente.apellido}</td>
-                          <td data-th="Nombre">{paciente.nombre}</td>
-                          <td data-th="Ingreso">
-                            {paciente.fecha_ingreso
-                              ? utils.convertirFormatoFecha(paciente.fecha_ingreso)
-                              : ''}
-                          </td>
-                        </tr>
-                    ))}
-              </tbody>
+                  {pacientesFiltrados.map((paciente) => (
+                    <tr
+                      key={paciente.id_persona ?? paciente.id}
+                      className={styles.filaClickeable}
+                      onClick={() => {
+                        verSeccion(paciente.id_persona, paciente.nombre, paciente.apellido);
+                        navigate('/ficha');
+                      }}
+                    >
+                      <td data-th="Apellido">{paciente.apellido}</td>
+                      <td data-th="Nombre">{paciente.nombre}</td>
+                      <td data-th="Ingreso">
+                        {paciente.fecha_ingreso
+                          ? utils.convertirFormatoFecha(paciente.fecha_ingreso)
+                          : ''}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
               </table>
             </div>
             {loading && <LoadingSpinner />}

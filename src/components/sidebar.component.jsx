@@ -95,7 +95,9 @@ const Sidebar = () => {
           aria-expanded={open}
           onClick={toggleSidebar}
         >
-          <MenuIcon className="bi bi-list" />
+          <span className="menu-toggle-icon">
+            <MenuIcon className="bi bi-list" />
+          </span>
           <img className="logo links_name" src={logoTelepark} alt="logo de telepark" />
         </button>
       </div>

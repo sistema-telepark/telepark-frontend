@@ -46,10 +46,10 @@
 
 .sidebar .logo-details svg {
   color: #fff;
-  height: 60px;
-  min-width: 35px;
+  height: 30px;
+  min-width: 30px;
   font-size: 28px;
-  line-height: 60px;
+  line-height: 30px;
 }
 
 .sidebar .logo-details .menu-toggle {
@@ -59,8 +59,20 @@
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   color: inherit;
+}
+
+/* Carril fijo del ícono: mismo centro horizontal (25px) que los iconos del nav.
+   Evita que el logo, al aparecer al abrir, desplace la hamburguesa. */
+.sidebar .menu-toggle-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  margin-left: 5px;
 }
 
 .sidebar .logo-details .menu-toggle:focus-visible {
@@ -72,7 +84,7 @@
 .sidebar .logo-details {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   height: 50px;
   position: relative;
   padding-top: 1.5rem;
@@ -85,6 +97,7 @@
   opacity: 0;
   width: 0;
   height: 0;
+  margin: 0;
 }
 
 /* RF-04: en desktop abierto el logo vuelve a ser visible junto a la hamburguesa.
@@ -94,6 +107,7 @@
   opacity: 1;
   width: 150px;
   height: auto;
+  margin: 0 0 0 12px;
   transition:
     visibility 0.5s,
     opacity 0.5s;
@@ -278,6 +292,12 @@
 
   .sidebar .logo-details {
     padding-top: 0.5rem;
+    justify-content: center;
+  }
+
+  /* En móvil el toggle es el logo: el carril del ícono no debe reservar espacio. */
+  .sidebar .menu-toggle-icon {
+    display: none;
   }
   .open {
     width: 100%;
@@ -342,11 +362,13 @@
   /* RF-02: en móvil el toggle es el logo (el svg queda oculto arriba). Sin esta
      regla, el ocultamiento global del img (mayor especificidad que
      .links_name) lo dejaría invisible. */
-  .sidebar .logo-details .menu-toggle img {
+  .sidebar .logo-details .menu-toggle img,
+  .sidebar.open .logo-details .menu-toggle img {
     visibility: visible;
     opacity: 1;
     width: 150px;
     height: auto;
+    margin: 7px;
     transition: none;
   }
 
