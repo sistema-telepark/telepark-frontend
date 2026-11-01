@@ -39,24 +39,16 @@ const Consulta = () => {
   useEffect(() => {
     setLoading(true);
     setLoadError(null);
-    Promise.all([
-      getTallerAll(),
-      getActividades(),
-      getEncuentroAll(),
-      getEventoAll(),
-    ])
+    Promise.all([getTallerAll(), getActividades(), getEncuentroAll(), getEventoAll()])
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
 
   const recargar = () => {
     setLoadError(null);
-    Promise.all([
-      getTallerAll(),
-      getActividades(),
-      getEncuentroAll(),
-      getEventoAll(),
-    ]).catch(() => {});
+    Promise.all([getTallerAll(), getActividades(), getEncuentroAll(), getEventoAll()]).catch(
+      () => {}
+    );
   };
 
   const getTallerAll = async () => {
@@ -224,32 +216,29 @@ const Consulta = () => {
       <Container className={`container panel-gris ${styles.flexMinWidth}`}>
         <h2 className="mt-4 text-center">Consultas</h2>
         <hr />
-        
+
         <div className="col-12 col-md-3">
-            <Form.Group className="mb-0">
-              <select
-                className="form-select"
-                placeholder="Seleccione el encuentro"
-                name="fechaEncuentro"
-                id="fechaEncuentro"
-                value={form.fechaEncuentro}
-                onChange={handleChange}
-              >
-                <option value="">Seleccione el encuentro</option>
-                {encuentro.map((element) => (
-                  <option key={element.id_encuentro} value={element.id_encuentro}>
-                    {utils.convertirFormatoFecha(element.fecha)}
-                  </option>
-                ))}
-              </select>
-              {errores.fecha && <small className="text-danger">{errores.fecha}</small>}
-            </Form.Group>
-          </div>
+          <Form.Group className="mb-0">
+            <select
+              className="form-select"
+              placeholder="Seleccione el encuentro"
+              name="fechaEncuentro"
+              id="fechaEncuentro"
+              value={form.fechaEncuentro}
+              onChange={handleChange}
+            >
+              <option value="">Seleccione el encuentro</option>
+              {encuentro.map((element) => (
+                <option key={element.id_encuentro} value={element.id_encuentro}>
+                  {utils.convertirFormatoFecha(element.fecha)}
+                </option>
+              ))}
+            </select>
+            {errores.fecha && <small className="text-danger">{errores.fecha}</small>}
+          </Form.Group>
+        </div>
 
-        <div
-          className={`d-flex m-md-3 justify-content-center rounded ${styles.whiteCard}`}
-        >
-
+        <div className={`d-flex m-md-3 justify-content-center rounded ${styles.whiteCard}`}>
           <div
             className={`mb-4 col-12 col-md-8 p-4 rounded shadow-sm ${styles.sectionCard} ${styles.flexMinWidth}`}
           >
@@ -304,20 +293,14 @@ const Consulta = () => {
         <br />
         <hr />
         <br />
-        <div
-          className={`d-flex m-md-3 justify-content-center rounded ${styles.whiteCard}`}
-        >
+        <div className={`d-flex m-md-3 justify-content-center rounded ${styles.whiteCard}`}>
           <div
             className={`mb-4 col-12 col-md-8 p-4 rounded shadow-sm ${styles.sectionCard} ${styles.flexMinWidth}`}
           >
             <div className="d-flex justify-content-between align-items-center mb-3">
               <span>Lista de pacientes con faltas consecutivas</span>
               <div className="d-flex">
-                <button
-                  type="button"
-                  className="btn btn-verde"
-                  onClick={() => consultarFaltasC()}
-                >
+                <button type="button" className="btn btn-verde" onClick={() => consultarFaltasC()}>
                   Consultar
                 </button>
                 <button
@@ -365,7 +348,7 @@ const Consulta = () => {
           <ErrorFallbackInline
             error={{ message: loadError }}
             resetErrorBoundary={recargar}
-            message={loadError || 'Error al cargar los datos. Intente nuevamente.'}
+            message="Error al cargar los datos. Intente nuevamente."
           />
         )}
       </Container>

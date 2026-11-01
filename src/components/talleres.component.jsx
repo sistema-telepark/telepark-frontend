@@ -313,20 +313,6 @@ const Talleres = () => {
         </Modal.Header>
         <Modal.Body>
           <div className="row">
-            <Form.Group className="mb-0">
-              <label htmlFor="id_taller" className="control-label">
-                Código:
-              </label>
-              <input
-                type="text"
-                name="id_taller"
-                id="id_taller"
-                className="form-control"
-                readOnly
-                value={tallerEditando ? tallerEditando.id_taller : ''}
-              />
-            </Form.Group>
-
             <div className="col-12 col-md-12">
               <Form.Group className="mb-0">
                 <div className="form-group mb-2">
@@ -378,7 +364,6 @@ const Talleres = () => {
             <h5>Actividades del taller:</h5>
             <div className="control-label">
               {tallerSeleccionado ? tallerSeleccionado.tipo_taller : ''}{' '}
-              <h6>Código: {tallerSeleccionado ? tallerSeleccionado.id_taller : ''} </h6>
             </div>
           </div>
         </Modal.Header>

@@ -138,13 +138,13 @@ const FichaMedica = () => {
                 <tbody className={styles.tableBodyMiddle}>
                   {diagnosticos &&
                     diagnosticos.map((diagnostico) => (
-                        <tr key={diagnostico.id_diagnostico}>
-                          <td data-th="Nombre de Enfermedad">{diagnostico.enfermedad.nombre}</td>
-                          <td data-th="Fecha de Diagnóstico">
-                            {utils.convertirFormatoFecha(diagnostico.fecha)}
-                          </td>
-                        </tr>
-                      ))}
+                      <tr key={diagnostico.id_diagnostico}>
+                        <td data-th="Nombre de Enfermedad">{diagnostico.enfermedad.nombre}</td>
+                        <td data-th="Fecha de Diagnóstico">
+                          {utils.convertirFormatoFecha(diagnostico.fecha)}
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
@@ -181,18 +181,16 @@ const FichaMedica = () => {
                 <tbody className={styles.tableBodyMiddle}>
                   {evoluciones &&
                     evoluciones.map((evolucion) => (
-                        <tr key={evolucion.id_evolucion}>
-                          <td data-th="Estado Evolutivo">
-                            Estado: {evolucion.escala_evolucion}
-                          </td>
-                          <td data-th="Descripción">
-                            {utils.describirEstado(evolucion.escala_evolucion)}
-                          </td>
-                          <td data-th="Fecha de Observación">
-                            {utils.convertirFormatoFecha(evolucion.fecha)}
-                          </td>
-                        </tr>
-                      ))}
+                      <tr key={evolucion.id_evolucion}>
+                        <td data-th="Estado Evolutivo">Estado: {evolucion.escala_evolucion}</td>
+                        <td data-th="Descripción">
+                          {utils.describirEstado(evolucion.escala_evolucion)}
+                        </td>
+                        <td data-th="Fecha de Observación">
+                          {utils.convertirFormatoFecha(evolucion.fecha)}
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
@@ -228,13 +226,13 @@ const FichaMedica = () => {
                 <tbody className={styles.tableBodyMiddle}>
                   {osociales &&
                     osociales.map((osocial) => (
-                        <tr key={osocial.id_cobertura}>
-                          <td data-th="Obra Social">{osocial.obra_social.nombre}</td>
-                          <td data-th="Tipo">
-                            {utils.convertirTipo(osocial.obra_social.es_estatal)}
-                          </td>
-                        </tr>
-                      ))}
+                      <tr key={osocial.id_cobertura}>
+                        <td data-th="Obra Social">{osocial.obra_social.nombre}</td>
+                        <td data-th="Tipo">
+                          {utils.convertirTipo(osocial.obra_social.es_estatal)}
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
@@ -273,20 +271,18 @@ const FichaMedica = () => {
                 <tbody className={styles.tableBodyMiddle}>
                   {indicaciones &&
                     indicaciones.map((indicacion) => (
-                        <tr key={indicacion.id_indicacion}>
-                          <td data-th="Nombre de Medicamento">{indicacion.medicamento.nombre}</td>
-                          <td data-th="Dosis en mg">{indicacion.cantidad_miligramos} mg</td>
-                          <td data-th="Hora de Toma">
-                            Cada {utils.convertirFormatoHora(indicacion.hora_de_toma)} hs
-                          </td>
-                          <td data-th="Fecha de Prescripción">
-                            {utils.convertirFormatoFecha(indicacion.fecha_prescripcion)}
-                          </td>
-                          <td data-th="Estado">
-                            {utils.convertirEstado(indicacion.esta_vigente)}
-                          </td>
-                        </tr>
-                      ))}
+                      <tr key={indicacion.id_indicacion}>
+                        <td data-th="Nombre de Medicamento">{indicacion.medicamento.nombre}</td>
+                        <td data-th="Dosis en mg">{indicacion.cantidad_miligramos} mg</td>
+                        <td data-th="Hora de Toma">
+                          Cada {utils.convertirFormatoHora(indicacion.hora_de_toma)} hs
+                        </td>
+                        <td data-th="Fecha de Prescripción">
+                          {utils.convertirFormatoFecha(indicacion.fecha_prescripcion)}
+                        </td>
+                        <td data-th="Estado">{utils.convertirEstado(indicacion.esta_vigente)}</td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
@@ -297,12 +293,16 @@ const FichaMedica = () => {
           <ErrorFallbackInline
             error={{ message: loadError }}
             resetErrorBoundary={recargar}
-            message={loadError || 'Error al cargar la ficha médica. Intente nuevamente.'}
+            message="Error al cargar la ficha médica. Intente nuevamente."
           />
         )}
         <div className="row justify-content-center mt-4">
           <div className="col-auto">
-            <button type="button" className="btn btn-secondary" onClick={() => navigate('/list-pacientes')}>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => navigate('/list-pacientes')}
+            >
               Volver
             </button>
           </div>

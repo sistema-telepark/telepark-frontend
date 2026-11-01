@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { WarningIcon, ReloadIcon } from '../icons/icons-shared';
-import styles from '../../styles/error-fallback-route.module.css';
 
 /**
  * ErrorFallbackRoute — Tarjeta de error contextual (NIVEL 2)
@@ -13,7 +12,7 @@ import styles from '../../styles/error-fallback-route.module.css';
  * @param {Function} resetErrorBoundary - Función para reintentar
  * @param {string} componentName      - Nombre del componente que falló (custom prop)
  */
-const ErrorFallbackRoute = ({ error, resetErrorBoundary, componentName }) => {
+const ErrorFallbackRoute = ({ resetErrorBoundary, componentName }) => {
   return (
     <div className="container py-4">
       <div className="card border-warning shadow-sm">
@@ -26,13 +25,6 @@ const ErrorFallbackRoute = ({ error, resetErrorBoundary, componentName }) => {
             Ocurrió un error al cargar esta sección. Las demás secciones de la aplicación no se
             vieron afectadas.
           </p>
-
-          {import.meta.env.DEV && (
-            <div className="alert alert-secondary py-2 px-3 mb-3">
-              <strong className="small">Error:</strong>
-              <pre className={'mb-0 mt-1 ' + styles.errorPre}>{error.message}</pre>
-            </div>
-          )}
 
           <button className="btn btn-naranja" onClick={resetErrorBoundary}>
             <ReloadIcon className="me-1" />

@@ -1,6 +1,18 @@
 import { logAsyncError } from '../components/error-boundary/logError';
 import { showToast } from './notification.service';
 
+const IDENTIFIER_IN_MESSAGE = /\b(?:c[oó]digo|id(?:_[a-z0-9]+)?)\b\s*[:=#]\s*[-#]?\d+\b/gi;
+
+const isInternalField = (field) => /^id(?:_|$)/i.test(field) || /c[oó]digo/i.test(field);
+
+const sanitizeMessage = (message) => {
+  if (typeof message !== 'string') return '';
+  return message
+    .replace(IDENTIFIER_IN_MESSAGE, '')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+};
+
 const formatValidationErrors = (data) => {
   if (!data) return '';
   if (typeof data === 'string') return data;
@@ -20,7 +32,9 @@ const formatValidationErrors = (data) => {
     return Object.entries(data)
       .map(([field, value]) => {
         const message = formatValidationErrors(value);
-        return message ? `${field}: ${message}` : '';
+        if (!message) return '';
+        // Los identificadores internos no se muestran al usuario.
+        return isInternalField(field) ? message : `${field}: ${message}`;
       })
       .filter(Boolean)
       .join('; ');
@@ -52,7 +66,7 @@ export const normalizeError = (error) => {
     }
 
     return {
-      message,
+      message: sanitizeMessage(message) || (status === 409 ? CONFLICT_FALLBACK : `Error ${status}`),
       status,
       code: data?.code,
       severity: status >= 500 ? 'modal' : 'toast',
@@ -68,7 +82,7 @@ export const normalizeError = (error) => {
   }
   // Error genérico (Error nativo, throw new Error(), etc.)
   return {
-    message: error.message || 'Error inesperado',
+    message: sanitizeMessage(error.message) || 'Error inesperado',
     status: 0,
     code: error.code,
     severity: 'modal',

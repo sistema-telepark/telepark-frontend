@@ -9,7 +9,7 @@ import styles from '../../styles/error-fallback-global.module.css';
  * Se muestra cuando un error no capturado por los boundaries de ruta
  * llega al nivel global. Permite al usuario recargar la aplicación.
  */
-const ErrorFallbackGlobal = ({ error }) => {
+const ErrorFallbackGlobal = () => {
   return (
     <div
       className={
@@ -25,13 +25,6 @@ const ErrorFallbackGlobal = ({ error }) => {
           Ocurrió un error inesperado en la aplicación. Por favor, recargá la página para intentarlo
           de nuevo.
         </p>
-
-        {import.meta.env.DEV && (
-          <div className={'alert alert-secondary text-start mb-4 ' + styles.devAlert}>
-            <strong>Detalles (solo desarrollo):</strong>
-            <pre className={'mb-0 mt-2 ' + styles.devPre}>{error.message}</pre>
-          </div>
-        )}
 
         <button className="btn btn-azul btn-lg" onClick={() => window.location.reload()}>
           <svg
