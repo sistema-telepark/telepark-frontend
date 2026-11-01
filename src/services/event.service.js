@@ -27,7 +27,9 @@ const events = {
     return response.data;
   },
   async getAll() {
-    const response = await http.get(`/personas`, { params: { activo: true } });
+    const response = await http.get(`/personas`, {
+      params: { activo: true, ordering: 'apellido' },
+    });
     return response.data;
   },
   async getPersonEp() {

@@ -153,7 +153,9 @@ const ListaPaciente = (props) => {
               <table className="table table-bordered table-hover shadow table-striped">
                 <thead>
                   <tr>
-                    <th scope="col">Nombre completo</th>
+                    <th scope="col">Apellido</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Ingreso</th>
                     <th scope="col">Acción</th>
                   </tr>
                 </thead>
@@ -170,8 +172,12 @@ const ListaPaciente = (props) => {
                       )
                       .map((paciente) => (
                         <tr key={paciente.id_persona ?? paciente.id}>
-                          <td data-th="Nombre completo">
-                            {paciente.nombre} {paciente.apellido}
+                          <td data-th="Apellido">{paciente.apellido}</td>
+                          <td data-th="Nombre">{paciente.nombre}</td>
+                          <td data-th="Ingreso">
+                            {paciente.fecha_ingreso
+                              ? utils.convertirFormatoFecha(paciente.fecha_ingreso)
+                              : ''}
                           </td>
                           <td data-th="Acción">
                           <Link
