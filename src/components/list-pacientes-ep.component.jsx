@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Link } from 'react-router';
+import { useNavigate } from 'react-router';
 import { connect } from 'react-redux';
 import { cambiarID } from '../actions/global';
 import { pacienteRepository } from '../services/paciente.service';
@@ -7,14 +7,7 @@ import { Form, Modal } from 'react-bootstrap';
 import utils from '../utils/utils';
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
 import LoadingSpinner from './shared/loading-spinner';
-import {
-  EyeIcon,
-  ClipboardCheckIcon,
-  ClipboardDataIcon,
-  JournalPlusIcon,
-  JournalTextIcon,
-  PlusIcon,
-} from './icons/icons-shared';
+import { PlusIcon } from './icons/icons-shared';
 import styles from '../styles/list-pacientes-ep.module.css';
 import addPacienteStyles from '../styles/add-paciente.module.css';
 import { useForm } from 'react-hook-form';
@@ -25,6 +18,7 @@ import CondicionesVivienda from './add-paciente/condiciones-vivienda.component';
 import PropTypes from 'prop-types';
 
 const ListaPaciente = (props) => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [buscar, setBuscar] = useState('');
   const [pacientes, setPacientes] = useState([]);
@@ -156,7 +150,6 @@ const ListaPaciente = (props) => {
                     <th scope="col">Apellido</th>
                     <th scope="col">Nombre</th>
                     <th scope="col">Ingreso</th>
-                    <th scope="col">Acción</th>
                   </tr>
                 </thead>
                 <tbody className={styles.tableBodyMiddle}>
@@ -171,7 +164,14 @@ const ListaPaciente = (props) => {
                             paciente.apellido.toUpperCase().includes(buscar))
                       )
                       .map((paciente) => (
-                        <tr key={paciente.id_persona ?? paciente.id}>
+                        <tr
+                          key={paciente.id_persona ?? paciente.id}
+                          className={styles.filaClickeable}
+                          onClick={() => {
+                            verSeccion(paciente.id_persona, paciente.nombre, paciente.apellido);
+                            navigate('/ficha');
+                          }}
+                        >
                           <td data-th="Apellido">{paciente.apellido}</td>
                           <td data-th="Nombre">{paciente.nombre}</td>
                           <td data-th="Ingreso">
@@ -179,83 +179,7 @@ const ListaPaciente = (props) => {
                               ? utils.convertirFormatoFecha(paciente.fecha_ingreso)
                               : ''}
                           </td>
-                          <td data-th="Acción">
-                          <Link
-                            to="/ficha"
-                            onClick={() =>
-                              verSeccion(paciente.id_persona, paciente.nombre, paciente.apellido)
-                            }
-                          >
-                            <button
-                              type="button"
-                              title="Ver Ficha Médica"
-                              className="btn btn-verde me-2"
-                            >
-                              <EyeIcon />
-                            </button>
-                          </Link>
-
-                          <Link
-                            to="/list-diagnostico"
-                            onClick={() =>
-                              verSeccion(paciente.id_persona, paciente.nombre, paciente.apellido)
-                            }
-                          >
-                            <button
-                              type="button"
-                              title="Ver Diagnósticos"
-                              className="btn btn-naranja me-2"
-                            >
-                              <ClipboardCheckIcon />
-                            </button>
-                          </Link>
-
-                          <Link
-                            to="/list-evolucion"
-                            onClick={() =>
-                              verSeccion(paciente.id_persona, paciente.nombre, paciente.apellido)
-                            }
-                          >
-                            <button
-                              type="button"
-                              title="Ver Evolución"
-                              className="btn btn-rojo me-2"
-                            >
-                              <ClipboardDataIcon />
-                            </button>
-                          </Link>
-
-                          <Link
-                            to="/list-obrasocial"
-                            onClick={() =>
-                              verSeccion(paciente.id_persona, paciente.nombre, paciente.apellido)
-                            }
-                          >
-                            <button
-                              type="button"
-                              title="Ver Obra Social"
-                              className="btn btn-violeta me-2"
-                            >
-                              <JournalPlusIcon />
-                            </button>
-                          </Link>
-
-                          <Link
-                            to="/list-indicacion"
-                            onClick={() =>
-                              verSeccion(paciente.id_persona, paciente.nombre, paciente.apellido)
-                            }
-                          >
-                            <button
-                              type="button"
-                              title="Ver Indicaciones Médicas"
-                              className="btn btn-azul me-2"
-                            >
-                              <JournalTextIcon />
-                            </button>
-                          </Link>
-                        </td>
-                      </tr>
+                        </tr>
                     ))}
               </tbody>
               </table>
