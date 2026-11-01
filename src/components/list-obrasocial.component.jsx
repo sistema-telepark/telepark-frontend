@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { Modal } from 'react-bootstrap';
 import { obrasocialRepository } from '../services/obrasocial.service';
 import { osRepository } from '../services/os.service';
-import { showToast } from '../services/notification.service';
+import { showConfirm, showToast } from '../services/notification.service';
 import { TokenService } from '../services/token.service';
 import utils from '../utils/utils';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
@@ -131,9 +131,30 @@ const ListaObraSocial = (props) => {
     }
   };
 
+  const notificacionEliminar = async (info, id) => {
+    const confirmado = await showConfirm({
+      title: 'Estas seguro?',
+      message: 'No podrás revertir esto!',
+      confirmLabel: 'Sí',
+      cancelLabel: 'No',
+      variant: 'warning',
+    });
+    if (confirmado) {
+      eliminar(info, id);
+    } else {
+      showToast('danger', 'Cancelado', { message: 'No se eliminaron registros' });
+    }
+  };
+
   return (
-    <main className="container panel-gris">
-      <div className="row">
+    <main
+      className={
+        'border-top-sm m-0 row justify-content-center panel-gris m-md-3 rounded shadow container-lg mx-md-auto ' +
+        styles.pageHeader
+      }
+    >
+      <div className="mb-4 col-12 col-md-9 col-lg-12 col-xl-10">
+        <div className="row">
         <div className="mb-2 col-12 col-md-12 col-lg-12 col-xl-12">
           <h3 className="mt-4">Obra Social de Persona con EP</h3>
           <hr />
@@ -253,7 +274,11 @@ const ListaObraSocial = (props) => {
       <div className="row">
         <div className="col-12 col-md-12 col-lg-12 col-xl-12">
           <div className="table-responsive">
-            <table className="table table-bordered table-hover shadow table-striped">
+            <table
+              className={
+                'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
+              }
+            >
               <thead>
                 <tr>
                   <th scope="col">Obra Social</th>
@@ -286,10 +311,9 @@ const ListaObraSocial = (props) => {
                               type="button"
                               className="btn btn-rojo"
                               onClick={() =>
-                                utils.notificacionEliminar(
+                                notificacionEliminar(
                                   { obra_social: osocial.obra_social.id_obra_social },
-                                  osocial.id_cobertura,
-                                  eliminar
+                                  osocial.id_cobertura
                                 )
                               }
                             >
@@ -311,6 +335,15 @@ const ListaObraSocial = (props) => {
               message="No se pudieron cargar las obras sociales. Intente nuevamente."
             />
           )}
+        </div>
+      </div>
+
+        <div className="row justify-content-center mt-4">
+          <div className="col-auto">
+            <button type="button" className="btn btn-azul" onClick={() => navigate('/ficha')}>
+              Volver
+            </button>
+          </div>
         </div>
       </div>
     </main>
