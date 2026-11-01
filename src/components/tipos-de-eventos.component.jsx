@@ -6,6 +6,7 @@ import { showConfirm, showToast } from '../services/notification.service';
 import { PencilIcon, PlusIcon, TrashIcon } from './icons/icons-shared';
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
 import LoadingSpinner from './shared/loading-spinner';
+import actionStyles from '../styles/table-row-actions.module.css';
 
 const TypeEvents = () => {
   const [typeEvent, setTypeEvent] = useState([]);
@@ -141,37 +142,38 @@ const TypeEvents = () => {
                 </tr>
               </thead>
               <tbody>
-                {typeEvent
-                  .map((element) => (
-                    <tr key={element.id_tipo_evento}>
-                      <td data-th="Nombre">{element.nombre}</td>
-                      <td data-th="Desactivar Taller">
-                        <input
-                          disabled={true}
-                          type="checkbox"
-                          checked={element.desactiva_taller}
-                          className="form-check-input"
-                        />
-                      </td>
-                      <td data-th="Acción">
-                      <button
-                        type="button"
-                        className="btn btn-verde me-2"
-                        onClick={() => showModalEdit(element)}
-                      >
-                        <PencilIcon />
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-rojo"
-                        onClick={() => handleDelete(element)}
-                      >
-                        <TrashIcon />
-                      </button>
+                {typeEvent.map((element) => (
+                  <tr key={element.id_tipo_evento}>
+                    <td data-th="Nombre">{element.nombre}</td>
+                    <td data-th="Desactivar Taller">
+                      <input
+                        disabled={true}
+                        type="checkbox"
+                        checked={element.desactiva_taller}
+                        className="form-check-input"
+                      />
+                    </td>
+                    <td data-th="Acción">
+                      <div className={actionStyles.rowActions}>
+                        <button
+                          type="button"
+                          className="btn btn-verde"
+                          onClick={() => showModalEdit(element)}
+                        >
+                          <PencilIcon />
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-rojo"
+                          onClick={() => handleDelete(element)}
+                        >
+                          <TrashIcon />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
-            </tbody>
+              </tbody>
             </table>
           </div>
         </div>

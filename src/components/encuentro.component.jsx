@@ -12,6 +12,7 @@ import ErrorFallbackInline from './error-boundary/error-fallback-inline.componen
 import LoadingSpinner from './shared/loading-spinner';
 import utils from '../utils/utils';
 import styles from '../styles/encuentro.module.css';
+import actionStyles from '../styles/table-row-actions.module.css';
 
 const normalizarSeleccion = (seleccion) => {
   if (Array.isArray(seleccion)) return seleccion.map(Number);
@@ -101,9 +102,7 @@ const Encuentro = () => {
     );
   };
 
-  const talleresDelEncuentro = (encuentroSeleccionado?.talleres ?? []).map((t) =>
-    Number(t.taller)
-  );
+  const talleresDelEncuentro = (encuentroSeleccionado?.talleres ?? []).map((t) => Number(t.taller));
 
   const actividadesDelTaller = encuentroSeleccionado
     ? actividad.filter((act) => talleresDelEncuentro.includes(Number(act.taller)))
@@ -116,9 +115,7 @@ const Encuentro = () => {
     const actividadesToSave = actividadesSeleccionadas
       .filter(
         (seleccionada) =>
-          !actividadRealizada.some(
-            (realizada) => realizada.actividad === seleccionada.id_actividad
-          )
+          !actividadRealizada.some((realizada) => realizada.actividad === seleccionada.id_actividad)
       )
       .map((actividadItem) => ({
         actividad: actividadItem.id_actividad,
@@ -200,7 +197,9 @@ const Encuentro = () => {
       )
     );
     const eliminaciones = await Promise.all(
-      aEliminar.map((asociacion) => encuentroTallerRepository.delete(asociacion.id_encuentro_taller))
+      aEliminar.map((asociacion) =>
+        encuentroTallerRepository.delete(asociacion.id_encuentro_taller)
+      )
     );
 
     if ([...creaciones, ...eliminaciones].every((asociacion) => asociacion.success)) {
@@ -297,9 +296,7 @@ const Encuentro = () => {
 
   // Agrupa las actividades por taller; el nombre del taller será la clave
   const actividadesPorTaller = actividadesDelTaller.reduce((acc, actividadItem) => {
-    const tallerObj = taller.find(
-      (tallerItem) => tallerItem.id_taller === actividadItem.taller
-    );
+    const tallerObj = taller.find((tallerItem) => tallerItem.id_taller === actividadItem.taller);
     const tallerNombre = tallerObj?.tipo_taller || 'Taller sin nombre';
 
     if (!acc[tallerNombre]) {
@@ -354,35 +351,37 @@ const Encuentro = () => {
                         .join(', ') || 'Sin taller'}
                     </td>
                     <td data-th="Acción">
-                    <button
-                      type="button"
-                      className="btn btn-verde me-2"
-                      title="Editar"
-                      onClick={() => showModalEdit(element)}
-                    >
-                      <PencilIcon />
-                    </button>
+                      <div className={actionStyles.rowActions}>
+                        <button
+                          type="button"
+                          className="btn btn-verde"
+                          title="Editar"
+                          onClick={() => showModalEdit(element)}
+                        >
+                          <PencilIcon />
+                        </button>
 
-                    <button
-                      type="button"
-                      className="btn btn-rojo me-2"
-                      title="Borrar"
-                      onClick={() => eliminarEncuentro(element)}
-                    >
-                      <TrashIcon />
-                    </button>
+                        <button
+                          type="button"
+                          className="btn btn-rojo"
+                          title="Borrar"
+                          onClick={() => eliminarEncuentro(element)}
+                        >
+                          <TrashIcon />
+                        </button>
 
-                    <button
-                      type="button"
-                      className="btn btn-azul me-2"
-                      title="Agregar actividades"
-                      onClick={() => showModalInsertAct(element)}
-                    >
-                      <PlusIcon />
-                    </button>
-                  </td>
-                </tr>
-              ))}
+                        <button
+                          type="button"
+                          className="btn btn-azul"
+                          title="Agregar actividades"
+                          onClick={() => showModalInsertAct(element)}
+                        >
+                          <PlusIcon />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -456,10 +455,7 @@ const Encuentro = () => {
                         value={String(element.id_taller)}
                         {...formInsert.register('idtalleres')}
                       />
-                      <label
-                        htmlFor={`idtaller-${element.id_taller}`}
-                        className="form-check-label"
-                      >
+                      <label htmlFor={`idtaller-${element.id_taller}`} className="form-check-label">
                         {element.tipo_taller}
                       </label>
                     </div>
@@ -600,39 +596,43 @@ const Encuentro = () => {
               <div className="table-responsive">
                 <table className="table table-bordered table-hover shadow table-striped">
                   <tbody>
-                  {nombresTalleres.map((tallerNombre) => (
-                    <React.Fragment key={tallerNombre}>
-                      <tr>
-                        <td colSpan="1" className={styles.groupHeader} data-th="Taller">
-                          {tallerNombre}
-                        </td>
-                      </tr>
-
-                      {actividadesPorTaller[tallerNombre].map((act) => (
-                        <tr key={act.id_actividad}>
-                          <td data-th="Actividad">{act.nombre}</td>
-                          <td data-th="Seleccionada">
-                            <input
-                              type="checkbox"
-                              className="form-check-input"
-                              id={`actividad-${act.id_actividad}`}
-                              value={act.id_actividad}
-                              checked={act.checked || false}
-                              onChange={() => handleActividadCheck(act.id_actividad)}
-                            />
+                    {nombresTalleres.map((tallerNombre) => (
+                      <React.Fragment key={tallerNombre}>
+                        <tr>
+                          <td colSpan="2" className={styles.groupHeader} data-th="Taller">
+                            {tallerNombre}
                           </td>
                         </tr>
-                      ))}
-                    </React.Fragment>
-                  ))}
-                </tbody>
+
+                        {actividadesPorTaller[tallerNombre].map((act) => (
+                          <tr key={act.id_actividad}>
+                            <td data-th="Actividad">{act.nombre}</td>
+                            <td data-th="Seleccionada">
+                              <input
+                                type="checkbox"
+                                className="form-check-input"
+                                id={`actividad-${act.id_actividad}`}
+                                value={act.id_actividad}
+                                checked={act.checked || false}
+                                onChange={() => handleActividadCheck(act.id_actividad)}
+                              />
+                            </td>
+                          </tr>
+                        ))}
+                      </React.Fragment>
+                    ))}
+                  </tbody>
                 </table>
               </div>
             </div>
           </div>
         </Modal.Body>
         <Modal.Footer className="justify-content-center">
-          <button type="button" className="btn btn-secondary" onClick={() => handleModalInsertAct()}>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => handleModalInsertAct()}
+          >
             Salir
           </button>
           <button

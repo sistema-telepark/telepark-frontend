@@ -4,6 +4,7 @@ import { PencilIcon, TrashIcon } from './icons/icons-shared';
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
 import LoadingSpinner from './shared/loading-spinner';
 import styles from '../styles/add-paciente.module.css';
+import actionStyles from '../styles/table-row-actions.module.css';
 import { eventRespository } from '../services/event.service';
 import { showConfirm, showToast } from '../services/notification.service';
 import { Form, Modal } from 'react-bootstrap';
@@ -157,24 +158,26 @@ const AdminPersonas = () => {
                       <td data-th="Nombre">{person.nombre}</td>
                       <td data-th="Telefono">{person.telefono}</td>
                       <td data-th="Accion">
-                      <button
-                        type="button"
-                        className="btn btn-verde me-2"
-                        onClick={() => showModalEdit(person)}
-                      >
-                        <PencilIcon />
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-rojo me-1"
-                        onClick={() => eliminar(person)}
-                      >
-                        <TrashIcon />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+                        <div className={actionStyles.rowActions}>
+                          <button
+                            type="button"
+                            className="btn btn-verde"
+                            onClick={() => showModalEdit(person)}
+                          >
+                            <PencilIcon />
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-rojo"
+                            onClick={() => eliminar(person)}
+                          >
+                            <TrashIcon />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
               </table>
             </div>
           </div>

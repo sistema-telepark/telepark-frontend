@@ -11,6 +11,7 @@ import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
 import LoadingSpinner from './shared/loading-spinner';
 import styles from '../styles/list-diagnostico.module.css';
+import actionStyles from '../styles/table-row-actions.module.css';
 
 const ListaDiagnostico = () => {
   const idEpElegido = useSelector((state) => state.global.idEpElegido);
@@ -313,52 +314,54 @@ const ListaDiagnostico = () => {
                   'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
                 }
               >
-              <thead>
-                <tr>
-                  <th scope="col">Nombre de Enfermedad</th>
-                  <th scope="col">Fecha de Diagnóstico</th>
-                  <th scope="col">Acción</th>
-                </tr>
-              </thead>
-              <tbody className={styles.tableBodyMiddle}>
-                {diagnosticos &&
-                  diagnosticos.map((diagnostico) => (
+                <thead>
+                  <tr>
+                    <th scope="col">Nombre de Enfermedad</th>
+                    <th scope="col">Fecha de Diagnóstico</th>
+                    <th scope="col">Acción</th>
+                  </tr>
+                </thead>
+                <tbody className={styles.tableBodyMiddle}>
+                  {diagnosticos &&
+                    diagnosticos.map((diagnostico) => (
                       <tr key={diagnostico.id_diagnostico}>
                         <td data-th="Nombre de Enfermedad">{diagnostico.enfermedad.nombre}</td>
                         <td data-th="Fecha de Diagnóstico">
                           {utils.convertirFormatoFecha(diagnostico.fecha)}
                         </td>
                         <td data-th="Acción">
-                          <button
-                            type="button"
-                            className={'btn btn-verde ' + styles.rowActionButton}
-                            onClick={() =>
-                              editar(
-                                diagnostico.enfermedad.id_enfermedad,
-                                diagnostico.fecha,
-                                diagnostico.id_diagnostico
-                              )
-                            }
-                          >
-                            <PencilIcon />
-                          </button>
-                          <button
-                            type="button"
-                            className="btn btn-rojo"
-                            onClick={() =>
-                              notificacionEliminar(
-                                diagnostico.enfermedad.id_enfermedad,
-                                diagnostico.fecha,
-                                diagnostico.id_diagnostico
-                              )
-                            }
-                          >
-                            <TrashIcon />
-                          </button>
+                          <div className={actionStyles.rowActions}>
+                            <button
+                              type="button"
+                              className="btn btn-verde"
+                              onClick={() =>
+                                editar(
+                                  diagnostico.enfermedad.id_enfermedad,
+                                  diagnostico.fecha,
+                                  diagnostico.id_diagnostico
+                                )
+                              }
+                            >
+                              <PencilIcon />
+                            </button>
+                            <button
+                              type="button"
+                              className="btn btn-rojo"
+                              onClick={() =>
+                                notificacionEliminar(
+                                  diagnostico.enfermedad.id_enfermedad,
+                                  diagnostico.fecha,
+                                  diagnostico.id_diagnostico
+                                )
+                              }
+                            >
+                              <TrashIcon />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}
-              </tbody>
+                </tbody>
               </table>
             </div>
             {loading && <LoadingSpinner />}

@@ -9,6 +9,7 @@ import { CheckIcon, CloseIcon, AddIcon, EditIcon, DeleteIcon } from './icons/ico
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
 import LoadingSpinner from './shared/loading-spinner';
 import styles from '../styles/nomenclador.module.css';
+import actionStyles from '../styles/table-row-actions.module.css';
 
 const Nomenclador = () => {
   const [type, setType] = useState('');
@@ -292,43 +293,43 @@ const Nomenclador = () => {
                         <tr key={enfermedad.id_enfermedad}>
                           <td data-th="Enfermedad">{enfermedad.nombre}</td>
                           <td data-th="Acción">
-                          {isSuperuser && (
-                            <>
-                              <button
-                                type="button"
-                                className={'btn btn-verde ' + styles.rowActionButton}
-                                onClick={() =>
-                                  editar(
-                                    'enfermedad',
-                                    { nombre: enfermedad.nombre },
-                                    enfermedad.id_enfermedad
-                                  )
-                                }
-                                aria-label={`Editar enfermedad: ${enfermedad.nombre}`}
-                              >
-                                <EditIcon />
-                              </button>
-                              <button
-                                type="button"
-                                className="btn btn-rojo"
-                                onClick={() =>
-                                  utils.notificacionEliminar(
-                                    'enfermedad',
-                                    enfermedad.id_enfermedad,
-                                    eliminar
-                                  )
-                                }
-                                aria-label={`Eliminar enfermedad: ${enfermedad.nombre}`}
-                              >
-                                <DeleteIcon />
-                              </button>
-                            </>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
+                            {isSuperuser && (
+                              <div className={actionStyles.rowActions}>
+                                <button
+                                  type="button"
+                                  className="btn btn-verde"
+                                  onClick={() =>
+                                    editar(
+                                      'enfermedad',
+                                      { nombre: enfermedad.nombre },
+                                      enfermedad.id_enfermedad
+                                    )
+                                  }
+                                  aria-label={`Editar enfermedad: ${enfermedad.nombre}`}
+                                >
+                                  <EditIcon />
+                                </button>
+                                <button
+                                  type="button"
+                                  className="btn btn-rojo"
+                                  onClick={() =>
+                                    utils.notificacionEliminar(
+                                      'enfermedad',
+                                      enfermedad.id_enfermedad,
+                                      eliminar
+                                    )
+                                  }
+                                  aria-label={`Eliminar enfermedad: ${enfermedad.nombre}`}
+                                >
+                                  <DeleteIcon />
+                                </button>
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -400,42 +401,42 @@ const Nomenclador = () => {
                         <tr key={medicamento.id_medicamento}>
                           <td data-th="Medicamento">{medicamento.nombre}</td>
                           <td data-th="Acción">
-                          {isSuperuser && (
-                            <>
-                              <button
-                                type="button"
-                                className={'btn btn-verde ' + styles.rowActionButton}
-                                onClick={() =>
-                                  editar(
-                                    'medicamento',
-                                    { nombre: medicamento.nombre },
-                                    medicamento.id_medicamento
-                                  )
-                                }
-                                aria-label={`Editar medicamento: ${medicamento.nombre}`}
-                              >
-                                <EditIcon />
-                              </button>
-                              <button
-                                type="button"
-                                className="btn btn-rojo"
-                                onClick={() =>
-                                  utils.notificacionEliminar(
-                                    'medicamento',
-                                    medicamento.id_medicamento,
-                                    eliminar
-                                  )
-                                }
-                                aria-label={`Eliminar medicamento: ${medicamento.nombre}`}
-                              >
-                                <DeleteIcon />
-                              </button>
-                            </>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
+                            {isSuperuser && (
+                              <div className={actionStyles.rowActions}>
+                                <button
+                                  type="button"
+                                  className="btn btn-verde"
+                                  onClick={() =>
+                                    editar(
+                                      'medicamento',
+                                      { nombre: medicamento.nombre },
+                                      medicamento.id_medicamento
+                                    )
+                                  }
+                                  aria-label={`Editar medicamento: ${medicamento.nombre}`}
+                                >
+                                  <EditIcon />
+                                </button>
+                                <button
+                                  type="button"
+                                  className="btn btn-rojo"
+                                  onClick={() =>
+                                    utils.notificacionEliminar(
+                                      'medicamento',
+                                      medicamento.id_medicamento,
+                                      eliminar
+                                    )
+                                  }
+                                  aria-label={`Eliminar medicamento: ${medicamento.nombre}`}
+                                >
+                                  <DeleteIcon />
+                                </button>
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
                 </table>
               </div>
             </div>
@@ -521,42 +522,45 @@ const Nomenclador = () => {
                         <tr key={obrasocial.id_obra_social}>
                           <td data-th="Obra Social">{obrasocial.nombre}</td>
                           <td data-th="Acción">
-                          {isSuperuser && (
-                            <>
-                              <button
-                                type="button"
-                                className={'btn btn-verde ' + styles.rowActionButton}
-                                onClick={() =>
-                                  editar(
-                                    'obrasocial',
-                                    { nombre: obrasocial.nombre, isChecked: obrasocial.es_estatal },
-                                    obrasocial.id_obra_social
-                                  )
-                                }
-                                aria-label={`Editar obra social: ${obrasocial.nombre}`}
-                              >
-                                <EditIcon />
-                              </button>
-                              <button
-                                type="button"
-                                className="btn btn-rojo"
-                                onClick={() =>
-                                  utils.notificacionEliminar(
-                                    'obrasocial',
-                                    obrasocial.id_obra_social,
-                                    eliminar
-                                  )
-                                }
-                                aria-label={`Eliminar obra social: ${obrasocial.nombre}`}
-                              >
-                                <DeleteIcon />
-                              </button>
-                            </>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
+                            {isSuperuser && (
+                              <div className={actionStyles.rowActions}>
+                                <button
+                                  type="button"
+                                  className="btn btn-verde"
+                                  onClick={() =>
+                                    editar(
+                                      'obrasocial',
+                                      {
+                                        nombre: obrasocial.nombre,
+                                        isChecked: obrasocial.es_estatal,
+                                      },
+                                      obrasocial.id_obra_social
+                                    )
+                                  }
+                                  aria-label={`Editar obra social: ${obrasocial.nombre}`}
+                                >
+                                  <EditIcon />
+                                </button>
+                                <button
+                                  type="button"
+                                  className="btn btn-rojo"
+                                  onClick={() =>
+                                    utils.notificacionEliminar(
+                                      'obrasocial',
+                                      obrasocial.id_obra_social,
+                                      eliminar
+                                    )
+                                  }
+                                  aria-label={`Eliminar obra social: ${obrasocial.nombre}`}
+                                >
+                                  <DeleteIcon />
+                                </button>
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
                 </table>
               </div>
             </div>

@@ -10,6 +10,7 @@ import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
 import LoadingSpinner from './shared/loading-spinner';
 import styles from '../styles/list-evolucion.module.css';
+import actionStyles from '../styles/table-row-actions.module.css';
 
 const ListaEvolucion = () => {
   const idEpElegido = useSelector((state) => state.global.idEpElegido);
@@ -285,21 +286,21 @@ const ListaEvolucion = () => {
                   'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
                 }
               >
-              <thead>
-                <tr>
-                  <th scope="col">Estado Evolutivo</th>
-                  <th scope="col" className={styles.descriptionColumn}>
-                    Descripción
-                  </th>
-                  <th scope="col">Fecha de Observación</th>
-                  <th scope="col" className={styles.actionColumn}>
-                    Acción
-                  </th>
-                </tr>
-              </thead>
-              <tbody className={styles.tableBodyMiddle}>
-                {evoluciones &&
-                  evoluciones.map((evolucion) => (
+                <thead>
+                  <tr>
+                    <th scope="col">Estado Evolutivo</th>
+                    <th scope="col" className={styles.descriptionColumn}>
+                      Descripción
+                    </th>
+                    <th scope="col">Fecha de Observación</th>
+                    <th scope="col" className={styles.actionColumn}>
+                      Acción
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className={styles.tableBodyMiddle}>
+                  {evoluciones &&
+                    evoluciones.map((evolucion) => (
                       <tr key={evolucion.id_evolucion}>
                         <td data-th="Estado Evolutivo">Estado: {evolucion.escala_evolucion}</td>
                         <td className={styles.descriptionColumn} data-th="Descripción">
@@ -309,36 +310,38 @@ const ListaEvolucion = () => {
                           {utils.convertirFormatoFecha(evolucion.fecha)}
                         </td>
                         <td className={styles.actionColumn} data-th="Acción">
-                          <button
-                            type="button"
-                            className={'btn btn-verde ' + styles.rowActionButton}
-                            onClick={() =>
-                              editar(
-                                evolucion.escala_evolucion,
-                                evolucion.fecha,
-                                evolucion.id_evolucion
-                              )
-                            }
-                          >
-                            <PencilIcon />
-                          </button>
-                          <button
-                            type="button"
-                            className="btn btn-rojo"
-                            onClick={() =>
-                              notificacionEliminar(
-                                evolucion.escala_evolucion,
-                                evolucion.fecha,
-                                evolucion.id_evolucion
-                              )
-                            }
-                          >
-                            <TrashIcon />
-                          </button>
+                          <div className={actionStyles.rowActions}>
+                            <button
+                              type="button"
+                              className="btn btn-verde"
+                              onClick={() =>
+                                editar(
+                                  evolucion.escala_evolucion,
+                                  evolucion.fecha,
+                                  evolucion.id_evolucion
+                                )
+                              }
+                            >
+                              <PencilIcon />
+                            </button>
+                            <button
+                              type="button"
+                              className="btn btn-rojo"
+                              onClick={() =>
+                                notificacionEliminar(
+                                  evolucion.escala_evolucion,
+                                  evolucion.fecha,
+                                  evolucion.id_evolucion
+                                )
+                              }
+                            >
+                              <TrashIcon />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}
-              </tbody>
+                </tbody>
               </table>
             </div>
             {loading && <LoadingSpinner />}
