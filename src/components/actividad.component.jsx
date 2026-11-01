@@ -8,6 +8,7 @@ import { CheckIcon, CloseIcon } from './icons/icons-nomenclador';
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
 import LoadingSpinner from './shared/loading-spinner';
 import styles from '../styles/actividad.module.css';
+import actionStyles from '../styles/table-row-actions.module.css';
 
 const Actividad = () => {
   const [actividades, setActividades] = useState([]);
@@ -176,24 +177,26 @@ const Actividad = () => {
                       <tr key={actividad.id_actividad}>
                         <td data-th="nombre Actividad">{actividad.nombre}</td>
                         <td data-th="Acción">
-                        <button
-                          type="button"
-                          className={`btn btn-verde ${styles.rowActionButton}`}
-                          onClick={() => editar(actividad)}
-                        >
-                          <PlusIcon />
-                        </button>
-                        <button
-                          type="button"
-                          className="btn btn-rojo"
-                          onClick={() => eliminar(actividad)}
-                        >
-                          <TrashIcon />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
+                          <div className={actionStyles.rowActions}>
+                            <button
+                              type="button"
+                              className="btn btn-verde"
+                              onClick={() => editar(actividad)}
+                            >
+                              <PlusIcon />
+                            </button>
+                            <button
+                              type="button"
+                              className="btn btn-rojo"
+                              onClick={() => eliminar(actividad)}
+                            >
+                              <TrashIcon />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
               </table>
             </div>
           </div>

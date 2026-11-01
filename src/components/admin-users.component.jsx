@@ -5,6 +5,7 @@ import { TokenService } from '../services/token.service';
 import utils from '../utils/utils';
 import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
 import styles from '../styles/admin-users.module.css';
+import actionStyles from '../styles/table-row-actions.module.css';
 import { showToast } from '../services/notification.service';
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
 import LoadingSpinner from './shared/loading-spinner';
@@ -638,25 +639,27 @@ const AdminUsuarios = () => {
                       <td data-th="Estado">{utils.convertStateUser(usuario.is_active)}</td>
 
                       <td data-th="Acción">
-                      <button
-                        type="button"
-                        className={'btn btn-verde ' + styles.rowActionButton}
-                        onClick={() => editUser(usuario)}
-                      >
-                        <PencilIcon />
-                      </button>
-                      <button
-                        type="button"
-                        className={'btn btn-rojo ' + styles.rowActionButton}
-                        onClick={() => eliminarUsuario(usuario)}
-                        aria-label={`Eliminar usuario ${usuario.username}`}
-                      >
-                        <TrashIcon />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
+                        <div className={actionStyles.rowActions}>
+                          <button
+                            type="button"
+                            className="btn btn-verde"
+                            onClick={() => editUser(usuario)}
+                          >
+                            <PencilIcon />
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-rojo"
+                            onClick={() => eliminarUsuario(usuario)}
+                            aria-label={`Eliminar usuario ${usuario.username}`}
+                          >
+                            <TrashIcon />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
             </table>
           </div>
         </div>

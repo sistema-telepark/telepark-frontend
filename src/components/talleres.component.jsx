@@ -8,6 +8,7 @@ import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
 import LoadingSpinner from './shared/loading-spinner';
 import styles from '../styles/talleres.module.css';
+import actionStyles from '../styles/table-row-actions.module.css';
 
 const TIPOS_TALLER = ['Educación física', 'Literario', 'Danza'];
 
@@ -210,35 +211,37 @@ const Talleres = () => {
                   <tr key={element.id_taller}>
                     <td data-th="Nombre">{element.tipo_taller}</td>
                     <td data-th="Acción">
-                    <button
-                      type="button"
-                      className="btn btn-verde me-2"
-                      title="Editar"
-                      onClick={() => showModalEdit(element)}
-                    >
-                      <PencilIcon />
-                    </button>
+                      <div className={actionStyles.rowActions}>
+                        <button
+                          type="button"
+                          className="btn btn-verde"
+                          title="Editar"
+                          onClick={() => showModalEdit(element)}
+                        >
+                          <PencilIcon />
+                        </button>
 
-                    <button
-                      type="button"
-                      className="btn btn-rojo me-2"
-                      title="Borrar"
-                      onClick={() => deleteT(element)}
-                    >
-                      <TrashIcon />
-                    </button>
+                        <button
+                          type="button"
+                          className="btn btn-rojo"
+                          title="Borrar"
+                          onClick={() => deleteT(element)}
+                        >
+                          <TrashIcon />
+                        </button>
 
-                    <button
-                      type="button"
-                      className="btn btn-azul me-2"
-                      title="Gestionar actividades"
-                      onClick={() => showModalInsertAct(element)}
-                    >
-                      <PlusIcon />
-                    </button>
-                  </td>
-                </tr>
-              ))}
+                        <button
+                          type="button"
+                          className="btn btn-azul"
+                          title="Gestionar actividades"
+                          onClick={() => showModalInsertAct(element)}
+                        >
+                          <PlusIcon />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -456,7 +459,11 @@ const Talleres = () => {
           </div>
         </Modal.Body>
         <Modal.Footer className="justify-content-center">
-          <button type="button" className="btn btn-secondary" onClick={() => handleModalInsertAct()}>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => handleModalInsertAct()}
+          >
             Salir
           </button>
           <button type="button" className="btn btn-verde ms-3" onClick={() => guardarAct()}>

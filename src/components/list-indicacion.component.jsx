@@ -11,6 +11,7 @@ import { PlusIcon, PencilIcon, TrashIcon } from './icons/icons-shared';
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
 import LoadingSpinner from './shared/loading-spinner';
 import styles from '../styles/list-indicacion.module.css';
+import actionStyles from '../styles/table-row-actions.module.css';
 
 const ListaIndicacion = () => {
   const idEpElegido = useSelector((state) => state.global.idEpElegido);
@@ -449,19 +450,19 @@ const ListaIndicacion = () => {
                   'table table-bordered table-hover shadow table-striped ' + styles.tableFullWidth
                 }
               >
-              <thead>
-                <tr>
-                  <th scope="col">Nombre de Medicamento</th>
-                  <th scope="col">Dosis en mg</th>
-                  <th scope="col">Hora de Toma</th>
-                  <th scope="col">Fecha de Prescripción</th>
-                  <th scope="col">Estado</th>
-                  <th scope="col">Acción</th>
-                </tr>
-              </thead>
-              <tbody className={styles.tableBodyMiddle}>
-                {indicaciones &&
-                  indicaciones.map((indicacion) => (
+                <thead>
+                  <tr>
+                    <th scope="col">Nombre de Medicamento</th>
+                    <th scope="col">Dosis en mg</th>
+                    <th scope="col">Hora de Toma</th>
+                    <th scope="col">Fecha de Prescripción</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Acción</th>
+                  </tr>
+                </thead>
+                <tbody className={styles.tableBodyMiddle}>
+                  {indicaciones &&
+                    indicaciones.map((indicacion) => (
                       <tr key={indicacion.id_indicacion}>
                         <td data-th="Nombre de Medicamento">{indicacion.medicamento.nombre}</td>
                         <td data-th="Dosis en mg">{indicacion.cantidad_miligramos} mg</td>
@@ -473,42 +474,44 @@ const ListaIndicacion = () => {
                         </td>
                         <td data-th="Estado">{utils.convertirEstado(indicacion.esta_vigente)}</td>
                         <td data-th="Acción">
-                          <button
-                            type="button"
-                            className={'btn btn-verde ' + styles.rowActionButton}
-                            onClick={() =>
-                              editar(
-                                indicacion.cantidad_miligramos,
-                                indicacion.esta_vigente,
-                                indicacion.fecha_prescripcion,
-                                indicacion.hora_de_toma,
-                                indicacion.medicamento.id_medicamento,
-                                indicacion.id_indicacion
-                              )
-                            }
-                          >
-                            <PencilIcon />
-                          </button>
-                          <button
-                            type="button"
-                            className="btn btn-rojo"
-                            onClick={() =>
-                              notificacionEliminar(
-                                indicacion.cantidad_miligramos,
-                                indicacion.esta_vigente,
-                                indicacion.fecha_prescripcion,
-                                indicacion.hora_de_toma,
-                                indicacion.medicamento.id_medicamento,
-                                indicacion.id_indicacion
-                              )
-                            }
-                          >
-                            <TrashIcon />
-                          </button>
+                          <div className={actionStyles.rowActions}>
+                            <button
+                              type="button"
+                              className="btn btn-verde"
+                              onClick={() =>
+                                editar(
+                                  indicacion.cantidad_miligramos,
+                                  indicacion.esta_vigente,
+                                  indicacion.fecha_prescripcion,
+                                  indicacion.hora_de_toma,
+                                  indicacion.medicamento.id_medicamento,
+                                  indicacion.id_indicacion
+                                )
+                              }
+                            >
+                              <PencilIcon />
+                            </button>
+                            <button
+                              type="button"
+                              className="btn btn-rojo"
+                              onClick={() =>
+                                notificacionEliminar(
+                                  indicacion.cantidad_miligramos,
+                                  indicacion.esta_vigente,
+                                  indicacion.fecha_prescripcion,
+                                  indicacion.hora_de_toma,
+                                  indicacion.medicamento.id_medicamento,
+                                  indicacion.id_indicacion
+                                )
+                              }
+                            >
+                              <TrashIcon />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}
-              </tbody>
+                </tbody>
               </table>
             </div>
             {loading && <LoadingSpinner />}
