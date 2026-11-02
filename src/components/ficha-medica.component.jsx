@@ -98,7 +98,7 @@ const FichaMedica = () => {
     >
       <div className="mb-4 col-12 col-md-9 col-lg-12 col-xl-10">
         <h2 className="mt-4 text-center">
-          <b>Ficha Médica</b>
+            Ficha Médica
         </h2>
         <hr />
         <div className="row">

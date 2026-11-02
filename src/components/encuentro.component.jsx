@@ -487,7 +487,7 @@ const Encuentro = () => {
             <div className="col-12 col-md-6">
               <Form.Group className="mb-0">
                 <label htmlFor="fechaEdit" className="control-label">
-                  Fecha de encuentro
+                  Fecha
                 </label>
                 <input
                   type="date"
@@ -517,12 +517,13 @@ const Encuentro = () => {
               </Form.Group>
             </div>
           </div>
-
+          <br />
           <div className="row">
             <div className="col-12 col-md-12">
               <Form.Group className="mb-0">
                 <div className="form-group mb-2">
                   <span className="control-label d-block">Talleres</span>
+                  <br />
                   {taller.map((element) => (
                     <div className="form-check" key={element.id_taller}>
                       <input
@@ -560,9 +561,12 @@ const Encuentro = () => {
       </Modal>
 
       <Modal show={modalInsertAct} scrollable>
-        <Modal.Header>
+        <Modal.Header className="justify-content-center">
+          <h4 className="mb-0">Agregar actividades</h4>
+        </Modal.Header>
+        <Modal.Body>
           <div>
-            <h5>Actividades del encuentro:</h5>
+            <label className="control-label">Encuentro</label>
             <div className="control-label">
               <div>
                 {encuentroSeleccionado
@@ -571,8 +575,10 @@ const Encuentro = () => {
               </div>
             </div>
           </div>
-        </Modal.Header>
-        <Modal.Body>
+          <br />
+          <label className="control-label">Actividades</label>
+          <br />
+          <br />
           <div className="row">
             <div className={`col-12 col-md-12 col-lg-12 col-xl-12 ${styles.scrollContainer}`}>
               <div className="table-responsive">

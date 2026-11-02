@@ -3,11 +3,13 @@ import styles from '../styles/familiar.module.css';
 
 const FamiliarComponent = () => {
   return (
-    <div className={`${styles.container} panel-gris`}>
-      <h2 className={`${styles.title} text-center mt-4`}>Ingresar/Modificar Familiar</h2>
-      <hr />
-      <p className={styles.placeholder}>Componente en construcción</p>
-    </div>
+    <>
+      <main className="border-top-sm m-0 justify-content-center m-md-3 rounded shadow container-lg mx-md-auto panel-gris">
+        <h2 className="mt-4 text-center">Familiares</h2>
+        <hr />
+        <p className={styles.placeholder}>Componente en construcción</p>
+      </main>
+    </>
   );
 };
 
