@@ -200,7 +200,8 @@ const Asistencia = () => {
           <table className="table table-striped">
             <thead>
               <tr>
-                <th scope="col">Persona con EP</th>
+                <th scope="col">Apellido</th>
+                <th scope="col">Nombre</th>
                 <th scope="col">Asistencia</th>
                 <th scope="col">Justificado</th>
               </tr>
@@ -208,7 +209,8 @@ const Asistencia = () => {
             <tbody>
               {pacientesVisibles.map((element) => (
                 <tr key={element.id_persona}>
-                  <td data-th="Persona con EP">{`${element.nombre} ${element.apellido}`}</td>
+                  <td data-th="Apellido">{element.apellido}</td>
+                  <td data-th="Nombre">{element.nombre}</td>
                   <td data-th="Asistencia">
                     <input
                       type="checkbox"

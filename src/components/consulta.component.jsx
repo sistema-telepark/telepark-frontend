@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Container, Form } from 'react-bootstrap';
 import { tallerRepository } from '../services/taller.service';
 import { actividadRepository } from '../services/actividad.service';
@@ -35,6 +35,8 @@ const Consulta = () => {
   const [form, setForm] = useState({
     fechaEncuentro: '',
   });
+
+  const rosterRequestRef = useRef(0);
 
   useEffect(() => {
     setLoading(true);
@@ -92,24 +94,34 @@ const Consulta = () => {
   };
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setForm({
       ...form,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
+
+    if (name === 'fechaEncuentro') {
+      consultarAsistencia(value);
+    }
   };
 
-  const consultarAsistencia = async () => {
-    if (!form.fechaEncuentro) {
-      setErrores({ fecha: 'Debe elegir un encuentro.' });
+  const consultarAsistencia = async (idEncuentro) => {
+    const requestId = ++rosterRequestRef.current;
+
+    if (!idEncuentro) {
       setAsistencia([]);
+      setMensajeSinDatos(false);
+      setErrores({});
       return;
     }
     setErrores({});
 
     const [respRoster, respPacientes] = await Promise.all([
-      asistenciaRepository.getRosterEncuentro(form.fechaEncuentro),
+      asistenciaRepository.getRosterEncuentro(idEncuentro),
       pacienteRepository.getPacientesEp(),
     ]);
+
+    if (requestId !== rosterRequestRef.current) return;
 
     if (!respRoster.success || !respPacientes.success) {
       setAsistencia([]);
@@ -121,19 +133,23 @@ const Consulta = () => {
     }
 
     const roster = toArray(respRoster.data);
-    const nombresPorPersona = new Map(
+    const datosPorPersona = new Map(
       respPacientes.data.map((paciente) => [
         Number(paciente.id_persona),
-        `${paciente.nombre} ${paciente.apellido}`,
+        { nombre: paciente.nombre, apellido: paciente.apellido },
       ])
     );
 
     setAsistencia(
-      roster.map((item) => ({
-        id_persona: item.persona_ep,
-        nombre: nombresPorPersona.get(Number(item.persona_ep)) ?? `Persona EP ${item.persona_ep}`,
-        estado: item.estado === ESTADO_PRESENTE ? ESTADO_PRESENTE : ESTADO_AUSENTE,
-      }))
+      roster.map((item) => {
+        const datosPersona = datosPorPersona.get(Number(item.persona_ep));
+        return {
+          id_persona: item.persona_ep,
+          nombre: datosPersona?.nombre ?? `Persona EP ${item.persona_ep}`,
+          apellido: datosPersona?.apellido ?? '',
+          estado: item.estado === ESTADO_PRESENTE ? ESTADO_PRESENTE : ESTADO_AUSENTE,
+        };
+      })
     );
     setMensajeSinDatos(roster.length === 0);
     setLoadError(null);
@@ -200,6 +216,7 @@ const Consulta = () => {
   };
 
   const limpiarAsistencia = () => {
+    rosterRequestRef.current += 1;
     setAsistencia([]);
     setMensajeSinDatos(false);
     setErrores({});
@@ -247,14 +264,7 @@ const Consulta = () => {
               <div className="d-flex">
                 <button
                   type="button"
-                  className="btn btn-verde"
-                  onClick={() => consultarAsistencia()}
-                >
-                  Consultar
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-celeste ms-3"
+                  className="btn btn-celeste"
                   onClick={() => limpiarAsistencia()}
                 >
                   Limpiar
@@ -268,6 +278,7 @@ const Consulta = () => {
                   <table className="table table-hover table-striped text-center">
                     <thead className="table-dark">
                       <tr>
+                        <th>Apellido</th>
                         <th>Nombre</th>
                         <th>Estado</th>
                       </tr>
@@ -275,6 +286,7 @@ const Consulta = () => {
                     <tbody>
                       {asistencia.map((item) => (
                         <tr key={item.id_persona}>
+                          <td data-th="Apellido">{item.apellido}</td>
                           <td data-th="Nombre">{item.nombre}</td>
                           <td data-th="Estado">{item.estado}</td>
                         </tr>
@@ -319,15 +331,15 @@ const Consulta = () => {
                   <table className="table table-hover table-striped text-center">
                     <thead className="table-dark">
                       <tr>
+                        <th>Apellido</th>
                         <th>Nombre</th>
                       </tr>
                     </thead>
                     <tbody>
                       {faltaC.map((paciente) => (
                         <tr key={paciente.id_persona}>
-                          <td data-th="Nombre">
-                            {paciente.nombre} {paciente.apellido}
-                          </td>
+                          <td data-th="Apellido">{paciente.apellido}</td>
+                          <td data-th="Nombre">{paciente.nombre}</td>
                         </tr>
                       ))}
                     </tbody>
