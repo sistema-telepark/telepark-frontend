@@ -10,8 +10,6 @@ import LoadingSpinner from './shared/loading-spinner';
 import styles from '../styles/talleres.module.css';
 import actionStyles from '../styles/table-row-actions.module.css';
 
-const TIPOS_TALLER = ['Educación física', 'Literario', 'Danza'];
-
 let contadorIdLocal = 1;
 const generarIdLocal = () => {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) {
@@ -266,23 +264,17 @@ const Talleres = () => {
               <Form.Group className="mb-0">
                 <div className="form-group mb-2">
                   <label htmlFor="tipo_taller" className="control-label">
-                    Tipo de taller
+                    Nombre
                   </label>
-                  <select
-                    className="form-select"
-                    placeholder="Ingrese el tipo de taller"
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Ingrese el nombre del taller"
                     id="tipo_taller"
                     {...formInsert.register('tipo_taller', {
-                      required: 'Debe seleccionar un tipo de taller.',
+                      required: 'El nombre del taller no puede estar vacío.',
                     })}
-                  >
-                    <option value="">Elija el tipo de taller</option>
-                    {TIPOS_TALLER.map((tipo) => (
-                      <option key={tipo} value={tipo}>
-                        {tipo}
-                      </option>
-                    ))}
-                  </select>
+                  />
                   {formInsert.formState.errors.tipo_taller && (
                     <small className="text-danger">
                       {formInsert.formState.errors.tipo_taller.message}
@@ -317,23 +309,17 @@ const Talleres = () => {
               <Form.Group className="mb-0">
                 <div className="form-group mb-2">
                   <label htmlFor="tipo_tallerEdit" className="control-label">
-                    Tipo de taller
+                    Nombre
                   </label>
-                  <select
-                    className="form-select"
-                    placeholder="Ingrese el tipo de taller"
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Ingrese el nombre del taller"
                     id="tipo_tallerEdit"
                     {...formEdit.register('tipo_taller', {
-                      required: 'Debe seleccionar un tipo de taller.',
+                      required: 'El nombre del taller no puede estar vacío.',
                     })}
-                  >
-                    <option value="">Seleccione el tipo de taller</option>
-                    {TIPOS_TALLER.map((tipo) => (
-                      <option key={tipo} value={tipo}>
-                        {tipo}
-                      </option>
-                    ))}
-                  </select>
+                  />
                   {formEdit.formState.errors.tipo_taller && (
                     <small className="text-danger">
                       {formEdit.formState.errors.tipo_taller.message}
@@ -359,19 +345,21 @@ const Talleres = () => {
       </Modal>
 
       <Modal show={modalInsertAct} scrollable>
-        <Modal.Header>
+        <Modal.Header className="justify-content-center">
+                  <h4 className="mb-0">Agregar actividades</h4>
+        </Modal.Header>
+        <Modal.Body>
           <div>
-            <h5>Actividades del taller:</h5>
+            <label className="control-label">Taller</label>
             <div className="control-label">
               {tallerSeleccionado ? tallerSeleccionado.tipo_taller : ''}{' '}
             </div>
           </div>
-        </Modal.Header>
-        <Modal.Body>
+          <br />
           <div className="row">
             <Form.Group className="mb-0">
               <label htmlFor="nombreActividad" className="control-label">
-                Ingrese nueva actividad:
+                Ingrese nueva actividad
               </label>
               <div className="mb-2 col-12 col-md-12 col-lg-12 col-xl-12 input-group">
                 <div className="input-group">

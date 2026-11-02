@@ -203,7 +203,7 @@ const TypeEvents = () => {
         <Modal.Body>
           <Form.Group className="mb-0">
             <label htmlFor="nombre" className="control-label">
-              Nombre:
+              Nombre
             </label>
             <input
               type="text"
@@ -220,7 +220,7 @@ const TypeEvents = () => {
           </Form.Group>
           <Form.Group className="mb-0">
             <label htmlFor="desactiva_taller" className="control-label">
-              Desactivar taller:
+              Desactivar taller
             </label>
             <input
               type="checkbox"
@@ -253,7 +253,7 @@ const TypeEvents = () => {
           <Form>
             <Form.Group className="mb-0">
               <label htmlFor="nombre" className="control-label">
-                Nombre de tipo de evento:
+                Nombre
               </label>
               <input
                 type="text"
@@ -270,7 +270,7 @@ const TypeEvents = () => {
             </Form.Group>
             <Form.Group className="mb-0">
               <label htmlFor="desactiva_taller" className="control-label">
-                Desactivar taller:
+                Desactivar taller
               </label>
               <input
                 type="checkbox"

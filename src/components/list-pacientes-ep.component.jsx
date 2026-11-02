@@ -167,6 +167,7 @@ const ListaPaciente = (props) => {
                     <tr
                       key={paciente.id_persona ?? paciente.id}
                       className={styles.filaClickeable}
+                      title="Ver ficha médica"
                       onClick={() => {
                         verSeccion(paciente.id_persona, paciente.nombre, paciente.apellido);
                         navigate('/ficha');
