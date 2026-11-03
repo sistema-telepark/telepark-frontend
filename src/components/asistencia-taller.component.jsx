@@ -4,7 +4,6 @@ import { Container, Form } from 'react-bootstrap';
 import { encuentroRepository } from '../services/encuentro.service';
 import { pacienteRepository } from '../services/paciente.service';
 import { asistenciaRepository } from '../services/asistencia.service';
-import { eventRespository } from '../services/event.service';
 import { showToast } from '../services/notification.service';
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
 import LoadingSpinner from './shared/loading-spinner';
@@ -17,7 +16,6 @@ const ESTADO_AUSENTE = 'Ausente';
 const Asistencia = () => {
   const [encuentro, setEncuentro] = useState([]);
   const [pacientes, setPacientes] = useState([]);
-  const [evento, setEvento] = useState([]);
   const [selectedEncuentroId, setSelectedEncuentroId] = useState(null);
 
   const [loadError, setLoadError] = useState(null);
@@ -28,14 +26,14 @@ const Asistencia = () => {
   useEffect(() => {
     setLoading(true);
     setLoadError(null);
-    Promise.all([getEncuentroAll(), getPacientes(), getEventoAll()])
+    Promise.all([getEncuentroAll(), getPacientes()])
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
 
   const recargar = () => {
     setLoadError(null);
-    Promise.all([getEncuentroAll(), getPacientes(), getEventoAll()]).catch(() => {});
+    Promise.all([getEncuentroAll(), getPacientes()]).catch(() => {});
   };
 
   const getEncuentroAll = async () => {
@@ -58,16 +56,6 @@ const Asistencia = () => {
     }
   };
 
-  const getEventoAll = async () => {
-    const resp = await eventRespository.getEventGestionAll();
-    if (resp.success) {
-      setEvento(resp.data.results);
-      setLoadError(null);
-    } else {
-      setLoadError(resp.error);
-    }
-  };
-
   const clear = () => {
     formAsistencia.reset({ fechaEncuentro: '' });
     setSelectedEncuentroId(null);
@@ -75,7 +63,7 @@ const Asistencia = () => {
       pacientes.map((persona) => ({
         ...persona,
         checked: false,
-        justificado: false,
+        justificada: false,
       }))
     );
   };
@@ -102,7 +90,6 @@ const Asistencia = () => {
     clear();
   };
 
-  // Al seleccionar un encuentro, carga sus asistencias y marca los pacientes cuyo evento cae en el rango de fechas
   const handleEncuentroChange = async (e) => {
     if (e.target.value === '') {
       setSelectedEncuentroId(null);
@@ -113,37 +100,25 @@ const Asistencia = () => {
     const encuentroSeleccionado = encuentro.find((enc) => Number(enc.id_encuentro) === encuentroId);
 
     if (encuentroSeleccionado) {
-      const resp = await asistenciaRepository.getAsistenciaByEncuentro(encuentroId);
+      const resp = await asistenciaRepository.getRosterEncuentro(encuentroId);
       if (!resp.success) {
         setLoadError(resp.error);
         return;
       }
       setLoadError(null);
 
-      const asistenciasPersistidas = resp.data;
+      const roster = resp.data;
       setSelectedEncuentroId(encuentroId);
 
-      const fechaEncuentro = new Date(encuentroSeleccionado.fecha);
-
       const updatedPacientes = pacientes.map((persona) => {
-        const eventosPersona = evento.filter(
-          (ev) => Number(ev.persona_ep) === Number(persona.id_persona)
-        );
-
-        const isDateInRange = eventosPersona.some((eventoItem) => {
-          const fechaDesde = new Date(eventoItem.fecha_desde);
-          const fechaHasta = new Date(eventoItem.fecha_hasta);
-          return fechaEncuentro >= fechaDesde && fechaEncuentro <= fechaHasta;
-        });
-
-        const asistenciaPersistida = asistenciasPersistidas.find(
+        const filaRoster = roster.find(
           (item) => Number(item.persona_ep) === Number(persona.id_persona)
         );
 
         return {
           ...persona,
-          checked: asistenciaPersistida ? asistenciaPersistida.estado === ESTADO_PRESENTE : false,
-          justificado: isDateInRange,
+          checked: filaRoster ? filaRoster.estado === ESTADO_PRESENTE : false,
+          justificada: filaRoster?.justificada === true,
         };
       });
       setPacientes(updatedPacientes);
@@ -203,7 +178,7 @@ const Asistencia = () => {
                 <th scope="col">Apellido</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Asistencia</th>
-                <th scope="col">Justificado</th>
+                <th scope="col">Justificada</th>
               </tr>
             </thead>
             <tbody>
@@ -222,13 +197,13 @@ const Asistencia = () => {
                       onChange={() => handleAsistenciaCheck(element.id_persona)}
                     />
                   </td>
-                  <td data-th="Justificado">
+                  <td data-th="Justificada">
                     <input
                       type="checkbox"
                       className="form-check-input"
-                      id={`justificado-${element.id_persona}`}
+                      id={`justificada-${element.id_persona}`}
                       value={element.id_persona}
-                      checked={element.justificado || false}
+                      checked={!element.checked && (element.justificada || false)}
                       readOnly
                     />
                   </td>

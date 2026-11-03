@@ -5,6 +5,7 @@ import { actividadRepository } from '../services/actividad.service';
 import { encuentroRepository } from '../services/encuentro.service';
 import { pacienteRepository } from '../services/paciente.service';
 import { asistenciaRepository } from '../services/asistencia.service';
+import { reporteRepository } from '../services/reporte.service';
 import { eventRespository } from '../services/event.service';
 import ErrorFallbackInline from './error-boundary/error-fallback-inline.component';
 import LoadingSpinner from './shared/loading-spinner';
@@ -37,6 +38,7 @@ const Consulta = () => {
   });
 
   const rosterRequestRef = useRef(0);
+  const faltasRequestRef = useRef(0);
 
   useEffect(() => {
     setLoading(true);
@@ -76,7 +78,7 @@ const Consulta = () => {
   const getEncuentroAll = async () => {
     const resp = await encuentroRepository.getEncuentroAll();
     if (resp.success) {
-      setEncuentro(resp.data.results);
+      setEncuentro(toArray(resp.data));
       setLoadError(null);
     } else {
       setLoadError(resp.error);
@@ -140,79 +142,73 @@ const Consulta = () => {
       ])
     );
 
-    setAsistencia(
-      roster.map((item) => {
-        const datosPersona = datosPorPersona.get(Number(item.persona_ep));
-        return {
-          id_persona: item.persona_ep,
-          nombre: datosPersona?.nombre ?? `Persona EP ${item.persona_ep}`,
-          apellido: datosPersona?.apellido ?? '',
-          estado: item.estado === ESTADO_PRESENTE ? ESTADO_PRESENTE : ESTADO_AUSENTE,
-        };
-      })
+    const filas = roster.map((item) => {
+      const datosPersona = datosPorPersona.get(Number(item.persona_ep));
+      return {
+        id_persona: item.persona_ep,
+        nombre: datosPersona?.nombre ?? `Persona EP ${item.persona_ep}`,
+        apellido: datosPersona?.apellido ?? '',
+        estado: item.estado === ESTADO_PRESENTE ? ESTADO_PRESENTE : ESTADO_AUSENTE,
+        justificada: item.justificada === true,
+      };
+    });
+
+    filas.sort(
+      (a, b) =>
+        a.apellido.localeCompare(b.apellido, 'es', { sensitivity: 'base' }) ||
+        a.nombre.localeCompare(b.nombre, 'es', { sensitivity: 'base' })
     );
+
+    setAsistencia(filas);
     setMensajeSinDatos(roster.length === 0);
     setLoadError(null);
   };
 
   const consultarFaltasC = async () => {
-    const respAsistencias = await asistenciaRepository.getAsistenciaAll();
-    const respPacientes = await pacienteRepository.getPacientesEp();
-    const respEncuentros = await encuentroRepository.getEncuentroAll();
+    const requestId = ++faltasRequestRef.current;
 
-    if (!respAsistencias.success || !respPacientes.success || !respEncuentros.success) {
+    const [respReporte, respPacientes] = await Promise.all([
+      reporteRepository.getFaltasConsecutivas(),
+      pacienteRepository.getPacientesEp(),
+    ]);
+
+    if (requestId !== faltasRequestRef.current) return;
+
+    if (!respReporte.success || !respPacientes.success) {
       setFaltaC([]);
       setMensajeSinDatosFC(false);
       const primerError =
-        !respAsistencias.success && respAsistencias.error
-          ? respAsistencias.error
-          : !respPacientes.success && respPacientes.error
-            ? respPacientes.error
-            : respEncuentros.error;
+        !respReporte.success && respReporte.error ? respReporte.error : respPacientes.error;
       setLoadError(primerError);
       return;
     }
 
+    const reporte = toArray(respReporte.data);
+    const datosPorPersona = new Map(
+      respPacientes.data.map((paciente) => [
+        Number(paciente.id_persona),
+        { nombre: paciente.nombre, apellido: paciente.apellido },
+      ])
+    );
+
+    const filas = reporte.map((item) => {
+      const datosPersona = datosPorPersona.get(Number(item.persona_ep));
+      return {
+        id_persona: item.persona_ep,
+        apellido: datosPersona?.apellido ?? `Persona EP ${item.persona_ep}`,
+        nombre: datosPersona?.nombre ?? '',
+      };
+    });
+
+    filas.sort(
+      (a, b) =>
+        a.apellido.localeCompare(b.apellido, 'es', { sensitivity: 'base' }) ||
+        a.nombre.localeCompare(b.nombre, 'es', { sensitivity: 'base' })
+    );
+
+    setFaltaC(filas);
+    setMensajeSinDatosFC(reporte.length === 0);
     setLoadError(null);
-
-    const asistencias = toArray(respAsistencias.data);
-    const pacientes = respPacientes.data.filter((paciente) => paciente.activo !== false);
-    const encuentros = toArray(respEncuentros.data);
-
-    // Ordenar encuentros por fecha (del más reciente al más antiguo)
-    const encuentrosOrdenados = [...encuentros].sort(
-      (a, b) => new Date(b.fecha) - new Date(a.fecha)
-    );
-    const ultimosDosEncuentros = encuentrosOrdenados.slice(0, 2).map((enc) => enc.id_encuentro);
-
-    // Filtrar asistencias de los últimos dos encuentros sin estado Presente
-    const asistenciasFiltradas = asistencias.filter(
-      (asistenciaItem) =>
-        ultimosDosEncuentros.includes(asistenciaItem.encuentro) &&
-        asistenciaItem.estado !== ESTADO_PRESENTE
-    );
-
-    // Agrupar asistencias por paciente
-    const faltasPorPaciente = asistenciasFiltradas.reduce((acc, asistenciaItem) => {
-      const { persona_ep } = asistenciaItem;
-      if (!acc[persona_ep]) {
-        acc[persona_ep] = 0;
-      }
-      acc[persona_ep]++;
-      return acc;
-    }, {});
-
-    // Filtrar pacientes con faltas en ambos encuentros
-    const pacientesConFaltasConsecutivas = Object.entries(faltasPorPaciente)
-      .filter(([, count]) => count === 2)
-      .map(([persona_ep]) => persona_ep);
-
-    const pacientesFiltrados = pacientes.filter((paciente) =>
-      pacientesConFaltasConsecutivas.includes(String(paciente.id_persona))
-    );
-
-    setFaltaC(pacientesFiltrados);
-    setMensajeSinDatosFC(pacientesFiltrados.length === 0);
   };
 
   const limpiarAsistencia = () => {
@@ -288,7 +284,12 @@ const Consulta = () => {
                         <tr key={item.id_persona}>
                           <td data-th="Apellido">{item.apellido}</td>
                           <td data-th="Nombre">{item.nombre}</td>
-                          <td data-th="Estado">{item.estado}</td>
+                          <td data-th="Estado">
+                            {item.estado}
+                            {item.estado === ESTADO_AUSENTE && item.justificada
+                              ? ' · Justificada'
+                              : ''}
+                          </td>
                         </tr>
                       ))}
                     </tbody>

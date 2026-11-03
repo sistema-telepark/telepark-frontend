@@ -5,11 +5,7 @@ const buildEncuentroPayload = ({ fecha, virtual }) => ({ fecha, virtual });
 
 const encuentros = {
   async getEncuentroAll() {
-    const response = await http.get(`/encuentros`);
-    return response.data;
-  },
-  async getEncuentroGestionAll() {
-    const response = await http.get(`/encuentros`);
+    const response = await http.get(`/encuentros`, { params: { ordering: '-fecha' } });
     return response.data;
   },
   async createEncuentro(data) {
@@ -29,9 +25,6 @@ const encuentros = {
 export const encuentroRepository = {
   getEncuentroAll: withServiceHandler(encuentros.getEncuentroAll, {
     context: 'obtener encuentros',
-  }),
-  getEncuentroGestionAll: withServiceHandler(encuentros.getEncuentroGestionAll, {
-    context: 'obtener encuentros para gestión',
   }),
   createEncuentro: withServiceHandler(encuentros.createEncuentro, { context: 'crear encuentro' }),
   updateEncuentro: withServiceHandler(encuentros.updateEncuentro, {
