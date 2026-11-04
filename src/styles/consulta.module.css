@@ -1,14 +1,19 @@
-.whiteCard {
-  background-color: var(--bs-body-bg);
-  padding: 24px;
-}
-
-.sectionCard {
-  background-color: var(--bs-tertiary-bg);
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
 .flexMinWidth {
   min-width: 0;
+}
+
+.buttonContainer {
+  text-align: center;
+  padding-top: 38px;
+}
+
+.columnDivider {
+  border-top: 1px solid var(--bs-border-color);
+}
+
+@media (min-width: 768px) {
+  .columnDivider {
+    border-top: 0;
+    border-left: 1px solid var(--bs-border-color);
+  }
 }
