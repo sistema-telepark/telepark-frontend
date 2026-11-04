@@ -144,31 +144,33 @@ const Asistencia = () => {
     <Container className="container panel-gris">
       <h2 className="mt-4 text-center">Asistencia</h2>
       <hr />
-      <div className="col-12 col-md-3">
-        <Form.Group className="mb-0">
-          <select
-            className="form-select"
-            placeholder="Seleccione el encuentro"
-            id="fechaEncuentro"
-            {...fechaRegister}
-            onChange={(e) => {
-              fechaRegister.onChange(e);
-              handleEncuentroChange(e);
-            }}
-          >
-            <option value="">Seleccione el encuentro</option>
-            {encuentro.map((element) => (
-              <option key={element.id_encuentro} value={element.id_encuentro}>
-                {utils.convertirFormatoFecha(element.fecha)}
-              </option>
-            ))}
-          </select>
-          {formAsistencia.formState.errors.fechaEncuentro && (
-            <small className="text-danger">
-              {formAsistencia.formState.errors.fechaEncuentro.message}
-            </small>
-          )}
-        </Form.Group>
+      <div className="row mb-4">
+        <div className="col-12 col-md-3">
+          <Form.Group className="mb-0">
+            <select
+              className="form-select"
+              placeholder="Seleccione el encuentro"
+              id="fechaEncuentro"
+              {...fechaRegister}
+              onChange={(e) => {
+                fechaRegister.onChange(e);
+                handleEncuentroChange(e);
+              }}
+            >
+              <option value="">Seleccione el encuentro</option>
+              {encuentro.map((element) => (
+                <option key={element.id_encuentro} value={element.id_encuentro}>
+                  {utils.convertirFormatoFecha(element.fecha)}
+                </option>
+              ))}
+            </select>
+            {formAsistencia.formState.errors.fechaEncuentro && (
+              <small className="text-danger">
+                {formAsistencia.formState.errors.fechaEncuentro.message}
+              </small>
+            )}
+          </Form.Group>
+        </div>
       </div>
       <div className="row m-md-3 shadow mx-md-auto border-top-sm m-0 justify-content-center rounded container-lg ">
         <div className="table-responsive">
