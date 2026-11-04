@@ -88,11 +88,11 @@ h6,
 .btn-celeste {
   box-shadow: 3px 3px #024686;
   background-image: linear-gradient(to right, #387bf7, #0c6dc7, #096fc2);
-  --bs-btn-color: #000;
-  --bs-btn-hover-color: #000;
-  --bs-btn-active-color: #000;
-  --bs-btn-disabled-color: #000;
-  color: #000;
+  --bs-btn-color: #fff;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-active-color: #fff;
+  --bs-btn-disabled-color: #fff;
+  color: #fff;
 }
 
 .btn-naranja {

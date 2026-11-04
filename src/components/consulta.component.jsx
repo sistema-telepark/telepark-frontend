@@ -43,16 +43,26 @@ const Consulta = () => {
   useEffect(() => {
     setLoading(true);
     setLoadError(null);
-    Promise.all([getTallerAll(), getActividades(), getEncuentroAll(), getEventoAll()])
+    Promise.all([
+      getTallerAll(),
+      getActividades(),
+      getEncuentroAll(),
+      getEventoAll(),
+      consultarFaltasC(),
+    ])
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
 
   const recargar = () => {
     setLoadError(null);
-    Promise.all([getTallerAll(), getActividades(), getEncuentroAll(), getEventoAll()]).catch(
-      () => {}
-    );
+    Promise.all([
+      getTallerAll(),
+      getActividades(),
+      getEncuentroAll(),
+      getEventoAll(),
+      consultarFaltasC(),
+    ]).catch(() => {});
   };
 
   const getTallerAll = async () => {
@@ -219,141 +229,112 @@ const Consulta = () => {
     setForm({ fechaEncuentro: '' });
   };
 
-  const limpiarFaltasC = () => {
-    setFaltaC([]);
-    setMensajeSinDatosFC(false);
-  };
-
   return (
     <>
       <Container className={`container panel-gris ${styles.flexMinWidth}`}>
         <h2 className="mt-4 text-center">Consultas</h2>
         <hr />
 
-        <div className="col-12 col-md-3">
-          <Form.Group className="mb-0">
-            <select
-              className="form-select"
-              placeholder="Seleccione el encuentro"
-              name="fechaEncuentro"
-              id="fechaEncuentro"
-              value={form.fechaEncuentro}
-              onChange={handleChange}
-            >
-              <option value="">Seleccione el encuentro</option>
-              {encuentro.map((element) => (
-                <option key={element.id_encuentro} value={element.id_encuentro}>
-                  {utils.convertirFormatoFecha(element.fecha)}
-                </option>
-              ))}
-            </select>
-            {errores.fecha && <small className="text-danger">{errores.fecha}</small>}
-          </Form.Group>
-        </div>
+        <div className="row m-md-3 shadow mx-md-auto border-top-sm m-0 rounded">
+          <div className={`col-12 col-md-8 p-3 ${styles.flexMinWidth}`}>
+            <h5 className="mb-3">Listado de asistencia</h5>
 
-        <div className={`d-flex m-md-3 justify-content-center rounded ${styles.whiteCard}`}>
-          <div
-            className={`mb-4 col-12 col-md-8 p-4 rounded shadow-sm ${styles.sectionCard} ${styles.flexMinWidth}`}
-          >
-            <div className="d-flex justify-content-between align-items-center mb-3">
-              <span>Listado de asistencia</span>
-              <div className="d-flex">
-                <button
-                  type="button"
-                  className="btn btn-celeste"
-                  onClick={() => limpiarAsistencia()}
-                >
-                  Limpiar
-                </button>
+            <div className="row g-2 align-items-center mb-3">
+              <div className="col-12 col-md-6">
+                <Form.Group className="mb-0">
+                  <select
+                    className="form-select"
+                    placeholder="Seleccione el encuentro"
+                    name="fechaEncuentro"
+                    id="fechaEncuentro"
+                    value={form.fechaEncuentro}
+                    onChange={handleChange}
+                  >
+                    <option value="">Seleccione el encuentro</option>
+                    {encuentro.map((element) => (
+                      <option key={element.id_encuentro} value={element.id_encuentro}>
+                        {utils.convertirFormatoFecha(element.fecha)}
+                      </option>
+                    ))}
+                  </select>
+                  {errores.fecha && <small className="text-danger">{errores.fecha}</small>}
+                </Form.Group>
               </div>
             </div>
 
-            <div className="col-12">
-              {asistencia.length > 0 ? (
-                <div className="table-responsive">
-                  <table className="table table-hover table-striped text-center">
-                    <thead className="table-dark">
-                      <tr>
-                        <th>Apellido</th>
-                        <th>Nombre</th>
-                        <th>Estado</th>
+            {asistencia.length > 0 ? (
+              <div className="table-responsive">
+                <table className="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Apellido</th>
+                      <th>Nombre</th>
+                      <th>Estado</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {asistencia.map((item) => (
+                      <tr key={item.id_persona}>
+                        <td data-th="Apellido">{item.apellido}</td>
+                        <td data-th="Nombre">{item.nombre}</td>
+                        <td data-th="Estado">
+                          {item.estado}
+                          {item.estado === ESTADO_AUSENTE && item.justificada
+                            ? ' · Justificada'
+                            : ''}
+                        </td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {asistencia.map((item) => (
-                        <tr key={item.id_persona}>
-                          <td data-th="Apellido">{item.apellido}</td>
-                          <td data-th="Nombre">{item.nombre}</td>
-                          <td data-th="Estado">
-                            {item.estado}
-                            {item.estado === ESTADO_AUSENTE && item.justificada
-                              ? ' · Justificada'
-                              : ''}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              ) : (
-                mensajeSinDatos && (
-                  <p className="text-center text-muted">No hay PersonaEP activas para consultar.</p>
-                )
-              )}
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              mensajeSinDatos && (
+                <p className="text-center text-muted">No hay PersonaEP activas para consultar.</p>
+              )
+            )}
+
+            <div className={`mb-4 ${styles.buttonContainer}`}>
+              <button
+                type="button"
+                className="btn btn-celeste"
+                style={{ width: '20%' }}
+                onClick={() => limpiarAsistencia()}
+              >
+                Limpiar
+              </button>
             </div>
           </div>
-        </div>
-        <br />
-        <hr />
-        <br />
-        <div className={`d-flex m-md-3 justify-content-center rounded ${styles.whiteCard}`}>
-          <div
-            className={`mb-4 col-12 col-md-8 p-4 rounded shadow-sm ${styles.sectionCard} ${styles.flexMinWidth}`}
-          >
-            <div className="d-flex justify-content-between align-items-center mb-3">
-              <span>Lista de pacientes con faltas consecutivas</span>
-              <div className="d-flex">
-                <button type="button" className="btn btn-verde" onClick={() => consultarFaltasC()}>
-                  Consultar
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-celeste ms-3"
-                  onClick={() => limpiarFaltasC()}
-                >
-                  Limpiar
-                </button>
-              </div>
-            </div>
 
-            <div className="col-12">
-              {faltaC.length > 0 ? (
-                <div className="table-responsive">
-                  <table className="table table-hover table-striped text-center">
-                    <thead className="table-dark">
-                      <tr>
-                        <th>Apellido</th>
-                        <th>Nombre</th>
+          <div className={`col-12 col-md-4 p-3 ${styles.columnDivider} ${styles.flexMinWidth}`}>
+            <h5 className="mb-3">Inasistencias consecutivas</h5>
+
+            {faltaC.length > 0 ? (
+              <div className="table-responsive">
+                <table className="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Apellido</th>
+                      <th>Nombre</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {faltaC.map((paciente) => (
+                      <tr key={paciente.id_persona}>
+                        <td data-th="Apellido">{paciente.apellido}</td>
+                        <td data-th="Nombre">{paciente.nombre}</td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {faltaC.map((paciente) => (
-                        <tr key={paciente.id_persona}>
-                          <td data-th="Apellido">{paciente.apellido}</td>
-                          <td data-th="Nombre">{paciente.nombre}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              ) : (
-                mensajeSinDatosFC && (
-                  <p className="text-center text-muted">
-                    No hay datos de pacientes con faltas consecutivas.
-                  </p>
-                )
-              )}
-            </div>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              mensajeSinDatosFC && (
+                <p className="text-center text-muted">
+                  No hay datos de pacientes con 3 faltas consecutivas.
+                </p>
+              )
+            )}
           </div>
         </div>
         {loading && <LoadingSpinner />}

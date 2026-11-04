@@ -346,7 +346,7 @@ const Talleres = () => {
 
       <Modal show={modalInsertAct} scrollable>
         <Modal.Header className="justify-content-center">
-                  <h4 className="mb-0">Agregar actividades</h4>
+          <h4 className="mb-0">Agregar actividades</h4>
         </Modal.Header>
         <Modal.Body>
           <div>
