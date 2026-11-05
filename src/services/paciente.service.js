@@ -13,7 +13,7 @@ const pacientes = {
       fecha_nacimiento: data.nacimientoEP,
       activa_taller: true,
       escolaridad_completa: false,
-      fecha_inicio: new Date(),
+      fecha_ingreso: data.fecha_ingreso || null,
       maxima_escolaridad_alcanzada: data.escolaridadEP,
       tiene_acompanante: data.tieneAcompananteEP ? true : false,
       tiene_cuidador: data.tieneCuidadorEP ? true : false,
