@@ -279,9 +279,9 @@ const Consulta = () => {
                         <td data-th="Nombre">{item.nombre}</td>
                         <td data-th="Estado">
                           {item.estado}
-                          {item.estado === ESTADO_AUSENTE && item.justificada
-                            ? ' · Justificada'
-                            : ''}
+                          {item.estado === ESTADO_AUSENTE && item.justificada && (
+                            <span className={styles.justifiedBadge}>Justificado</span>
+                          )}
                         </td>
                       </tr>
                     ))}
