@@ -53,7 +53,11 @@ const ListaPaciente = (props) => {
     watch,
     reset,
     setValue,
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      fecha_ingreso: utils.fechaActual(),
+    },
+  });
 
   useEffect(() => {
     const cargarProvincias = async () => {
@@ -87,6 +91,7 @@ const ListaPaciente = (props) => {
   };
 
   const showModalInsert = () => {
+    setValue('fecha_ingreso', utils.fechaActual());
     setModalInsert(true);
   };
 
@@ -205,7 +210,7 @@ const ListaPaciente = (props) => {
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit(customSubmit)}>
-            <DatosPersonales register={register} errors={errors} tipo="EP" />
+            <DatosPersonales register={register} errors={errors} tipo="EP" mostrarFechaIngreso />
             <br />
             <CondicionesVivienda register={register} />
             <Vivienda

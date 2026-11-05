@@ -2,7 +2,9 @@ import React from 'react';
 import utils from '../../utils/utils';
 import PropTypes from 'prop-types';
 
-const DatosPersonales = ({ register, errors, tipo }) => {
+const DatosPersonales = ({ register, errors, tipo, mostrarFechaIngreso = false }) => {
+  const anchoColumna = mostrarFechaIngreso ? 'col-md-4' : 'col-md-6';
+
   return (
     <div>
       <div className="row">
@@ -87,7 +89,7 @@ const DatosPersonales = ({ register, errors, tipo }) => {
         </div>
       </div>
       <div className="row justify-content-center">
-        <div className="mt-2 col-12 col-md-6">
+        <div className={`mt-2 col-12 ${anchoColumna}`}>
           <label htmlFor={`nacimiento${tipo}`} className="col-form-label">
             Nacimiento
           </label>
@@ -107,7 +109,7 @@ const DatosPersonales = ({ register, errors, tipo }) => {
             <small className="field-error">{errors['nacimiento' + tipo].message}</small>
           )}
         </div>
-        <div className="mt-2 col-12 col-md-6">
+        <div className={`mt-2 col-12 ${anchoColumna}`}>
           <label htmlFor={`telefono${tipo}`} className="col-form-label">
             Teléfono
           </label>
@@ -131,6 +133,20 @@ const DatosPersonales = ({ register, errors, tipo }) => {
             <small className="field-error">{errors['telefono' + tipo].message}</small>
           )}
         </div>
+        {mostrarFechaIngreso && (
+          <div className={`mt-2 col-12 ${anchoColumna}`}>
+            <label htmlFor="fecha_ingreso" className="col-form-label">
+              Ingreso
+            </label>
+            <input
+              type="date"
+              className="form-control"
+              max={utils.fechaActual()}
+              id="fecha_ingreso"
+              {...register('fecha_ingreso')}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
@@ -144,6 +160,7 @@ DatosPersonales.propTypes = {
     })
   ).isRequired,
   tipo: PropTypes.string.isRequired,
+  mostrarFechaIngreso: PropTypes.bool,
 };
 
 export default DatosPersonales;

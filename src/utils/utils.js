@@ -71,8 +71,11 @@ class Utils {
 
   fechaActual() {
     const fecha = new Date();
-    const dia = fecha.getDate();
+    let dia = fecha.getDate();
     let mes = fecha.getMonth() + 1;
+    if (dia < 10) {
+      dia = '0' + dia;
+    }
     const anio = fecha.getFullYear();
     if (mes < 10) {
       mes = '0' + mes;
