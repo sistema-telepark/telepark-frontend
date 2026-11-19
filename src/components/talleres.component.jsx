@@ -70,7 +70,7 @@ const Talleres = () => {
   };
 
   const showModalInsert = () => {
-    formInsert.reset({ tipo_taller: '' });
+    formInsert.reset({ nombre: '' });
     setModalInsert(true);
   };
 
@@ -81,7 +81,7 @@ const Talleres = () => {
 
   const showModalEdit = (data) => {
     setTallerEditando(data);
-    formEdit.reset({ tipo_taller: data.tipo_taller });
+    formEdit.reset({ nombre: data.nombre });
     setModalEdit(true);
   };
 
@@ -105,7 +105,7 @@ const Talleres = () => {
   };
 
   const guardarNuevo = async (data) => {
-    const resp = await tallerRepository.createTaller({ tipo_taller: data.tipo_taller });
+    const resp = await tallerRepository.createTaller({ nombre: data.nombre });
     if (resp.success) {
       showToast('success', 'Se ha guardado con éxito');
       setModalInsert(false);
@@ -116,7 +116,7 @@ const Talleres = () => {
 
   const editar = async (data) => {
     const resp = await tallerRepository.updateTaller(tallerEditando.id_taller, {
-      tipo_taller: data.tipo_taller,
+      nombre: data.nombre,
     });
     if (resp.success) {
       showToast('success', 'Se ha guardado con éxito');
@@ -128,7 +128,7 @@ const Talleres = () => {
   };
 
   const deleteT = async (data) => {
-    const ok = await showConfirm(`¿Seguro que desea eliminar el taller: ${data.tipo_taller}?`);
+    const ok = await showConfirm(`¿Seguro que desea eliminar el taller: ${data.nombre}?`);
     if (!ok) {
       showToast('danger', 'Cancelado', { message: 'No se eliminaron registros' });
       return;
@@ -215,7 +215,7 @@ const Talleres = () => {
               <tbody>
                 {taller.map((element) => (
                   <tr key={element.id_taller}>
-                    <td data-th="Nombre">{element.tipo_taller}</td>
+                    <td data-th="Nombre">{element.nombre}</td>
                     <td data-th="Acción">
                       <div className={actionStyles.rowActions}>
                         <button
@@ -271,21 +271,21 @@ const Talleres = () => {
             <div className="col-12 col-md-12">
               <Form.Group className="mb-0">
                 <div className="form-group mb-2">
-                  <label htmlFor="tipo_taller" className="control-label">
+                  <label htmlFor="nombreTaller" className="control-label">
                     Nombre
                   </label>
                   <input
                     type="text"
                     className="form-control"
                     placeholder="Ingrese el nombre del taller"
-                    id="tipo_taller"
-                    {...formInsert.register('tipo_taller', {
+                    id="nombreTaller"
+                    {...formInsert.register('nombre', {
                       required: 'El nombre del taller no puede estar vacío.',
                     })}
                   />
-                  {formInsert.formState.errors.tipo_taller && (
+                  {formInsert.formState.errors.nombre && (
                     <small className="text-danger">
-                      {formInsert.formState.errors.tipo_taller.message}
+                      {formInsert.formState.errors.nombre.message}
                     </small>
                   )}
                 </div>
@@ -316,21 +316,21 @@ const Talleres = () => {
             <div className="col-12 col-md-12">
               <Form.Group className="mb-0">
                 <div className="form-group mb-2">
-                  <label htmlFor="tipo_tallerEdit" className="control-label">
+                  <label htmlFor="nombreTallerEdit" className="control-label">
                     Nombre
                   </label>
                   <input
                     type="text"
                     className="form-control"
                     placeholder="Ingrese el nombre del taller"
-                    id="tipo_tallerEdit"
-                    {...formEdit.register('tipo_taller', {
+                    id="nombreTallerEdit"
+                    {...formEdit.register('nombre', {
                       required: 'El nombre del taller no puede estar vacío.',
                     })}
                   />
-                  {formEdit.formState.errors.tipo_taller && (
+                  {formEdit.formState.errors.nombre && (
                     <small className="text-danger">
-                      {formEdit.formState.errors.tipo_taller.message}
+                      {formEdit.formState.errors.nombre.message}
                     </small>
                   )}
                 </div>
@@ -360,7 +360,7 @@ const Talleres = () => {
           <div>
             <label className="control-label">Taller</label>
             <div className="control-label">
-              {tallerSeleccionado ? tallerSeleccionado.tipo_taller : ''}{' '}
+              {tallerSeleccionado ? tallerSeleccionado.nombre : ''}{' '}
             </div>
           </div>
           <br />

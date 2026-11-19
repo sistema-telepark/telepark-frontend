@@ -296,7 +296,7 @@ const Encuentro = () => {
   // Agrupa las actividades por taller; el nombre del taller será la clave
   const actividadesPorTaller = actividadesDelTaller.reduce((acc, actividadItem) => {
     const tallerObj = taller.find((tallerItem) => tallerItem.id_taller === actividadItem.taller);
-    const tallerNombre = tallerObj?.tipo_taller || 'Taller sin nombre';
+    const tallerNombre = tallerObj?.nombre || 'Taller sin nombre';
 
     if (!acc[tallerNombre]) {
       acc[tallerNombre] = [];
@@ -347,7 +347,7 @@ const Encuentro = () => {
                             taller.find(
                               (tallerItem) =>
                                 Number(tallerItem.id_taller) === Number(asociacion.taller)
-                            )?.tipo_taller
+                            )?.nombre
                         )
                         .filter(Boolean)
                         .join(', ') || 'Sin taller'}
@@ -458,7 +458,7 @@ const Encuentro = () => {
                         {...formInsert.register('idtalleres')}
                       />
                       <label htmlFor={`idtaller-${element.id_taller}`} className="form-check-label">
-                        {element.tipo_taller}
+                        {element.nombre}
                       </label>
                     </div>
                   ))}
@@ -540,7 +540,7 @@ const Encuentro = () => {
                         htmlFor={`idtallerEdit-${element.id_taller}`}
                         className="form-check-label"
                       >
-                        {element.tipo_taller}
+                        {element.nombre}
                       </label>
                     </div>
                   ))}

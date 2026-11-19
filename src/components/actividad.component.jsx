@@ -125,7 +125,7 @@ const Actividad = () => {
               <option value="">Elija el taller</option>
               {talleres.map((taller) => (
                 <option key={taller.id_taller} value={taller.id_taller}>
-                  {taller.tipo_taller}
+                  {taller.nombre}
                 </option>
               ))}
             </select>
