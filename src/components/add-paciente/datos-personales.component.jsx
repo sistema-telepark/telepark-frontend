@@ -148,6 +148,29 @@ const DatosPersonales = ({ register, errors, tipo, mostrarFechaIngreso = false }
           </div>
         )}
       </div>
+      <div className="row justify-content-center">
+        <div className="mt-2 col-12 col-md-9">
+          <label htmlFor={`email${tipo}`} className="col-form-label">
+            Email
+          </label>
+          <input
+            type="email"
+            className="form-control"
+            placeholder="Email"
+            id={`email${tipo}`}
+            autoComplete="email"
+            {...register('email' + tipo, {
+              pattern: {
+                value: /^\S+@\S+\.\S+$/,
+                message: 'El email no es válido',
+              },
+            })}
+          />
+          {errors['email' + tipo] && (
+            <small className="field-error">{errors['email' + tipo].message}</small>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

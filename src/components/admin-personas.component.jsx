@@ -43,6 +43,7 @@ const AdminPersonas = () => {
       nombre: data.nombre,
       apellido: data.apellido,
       telefono: data.telefono,
+      email: data.email || null,
       activo: modifidedPerson.activo,
     };
     eventRespository.updatePerson(personaEditando.id_persona, modifidedPerson).then((response) => {
@@ -62,6 +63,7 @@ const AdminPersonas = () => {
       nombre: data.nombre,
       apellido: data.apellido,
       telefono: data.telefono,
+      email: data.email || '',
     });
   };
 
@@ -156,6 +158,7 @@ const AdminPersonas = () => {
                     <th scope="col">Apellido</th>
                     <th scope="col">Nombre</th>
                     <th scope="col">Telefono</th>
+                    <th scope="col">Email</th>
                     <th scope="col">Accion</th>
                   </tr>
                 </thead>
@@ -165,11 +168,13 @@ const AdminPersonas = () => {
                       <td data-th="Apellido">{person.apellido}</td>
                       <td data-th="Nombre">{person.nombre}</td>
                       <td data-th="Telefono">{person.telefono}</td>
+                      <td data-th="Email">{person.email || ''}</td>
                       <td data-th="Accion">
                         <div className={actionStyles.rowActions}>
                           <button
                             type="button"
                             className="btn btn-verde"
+                            title="Editar"
                             onClick={() => showModalEdit(person)}
                           >
                             <PencilIcon />
@@ -177,6 +182,7 @@ const AdminPersonas = () => {
                           <button
                             type="button"
                             className="btn btn-rojo"
+                            title="Eliminar"
                             onClick={() => eliminar(person)}
                           >
                             <TrashIcon />
@@ -254,6 +260,30 @@ const AdminPersonas = () => {
               {formEdit.formState.errors.telefono && (
                 <span className="text-danger" role="alert">
                   {formEdit.formState.errors.telefono.message}
+                </span>
+              )}
+            </Form.Group>
+            <Form.Group className="mb-0">
+              <label htmlFor="email" className="control-label">
+                Email
+              </label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                className="form-control"
+                placeholder="Email"
+                autoComplete="email"
+                {...formEdit.register('email', {
+                  pattern: {
+                    value: /^\S+@\S+\.\S+$/,
+                    message: 'Por favor, ingresa un email válido.',
+                  },
+                })}
+              />
+              {formEdit.formState.errors.email && (
+                <span className="text-danger" role="alert">
+                  {formEdit.formState.errors.email.message}
                 </span>
               )}
             </Form.Group>

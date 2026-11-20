@@ -298,6 +298,7 @@ const Nomenclador = () => {
                                 <button
                                   type="button"
                                   className="btn btn-verde"
+                                  title="Editar"
                                   onClick={() =>
                                     editar(
                                       'enfermedad',
@@ -312,6 +313,7 @@ const Nomenclador = () => {
                                 <button
                                   type="button"
                                   className="btn btn-rojo"
+                                  title="Eliminar"
                                   onClick={() =>
                                     utils.notificacionEliminar(
                                       'enfermedad',
@@ -406,6 +408,7 @@ const Nomenclador = () => {
                                 <button
                                   type="button"
                                   className="btn btn-verde"
+                                  title="Editar"
                                   onClick={() =>
                                     editar(
                                       'medicamento',
@@ -420,6 +423,7 @@ const Nomenclador = () => {
                                 <button
                                   type="button"
                                   className="btn btn-rojo"
+                                  title="Eliminar"
                                   onClick={() =>
                                     utils.notificacionEliminar(
                                       'medicamento',
@@ -527,6 +531,7 @@ const Nomenclador = () => {
                                 <button
                                   type="button"
                                   className="btn btn-verde"
+                                  title="Editar"
                                   onClick={() =>
                                     editar(
                                       'obrasocial',
@@ -544,6 +549,7 @@ const Nomenclador = () => {
                                 <button
                                   type="button"
                                   className="btn btn-rojo"
+                                  title="Eliminar"
                                   onClick={() =>
                                     utils.notificacionEliminar(
                                       'obrasocial',
