@@ -9,6 +9,7 @@ const pacientes = {
       nombre: data.nombreEP,
       apellido: data.apellidoEP,
       telefono: data.telefonoEP,
+      email: data.emailEP || null,
       sexo: data.sexoEP,
       fecha_nacimiento: data.nacimientoEP,
       activa_taller: true,
@@ -32,6 +33,7 @@ const pacientes = {
         nombre: data.nombreR,
         apellido: data.apellidoR,
         telefono: data.telefonoR,
+        email: data.emailR || null,
         sexo: data.sexoR,
         fecha_nacimiento: data.nacimientoR,
         direccion: {

@@ -643,6 +643,7 @@ const AdminUsuarios = () => {
                           <button
                             type="button"
                             className="btn btn-verde"
+                            title="Editar"
                             onClick={() => editUser(usuario)}
                           >
                             <PencilIcon />
@@ -650,6 +651,7 @@ const AdminUsuarios = () => {
                           <button
                             type="button"
                             className="btn btn-rojo"
+                            title="Eliminar"
                             onClick={() => eliminarUsuario(usuario)}
                             aria-label={`Eliminar usuario ${usuario.username}`}
                           >

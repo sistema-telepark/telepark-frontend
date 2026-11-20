@@ -170,6 +170,7 @@ const TypeEvents = () => {
                         <button
                           type="button"
                           className="btn btn-verde"
+                          title="Editar"
                           onClick={() => showModalEdit(element)}
                         >
                           <PencilIcon />
@@ -177,6 +178,7 @@ const TypeEvents = () => {
                         <button
                           type="button"
                           className="btn btn-rojo"
+                          title="Eliminar"
                           onClick={() => handleDelete(element)}
                         >
                           <TrashIcon />
