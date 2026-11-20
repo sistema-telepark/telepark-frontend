@@ -83,9 +83,11 @@ const Encuentro = () => {
     }
   };
 
-  // Las actividades realizadas de una clase llegan como array plano
+  // Las actividades realizadas del encuentro llegan como array plano
   const getActividadesRealizadas = async (id_encuentro) => {
-    const resp = await actividadRealizadaRepository.getActividadesRealizadasByClase(id_encuentro);
+    const resp = await actividadRealizadaRepository.getActividadesRealizadasByEncuentro(
+      id_encuentro
+    );
     if (resp.success) {
       setActividadRealizada(resp.data);
       setLoadError(null);
@@ -111,25 +113,37 @@ const Encuentro = () => {
   // Guardar o eliminar las actividades realizadas del encuentro según su estado
   const guardarActividadesSeleccionadas = async () => {
     const actividadesSeleccionadas = actividadesDelTaller.filter((act) => act.checked);
+    const encuentroTallerPorTaller = new Map(
+      (encuentroSeleccionado?.talleres ?? []).map((asociacion) => [
+        Number(asociacion.taller),
+        asociacion.id_encuentro_taller,
+      ])
+    );
 
-    const actividadesToSave = actividadesSeleccionadas
-      .filter(
-        (seleccionada) =>
-          !actividadRealizada.some((realizada) => realizada.actividad === seleccionada.id_actividad)
-      )
-      .map((actividadItem) => ({
-        actividad: actividadItem.id_actividad,
-        encuentro: encuentroSeleccionado.id_encuentro,
-      }));
+    const actividadesToSave = actividadesSeleccionadas.flatMap((actividadItem) => {
+      const idEncuentroTaller = encuentroTallerPorTaller.get(Number(actividadItem.taller));
+      const yaRealizada = actividadRealizada.some(
+        (realizada) =>
+          Number(realizada.encuentro_taller) === Number(idEncuentroTaller) &&
+          Number(realizada.actividad) === Number(actividadItem.id_actividad)
+      );
+
+      return idEncuentroTaller && !yaRealizada
+        ? [{ actividad: actividadItem.id_actividad, encuentro_taller: idEncuentroTaller }]
+        : [];
+    });
 
     const actividadesADeseleccionar = actividadRealizada.filter(
       (realizada) =>
         !actividadesSeleccionadas.some(
-          (seleccionada) => seleccionada.id_actividad === realizada.actividad
+          (seleccionada) =>
+            Number(seleccionada.id_actividad) === Number(realizada.actividad) &&
+            Number(encuentroTallerPorTaller.get(Number(seleccionada.taller))) ===
+              Number(realizada.encuentro_taller)
         )
     );
     const idsActividadesADeseleccionar = actividadesADeseleccionar.map(
-      (realizada) => realizada.id_encuentro_actividad
+      (realizada) => realizada.id_encuentro_taller_actividad
     );
 
     const createResults = await Promise.all(
@@ -268,7 +282,7 @@ const Encuentro = () => {
     setEncuentroSeleccionado(data);
     setModalInsertAct(true);
 
-    const resp = await actividadRealizadaRepository.getActividadesRealizadasByClase(
+    const resp = await actividadRealizadaRepository.getActividadesRealizadasByEncuentro(
       data.id_encuentro
     );
     if (resp.success) {
@@ -276,11 +290,22 @@ const Encuentro = () => {
       const talleresAsociados = (data.talleres ?? []).map((asociacion) =>
         Number(asociacion.taller)
       );
+      const encuentroTallerPorTaller = new Map(
+        (data.talleres ?? []).map((asociacion) => [
+          Number(asociacion.taller),
+          Number(asociacion.id_encuentro_taller),
+        ])
+      );
       const actividadesConEstado = actividad.map((act) => ({
         ...act,
         checked:
           talleresAsociados.includes(Number(act.taller)) &&
-          resp.data.some((realizada) => realizada.actividad === act.id_actividad),
+          resp.data.some(
+            (realizada) =>
+              Number(realizada.encuentro_taller) ===
+                encuentroTallerPorTaller.get(Number(act.taller)) &&
+              Number(realizada.actividad) === Number(act.id_actividad)
+          ),
       }));
       setActividad(actividadesConEstado);
     } else {

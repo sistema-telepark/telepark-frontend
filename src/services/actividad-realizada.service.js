@@ -2,36 +2,36 @@ import http from '../http-common';
 import { withServiceHandler } from './error-handler';
 
 const actividadesRealizadas = {
-  async getActividadesRealizadasByClase(idEncuentro) {
-    const response = await http.get(`/encuentros-actividades`, {
+  async getActividadesRealizadasByEncuentro(idEncuentro) {
+    const response = await http.get(`/encuentros-talleres-actividades`, {
       params: { encuentro: idEncuentro },
     });
     return response.data.results ?? response.data;
   },
   async getAll() {
-    const response = await http.get(`/encuentros-actividades`);
+    const response = await http.get(`/encuentros-talleres-actividades`);
     return response.data.results ?? response.data;
   },
   async create(data) {
-    const response = await http.post(`/encuentros-actividades`, data);
+    const response = await http.post(`/encuentros-talleres-actividades`, data);
     return response.data;
   },
-  // El path param identifica el registro de encuentro-actividad (M2M).
+  // El path param identifica el registro de encuentro-taller-actividad (M2M).
   async updateActividadRealizada(id, data) {
-    const response = await http.put(`/encuentros-actividades/${id}`, data);
+    const response = await http.put(`/encuentros-talleres-actividades/${id}`, data);
     return response.data;
   },
   async delete(id) {
-    const response = await http.delete(`/encuentros-actividades/${id}`);
+    const response = await http.delete(`/encuentros-talleres-actividades/${id}`);
     return response.data;
   },
 };
 
 export const actividadRealizadaRepository = {
-  getActividadesRealizadasByClase: withServiceHandler(
-    actividadesRealizadas.getActividadesRealizadasByClase,
+  getActividadesRealizadasByEncuentro: withServiceHandler(
+    actividadesRealizadas.getActividadesRealizadasByEncuentro,
     {
-      context: 'obtener actividades de un encuentro',
+      context: 'obtener actividades realizadas de un encuentro',
     }
   ),
   getAll: withServiceHandler(actividadesRealizadas.getAll, {
