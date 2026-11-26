@@ -1,7 +1,7 @@
 import http from '../http-common';
 import { withServiceHandler } from './error-handler';
 
-const ASISTENCIA_PATH = '/asistencias-taller';
+const ASISTENCIA_PATH = '/asistencias-encuentro';
 
 const asistencias = {
   async createAsistencia(data) {
