@@ -66,7 +66,7 @@ const Events = () => {
   const guardarNuevo = () => {
     let data = {};
     data = {
-      fecha_desde: events.fechaDesde || null,
+      fecha_desde: events.fechaDesde,
       fecha_hasta: events.fechaHasta || null,
       motivo: events.motivo,
       persona_ep: events.idpersonaep,
@@ -98,7 +98,7 @@ const Events = () => {
         id="myForm"
         onSubmit={(e) => {
           e.preventDefault();
-          if (!validate) guardarNuevo();
+          if (events.fechaDesde && !validate) guardarNuevo();
         }}
       >
         <main className="justify-content-center row container-lg m-md-3 shadow mx-md-auto border-top-sm m-0 panel-gris">
@@ -115,6 +115,7 @@ const Events = () => {
                 id="fechaDesde"
                 className="form-control"
                 placeholder="Fecha de inicio"
+                required
                 onChange={handleChange}
               />
             </div>

@@ -10,7 +10,6 @@ import {
   HomeIcon,
   AdminUsersIcon,
   SearchSidebarIcon,
-  FamilyIcon,
   MedicalRecordIcon,
   NomencladorIcon,
   CalendarIcon,
@@ -116,14 +115,6 @@ const Sidebar = () => {
             <span className="links_name">Ficha Médica</span>
           </a>
           <span className="tooltip">Ficha Médica</span>
-        </li>
-
-        <li className={current_url === '/familiar' ? 'active' : ''}>
-          <a href="./familiar" aria-label="Ingresar/Modificar Familiar">
-            <FamilyIcon />
-            <span className="links_name">Familiares</span>
-          </a>
-          <span className="tooltip">Familiares</span>
         </li>
 
         <li className={current_url === '/add-paciente' ? 'active' : ''}>
