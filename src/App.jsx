@@ -68,9 +68,6 @@ const Asistencia = lazy(
 const Consulta = lazy(
   () => import(/* webpackChunkName: "consulta" */ './components/consulta.component')
 );
-const Familiar = lazy(
-  () => import(/* webpackChunkName: "familiar" */ './components/familiar.component')
-);
 
 function AppContent({ token, userName, userRole, setToken, setUserName, setUserRole }) {
   const location = useLocation();
@@ -464,23 +461,6 @@ function AppContent({ token, userName, userRole, setToken, setUserName, setUserR
                     >
                       <Suspense fallback={<LoadingSpinner />}>
                         <Consulta key={retryKey} />
-                      </Suspense>
-                    </ErrorBoundary>
-                  }
-                />
-                <Route
-                  path="/familiar"
-                  element={
-                    <ErrorBoundary
-                      FallbackComponent={(props) => (
-                        <ErrorFallbackRoute {...props} componentName="Familiar" />
-                      )}
-                      onError={logError}
-                      onReset={() => setRetryKey((k) => k + 1)}
-                      resetKeys={[token]}
-                    >
-                      <Suspense fallback={<LoadingSpinner />}>
-                        <Familiar key={retryKey} />
                       </Suspense>
                     </ErrorBoundary>
                   }
